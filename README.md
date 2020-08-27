@@ -1,1 +1,1 @@
-# psychic-pancake
+# Senior Project - F20
