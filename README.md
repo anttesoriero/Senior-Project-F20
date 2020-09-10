@@ -32,7 +32,7 @@ About this project
 - Nicholas Romeo    - [Email](mailto:romeon7@students.rowan.edu)    - [GitHub](https://github.com/romeon728)        - [Site]()
 
 ### Wild Card
-- Steven Jiang      - [Email](mailto:jiangs1@students.rowan.edu)    - [GitHub](https://github.com/jiangs11)         - [Site]()
+- Steven Jiang      - [Email](mailto:jiangs1@students.rowan.edu)    - [GitHub](https://github.com/jiangs11)         - [LinkedIn](https://www.linkedin.com/in/steven-jiang-471453192/)
 
 ## Acknowledgements
 - Thank you to Dr. Ganesh Baliga for advising us through this project - [Rowan Site](https://csm.rowan.edu/departments/cs/facultystaff/compsci_full_part/baliga.html)
