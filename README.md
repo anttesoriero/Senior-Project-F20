@@ -31,7 +31,7 @@ About this project
 
 ### Back-End
 - Matthew Schofield - [Email](mailto:schofielm0@students.rowan.edu) - [GitHub](https://github.com/mattscho)         - [Site]()
-- Jasdip Dhillon    - [Email](mailto:dhillonj2@students.rowan.edu)  - [GitHub](https://github.com/dhillonj2)        - [Site]()
+- Jasdip Dhillon    - [Email](mailto:dhillonj2@students.rowan.edu)  - [GitHub](https://github.com/dhillonj2)        - [LinkedIn](https://www.linkedin.com/in/jasdip-dhillon-050a5719a/)
 - Nicholas Romeo    - [Email](mailto:romeon7@students.rowan.edu)    - [GitHub](https://github.com/romeon728)        - [Site]()
 
 ### Wild Card
