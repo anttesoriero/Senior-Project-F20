@@ -16,7 +16,10 @@ About this project
 - 
 
 ### Back-End
-- 
+- Python3
+- Flask
+- MySQL
+- AWS EC2
 
 ## Document Links
 
