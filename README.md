@@ -13,7 +13,8 @@ About this project
 
 ## Built With
 ### Front-End
-- React
+- ReactJS
+- Typescript
 
 ### Back-End
 - Python3
