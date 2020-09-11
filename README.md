@@ -13,7 +13,7 @@ About this project
 
 ## Built With
 ### Front-End
-- 
+- React
 
 ### Back-End
 - Python3
