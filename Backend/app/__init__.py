@@ -34,12 +34,14 @@ must be completed first
 from app.main import main_blueprint
 from app.auth import auth_blueprint
 from app.user import user_blueprint
+from app.me import me_blueprint
 from app.errors import errors_blueprint
 
 # Load in modules "Blueprints"
 app.register_blueprint(main_blueprint, url_prefix="/main")
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
 app.register_blueprint(user_blueprint, url_prefix="/user")
+app.register_blueprint(me_blueprint, url_prefix="/me")
 app.register_blueprint(errors_blueprint)
 
 # Init database with referenced models from routes

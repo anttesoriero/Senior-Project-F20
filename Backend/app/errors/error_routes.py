@@ -13,7 +13,7 @@ from flask import jsonify
 # Module imports
 from app.errors import errors_blueprint
 
-@errors_blueprint.app_errorhandler(Exception)
+@errors_blueprint.app_errorhandler(404)
 def handle_exception(e):
     '''
     Generic error handling

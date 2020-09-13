@@ -16,13 +16,3 @@ from app.user import user_blueprint
 
 # Model imports
 from app.models.user_model import User
-
-@user_blueprint.route('/email', methods=['GET'])
-@jwt_required
-def getUserEmail():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(
-        id=current_user
-    ).first()
-    email=user.email
-    return jsonify(email=email), 200

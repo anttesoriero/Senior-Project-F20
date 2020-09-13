@@ -5,19 +5,17 @@ Try to use utilities outside of this file to do the heavy lifting
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 9.12.2020
+@version 9.13.2020
 """
 # Library imports
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
 # Module imports
 from app.auth import auth_blueprint
+from app.utilities.validation import validateRequestJSON
 
 # Database Models
-from app import db
 from app.models.user_model import User
 
 @auth_blueprint.route('/login', methods=['POST'])
@@ -32,23 +30,17 @@ def login():
     :param password: Password to User's account
     :return: JWT token for HTTP authentication
     '''
-    if not request.is_json:
-        return jsonify({"msg": "Missing JSON in request"}), 400
+    # Validate input
+    formattedJSON = validateRequestJSON(request, ["email", "password"], [])
+    if not formattedJSON["_formatSuccess"]:
+        return formattedJSON
 
-    email = request.json.get('email', None)
-    password = request.json.get('password', None)
+    # Get User
+    user = User.getByEmail(formattedJSON["email"])
 
-    if not email:
-        return jsonify({"msg": "Missing email parameter"}), 400
-    if not password:
-        return jsonify({"msg": "Missing password parameter"}), 400
-
-    user = User.query.filter_by(
-        email=email
-    ).first()
-
-    if user and check_password_hash(user.password_hash, password):
-        access_token = create_access_token(identity=user.id)
+    # If user exists check their credentials
+    if user and user.checkCredentials(formattedJSON["password"]):
+        access_token = create_access_token(identity=user.user_id)
         return jsonify(access_token=access_token), 200
     else:
         return jsonify({"msg": "Bad username or password"}), 401
@@ -64,40 +56,22 @@ def register():
     :param password: password for the new user
     :return:
     '''
-    if not request.is_json:
-        return jsonify({"msg": "Missing JSON in request"}), 400
+    # Validate input
+    formattedJSON = validateRequestJSON(request, ["email", "password"], [])
+    if not formattedJSON["_formatSuccess"]:
+        return formattedJSON
 
-    email = request.json.get('email', None)
-    password = request.json.get('password', None)
-    if not email:
-        return jsonify({"msg": "Missing email parameter"}), 400
-    if not password:
-        return jsonify({"msg": "Missing password parameter"}), 400
-
-    user = User.query.filter_by(
-        email=email
-    ).first()
-
-    if not user:
-        user = User(
-            email=email,
-            password_hash=generate_password_hash(password)
-        )
-
-        db.session.add(user)
-        db.session.commit()
-
-        # generate the auth token
-        auth_token = create_access_token(identity=user.id)
-        responseObject = {
-            'status': 'success',
-            'message': 'Successfully registered.',
-            'auth_token': auth_token
+    # Create user
+    if User.createUser(
+        email=formattedJSON["email"],
+        password=formattedJSON["password"]
+    ):
+        response = {
+            'message': 'Successfully registered.'
         }
-        return jsonify(responseObject), 201
+        return jsonify(response), 201
     else:
-        responseObject = {
-            'status': 'fail',
-            'message': 'Email already exists. Please Log in.',
+        response = {
+            'message': 'Failed to register',
         }
-        return jsonify(responseObject), 202
+        return jsonify(response), 202
