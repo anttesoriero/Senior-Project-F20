@@ -28,7 +28,7 @@ About this project
 ### Front-End 
 - Daniel Sanchez    - [Email](mailto:sanchezd6@students.rowan.edu)  - [GitHub](https://github.com/danandressanchez) - [Site]()
 - Anthony Tesoriero - [Email](mailto:tesoriera6@students.rowan.edu) - [GitHub](https://github.com/anttesoriero)     - [Site](http://anttes.com)
-- Anthony Catalina  - [Email](mailto:catalinaa2@students.rowan.edu) - [GitHub](https://github.com/antcatalina)      - [Site](https://www.linkedin.com/in/anthony-catalina-062b31174/)
+- Anthony Catalina  - [Email](mailto:catalinaa2@students.rowan.edu) - [GitHub](https://github.com/antcatalina)      - [LinkedIn](https://www.linkedin.com/in/anthony-catalina-062b31174/)
 
 ### Back-End
 - Matthew Schofield - [Email](mailto:schofielm0@students.rowan.edu) - [GitHub](https://github.com/mattscho)         - [Site]()
