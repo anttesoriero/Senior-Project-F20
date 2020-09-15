@@ -9,7 +9,7 @@
 - [Acknowledgements](#acknowledgements)
 
 ## About
-About this project
+Odd Jobs is a service that will connect people who need help with small tasks (odd-jobs) with motivated people interested in an extra income! We intend for users to post requests for help with odd jobs such as moving a couch, picking up groceries, mowing the lawn, etc. Other users with free-time can negotiate the terms on filling the request. We will have users regularly complete surveys to better understand their preferences and optimize their experience.
 
 ## Built With
 ### Front-End
