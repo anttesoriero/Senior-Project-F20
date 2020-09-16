@@ -1,4 +1,4 @@
-# OddJob :tophat:
+# OddJobs :tophat:
 ###### Senior Project at Rowan University - Fall 2020
 
 ## Summary
