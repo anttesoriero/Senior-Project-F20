@@ -23,6 +23,8 @@ Odd Jobs is a service that will connect people who need help with small tasks (o
 - AWS EC2
 
 ## Document Links
+- [Frontend Code](frontend)
+- [Backend Code](Backend)
 
 ## Authors
 ### Front-End 
