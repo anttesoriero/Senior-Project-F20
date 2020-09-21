@@ -4,32 +4,29 @@ def validateRequestJSON(request, requiredParamaters, variableParameters):
 
     :param request:
     :param requiredParamaters:
-    :return:
     '''
-    formattedJSON = {
-        "_formatSuccess": True,
-        "_status": "good format",
-    }
+    success = True
+    errorCode = 400
+    goodCode = 200
+
+    # This is useful to drop unexpected parameters
+    outputJSON = {}
 
     # Validate input is JSON
     if not request.is_json:
-        formattedJSON["_formatSuccess"] = False
-        formattedJSON["_status"] = "request not json"
-        return formattedJSON
+        success = False
+        return success, errorCode, {}
 
     # Check for missing parameters
-    for param in requiredParamaters:
-        parameter = request.json.get(param, None)
+    for paramName in requiredParamaters:
+        parameter = request.json.get(paramName, None)
         if not parameter:
-            if formattedJSON["_formatSuccess"]:
-                formattedJSON["_status"] = "Missing parameters: "
-            formattedJSON["_status"] += parameter
-            formattedJSON["_formatSuccess"] = False
-        else:
-            formattedJSON[param] = parameter
+            success = False
+            return success, errorCode, {}
+        outputJSON[paramName] = parameter
 
     # Add in variable parameters
-    for param in variableParameters:
-        formattedJSON[param] = request.json.get(param, None)
+    for paramName in variableParameters:
+        outputJSON[paramName] = request.json.get(paramName, None)
 
-    return formattedJSON
+    return success, goodCode, outputJSON
