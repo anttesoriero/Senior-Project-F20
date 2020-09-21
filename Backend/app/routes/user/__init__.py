@@ -13,4 +13,4 @@ from flask import Blueprint
 user_blueprint = Blueprint('user', __name__)
 
 # Register routes
-from app.user import user_routes
+from app.routes.user import user_routes

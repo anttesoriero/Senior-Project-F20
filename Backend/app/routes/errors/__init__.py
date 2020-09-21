@@ -13,4 +13,4 @@ from flask import Blueprint
 errors_blueprint = Blueprint('error_handler', __name__)
 
 # Register routes
-from app.errors import error_routes
+from app.routes.errors import error_routes

@@ -21,4 +21,4 @@ from flask import Blueprint
 auth_blueprint = Blueprint('auth', __name__)
 
 # Register routes
-from app.auth import auth_routes
+from app.routes.auth import auth_routes
