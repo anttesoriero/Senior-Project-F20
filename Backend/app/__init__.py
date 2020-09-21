@@ -31,11 +31,11 @@ The blueprints must be loaded in last as the configurations to the JWT manager a
 must be completed first
 '''
 # Blueprint imports
-from app.main import main_blueprint
-from app.auth import auth_blueprint
-from app.user import user_blueprint
-from app.me import me_blueprint
-from app.errors import errors_blueprint
+from app.routes.main import main_blueprint
+from app.routes.auth import auth_blueprint
+from app.routes.user import user_blueprint
+from app.routes.me import me_blueprint
+from app.routes.errors import errors_blueprint
 
 # Load in modules "Blueprints"
 app.register_blueprint(main_blueprint, url_prefix="/main")
