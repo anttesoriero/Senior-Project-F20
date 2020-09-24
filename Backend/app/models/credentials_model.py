@@ -18,8 +18,8 @@ class Credentials(db.Model):
     user_id
     password_hash
     '''
-    user_id = db.Column(db.Integer(), db.ForeignKey("user.user_id"),  primary_key=True)
-    password_hash = db.Column(db.String(128))
+    userId = db.Column(db.Integer(), db.ForeignKey("user.userId"),  primary_key=True)
+    passwordHash = db.Column(db.String(128))
 
     def checkPassword(self, password):
         '''
@@ -28,7 +28,7 @@ class Credentials(db.Model):
         :param password: plain text password
         :return: Boolean whether password hashes match
         '''
-        return check_password_hash(self.password_hash, password)
+        return check_password_hash(self.passwordHash, password)
 
     @classmethod
     def createCredentials(cls, user, password):
@@ -39,10 +39,10 @@ class Credentials(db.Model):
         :param password: plain text password for User
         '''
         # Hash password
-        hashed_password = generate_password_hash(password)
+        hashedPassword = generate_password_hash(password)
 
         # Create Credentials object
-        credentials = Credentials(user=user, password_hash=hashed_password)
+        credentials = Credentials(user=user, password_hash=hashedPassword)
 
         # Save to database
         db.session.add(credentials)

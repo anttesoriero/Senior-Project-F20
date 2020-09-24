@@ -14,17 +14,35 @@ class User(db.Model):
     '''
     Column definitions
 
-    user_id Integer PK
-    email   String  Unique
-    name    String  Nullable
+    userId        Integer  PK
+    email         String   Unique
+    firstName     String   Nullable
+    lastName      String   Nullable
+    preferredName String   Nullable
+    phoneNumber   String   Nullable
     '''
+    __tablename__ = 'user'
     # Column definitions
-    user_id = db.Column(db.Integer(), primary_key=True)
+    userId = db.Column(db.Integer(), primary_key=True)
     email = db.Column(db.String(120), index=True, unique=True)
-    name = db.Column(db.String(120), nullable=True)
+    firstName = db.Column(db.String(120), nullable=True)
+    lastName = db.Column(db.String(120), nullable=True)
+    preferredName = db.Column(db.String(120), nullable=True)
+    phoneNumber = db.Column(db.String(12), nullable=True)
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False)
+    postedTasks = db.relationship('Task', backref="user", uselist=True)
+    extendedModel = db.relationship("Extended", backref="user", uselist=False)
+    historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True)
+
+    def setName(self, newName):
+        self.name = newName
+        db.session.commit()
+
+    def setEmail(self, newEmail):
+        self.email = newEmail
+        db.session.commit()
 
     def checkCredentials(self, password):
         '''
@@ -34,6 +52,23 @@ class User(db.Model):
         :return: Boolean whether password is the User's password
         '''
         return self.credentials.checkPassword(password)
+
+    def getBriefPublicInfo(self):
+        '''
+        Get a brief overview of information about a user
+
+        :return:
+        '''
+        output = {
+            "name": self.name
+        }
+        return output
+
+    def getPublicInfo(self):
+        '''
+        TODO
+        '''
+        return {}
 
     @classmethod
     def getByEmail(cls, email):
