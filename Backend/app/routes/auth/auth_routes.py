@@ -36,8 +36,7 @@ def login():
     '''
     # Validate input
     success, code, inputJSON = validateRequestJSON(request, ["email", "password"], [])
-    print(success)
-    print(code)
+
     if not success:
         return jsonify({}), code
 
@@ -46,7 +45,7 @@ def login():
 
     # If user exists check their credentials
     if user and user.checkCredentials(inputJSON["password"]):
-        access_token = create_access_token(identity=user.user_id)
+        access_token = create_access_token(identity=user.userId)
         return jsonify(access_token=access_token), 200
     else:
         return jsonify({"success": False}), 401
@@ -177,8 +176,15 @@ def changePasswordWithAuth():
     }
     '''
     # Validate input
-    success, code, inputJSON = validateRequestJSON(request, ["newPassword"], [])
+    success, code, inputJSON = validateRequestJSON(request, ["oldPassword", "newPassword"], [])
     if not success:
         return jsonify({}), code
 
-    return jsonify({"success": True}), 200
+    user = User.getByUserId(get_jwt_identity())
+
+    if user and user.checkCredentials(inputJSON["oldPassword"]):
+        user.setPassword(inputJSON["newPassword"])
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False}), 401
+

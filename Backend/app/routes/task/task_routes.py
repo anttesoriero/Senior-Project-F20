@@ -16,8 +16,8 @@ from app.routes.task import task_blueprint
 from app.utilities.validation import validateRequestJSON
 
 # Model imports
+from app.models.task_model import Task
 from app.models.user_model import User
-
 
 '''
 GETs
@@ -102,7 +102,7 @@ DELETEs
 '''
 @task_blueprint.route('/deleteTask', methods=['DELETE'])
 @jwt_required
-def createTask():
+def deleteTask():
     '''
     '''
     taskId = request.args.get('taskId', type=int)

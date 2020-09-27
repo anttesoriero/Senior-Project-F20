@@ -9,6 +9,7 @@ from app import db
 
 # Models imports
 from app.models.credentials_model import Credentials
+from app.models.extended_user_model import ExtendedUser
 
 class User(db.Model):
     '''
@@ -21,7 +22,6 @@ class User(db.Model):
     preferredName String   Nullable
     phoneNumber   String   Nullable
     '''
-    __tablename__ = 'user'
     # Column definitions
     userId = db.Column(db.Integer(), primary_key=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -33,8 +33,12 @@ class User(db.Model):
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False)
     postedTasks = db.relationship('Task', backref="user", uselist=True)
-    extendedModel = db.relationship("Extended", backref="user", uselist=False)
+    extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False)
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True)
+
+    def setPassword(self, password):
+        self.credentials.changePassword(password=password)
+        db.session.commit()
 
     def setName(self, newName):
         self.name = newName
@@ -85,7 +89,7 @@ class User(db.Model):
         return user
 
     @classmethod
-    def getByUserId(cls, user_id):
+    def getByUserId(cls, userId):
         '''
         Get User by user_id
 
@@ -93,7 +97,7 @@ class User(db.Model):
         :return: User object connected to given user_id
         '''
         user = User.query.filter_by(
-            user_id=user_id
+            userId=userId
         ).first()
 
         return user
@@ -109,7 +113,7 @@ class User(db.Model):
         return not User.getByEmail(email)
 
     @classmethod
-    def createUser(cls, email, password, name=""):
+    def createUser(cls, email, password, firstName=""):
         '''
         Creates a User
 
@@ -122,7 +126,7 @@ class User(db.Model):
             return False
 
         # Create User
-        user = User(email=email, name=name)
+        user = User(email=email, firstName=firstName)
         Credentials.createCredentials(password=password, user=user)
 
         # Save User to database

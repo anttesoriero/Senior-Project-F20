@@ -1,9 +1,10 @@
 '''
 Credential's model for database
-Connects to User table
+Stores the password hashes for Users
+OneToOne relationship with the User table
 
 @author Matthew Schofield
-@version 9.12.2020
+@version 9.25.2020
 '''
 # Library imports
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,7 +15,6 @@ from app import db
 class Credentials(db.Model):
     '''
     Column definitions
-
     user_id
     password_hash
     '''
@@ -30,6 +30,15 @@ class Credentials(db.Model):
         '''
         return check_password_hash(self.passwordHash, password)
 
+    def changePassword(self, password):
+        '''
+
+        :param password:
+        :return:
+        '''
+        self.passwordHash = generate_password_hash(password)
+        db.session.commit()
+
     @classmethod
     def createCredentials(cls, user, password):
         '''
@@ -42,7 +51,7 @@ class Credentials(db.Model):
         hashedPassword = generate_password_hash(password)
 
         # Create Credentials object
-        credentials = Credentials(user=user, password_hash=hashedPassword)
+        credentials = Credentials(user=user, passwordHash=hashedPassword)
 
         # Save to database
         db.session.add(credentials)

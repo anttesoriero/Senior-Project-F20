@@ -1,8 +1,10 @@
 '''
 Task's model for database
 
+These are Tasks that Users post
+
 @author Matthew Schofield
-@version 9.14.2020
+@version 9.25.2020
 '''
 # Module imports
 from app import db

@@ -1,8 +1,10 @@
 '''
-User's model for database
+Survey's model for database
+
+This stores static Surveys, a survey should never be removed or edited only disabled
 
 @author Matthew Schofield
-@version 9.12.2020
+@version 9.25.2020
 '''
 # Module imports
 from app import db
@@ -14,6 +16,14 @@ class Survey(db.Model):
     '''
     Column definitions
 
+    surveyId
+    active
+    question
+    answerA
+    answerB
+    answerC
+    answerD
+    answerE
     '''
     # Column definitions
     surveyId = db.Column(db.Integer(), db.ForeignKey("historical_survey.historicalSurveyId"),  primary_key=True)

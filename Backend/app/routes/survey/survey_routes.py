@@ -16,6 +16,7 @@ from app.routes.survey import survey_blueprint
 from app.utilities.validation import validateRequestJSON
 
 # Model imports
+from app.models.survey_model import Survey
 from app.models.user_model import User
 
 

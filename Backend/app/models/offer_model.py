@@ -1,8 +1,10 @@
 '''
 Offer's model for database
 
+These are offers a User makes for being hired to complete a Task
+
 @author Matthew Schofield
-@version 9.23.2020
+@version 9.25.2020
 '''
 # Module imports
 from app import db
@@ -13,7 +15,19 @@ from app.models.user_model import User
 class Offer(db.Model):
     '''
     Column definitions
+    offerId
+    taskId
+    userIdFrom
+    payment
+    startDate
+    jobDurationMinutes
+    note
+    accepted
+    responseMessage
 
+    Relationships
+    Task.taskId
+    User.userId
     '''
     # Column definitions
     offerId = db.Column(db.Integer(), primary_key=True)
