@@ -13,6 +13,7 @@
     "@types/reactstrap": "^8.5.1",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
+    "holderjs": "^2.9.7",
     "jwt-decode": "^3.0.0-beta.2",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
