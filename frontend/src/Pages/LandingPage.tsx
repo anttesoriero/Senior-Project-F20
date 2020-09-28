@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {RouteComponentProps, withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, Label, Button } from 'reactstrap';
-import Naviagtion from '../Components/Naviagtion';
+import Navigation from '../Components/Navigation';
 import axios from 'axios';
 
 type event = {
@@ -32,7 +32,7 @@ const LandingPage = ({history}: RouteComponentProps) => {
 
     return(
         <div>
-            <Naviagtion/> 
+            <Navigation/>
             <br/>
             <Container>
                 <div>

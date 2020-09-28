@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Button, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
-const Naviagtion = () => {
+const Navigation = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [popoverOpen, setPopoverOpen] = useState(false);
 
@@ -41,4 +41,4 @@ const Naviagtion = () => {
     );
 }
 
-export default Naviagtion;
+export default Navigation;

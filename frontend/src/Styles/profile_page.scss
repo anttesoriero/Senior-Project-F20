@@ -1,0 +1,12 @@
+// profile_page.scss for ProfilePage.tsx
+#centered{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#right{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
