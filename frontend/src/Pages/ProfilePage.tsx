@@ -18,9 +18,9 @@ const ProfilePage = () => {
                     <Col xs="10">
                         <Media>
                             <Media left href="#">
-                                <Media object style={{padding: 10}} data-src="holder.js/160x160" alt="Generic placeholder image" height="160" width="160"/>
+                                <Media object data-src="holder.js/160x160" alt="Generic placeholder image" height="160" width="160"/>
                             </Media>
-                            <Media body>
+                            <Media body style={{padding: 10}}>
                                 <Media heading>
                                     [FIRST NAME] [LAST NAME]
                                 </Media>
@@ -65,6 +65,7 @@ const ProfilePage = () => {
                                 <Media right object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
                             </Media>
                             */}
+
 
                         </div>
                     </Col>
