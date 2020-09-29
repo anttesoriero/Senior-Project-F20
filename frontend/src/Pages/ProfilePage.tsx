@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media } from 'reactstrap';
+import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
 import "../Styles/profile_page.scss"; // profile_page.scss file in Styles folder
 // <script src="holder.js"/>
 
@@ -44,7 +44,7 @@ const ProfilePage = () => {
                         <hr/>
 
                         <div id="history_category">
-                            <Media heading>Category 1</Media>
+                            <Media heading>Category 1 <Badge color="secondary">New</Badge></Media>
                             <br/>
                             <Row>
                                 <Col xs="6" sm="4">

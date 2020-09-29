@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {RouteComponentProps, withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, Label, Button } from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label, Button, Jumbotron, Row, Col} from 'reactstrap';
 import Navigation from '../Components/Navigation';
 import axios from 'axios';
 
@@ -36,6 +36,33 @@ const LandingPage = ({history}: RouteComponentProps) => {
             <br/>
             <Container>
                 <div>
+                    <Jumbotron fluid>
+                        <Container fluid>
+                            <Row>
+                                <Col xs="8">
+                                    <h1 className="display-3">OddJobs</h1>
+                                    <p className="lead">No Job is too Odd</p>
+                                </Col>
+                                <Col xs="4">
+                                    <Form onSubmit={handleSubmit}>
+                                        <FormGroup>
+                                            <Label for="exampleEmail">Email</Label>
+                                            <Input type="email" name="email" placeholder="email@email.com" onChange={event =>setEmail(event.target.value)} required/>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label for="examplePassword">Password</Label>
+                                            <Input type="password" name="password" placeholder="password" onChange={event =>setPassword(event.target.value)} required/>
+                                        </FormGroup>
+                                        <FormGroup className='centered'>
+                                            <Button type='submit' color="primary">Sign In</Button>
+                                        </FormGroup>
+                                    </Form>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Jumbotron>
+
+                    {/* OG */}
                     <Form onSubmit={handleSubmit}>
                         <FormGroup>
                             <Label for="exampleEmail">Email</Label>
@@ -46,7 +73,7 @@ const LandingPage = ({history}: RouteComponentProps) => {
                             <Input type="password" name="password" placeholder="password" onChange={event =>setPassword(event.target.value)} required/>
                         </FormGroup>
                         <FormGroup className='centered'>
-                            <Button type='submit'>Sign In</Button>
+                            <Button type='submit' color="primary">Sign In</Button>
                         </FormGroup>
                     </Form>
                 </div>
