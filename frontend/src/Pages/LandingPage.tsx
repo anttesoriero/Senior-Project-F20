@@ -39,10 +39,13 @@ const LandingPage = ({history}: RouteComponentProps) => {
                     <Jumbotron fluid>
                         <Container fluid>
                             <Row>
+                                {/* Left - Main info */}
                                 <Col xs="8">
                                     <h1 className="display-3">OddJobs</h1>
                                     <p className="lead">No Job is too Odd</p>
                                 </Col>
+
+                                {/* Right - Login */}
                                 <Col xs="4">
                                     <Form onSubmit={handleSubmit}>
                                         <FormGroup>
