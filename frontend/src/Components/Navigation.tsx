@@ -17,16 +17,16 @@ const Navigation = () => {
             <Collapse isOpen={isOpen} navbar>
                 <Nav navbar className="mr-auto">
                     <NavItem>
-                        <NavLink href="/taskboard">Job Board</NavLink>
+                        <NavLink href="/taskboard">Task Board</NavLink>
                     </NavItem>
                     {/*<NavItem>
                         <NavLink href="/profile">Profile</NavLink>
                     </NavItem>*/}
                     <NavItem>
-                        <NavLink href="/findjobs">Find a Job</NavLink>
+                        <NavLink href="/findtasks">Find a Task</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink href="/listjobs">List a Job</NavLink>
+                        <NavLink href="/listtasks">List a Task</NavLink>
                     </NavItem>
                 </Nav>
                 {/* <Button color="light" id="Popover1" type="button">Profile</Button> */}
@@ -54,8 +54,8 @@ const Navigation = () => {
                             Profile Home
                         </DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem href="/upcomingjobs">
-                            Upcoming Jobs
+                        <DropdownItem href="/upcomingtasks">
+                            Upcoming Tasks
                         </DropdownItem>
                         <DropdownItem href="/offers">
                             Offers
