@@ -13,7 +13,7 @@ const ErrorPage = () => {
                 <br/>
 
                 <Media id="centered">
-                    <Media object data-src="../Styles/Images/SurprisedOtter-Error.png" alt="ERROR IMAGE" height="200" width="200"/>
+                    <Media object data-src="../Styles/Images/SurprisedOtterError.png" alt="ERROR IMAGE" height="200" width="200"/>
                 </Media>
 
                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Uh-oh, something's wrong!</h1>
