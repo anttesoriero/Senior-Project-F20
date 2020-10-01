@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {RouteComponentProps, withRouter } from 'react-router-dom';
-import {Container, Form, FormGroup, Input, Label, Button, Jumbotron, Row, Col} from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label, Button, Jumbotron, Row, Col, Alert} from 'reactstrap';
 import Navigation from '../Components/Navigation';
 import axios from 'axios';
 
@@ -12,6 +12,8 @@ type event = {
 const LandingPage = ({history}: RouteComponentProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [visible, setVisible] = useState(true);
+    const onDismiss = () => setVisible(false);
 
     const handleSubmit = event => {
         const data = new FormData(event.target)
@@ -36,6 +38,12 @@ const LandingPage = ({history}: RouteComponentProps) => {
             <br/>
             <Container>
                 <div>
+
+                    {/* Cookie Alert */}
+                    <Alert id="myAlert-bottom" color="warning" isOpen={visible} toggle={onDismiss}>
+                        <text style={{color: "black"}}>We use cookies on this site to better your experience</text>
+                    </Alert>
+
                     <Jumbotron fluid>
                         <Container fluid>
                             <Row>
