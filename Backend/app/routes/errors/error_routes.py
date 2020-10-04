@@ -32,3 +32,23 @@ def handle_exception(e):
     )
     response.content_type = "application/json"
     return response, e.code
+
+@errors_blueprint.app_errorhandler(401)
+def handle_exception(e):
+    '''
+    Generic error handling
+    HTTP and Server errors
+
+    :param e: error object
+    :return: JSON reporting 404 error
+    {
+        "code": int error code,
+        "name": str name of error
+    }
+    '''
+    response = jsonify(
+        code=e.code,
+        name=e.name
+    )
+    response.content_type = "application/json"
+    return response, e.code

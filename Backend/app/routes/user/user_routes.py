@@ -13,7 +13,6 @@ from flask_jwt_extended import jwt_required
 
 # Module imports
 from app.routes.user import user_blueprint
-from app.utilities.validation import validateRequestJSON
 
 # Model imports
 from app.models.user_model import User
@@ -32,7 +31,6 @@ def getBriefProfile():
 
     # Get models
     otherUser = User.getByUserId(otherUserId)
-
     if not otherUser:
         return jsonify({}), 404
 

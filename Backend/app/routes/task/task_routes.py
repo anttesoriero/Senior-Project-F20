@@ -13,11 +13,11 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Module imports
 from app.routes.task import task_blueprint
-from app.utilities.validation import validateRequestJSON
+from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
-from app.models.task_model import Task
 from app.models.user_model import User
+from app.models.task_model import Task
 
 '''
 GETs
@@ -26,11 +26,29 @@ GETs
 @jwt_required
 def getBriefPublic():
     '''
+    Get brief public information about a task
+
+    In:
+    {
+
+    }
+
+    Out:
+    {
+
+    }
     '''
     # Validate inputs
     taskId = request.args.get('taskId', type=int)
 
-    return jsonify({}), 200
+    # Get task
+    task = Task.getByTaskId(taskId)
+    if task is None:
+        return jsonify({"success":False}), 404
+
+    # Get information
+    responseInformation = task.getBriefPublicInfo()
+    return jsonify(responseInformation), 200
 
 
 @task_blueprint.route('/getPublic', methods=['GET'])
@@ -89,12 +107,40 @@ POSTs
 @jwt_required
 def createTask():
     '''
+    Create a task
+
+    In
+    {
+        "categoryId": int, integer categoryId
+    }
+    Out
+
     '''
+    # Validate input
+    requiredParameters = ["categoryId", "title"]
+    optionalParameters = ["description"]
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
-    return jsonify({}), 200
+    # Create task
+    task = Task.createTask(
+        posterUserId=user.userId,
+        categoryId=inputJSON["categoryId"],
+        title=inputJSON["title"],
+        description=inputJSON["description"]
+    )
+
+    # Build output
+    output = {
+        "taskId": task.taskId
+    }
+
+    return jsonify(output), 200
 
 
 '''
