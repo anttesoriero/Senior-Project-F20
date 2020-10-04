@@ -10,7 +10,6 @@ This stores static Surveys, a survey should never be removed or edited only disa
 from app import db
 
 # Models imports
-from app.models.historical_survey_model import HistoricalSurvey
 
 class Survey(db.Model):
     '''

@@ -9,9 +9,6 @@ These are offers a User makes for being hired to complete a Task
 # Module imports
 from app import db
 
-# Models imports
-from app.models.user_model import User
-
 class Offer(db.Model):
     '''
     Column definitions

@@ -9,10 +9,6 @@ These are Tasks that Users post
 # Module imports
 from app import db
 
-# Models imports
-from app.models.user_model import User
-from app.models.category_model import Category
-
 class Task(db.Model):
     '''
     Column definitions
@@ -40,7 +36,34 @@ class Task(db.Model):
     def getBriefPublicInfo(self):
         output = {
             "title": self.title,
-            "description": self.description
+            "categoryId": self.categoryId
         }
         return output
 
+    @classmethod
+    def getByTaskId(cls, taskId):
+        '''
+        Get Task by taskId
+
+        :param taskId: taskId to get Task with
+        :return: Task object connected to given taskId
+        '''
+        task = Task.query.filter_by(
+            taskId=taskId
+        ).first()
+
+        return task
+
+    @classmethod
+    def createTask(cls, posterUserId, categoryId, title, description=None):
+        '''
+        Creates a Task
+
+        '''
+        # Create Task
+        task = Task(posterUserId=posterUserId, categoryId=categoryId, title=title, description=description)
+
+        # Save User to database
+        db.session.add(task)
+        db.session.commit()
+        return task
