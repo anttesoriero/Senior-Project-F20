@@ -23,5 +23,5 @@ class HistoricalSurvey(db.Model):
     surveyId = db.Column(db.Integer())
     response = db.Column(db.Integer(), nullable=False)
 
-    survey = db.relationship('Survey', backref="historical_survey", uselist=False)
+
 
