@@ -11,21 +11,42 @@ Move furniture
 '''
 # Module imports
 from app import db
+import sys
 
 class Category(db.Model):
     '''
     Column definitions
     categoryId
     categoryName
-    categoryType
 
     Relational Connections
     survey
     '''
+    # Columns
     categoryId = db.Column(db.Integer(),  primary_key=True)
     categoryName = db.Column(db.String(128))
-    # Enumerations for type of job
-    categoryType = db.Column(db.String(128))
 
     # Set-up Relational connections
-    survey = db.relationship('Task', backref="category", uselist=False)
+    task = db.relationship('Task', backref="category", uselist=False)
+
+    def getName(self):
+        return self.categoryName
+
+    @classmethod
+    def empty(cls):
+        return Category.query.first() is None
+
+    @classmethod
+    def getByCategoryId(cls, categoryId):
+        '''
+        Get Category by categoryId
+
+        :param categoryId: categoryId to get Category with
+        :return: Category object connected to given categoryId
+        '''
+        category = Category.query.filter_by(
+            categoryId=categoryId
+        ).first()
+
+        return category
+

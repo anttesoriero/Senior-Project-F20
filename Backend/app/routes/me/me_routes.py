@@ -13,7 +13,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Module imports
 from app.routes.me import me_blueprint
-from app.utilities.validation import validateRequestJSON
+from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
 from app.models.user_model import User

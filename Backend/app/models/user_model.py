@@ -9,7 +9,12 @@ from app import db
 
 # Models imports
 from app.models.credentials_model import Credentials
+from app.models.offer_model import Offer
+from app.models.category_model import Category
+from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
+from app.models.survey_model import Survey
+from app.models.historical_survey_model import HistoricalSurvey
 
 class User(db.Model):
     '''
@@ -40,8 +45,8 @@ class User(db.Model):
         self.credentials.changePassword(password=password)
         db.session.commit()
 
-    def setName(self, newName):
-        self.name = newName
+    def setFirstName(self, newName):
+        self.firstName = newName
         db.session.commit()
 
     def setEmail(self, newEmail):
@@ -64,7 +69,7 @@ class User(db.Model):
         :return:
         '''
         output = {
-            "name": self.name
+            "name": self.firstName
         }
         return output
 
@@ -82,10 +87,10 @@ class User(db.Model):
         :param email: email to get User with
         :return: User object connected to given email
         '''
+        # User or None
         user = User.query.filter_by(
             email=email
         ).first()
-
         return user
 
     @classmethod
@@ -123,7 +128,7 @@ class User(db.Model):
         '''
         # Check if user exists
         if not User.existsByEmail(email):
-            return False
+            return None
 
         # Create User
         user = User(email=email, firstName=firstName)
@@ -132,4 +137,4 @@ class User(db.Model):
         # Save User to database
         db.session.add(user)
         db.session.commit()
-        return True
+        return user
