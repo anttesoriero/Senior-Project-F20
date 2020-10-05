@@ -67,3 +67,11 @@ if Category.empty():
         db.session.add(category)
     db.session.commit()
     file.close()
+
+#Initial load of Survey table
+from app.models.survey_model import Survey
+if Survey.empty():
+    file = open("./app/models/initializers/initialSurvey.txt", 'r')
+    for survey in file.read().split("\n"):
+        Survey.createSurvey(survey.split(";"))
+    file.close()
