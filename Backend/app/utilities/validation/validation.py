@@ -30,3 +30,4 @@ def validateRequestJSON(request, requiredParamaters, variableParameters):
         outputJSON[paramName] = request.json.get(paramName, None)
 
     return success, goodCode, outputJSON
+

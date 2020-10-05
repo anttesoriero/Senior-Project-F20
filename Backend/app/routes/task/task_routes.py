@@ -28,14 +28,16 @@ def getBriefPublic():
     '''
     Get brief public information about a task
 
-    In:
-    {
-
-    }
+    ?
+    taskId=<taskId>
 
     Out:
     {
-
+        "accepted": bool
+        "categoryId": int
+        "recommendedPrice": float nullable
+        "taskId": int
+        "title": str
     }
     '''
     # Validate inputs
@@ -48,6 +50,7 @@ def getBriefPublic():
 
     # Get information
     responseInformation = task.getBriefPublicInfo()
+
     return jsonify(responseInformation), 200
 
 
@@ -55,11 +58,33 @@ def getBriefPublic():
 @jwt_required
 def getPublic():
     '''
+
+    ?
+    taskId=<taskId>
+
+    Out:
+    {
+        "accepted": bool
+        "categoryId": int
+        "description": str
+        "posterTaskId": int
+        "recommendedPrice": float, nullable
+        "taskId": int
+        "title": str
+    }
     '''
     # Validate inputs
     taskId = request.args.get('taskId', type=int)
 
-    return jsonify({}), 200
+    # Get task
+    task = Task.getByTaskId(taskId)
+    if task is None:
+        return jsonify({"success":False}), 404
+
+    # Get information
+    responseInformation = task.getPublicInfo()
+
+    return jsonify(responseInformation), 200
 
 
 @task_blueprint.route('/getBriefPrivate', methods=['GET'])
@@ -110,15 +135,21 @@ def createTask():
     Create a task
 
     In
+    * optional
     {
-        "categoryId": int, integer categoryId
+        "categoryId": int
+        "title": str
+        *"description": str
+        *"recommendedPrice": float
     }
     Out
-
+    {
+        "taskId": int
+    }
     '''
     # Validate input
     requiredParameters = ["categoryId", "title"]
-    optionalParameters = ["description"]
+    optionalParameters = ["description", "recommendedPrice"]
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
@@ -132,7 +163,8 @@ def createTask():
         posterUserId=user.userId,
         categoryId=inputJSON["categoryId"],
         title=inputJSON["title"],
-        description=inputJSON["description"]
+        description=inputJSON["description"],
+        recommendedPrice=inputJSON["recommendedPrice"]
     )
 
     # Build output

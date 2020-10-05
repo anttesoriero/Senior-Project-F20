@@ -9,6 +9,7 @@ from app import db
 
 # Models imports
 from app.models.credentials_model import Credentials
+from app.models.offer_model import Offer
 from app.models.category_model import Category
 from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
