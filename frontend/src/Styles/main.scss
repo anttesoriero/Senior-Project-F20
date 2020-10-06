@@ -5,4 +5,9 @@
 @import "./paper-kit.scss";
 
 //Pages
-@import "./landing_page.scss";
+@import "./Pages/landing_page.scss";
+@import "./Pages/error_page.scss";
+@import "./Pages/profile_page.scss";
+
+//Components
+@import './Components/ReactTabs.scss';

@@ -1,7 +1,6 @@
 import React from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
-import "../Styles/profile_page.scss"; // profile_page.scss file in Styles folder
 // <script src="holder.js"/>
 
 const ProfilePage = () => {

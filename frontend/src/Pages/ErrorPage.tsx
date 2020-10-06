@@ -1,7 +1,6 @@
 import React from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media} from 'reactstrap';
-import "../Styles/error_page.scss"; // error_page.scss file in Styles folder
 // <script src="holder.js"/>
 
 const ErrorPage = () => {
