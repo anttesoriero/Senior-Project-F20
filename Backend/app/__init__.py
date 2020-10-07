@@ -8,7 +8,7 @@ Initialize Flask application architecture
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
-
+import sys
 # Init app
 app = Flask(__name__)
 
@@ -17,6 +17,13 @@ app = Flask(__name__)
 # Setup the JWT configuration
 app.config['JWT_SECRET_KEY'] = 'cmkf34LFMEl3iwp4fmna342'
 jwtManager = JWTManager(app)
+blacklist = set()
+
+# Function to invalidate a JWT token, used in logouts
+@jwtManager.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
 
 # Setup the database connection
 DB_USER = "oddjobsuser"
@@ -36,13 +43,35 @@ from app.routes.auth import auth_blueprint
 from app.routes.user import user_blueprint
 from app.routes.me import me_blueprint
 from app.routes.errors import errors_blueprint
+from app.routes.survey import survey_blueprint
+from app.routes.task import task_blueprint
 
 # Load in modules "Blueprints"
 app.register_blueprint(main_blueprint, url_prefix="/main")
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
 app.register_blueprint(user_blueprint, url_prefix="/user")
 app.register_blueprint(me_blueprint, url_prefix="/me")
+app.register_blueprint(task_blueprint, url_prefix="/task")
+app.register_blueprint(survey_blueprint, url_prefix="/survey")
 app.register_blueprint(errors_blueprint)
 
 # Init database with referenced models from routes
 db.create_all()
+
+#Initial load of Category table
+from app.models.category_model import Category
+if Category.empty():
+    file = open("./app/models/initializers/initialCategories.txt", 'r')
+    for categoryName in file.read().split("\n"):
+        category = Category(categoryName=categoryName)
+        db.session.add(category)
+    db.session.commit()
+    file.close()
+
+#Initial load of Survey table
+from app.models.survey_model import Survey
+if Survey.empty():
+    file = open("./app/models/initializers/initialSurvey.txt", 'r')
+    for survey in file.read().split("\n"):
+        Survey.createSurvey(survey.split(";"))
+    file.close()

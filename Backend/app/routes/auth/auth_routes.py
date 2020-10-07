@@ -5,15 +5,16 @@ Try to use utilities outside of this file to do the heavy lifting
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 9.13.2020
+@version 9.27.2020
 """
 # Library imports
 from flask import jsonify, request
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_raw_jwt
 
 # Module imports
 from app.routes.auth import auth_blueprint
-from app.utilities.validation import validateRequestJSON
+from app.utilities.validation.validation import validateRequestJSON
+from app import blacklist
 
 # Database Models
 from app.models.user_model import User
@@ -21,7 +22,6 @@ from app.models.user_model import User
 '''
 Open endpoints
 '''
-
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
     '''
@@ -30,14 +30,31 @@ def login():
     Standard login endpoint, given a User's authentication parameters
     return a JWT authentication token.
 
-    :param email: Email associated with a User's account
-    :param password: Password to User's account
-    :return: JWT token for HTTP authentication
+    In:
+    {
+        email: str, user's email
+        password: str, user's password
+    }
+
+    Out:
+    Success
+    {
+        access_token: str, JWT access token
+        success: bool[=True]
+    }
+    Failure
+    {
+        success: bool[=False]
+    }
+
+
+    HTTP codes:
+    401 - Login failed
+    200 - OK
     '''
     # Validate input
     success, code, inputJSON = validateRequestJSON(request, ["email", "password"], [])
-    print(success)
-    print(code)
+
     if not success:
         return jsonify({}), code
 
@@ -46,9 +63,11 @@ def login():
 
     # If user exists check their credentials
     if user and user.checkCredentials(inputJSON["password"]):
-        access_token = create_access_token(identity=user.user_id)
-        return jsonify(access_token=access_token), 200
+        # Generate JWT token
+        access_token = create_access_token(identity=user.userId)
+        return jsonify({"success":True, "access_token": access_token}), 200
     else:
+        # Send back error
         return jsonify({"success": False}), 401
 
 @auth_blueprint.route('/register', methods=['POST'])
@@ -58,12 +77,27 @@ def register():
 
     Register a new user
 
-    :param email: email of the new user
-    :param password: password for the new user
-    :return:
+    In:
     {
-        "success": bool, whether the user was registered
+        email: str, new user's email
+        password: str, new user's password
     }
+
+    Out:
+    Success
+    {
+        access_token: str, JWT access token
+        success: bool[=True]
+    }
+    Failure
+    {
+        success: bool[=False]
+    }
+
+
+    HTTP codes:
+    200 - OK
+    400 - Bad
     '''
     # Validate input
     success, code, inputJSON = validateRequestJSON(request, ["email", "password"], [])
@@ -71,19 +105,26 @@ def register():
         return jsonify({}), code
 
     # Create user
-    if User.createUser(
-        email=inputJSON["email"],
-        password=inputJSON["password"]
-    ):
+    user = User.createUser(
+             email=inputJSON["email"],
+             password=inputJSON["password"]
+    )
+
+    # Check user created
+    if user is not None:
+        # Generate and return JWT token
+        access_token = create_access_token(identity=user.userId)
         response = {
-            'success': True
+            'success': True,
+            'access_token': access_token
         }
-        return jsonify(response), 201
+        return jsonify(response), 200
     else:
+        # Failed to register
         response = {
             'success': False
         }
-        return jsonify(response), 202
+        return jsonify(response), 400
 
 @auth_blueprint.route('/forgotPassword', methods=['POST'])
 def forgotPassword():
@@ -92,12 +133,12 @@ def forgotPassword():
 
     A user has forgotten password
 
-    :param:
+    In
     {
         "email": str, user's email
     }
 
-    :return:
+    Out
     {
         "success": bool, email sent
     }
@@ -138,7 +179,7 @@ def changePasswordFromVerification():
 '''
 Protected endpoints
 '''
-@auth_blueprint.route('/logout', methods=['POST'])
+@auth_blueprint.route('/logout', methods=['GET'])
 @jwt_required
 def logout():
     '''
@@ -148,11 +189,16 @@ def logout():
 
     Logout a user
 
-    :return:
+    In
+    None
+
+    Out
     {
         "success": bool, whether user was logged out
     }
     '''
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
     return jsonify({"success": True}), 200
 
 
@@ -160,14 +206,13 @@ def logout():
 @jwt_required
 def changePasswordWithAuth():
     '''
-    *
-
     Closed Endpoint
 
-    Change a user's password
+    Change an authenticated User's password
 
     :param:
     {
+        "oldPassword": str, old password
         "newPassword": str, new password
     }
 
@@ -177,8 +222,15 @@ def changePasswordWithAuth():
     }
     '''
     # Validate input
-    success, code, inputJSON = validateRequestJSON(request, ["newPassword"], [])
+    success, code, inputJSON = validateRequestJSON(request, ["oldPassword", "newPassword"], [])
     if not success:
         return jsonify({}), code
 
-    return jsonify({"success": True}), 200
+    user = User.getByUserId(get_jwt_identity())
+
+    if user and user.checkCredentials(inputJSON["oldPassword"]):
+        user.setPassword(inputJSON["newPassword"])
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False}), 401
+

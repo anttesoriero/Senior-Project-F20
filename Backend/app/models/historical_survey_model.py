@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
 
+
 class HistoricalSurvey(db.Model):
     '''
     Column definitions
@@ -21,6 +22,3 @@ class HistoricalSurvey(db.Model):
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"))
     surveyId = db.Column(db.Integer())
     response = db.Column(db.Integer(), nullable=False)
-
-    survey = db.relationship('Survey', backref="historical_survey", uselist=False)
-
