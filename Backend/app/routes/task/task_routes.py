@@ -123,7 +123,9 @@ def recommendTasks():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
-    return jsonify({"recommendedTasks":[]}), 200
+    recommendTasks = Task.getRecommendTasks()
+
+    return jsonify({"recommendedTasks":recommendTasks}), 200
 
 '''
 POSTs
@@ -140,7 +142,12 @@ def createTask():
         "categoryId": int
         "title": str
         *"description": str
-        *"recommendedPrice": float
+        *"recommendedPrice": float,
+        *"estimatedDurationMinutes": int,
+        *"locationALongitude": float,
+        *"locationALatitude": float,
+        *"locationBLongitude": float,
+        *"locationBLatitude": float
     }
     Out
     {
@@ -149,7 +156,11 @@ def createTask():
     '''
     # Validate input
     requiredParameters = ["categoryId", "title"]
-    optionalParameters = ["description", "recommendedPrice"]
+
+    optionalParameters = ["description", "recommendedPrice", "estimatedDurationMinutes",
+                          "locationALongitude", "locationALatitude", "locationBLongitude",
+                          "locationBLatitude"]
+
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
@@ -164,8 +175,14 @@ def createTask():
         categoryId=inputJSON["categoryId"],
         title=inputJSON["title"],
         description=inputJSON["description"],
-        recommendedPrice=inputJSON["recommendedPrice"]
+        recommendedPrice=inputJSON["recommendedPrice"],
+        estimatedDurationMinutes=inputJSON["estimatedDurationMinutes"],
+        locationALongitude=inputJSON["locationALongitude"],
+        locationALatitude=inputJSON["locationALatitude"],
+        locationBLongitude=inputJSON["locationBLongitude"],
+        locationBLatitude=inputJSON["locationBLatitude"]
     )
+    print(task.locationALatitude)
 
     # Build output
     output = {
@@ -182,20 +199,54 @@ DELETEs
 @jwt_required
 def deleteTask():
     '''
+    Delete a task by a given Id if the current user is the poster
+
+    TODO:
+    Check there are no offers
     '''
     taskId = request.args.get('taskId', type=int)
     # Get current user
     current_user_id = get_jwt_identity()
-    user = User.getByUserId(current_user_id)
 
-    return jsonify({}), 200
+    # Get target task
+    task = Task.getByTaskId(taskId)
+    if task:
+        # Check if the user is the poster
+        if task.posterUserId == current_user_id:
+            # Delete task
+            Task.deleteByTaskId(task.taskId)
+            return jsonify({"success": True}), 200
+        else:
+            # User does not have permission to delete the task
+            return jsonify({"success": False}), 403
+    else:
+        # Task not found
+        return jsonify({"success": False}), 404
 
 '''
 PUTs
 '''
-@task_blueprint.route('/putTask', methods=['PUT'])
+@task_blueprint.route('/editTask', methods=['PATCH'])
 @jwt_required
 def editTask():
     '''
     '''
-    return jsonify({}), 200
+    # Validate input
+    requiredParameters = ["taskId"]
+    optionalParameters = ["title", "categroyId", "description", "recommendedPrice", "estimatedDurationMinutes",
+                          "locationALongitude", "locationALatitude", "locationBLongitude",
+                          "locationBLatitude"]
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    editParams = {}
+    task = Task.getByTaskId(inputJSON["taskId"])
+    if task and not task.isAccepted():
+        for opt in optionalParameters:
+            if inputJSON[opt] is not None:
+                editParams[opt] = inputJSON[opt]
+        task.edit(editParams)
+        return jsonify({"success":True}), 200
+    else:
+        return jsonify({"success": False}), 403

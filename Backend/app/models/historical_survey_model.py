@@ -22,6 +22,3 @@ class HistoricalSurvey(db.Model):
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"))
     surveyId = db.Column(db.Integer())
     response = db.Column(db.Integer(), nullable=False)
-
-
-

@@ -34,6 +34,10 @@ class Survey(db.Model):
     answerD = db.Column(db.String(120), nullable=True)
     answerE = db.Column(db.String(120), nullable=True)
 
+    @classmethod
+    def empty(cls):
+        return Survey.query.first() is None
+
     # Set-up Database Relationships
     @classmethod
     def createSurvey(cls, inputList):
@@ -56,3 +60,24 @@ class Survey(db.Model):
         db.session.add(survey)
         db.session.commit()
         return survey
+
+    @classmethod
+    def getBySurveyId(cls, surveyId):
+        '''
+        Get a survey based on Id
+
+        :param surveyId: survey to get
+        :return: specific survey
+            or None
+        '''
+        survey = Survey.query.filter_by(
+            surveyId=surveyId
+        ).first()
+
+        return survey
+
+    @classmethod
+    def recommendSurvey(cls):
+        surveys = Survey.query
+        surveys = [survey.surveyId for survey in surveys]
+        return surveys
