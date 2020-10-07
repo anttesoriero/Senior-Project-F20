@@ -1,2 +1,22 @@
 How much more would you want to be paid for a job that is an hour away vs. 15 minutes away; I would not expect more; $5; $10; $15; $15+
 How much would you like to be paid to mow your lawn; $15; $20; $25, $30; $35+
+How much would you pay someone to mow your lawn; $15; $20; $25, $30; $35+
+How satisfied are you with the platform; Very Dissatisfied; Slightly Dissatisfied; Neutral; Slightly Satisfied; Very Satisfied
+How many tasks per week would you like to fill?; <1; 1; 2; 3; 3+
+How many tasks per week would you like to list?; <1; 1; 2; 3; 3+
+What category is most related to Fitness?; Moving; Yard Work; Cleaning; Cooking
+What category is most related to Cleaning?; Yard Work; Cooking; Care-Taking; Moving
+What category is most related to Yard Work?; Moving; Cleaning; Care-Taking; Fitness
+What category is most related to Care-Taking?; Cleaning; Cooking; Educational; Transportation
+What category is most related to Transportation?; Care-Taking; Pick-Up Goods; Cooking; Moving
+What category is most related to Pick-Up Goods?; Transportation; Moving; Cooking; Care-Taking
+What category is most related to Educational?; Care-Taking; Fitness; Cooking; Transportation
+Would you recommend this service to a friend?; Yes; No
+How much would you like to be paid to deliver groceries; $10; $15; $20, $25; $30+
+How much would you pay someone to deliver groceries; $10; $15; $20, $25; $30+
+How much would you like to be paid to move furniture?; $10; $15; $20, $25; $30+
+How much would you pay someone to move furniture; $10; $15; $20, $25; $30+
+How much would you like to be paid to clean bathrooms?; $10; $15; $20, $25; $30+
+How much would you pay someone to clean bathrooms; $10; $15; $20, $25; $30+
+How much would you like to be paid to rake leaves?; $10; $15; $20, $25; $30+
+How much would you pay someone to rake leaves; $10; $15; $20, $25; $30+
