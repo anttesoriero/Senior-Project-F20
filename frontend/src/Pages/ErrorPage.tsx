@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media} from 'reactstrap';
-// <script src="holder.js"/>
+import ErrorImage from "../Styles/Images/SurprisedOtterError.png"
 
 const ErrorPage = () => {
     return (
@@ -12,7 +12,7 @@ const ErrorPage = () => {
                 <br/>
 
                 <Media id="centered">
-                    <Media object data-src="../Styles/Images/SurprisedOtterError.png" alt="ERROR IMAGE" height="200" width="200"/>
+                    <Media object src={ErrorImage} alt="ERROR IMAGE" height="200"/>
                 </Media>
 
                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Uh-oh, something's wrong!</h1>
