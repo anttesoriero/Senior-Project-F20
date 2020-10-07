@@ -1,0 +1,19 @@
+// profile_page.scss for ProfilePage.tsx
+#centered{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#right{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#smallMedia{
+  height: 80px;
+  width: 80px;
+  padding-right: 30px;
+  box-sizing: border-box;
+}

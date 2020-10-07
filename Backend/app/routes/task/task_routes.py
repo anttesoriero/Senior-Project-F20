@@ -156,9 +156,11 @@ def createTask():
     '''
     # Validate input
     requiredParameters = ["categoryId", "title"]
+
     optionalParameters = ["description", "recommendedPrice", "estimatedDurationMinutes",
                           "locationALongitude", "locationALatitude", "locationBLongitude",
                           "locationBLatitude"]
+
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
@@ -166,6 +168,7 @@ def createTask():
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
+
     # Create task
     task = Task.createTask(
         posterUserId=user.userId,
@@ -180,6 +183,7 @@ def createTask():
         locationBLatitude=inputJSON["locationBLatitude"]
     )
     print(task.locationALatitude)
+
     # Build output
     output = {
         "taskId": task.taskId

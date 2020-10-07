@@ -1,0 +1,19 @@
+.centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jumbotron{
+    color: #fff;
+    /*background-color:none !important;*/
+    background-image: url("../Images/mowingLawnFlipped.png");
+    background-position: 0% 50%;
+    background-size: cover;
+}
+
+#myAlert-bottom{
+    position: fixed;
+    bottom: 5px;
+    width: 50%;
+}

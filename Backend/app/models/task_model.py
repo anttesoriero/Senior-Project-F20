@@ -9,6 +9,7 @@ These are Tasks that Users post
 # Module imports
 from app import db
 
+from app.utilities.validation import validation
 
 class Task(db.Model):
     '''
@@ -41,6 +42,7 @@ class Task(db.Model):
     locationBLongitude = db.Column(db.Numeric(7,5), nullable=True)
     locationBLatitude = db.Column(db.Numeric(7,5), nullable=True)
 
+
     # Set-up Database Relationships
     acceptedOfferId = db.relationship('Offer', backref="offer", uselist=False)
 
@@ -62,6 +64,7 @@ class Task(db.Model):
             "title": self.title,
             "categoryId": self.categoryId,
             "recommendedPrice": recommendedPrice,
+
             "accepted": self.isAccepted()
         }
         return output
@@ -183,6 +186,7 @@ class Task(db.Model):
                    description=None, recommendedPrice=None, estimatedDurationMinutes=None,
                    locationALongitude=None, locationALatitude=None, locationBLongitude=None,
                     locationBLatitude=None):
+
         '''
         Creates a Task
 
@@ -199,6 +203,7 @@ class Task(db.Model):
             locationALatitude=locationALatitude,
             locationBLongitude=locationBLongitude,
             locationBLatitude=locationBLatitude
+
         )
 
         # Save User to database

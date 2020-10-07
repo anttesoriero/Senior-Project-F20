@@ -11,6 +11,7 @@ Move furniture
 '''
 # Module imports
 from app import db
+import sys
 
 class Category(db.Model):
     '''

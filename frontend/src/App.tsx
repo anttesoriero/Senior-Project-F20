@@ -1,14 +1,24 @@
 import React from 'react';
 import { Button, Container } from 'reactstrap';
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import LandingPage from './Pages/LandingPage';
+import ProfilePage from './Pages/ProfilePage';
+import ErrorPage from './Pages/ErrorPage';
 
 function App() {
   return (
-    <div className="App">
-      <Container>
-        <h1>This is the website so far</h1>
-        <Button>This is a button</Button>
-      </Container>
-    </div>
+    <BrowserRouter>
+      <Switch>
+          <Route exact={true} path="/" render={(props) => <LandingPage />}/>
+          <Route exact={true} path="/profile" render={(props) => <ProfilePage />}/>
+          <Route exact={true} path="/error" render={(props) => <ErrorPage />}/>
+          {/* <Route exact={true} path="/shop" render={(props) => < Shop {...props}/>}/>
+          <Route exact={true} path="/signin" render={(props) => < Signin {...props}/>}/>
+          <Route exact={true} path="/register" render={(props) => < Register {...props}/>}/>
+          <Route exact={true} path="/contact" render={(props) => < ContactPage {...props}/>}/> */}
+          {/* <Redirect to="/"/> */}
+      </Switch>
+    </BrowserRouter>
   );
 }
 
