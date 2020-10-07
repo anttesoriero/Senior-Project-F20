@@ -1,37 +1,57 @@
-'''
-Survey's model for database
-
-This stores static Surveys, a survey should never be removed or edited only disabled
-
+"""
+Defines routes for survey related endpoints
+! Try to use utilities outside of this file to do the heavy lifting !
+This file should be focused on annotating routes
 @author Matthew Schofield
-@version 9.25.2020
-'''
+@version 9.21.2020
+"""
+# Library imports
+from flask import jsonify, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 # Module imports
-from app import db
+from app.routes.survey import survey_blueprint
 
-# Models imports
+# Model imports
+from app.models.user_model import User
 
-class Survey(db.Model):
+
+'''
+GETs
+'''
+@survey_blueprint.route('/getSurvey', methods=['GET'])
+@jwt_required
+def getSurvey():
     '''
-    Column definitions
-
-    surveyId
-    active
-    question
-    answerA
-    answerB
-    answerC
-    answerD
-    answerE
     '''
-    # Column definitions
-    surveyId = db.Column(db.Integer(), db.ForeignKey("historical_survey.historicalSurveyId"),  primary_key=True)
-    active = db.Column(db.Boolean())
-    question = db.Column(db.String(120))
-    answerA = db.Column(db.String(120))
-    answerB = db.Column(db.String(120))
-    answerC = db.Column(db.String(120))
-    answerD = db.Column(db.String(120))
-    answerE = db.Column(db.String(120))
+    # Validate inputs
+    surveyId = request.args.get('taskId', type=int)
 
-    # Set-up Database Relationships
+    return jsonify({}), 200
+
+@survey_blueprint.route('/recommendSurvey', methods=['GET'])
+@jwt_required
+def recommendSurvey():
+    '''
+    Return a recommended survey ID
+    :return: survey ID recommendation
+    '''
+    # Get current user
+    current_user_id = get_jwt_identity()
+    user = User.getByUserId(current_user_id)
+
+    return jsonify({"recommendedSurvey":0}), 200
+
+'''
+POSTs
+'''
+@survey_blueprint.route('/respond', methods=['POST'])
+@jwt_required
+def respond():
+    '''
+    '''
+    # Get current user
+    current_user_id = get_jwt_identity()
+    user = User.getByUserId(current_user_id)
+
+    return jsonify({}), 200
