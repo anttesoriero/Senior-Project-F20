@@ -1,57 +1,58 @@
-"""
-Defines routes for survey related endpoints
-! Try to use utilities outside of this file to do the heavy lifting !
-This file should be focused on annotating routes
+'''
+Survey's model for database
+
+This stores static Surveys, a survey should never be removed or edited only disabled
+
 @author Matthew Schofield
-@version 9.21.2020
-"""
-# Library imports
-from flask import jsonify, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
-
+@version 9.25.2020
+'''
 # Module imports
-from app.routes.survey import survey_blueprint
+from app import db
 
-# Model imports
-from app.models.user_model import User
+# Models imports
 
-
-'''
-GETs
-'''
-@survey_blueprint.route('/getSurvey', methods=['GET'])
-@jwt_required
-def getSurvey():
+class Survey(db.Model):
     '''
-    '''
-    # Validate inputs
-    surveyId = request.args.get('taskId', type=int)
+    Column definitions
 
-    return jsonify({}), 200
-
-@survey_blueprint.route('/recommendSurvey', methods=['GET'])
-@jwt_required
-def recommendSurvey():
+    surveyId
+    active
+    question
+    answerA
+    answerB
+    answerC
+    answerD
+    answerE
     '''
-    Return a recommended survey ID
-    :return: survey ID recommendation
-    '''
-    # Get current user
-    current_user_id = get_jwt_identity()
-    user = User.getByUserId(current_user_id)
+    # Column definitions
+    surveyId = db.Column(db.Integer(),  primary_key=True)
+    active = db.Column(db.Boolean(), nullable=False)
+    question = db.Column(db.String(120), nullable=False)
+    answerA = db.Column(db.String(120), nullable=False)
+    answerB = db.Column(db.String(120), nullable=True)
+    answerC = db.Column(db.String(120), nullable=True)
+    answerD = db.Column(db.String(120), nullable=True)
+    answerE = db.Column(db.String(120), nullable=True)
 
-    return jsonify({"recommendedSurvey":0}), 200
+    # Set-up Database Relationships
+    @classmethod
+    def createSurvey(cls, inputList):
+        '''
+        Creates a Survey
 
-'''
-POSTs
-'''
-@survey_blueprint.route('/respond', methods=['POST'])
-@jwt_required
-def respond():
-    '''
-    '''
-    # Get current user
-    current_user_id = get_jwt_identity()
-    user = User.getByUserId(current_user_id)
+        '''
+        # Create Survey
+        survey = Survey(
+            active=True,
+            question=inputList[0],
+            answerA=inputList[1],
+            answerB=inputList[2] if 2 < len(inputList) else None,
+            answerC=inputList[3] if 3 < len(inputList) else None,
+            answerD=inputList[4] if 4 < len(inputList) else None,
+            answerE=inputList[5] if 5 < len(inputList) else None
+        )
 
-    return jsonify({}), 200
+        # Save User to database
+        db.session.add(survey)
+        db.session.commit()
+        return survey
