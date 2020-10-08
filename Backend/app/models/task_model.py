@@ -76,7 +76,7 @@ class Task(db.Model):
         '''
         # Strip latitude and longitudes to only 2 decimals
         locationALongitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
-        locationALatitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
+        locationALatitude = str("%.1f" % self.locationALatitude) if self.locationALatitude else None
         locationBLongitude = str("%.1f" % self.locationBLongitude) if self.locationBLongitude else None
         locationBLatitude = str("%.1f" % self.locationBLatitude) if self.locationBLatitude else None
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
