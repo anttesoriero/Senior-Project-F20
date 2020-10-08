@@ -36,14 +36,14 @@ def getProfile():
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
+    userBalance = User.getAccountBalance(current_user_id)
 
-    # TODO: add account balance after that table is created
     responseInformation = {
         "email": user.email,
         "firstName": user.firstName,
         "lastName": user.lastName,
         "preferredName": user.preferredName,
-        "accountBalance": "" 
+        "accountBalance": userBalance.accountBalance
     }
 
     return jsonify(responseInformation), 200

@@ -9,6 +9,7 @@ from app import db
 
 # Models imports
 from app.models.credentials_model import Credentials
+from app.models.account_balance_model import AccountBalance
 from app.models.offer_model import Offer
 from app.models.category_model import Category
 from app.models.task_model import Task
@@ -37,6 +38,7 @@ class User(db.Model):
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False)
+    accountBalance = db.relationship('AccountBalance', backref="user", uselist=False)
     postedTasks = db.relationship('Task', backref="user", uselist=True)
     extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False)
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True)
@@ -159,3 +161,18 @@ class User(db.Model):
             task_ids.append(task.taskId)
 
         return task_ids
+    
+    @classmethod
+    def getAccountBalance(cls, userId):
+        '''
+        Get account balance for a specific user
+
+        :param userId: user_id to get User with
+        :return: account balance for that user 
+        '''
+
+        user = User.query.filter_by(
+            userId=userId
+        ).first()
+
+        return user.accountBalance
