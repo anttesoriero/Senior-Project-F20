@@ -9,7 +9,6 @@ These are Tasks that Users post
 # Module imports
 from app import db
 
-from app.utilities.validation import validation
 
 class Task(db.Model):
     '''
@@ -35,13 +34,12 @@ class Task(db.Model):
     categoryId = db.Column(db.Integer(), db.ForeignKey("category.categoryId"))
     description = db.Column(db.String(300), nullable=True)
     title = db.Column(db.String(60), nullable=True)
-    recommendedPrice = db.Column(db.Numeric(4,2), nullable=True)
+    recommendedPrice = db.Column(db.Numeric(6,2), nullable=True)
     estimatedDurationMinutes = db.Column(db.Integer(), nullable=True)
-    locationALongitude = db.Column(db.Numeric(7,5), nullable=True)
-    locationALatitude = db.Column(db.Numeric(7,5), nullable=True)
-    locationBLongitude = db.Column(db.Numeric(7,5), nullable=True)
-    locationBLatitude = db.Column(db.Numeric(7,5), nullable=True)
-
+    locationALongitude = db.Column(db.Numeric(8,5), nullable=True)
+    locationALatitude = db.Column(db.Numeric(8,5), nullable=True)
+    locationBLongitude = db.Column(db.Numeric(8,5), nullable=True)
+    locationBLatitude = db.Column(db.Numeric(8,5), nullable=True)
 
     # Set-up Database Relationships
     acceptedOfferId = db.relationship('Offer', backref="offer", uselist=False)
@@ -64,7 +62,6 @@ class Task(db.Model):
             "title": self.title,
             "categoryId": self.categoryId,
             "recommendedPrice": recommendedPrice,
-
             "accepted": self.isAccepted()
         }
         return output
@@ -100,7 +97,7 @@ class Task(db.Model):
     '''
     Update
     '''
-    def editParams(self, paramDict):
+    def edit(self, paramDict):
         k = paramDict.keys()
         if "title" in k:
             self.title = paramDict["title"]
@@ -172,7 +169,7 @@ class Task(db.Model):
         '''
         task = cls.getByTaskId(taskId)
         if task:
-            task.delete()
+            db.session.delete(task)
             db.session.commit()
             return True
         else:
@@ -186,7 +183,6 @@ class Task(db.Model):
                    description=None, recommendedPrice=None, estimatedDurationMinutes=None,
                    locationALongitude=None, locationALatitude=None, locationBLongitude=None,
                     locationBLatitude=None):
-
         '''
         Creates a Task
 
@@ -203,7 +199,6 @@ class Task(db.Model):
             locationALatitude=locationALatitude,
             locationBLongitude=locationBLongitude,
             locationBLatitude=locationBLatitude
-
         )
 
         # Save User to database
