@@ -37,9 +37,13 @@ def getProfile():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
+    # TODO: add account balance after that table is created
     responseInformation = {
         "email": user.email,
-        "name": user.name
+        "firstName": user.firstName,
+        "lastName": user.lastName,
+        "preferredName": user.preferredName,
+        "accountBalance": "" 
     }
 
     return jsonify(responseInformation), 200
@@ -57,14 +61,14 @@ def getPostedTasks():
     '''
     # Get current user
     current_user_id = get_jwt_identity()
-    user = User.getByUserId(current_user_id)
-
-    # Get user's tasks
-    # TODO
+    # user = User.getByUserId(current_user_id)
+    
+    # Get user's task ids
+    task_ids = User.getPostedTaskIDs(current_user_id)
 
     # Format output
     responseInformation = {
-        "tasks":[]
+        "taskIDs": task_ids
     }
 
     return jsonify(responseInformation), 200

@@ -69,7 +69,9 @@ class User(db.Model):
         :return:
         '''
         output = {
-            "name": self.firstName
+            "name": self.firstName + ' ' + self.lastName,
+            "preferredName": self.preferredName,
+            "phoneNumber": self.phoneNumber
         }
         return output
 
@@ -118,23 +120,42 @@ class User(db.Model):
         return not User.getByEmail(email)
 
     @classmethod
-    def createUser(cls, email, password, firstName=""):
+    def createUser(cls, email, password, firstName="", lastName="", preferredName="", phoneNumber=""):
         '''
         Creates a User
 
         :param email: User's email
         :param password: User's plaintext password
-        :param name: name of the user
+        :param firstName: first name of the user
+        :param lastName: last name of the user
         '''
         # Check if user exists
         if not User.existsByEmail(email):
             return None
 
         # Create User
-        user = User(email=email, firstName=firstName)
+        user = User(email=email, firstName=firstName, lastName=lastName, preferredName=preferredName, phoneNumber=phoneNumber)
         Credentials.createCredentials(password=password, user=user)
 
         # Save User to database
         db.session.add(user)
         db.session.commit()
         return user
+
+    @classmethod
+    def getPostedTaskIDs(cls, userId):
+        '''
+        Gets the task ids for a particular user
+
+        :param userId user_id to get user
+        :return list of task ids for a user
+        '''
+        tasks = db.session.query(User, Task).filter(User.userId == Task.posterUserId).all()
+        task_ids = []
+
+        # loop through table returned from user and task join
+        for user, task in tasks:
+            # add task ids to list
+            task_ids.append(task.taskId)
+
+        return task_ids
