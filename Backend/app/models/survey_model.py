@@ -34,6 +34,19 @@ class Survey(db.Model):
     answerD = db.Column(db.String(120), nullable=True)
     answerE = db.Column(db.String(120), nullable=True)
 
+    def getPublicInfo(self):
+        output = {
+            "surveyId": self.surveyId,
+            "active": self.active,
+            "question": self.question,
+            "answerA": self.answerA,
+            "answerB": self.answerB,
+            "answerC": self.answerC,
+            "answerD": self.answerD,
+            "answerE": self.answerE
+        }
+    return output
+    
     @classmethod
     def empty(cls):
         return Survey.query.first() is None
