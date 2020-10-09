@@ -22,8 +22,8 @@ const ErrorPage = () => {
 
                 <Row>
                     <Col><hr/></Col>
-                    <Col id="centered"><Button color="secondary" size="lg">Go Back</Button></Col>
-                    <Col id="centered"><Button color="primary" size="lg">Go Home</Button></Col>
+                    <Col id="centered"><Button href="javascript:history.go(-1)" color="secondary" size="lg">Go Back</Button></Col>
+                    <Col id="centered"><Button href="/" color="primary" size="lg">Go Home</Button></Col>
                     <Col><hr/></Col>
                 </Row>
 
