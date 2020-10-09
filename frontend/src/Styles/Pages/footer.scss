@@ -3,3 +3,29 @@
   justify-content: center;
   align-items: center;
 }
+
+#right{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* unvisited link & visited link */
+footer {
+  padding: 10px;
+  background-color: lightgrey;
+  /*
+  position: absolute;
+  bottom: 0;
+   */
+
+  a:link, a:visited {
+    color: black;
+  }
+
+  /* mouse over link & selected link*/
+  a:hover, a:active {
+    //color: hotpink;
+    text-decoration: underline;
+  }
+}
