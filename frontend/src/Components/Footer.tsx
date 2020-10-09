@@ -4,7 +4,6 @@ const Footer = () => {
     return (
         <div>
             {/*Footer Code*/}
-
         </div>
     );
 }

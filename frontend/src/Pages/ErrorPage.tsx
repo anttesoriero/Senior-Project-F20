@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media} from 'reactstrap';
 import ErrorImage from "../Styles/Images/SurprisedOtterError.png"
+import Footer from '../Components/Footer';
 
 const ErrorPage = () => {
     return (
@@ -38,6 +39,7 @@ const ErrorPage = () => {
 
 
             </Container>
+            <Footer/>
         </div>
     );
 }
