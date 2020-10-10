@@ -4,7 +4,7 @@ import json
 base_auth = "http://127.0.0.1:5000/auth/"
 headers = {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
+    'Accept': 'application/json',
 }
 
 
@@ -40,9 +40,13 @@ def test_login():
         headers=headers,
         data=inputData
     )
+    
     assert response.status_code == 200
 
+    return response.json()["access_token"]
+
 test_login()
+headers["Authorization"] = 'Bearer ' + test_login()
 
 def test_login_fail():
     endpoint = "login"
@@ -61,3 +65,22 @@ def test_login_fail():
     assert response.status_code == 401
 
 test_login_fail()
+
+def test_changePasswordWithAuth():
+    endpoint = "changePasswordWithAuth"
+
+    inputData = {
+        "oldPassword": "xyz",
+        "newPassword": "123"
+    }
+    inputData = json.dumps(inputData)
+
+    response = requests.post(
+        base_auth + endpoint,
+        headers=headers,
+        data=inputData
+    )
+
+    assert response.status_code == 200
+
+test_changePasswordWithAuth()
