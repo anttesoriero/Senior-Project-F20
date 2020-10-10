@@ -25,11 +25,30 @@ GETs
 @jwt_required
 def getSurvey():
     '''
+        Out:
+    {
+        "surveyId": int
+        "active": bool
+        "question": str
+        "answerA": str
+        "answerB": str
+        "answerC": str
+        "answerD": str
+        "answerE": str
+    }
     '''
-    # Validate inputs
-    surveyId = request.args.get('taskId', type=int)
 
-    return jsonify({}), 200
+    # Validate inputs
+    surveyId = request.args.get('surveyId', type=int)
+
+    # Get task
+    survey = Survey.getBySurveyId(surveyId)
+    if survey is None:
+        return jsonify({"success":False}), 404
+
+    responseInformation = survey.getPublicInfo()
+
+    return jsonify(responseInformation), 200
 
 @survey_blueprint.route('/recommendSurvey', methods=['GET'])
 @jwt_required

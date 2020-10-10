@@ -3,6 +3,7 @@ import {RouteComponentProps, withRouter } from 'react-router-dom';
 import {Container, Jumbotron, Row, Col, Alert} from 'reactstrap';
 import Navigation from '../Components/Navigation';
 import AuthTabs from '../Components/AuthTabs';
+import Footer from "../Components/Footer";
 
 type event = {
     email: string,
@@ -44,6 +45,8 @@ const LandingPage = () => {
                     </Jumbotron>
                 </div>
             </Container>
+            <br />
+            <Footer/>
         </div>
     )
 }

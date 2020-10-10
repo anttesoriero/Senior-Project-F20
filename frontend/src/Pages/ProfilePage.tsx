@@ -1,6 +1,7 @@
 import React from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
+import Footer from "../Components/Footer";
 // <script src="holder.js"/>
 
 const ProfilePage = () => {
@@ -102,6 +103,9 @@ const ProfilePage = () => {
 
 
             </Container>
+
+            <br />
+            <Footer/>
 
 
         </div>
