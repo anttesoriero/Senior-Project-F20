@@ -50,6 +50,7 @@
     img{
         max-width: 100%;
         height: auto;
+        object-fit: cover;
         border-radius: $border-radius-extreme $border-radius-extreme 0 0;
     }
 
@@ -518,12 +519,13 @@
     }
 }
 .card-image{
+    object-fit: contain;
     &.card-big-shadow{
         max-width: 100%;
     }
     .card{
         background-size: cover;
-        min-height: 430px;
+        //min-height: 430px;
         width: 100%;
     }
     .img-raised{
