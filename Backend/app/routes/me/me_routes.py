@@ -61,7 +61,6 @@ def getPostedTasks():
     '''
     # Get current user
     current_user_id = get_jwt_identity()
-    # user = User.getByUserId(current_user_id)
     
     # Get user's task ids
     task_ids = User.getPostedTaskIDs(current_user_id)
@@ -84,12 +83,16 @@ def editInformation():
 
     :return:
     {
-        email: str, email to set
-        name: str, name to set
+        email:         str, email to set
+        firstName:     str, first name to set
+        lastName:      str, last name to set
+        preferredName: str, preferred name to set
+        phoneNumber:   str, phone number to set
     }
     '''
     # Validate input
-    success, code, inputJSON = validateRequestJSON(request, [], ["email", "name"])
+    success, code, inputJSON = validateRequestJSON(request, [], 
+                                ["email", "firstName", "lastName", "preferredName", "phoneNumber"])
     if not success:
         return jsonify({}), code
 
@@ -98,10 +101,16 @@ def editInformation():
     user = User.getByUserId(current_user_id)
 
     # Iterate through parameters
-    inputKeys = inputJSON.keys()
-    if "name" in inputKeys:
-        user.setName(inputJSON["name"])
-    if "email" in inputKeys:
+    # inputKeys = inputJSON.keys()
+    if inputJSON["firstName"] != None:
+        user.setFirstName(inputJSON["firstName"])
+    if inputJSON["lastName"] != None:
+        user.setLastName(inputJSON["lastName"])
+    if inputJSON["email"] != None:
         user.setEmail(inputJSON["email"])
+    if inputJSON["preferredName"] != None:
+        user.setPreferredName(inputJSON["preferredName"])
+    if inputJSON["phoneNumber"] != None:
+        user.setPhoneNumber(inputJSON["phoneNumber"])
 
     return jsonify(message="New user information successfully set"), 200
