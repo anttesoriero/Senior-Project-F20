@@ -33,3 +33,27 @@ class ExtendedUser(db.Model):
     locationInterestedInBLatitude = db.Column(db.Numeric(9, 6), nullable=True)
     pricePerDrivingMinute = db.Column(db.Numeric(10, 2), nullable=True)
     posterPreference = db.Column(db.Integer(), nullable=True)
+
+    def setLocationInterestedInALongitude(self, newLongitudeA):
+        self.locationInterestedInALongitude = newLongitudeA
+        db.session.commit()
+
+    def setLocationInterestedInALatitude(self, newLatitudeA):
+        self.locationInterestedInALatitude = newLatitudeA
+        db.session.commit()
+
+    def setLocationInterestedInALongitude(self, newLongitudeB):
+        self.locationInterestedInBLongitude = newLongitudeB
+        db.session.commit()
+
+    def setLocationInterestedInALongitude(self, newLatitudeB):
+        self.locationInterestedInBLatitude = newLatitudeB
+        db.session.commit()
+
+    def setPricePerDrivingMinute(self, newPricePerDrivingMinute):
+        self.pricePerDrivingMinute = newPricePerDrivingMinute
+        db.session.commit()
+
+    def setPosterPreference(self, newPosterPreference):
+        self.posterPreference = newPosterPreference
+        db.session.commit()
