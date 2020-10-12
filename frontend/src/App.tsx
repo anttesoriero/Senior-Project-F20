@@ -4,12 +4,14 @@ import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import LandingPage from './Pages/LandingPage';
 import ProfilePage from './Pages/ProfilePage';
 import ErrorPage from './Pages/ErrorPage';
+import SurveyPage from './Pages/SurveyPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
           <Route exact={true} path="/" render={(props) => <LandingPage />}/>
+          <Route exact={true} path="/survey" render={(props) => <SurveyPage />}/>
           <Route exact={true} path="/profile" render={(props) => <ProfilePage />}/>
           <Route exact={true} path="/error" render={(props) => <ErrorPage />}/>
           {/* <Route exact={true} path="/shop" render={(props) => < Shop {...props}/>}/>
