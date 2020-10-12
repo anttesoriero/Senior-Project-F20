@@ -43,28 +43,13 @@ class User(db.Model):
     extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False)
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True)
 
-    def setPassword(self, password):
-        self.credentials.changePassword(password=password)
-        db.session.commit()
 
-    def setFirstName(self, newFirstName):
-        self.firstName = newFirstName
-        db.session.commit()
-
-    def setLastName(self, newLastName):
-        self.lastName = newLastName
-        db.session.commit()
-
-    def setPreferredName(self, newPreferredName):
-        self.preferredName = newPreferredName
+    def setFirstName(self, newName):
+        self.firstName = newName
         db.session.commit()
 
     def setEmail(self, newEmail):
         self.email = newEmail
-        db.session.commit()
-
-    def setPhoneNumber(self, newPhoneNumber):
-        self.phoneNumber = newPhoneNumber
         db.session.commit()
 
     def checkCredentials(self, password):
@@ -76,10 +61,27 @@ class User(db.Model):
         '''
         return self.credentials.checkPassword(password)
 
+    def getTaskIds(self):
+        return [task.taskId for task in self.postedTasks]
+
+    '''
+    Interactions with credentials are routed through Credentials object
+    '''
+    def setPassword(self, password):
+        self.credentials.changePassword(password=password)
+
+    '''
+    Interactions with account balance are routed through Account Balance object
+    '''
+    def getAccountBalance(self):
+        return self.accountBalance.getBalance()
+
+    def changeAccountBalance(self, amountToChange):
+        return self.accountBalance.changeBalance(amountToChange)
+
     def getBriefPublicInfo(self):
         '''
         Get a brief overview of information about a user
-
         :return:
         '''
         output = {
@@ -93,7 +95,6 @@ class User(db.Model):
     def getPublicInfo(self):
         '''
         Get a more in-depth overview of information about a user
-
         :return:
         '''
 
@@ -102,7 +103,7 @@ class User(db.Model):
             "preferredName": self.preferredName,
             "phoneNumber": self.phoneNumber,
             "email": self.email,
-            "gender": self.extendedModel.gender if self.extendedModel != None else ''
+            "gender": self.extendedModel.gender
         }
         return output
 
@@ -131,7 +132,8 @@ class User(db.Model):
         user = User.query.filter_by(
             userId=userId
         ).first()
-
+        if user.extendedModel.gender is None:
+            user.extendedModel.gender = ''
         return user
 
     @classmethod
@@ -145,57 +147,24 @@ class User(db.Model):
         return not User.getByEmail(email)
 
     @classmethod
-    def createUser(cls, email, password, firstName="", lastName="", preferredName="", phoneNumber=""):
+    def createUser(cls, email, password, firstName=""):
         '''
         Creates a User
 
         :param email: User's email
         :param password: User's plaintext password
-        :param firstName: first name of the user
-        :param lastName: last name of the user
+        :param name: name of the user
         '''
         # Check if user exists
         if not User.existsByEmail(email):
             return None
 
         # Create User
-        user = User(email=email, firstName=firstName, lastName=lastName, preferredName=preferredName, phoneNumber=phoneNumber)
+        user = User(email=email, firstName=firstName)
         Credentials.createCredentials(password=password, user=user)
+        AccountBalance.createBalance(user=user, accountBalance=10.0)
 
         # Save User to database
         db.session.add(user)
         db.session.commit()
         return user
-
-    @classmethod
-    def getPostedTaskIDs(cls, userId):
-        '''
-        Gets the task ids for a particular user
-
-        :param userId user_id to get user
-        :return list of task ids for a user
-        '''
-        tasks = db.session.query(User, Task).filter(User.userId == Task.posterUserId).all()
-        task_ids = []
-
-        # loop through table returned from user and task join
-        for user, task in tasks:
-            # add task ids to list
-            task_ids.append(task.taskId)
-
-        return task_ids
-    
-    @classmethod
-    def getAccountBalance(cls, userId):
-        '''
-        Get account balance for a specific user
-
-        :param userId: user_id to get User with
-        :return: account balance for that user 
-        '''
-
-        user = User.query.filter_by(
-            userId=userId
-        ).first()
-
-        return user.accountBalance
