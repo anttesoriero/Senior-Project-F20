@@ -47,12 +47,24 @@ class User(db.Model):
         self.credentials.changePassword(password=password)
         db.session.commit()
 
-    def setFirstName(self, newName):
-        self.firstName = newName
+    def setFirstName(self, newFirstName):
+        self.firstName = newFirstName
+        db.session.commit()
+
+    def setLastName(self, newLastName):
+        self.lastName = newLastName
+        db.session.commit()
+
+    def setPreferredName(self, newPreferredName):
+        self.preferredName = newPreferredName
         db.session.commit()
 
     def setEmail(self, newEmail):
         self.email = newEmail
+        db.session.commit()
+
+    def setPhoneNumber(self, newPhoneNumber):
+        self.phoneNumber = newPhoneNumber
         db.session.commit()
 
     def checkCredentials(self, password):
@@ -84,12 +96,13 @@ class User(db.Model):
 
         :return:
         '''
+
         output = {
             "name": self.firstName + ' ' + self.lastName,
             "preferredName": self.preferredName,
             "phoneNumber": self.phoneNumber,
-            "email": self.email
-            # TODO add other fields
+            "email": self.email,
+            "gender": self.extendedModel.gender if self.extendedModel != None else ''
         }
         return output
 
