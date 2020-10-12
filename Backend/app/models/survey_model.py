@@ -45,7 +45,7 @@ class Survey(db.Model):
             "answerD": self.answerD,
             "answerE": self.answerE
         }
-    return output
+        return output
     
     @classmethod
     def empty(cls):

@@ -73,15 +73,25 @@ class User(db.Model):
         output = {
             "name": self.firstName + ' ' + self.lastName,
             "preferredName": self.preferredName,
-            "phoneNumber": self.phoneNumber
+            "phoneNumber": self.phoneNumber,
+            "email": self.email
         }
         return output
 
     def getPublicInfo(self):
         '''
-        TODO
+        Get a more in-depth overview of information about a user
+
+        :return:
         '''
-        return {}
+        output = {
+            "name": self.firstName + ' ' + self.lastName,
+            "preferredName": self.preferredName,
+            "phoneNumber": self.phoneNumber,
+            "email": self.email
+            # TODO add other fields
+        }
+        return output
 
     @classmethod
     def getByEmail(cls, email):

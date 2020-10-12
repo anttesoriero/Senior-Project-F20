@@ -9,7 +9,7 @@ This file should be focused on annotating routes
 """
 # Library imports
 from flask import jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Module imports
 from app.routes.user import user_blueprint
@@ -26,16 +26,18 @@ def getBriefProfile():
     :return: brief profile about a given user
     see output of User.getBriefPublicInfo()
     '''
-    # Validate inputs
-    otherUserId = request.args.get('otherUser', type=int)
+    # # Validate inputs
+    # otherUserId = request.args.get('otherUser', type=int)
 
-    # Get models
-    otherUser = User.getByUserId(otherUserId)
-    if not otherUser:
-        return jsonify({}), 404
+    # # Get models
+    # otherUser = User.getByUserId(otherUserId)
 
-    responseInformation = otherUser.getBriefPublicInfo()
+    current_user_id = get_jwt_identity()
+    user = User.getByUserId(current_user_id)
+    if not user:
+        return jsonify({"message": "user not found"}), 404
 
+    responseInformation = user.getBriefPublicInfo()
     return jsonify(responseInformation), 200
 
 @user_blueprint.route('/getProfile', methods=['GET'])
@@ -47,15 +49,16 @@ def getProfile():
     :return: profile about a given user
     see output of User.getPublicInfo()
     '''
-    # Validate inputs
-    otherUserId = request.args.get('otherUser', type=int)
+    # # Validate inputs
+    # otherUserId = request.args.get('otherUser', type=int)
 
-    # Get models
-    otherUser = User.getByUserId(otherUserId)
+    # # Get models
+    # otherUser = User.getByUserId(otherUserId)
 
-    if not otherUser:
-        return jsonify({}), 404
+    current_user_id = get_jwt_identity()
+    user = User.getByUserId(current_user_id)
+    if not user:
+        return jsonify({"message": "user not found"}), 404
 
-    responseInformation = otherUser.getPublicInfo()
-
+    responseInformation = user.getPublicInfo()
     return jsonify(responseInformation), 200
