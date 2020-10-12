@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
 import Footer from "../Components/Footer";
+import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 // <script src="holder.js"/>
 
 const ProfilePage = () => {
@@ -18,7 +19,7 @@ const ProfilePage = () => {
                     <Col xs="10">
                         <Media>
                             <Media left href="#">
-                                <Media object data-src="holder.js/160x160" alt="Generic placeholder image" height="160" width="160"/>
+                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160"/>
                             </Media>
                             <Media body style={{padding: 10}}>
                                 <Media heading>
@@ -48,13 +49,13 @@ const ProfilePage = () => {
                             <br/>
                             <Row>
                                 <Col xs="6" sm="4">
-                                    <Media object data-src="holder.js/80x80" alt="Generic placeholder image" height="80" width="80"/>
+                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80"/>
                                 </Col>
                                 <Col xs="6" sm="4">
-                                    <Media object data-src="holder.js/80x80" alt="Generic placeholder image" height="80" width="80"/>
+                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80"/>
                                 </Col>
                                 <Col sm="4">
-                                    <Media object data-src="holder.js/80x80" alt="Generic placeholder image" height="80" width="80"/>
+                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80"/>
                                 </Col>
                             </Row>
 
