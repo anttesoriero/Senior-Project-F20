@@ -6,7 +6,7 @@ TODO:
 Check userId, it may not need primary_key=True
 
 @author Matthew Schofield
-@version 9.25.2020
+@version 10.11.2020
 '''
 # Library imports
 # Place holding
@@ -23,6 +23,14 @@ class ExtendedUser(db.Model):
     Connections
     User table, userId
     '''
+    # Column definitions
     extendedUserId = db.Column(db.Integer(), primary_key=True)
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"), primary_key=True)
-
+    gender = db.Column(db.Integer(), nullable=True)
+    age = db.Column(db.Integer(), nullable=True)
+    locationInterestedInALongitude = db.Column(db.Numeric(9, 6), nullable=True)
+    locationInterestedInALatitude = db.Column(db.Numeric(9, 6), nullable=True)
+    locationInterestedInBLongitude = db.Column(db.Numeric(9, 6), nullable=True)
+    locationInterestedInBLatitude = db.Column(db.Numeric(9, 6), nullable=True)
+    pricePerDrivingMinute = db.Column(db.Numeric(10, 2), nullable=True)
+    posterPreference = db.Column(db.Integer(), nullable=True)
