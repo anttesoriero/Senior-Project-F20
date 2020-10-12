@@ -16,6 +16,7 @@ from app.routes.survey import survey_blueprint
 
 # Model imports
 from app.models.user_model import User
+from app.models.survey_model import Survey
 
 
 '''
