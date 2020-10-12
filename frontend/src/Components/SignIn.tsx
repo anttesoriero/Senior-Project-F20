@@ -9,18 +9,19 @@ const SignIn = ({history}: RouteComponentProps) => {
 
     const signIn = data => {
         setSubmitting(true);
-        axios.post('https://futurfits-api.herokuapp.com/api/v1/user/login', {
+        axios.post('http://127.0.0.1:5000/auth/login', {
             email: data.email,
             password: data.password
           })
           .then(function (response) {
             setSubmitting(false);
+            localStorage.setItem('access_token', response.data.access_token);
             history.push('/profile')
             console.log(response);
           })
           .catch(function (error) {
             setSubmitting(false);
-            console.log(data);
+            console.log(error);
           });   
     }
 

@@ -9,18 +9,18 @@ const Register = ({ history }: RouteComponentProps) => {
 
     const signIn = data => {
         setSubmitting(true);
-        axios.post('https://futurfits-api.herokuapp.com/api/v1/user/register', {
+        axios.post('http://127.0.0.1:5000/auth/register', {
             email: data.email,
             password: data.password
         })
             .then(function (response) {
                 setSubmitting(false);
-                console.log(response);
+                localStorage.setItem('access_token', response.data.access_token)
                 history.push('/profile')
             })
             .catch(function (error) {
                 setSubmitting(false);
-                console.log(data);
+                console.log(error);
             });
     }
 
@@ -37,8 +37,8 @@ const Register = ({ history }: RouteComponentProps) => {
                         <Field placeholder='Password' name='password' type='password' required as={Input} />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="password">Confirm Password</Label>
-                        <Field placeholder='Confirm Password' name='password' type='password' required as={Input} />
+                        <Label for="passwordc">Confirm Password</Label>
+                        <Field placeholder='Confirm Password' name='passwordc' type='password' required as={Input} />
                     </FormGroup>
                     <FormGroup className='centered'>
                         {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Making account...</Button> : <Button type='submit' color="primary">Create Account</Button>}

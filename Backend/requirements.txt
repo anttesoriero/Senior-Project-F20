@@ -3,3 +3,4 @@ Flask-JWT-Extended==3.24.1
 Flask-SQLAlchemy==2.4.4
 waitress==1.4.4
 Werkzeug==1.0.0
+flask-cors

@@ -8,9 +8,12 @@ Initialize Flask application architecture
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 import sys
 # Init app
 app = Flask(__name__)
+#Cors setup to allow requests from frontend
+CORS(app)
 
 # Set up
 

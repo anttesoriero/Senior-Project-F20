@@ -1,11 +1,30 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
 import Footer from "../Components/Footer";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
+import * as JWT from "jwt-decode";
+import axios from 'axios';
 // <script src="holder.js"/>
 
 const ProfilePage = () => {
+    const token = localStorage.getItem('access_token');
+
+    const config = {
+        
+    };
+    
+    useEffect(() => {
+        axios.get('http://127.0.0.1:5000/me/getProfile', 
+        { headers: { Authorization: `Bearer ${token}` } })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });   
+    })
+
     return (
         <div>
             <Navigation/>
