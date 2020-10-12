@@ -36,14 +36,13 @@ def getProfile():
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
-    userBalance = User.getAccountBalance(current_user_id)
 
     responseInformation = {
         "email": user.email,
         "firstName": user.firstName,
         "lastName": user.lastName,
         "preferredName": user.preferredName,
-        "accountBalance": userBalance.accountBalance
+        "accountBalance": user.getAccountBalance()
     }
 
     return jsonify(responseInformation), 200
