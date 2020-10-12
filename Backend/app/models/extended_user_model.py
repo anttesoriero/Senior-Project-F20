@@ -26,7 +26,7 @@ class ExtendedUser(db.Model):
     # Column definitions
     extendedUserId = db.Column(db.Integer(), primary_key=True)
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"), primary_key=True)
-    gender = db.Column(db.Integer(), nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
     age = db.Column(db.Integer(), nullable=True)
     locationInterestedInALongitude = db.Column(db.Numeric(9, 6), nullable=True)
     locationInterestedInALatitude = db.Column(db.Numeric(9, 6), nullable=True)
