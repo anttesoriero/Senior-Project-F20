@@ -35,7 +35,7 @@ def getBriefProfile():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
     if not user:
-        return jsonify({"message": "user not found"}), 404
+        return jsonify(message="user not found"), 404
 
     responseInformation = user.getBriefPublicInfo()
     return jsonify(responseInformation), 200
@@ -58,7 +58,7 @@ def getProfile():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
     if not user:
-        return jsonify({"message": "user not found"}), 404
+        return jsonify(message="user not found"), 404
 
     responseInformation = user.getPublicInfo()
     return jsonify(responseInformation), 200
