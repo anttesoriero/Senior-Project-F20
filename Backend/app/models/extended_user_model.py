@@ -57,3 +57,17 @@ class ExtendedUser(db.Model):
     def setPosterPreference(self, newPosterPreference):
         self.posterPreference = newPosterPreference
         db.session.commit()
+
+    @classmethod
+    def createExtendedUserModel(cls, user):
+        '''
+        Create an Extended User Model object in the database
+
+        :param user: User connected to
+        '''
+        # Create Credentials object
+        extendedUser = ExtendedUser(user=user)
+
+        # Save to database
+        db.session.add(extendedUser)
+        db.session.commit()

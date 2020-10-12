@@ -163,6 +163,7 @@ class User(db.Model):
         user = User(email=email, firstName=firstName)
         Credentials.createCredentials(password=password, user=user)
         AccountBalance.createBalance(user=user, accountBalance=10.0)
+        ExtendedUser.createExtendedUserModel(user=user)
 
         # Save User to database
         db.session.add(user)
