@@ -134,6 +134,10 @@ class User(db.Model):
         ).first()
         if user.extendedModel.gender is None:
             user.extendedModel.gender = ''
+        if user.firstName is None:
+            user.firstName = ''
+        if user.lastName is None:
+            user.lastName = ''
         return user
 
     @classmethod
