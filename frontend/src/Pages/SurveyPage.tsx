@@ -15,8 +15,8 @@ const SurveyPage = () => {
        <p id="centered">This survey helps us make your experience better!</p>
        <hr/>
 
-       <h4 id="centered" style={{ fontWeight: 'bold' }} >Expected Pay</h4>
-       <p id="centered">How much more would you want to be paid for a job that is an hour away vs. 15 minutes away?</p>
+       <h4 id="centered" style={{ fontWeight: 'bold' }} >[Example Question ... ?]</h4>
+       <p id="centered">Some more information if needed</p>
 
        <div className="container">
           <div className="row mt-5">
@@ -33,7 +33,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  I would not expect more
+                  Example Choice #1
                   </label>
                 </div>
 
@@ -46,7 +46,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $5
+                  Example Choice #2
                   </label>
                 </div>
 
@@ -59,7 +59,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $10
+                  Example Choice #3
                   </label>
                 </div>
 
@@ -72,7 +72,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $15
+                  Example Choice #4
                   </label>
                 </div>
 
@@ -85,17 +85,17 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $15+
+                  Example Choice #5
                   </label>
                 </div>
 
                 <Row>
                     <Col><hr/></Col>
                     <Col id="centered"><Button href="/survey" color="secondary">Previous</Button></Col>
-                    <Col id="centered"><Button href="/survey2" color="primary">Next</Button></Col>
+                    <Col id="centered"><Button href="/survey" color="primary">Next</Button></Col>
                     <Col><hr/></Col>
                 </Row>
-                <h4></h4>
+                <h4> </h4>
 
       </form>
 

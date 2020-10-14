@@ -49,14 +49,18 @@ const LandingPage = () => {
                     }
                 </Container>
             </Jumbotron>
+
             <CardCategories />
+
             <Footer />
+
             {/* Cookie Alert */}
-            <Alert id="myAlert-bottom" color="warning" isOpen={visible} toggle={onDismiss}>
-                <text style={{ color: "black" }}>We use cookies on this site to better your experience</text>
+            <Alert id="myAlert-bottom" className="centered" color="warning" isOpen={visible} toggle={onDismiss}>
+                <text style={{ color: "black" }}>We use cookies on this site to better your experience. <a href="/privacy" className="alert-link">Learn More</a></text>
             </Alert>
         </div>
-    )
+    );
 }
+
 
 export default withRouter(LandingPage);

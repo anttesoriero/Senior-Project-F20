@@ -10,11 +10,13 @@
     background-image: url("../Images/mowingLawnFlipped.png");
     background-position: 0% 60%;
     background-size: cover;
-    min-height: 425px;
+    // min-height: 425px;
+    min-height: 500px;
 }
 
 #myAlert-bottom{
     position: fixed;
+    z-index:1000;
     bottom: 5px;
     width: 50%;
 }

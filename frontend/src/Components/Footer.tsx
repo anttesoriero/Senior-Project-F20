@@ -8,7 +8,7 @@ const Footer = () => {
                 <hr />
                 <br />
                 {/* Upper - Menu */}
-                <div className='centered'>
+                {/* Temp remove - <div className='centeredFoot'> - */}
                     <Row>
                         {/* Left - Menu */}
                         <Col xs="6" sm="4">
@@ -34,7 +34,7 @@ const Footer = () => {
                             <p><a href="/terms">Terms</a></p>
                         </Col>
                     </Row>
-                </div>
+                {/* Temp remove - </div> */}
 
                 <br />
                 <hr />
@@ -48,7 +48,7 @@ const Footer = () => {
 
                     {/* Right - Copyright */}
                     <Col xs="2" id="right">
-                        <p id="centered">Copyright &copy; 2020</p>
+                        <p style={{color: "black"}}>Copyright &copy; 2020</p>
                     </Col>
                 </Row>
             </Container>
