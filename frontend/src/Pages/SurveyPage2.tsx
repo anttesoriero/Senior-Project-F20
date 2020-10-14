@@ -3,7 +3,7 @@ import Navigation from '../Components/Navigation';
 import Footer from '../Components/Footer';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
 
-const SurveyPage = () => {
+const SurveyPage2 = () => {
   return (
   <div>
     <Navigation/>
@@ -15,8 +15,8 @@ const SurveyPage = () => {
        <p id="centered">This survey helps us make your experience better!</p>
        <hr/>
 
-       <h4 id="centered" style={{ fontWeight: 'bold' }} >Expected Pay</h4>
-       <p id="centered">How much more would you want to be paid for a job that is an hour away vs. 15 minutes away?</p>
+       <h4 id="centered" style={{ fontWeight: 'bold' }} >User Rating</h4>
+       <p id="centered">How satisfied are you with the platform?</p>
 
        <div className="container">
           <div className="row mt-5">
@@ -33,7 +33,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  I would not expect more
+                  Very Dissatisfied
                   </label>
                 </div>
 
@@ -46,7 +46,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $5
+                  Slightly Dissatisfied
                   </label>
                 </div>
 
@@ -59,7 +59,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $10
+                  Nuetral
                   </label>
                 </div>
 
@@ -72,7 +72,7 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $15
+                  Slightly Satisfied
                   </label>
                 </div>
 
@@ -85,14 +85,14 @@ const SurveyPage = () => {
                     checked={true}
                     className="form-check-input"
                   />
-                  $15+
+                  Very Satisfied
                   </label>
                 </div>
 
                 <Row>
                     <Col><hr/></Col>
                     <Col id="centered"><Button href="/survey" color="secondary">Previous</Button></Col>
-                    <Col id="centered"><Button href="/survey2" color="primary">Next</Button></Col>
+                    <Col id="centered"><Button href="/survey" color="primary">Next</Button></Col>
                     <Col><hr/></Col>
                 </Row>
                 <h4></h4>
@@ -109,4 +109,4 @@ const SurveyPage = () => {
   );
 }
 
-export default SurveyPage;
+export default SurveyPage2;
