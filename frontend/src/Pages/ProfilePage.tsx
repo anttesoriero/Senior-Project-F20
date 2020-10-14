@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
 import Footer from "../Components/Footer";
@@ -7,23 +7,34 @@ import * as JWT from "jwt-decode";
 import axios from 'axios';
 // <script src="holder.js"/>
 
+type userState = {
+    email: string,
+    firstName: string,
+    lastName: string,
+    accountBalance: number
+}
+
 const ProfilePage = () => {
     const token = localStorage.getItem('access_token');
+    const [user, setUser]  = useState<userState>();
 
-    const config = {
-        
-    };
-    
-    useEffect(() => {
-        axios.get('http://127.0.0.1:5000/me/getProfile', 
+    const getUser = async () => {
+        {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
+            First one is the endpoint and second is the authorization headers */}
+        await axios.get('http://127.0.0.1:5000/me/getProfile', 
         { headers: { Authorization: `Bearer ${token}` } })
-        .then(function (response) {
-            console.log(response);
+        .then( response => {
+            console.log(response.data);
+            setUser(response.data)
         })
-        .catch(function (error) {
+        .catch( error => {
             console.log(error);
         });   
-    })
+    }
+    
+    useEffect(()=> {
+        getUser();
+    }, []);
 
     return (
         <div>
@@ -44,7 +55,7 @@ const ProfilePage = () => {
                                 <Media heading>
                                     [FIRST NAME] [LAST NAME]
                                 </Media>
-                                    Certified Contractor
+                                    {user ? <p>Account balance ${String(user.accountBalance)}</p>  : <div></div>}
                             </Media>
                         </Media>
                     </Col>
@@ -110,7 +121,11 @@ const ProfilePage = () => {
                         {/* Email */}
                         <Row>
                             <Col xs="2"><p>Email:</p></Col>
-                            <Col xs="10"><p>user@email.com</p></Col>
+                            {user ? 
+                                <Col xs="10"><p>{user.email}</p></Col>
+                            : 
+                                <Col xs="10"><p>user@email.com</p></Col>
+                            }
                         </Row>
                         {/* Website */}
                         <Row>
@@ -120,14 +135,9 @@ const ProfilePage = () => {
 
                     </Col>
                 </Row>
-
-
             </Container>
-
             <br />
             <Footer/>
-
-
         </div>
     );
 }
