@@ -2,6 +2,7 @@ import requests
 import json
 
 base_auth = "http://127.0.0.1:5000/auth/"
+base_me="http://127.0.0.1:5000/me/"
 headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -54,11 +55,24 @@ headers["Authorization"] = 'Bearer ' + test_login()
 def test_getProfile():
     endpoint = "getProfile"
 
-    response = requests.post(
-        base_auth + endpoint,
+    response = requests.get(
+        base_me + endpoint,
         headers=headers
     )
     
     assert response.status_code == 200, "test_getProfile()"
 
 test_getProfile()
+
+# Tests getProfile for success
+def test_getPostedTasks():
+    endpoint = "getPostedTasks"
+
+    response = requests.get(
+        base_me + endpoint,
+        headers=headers
+    )
+    
+    assert response.status_code == 200, "test_getPostedTasks()"
+
+test_getPostedTasks()
