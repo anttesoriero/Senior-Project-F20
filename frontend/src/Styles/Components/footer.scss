@@ -11,9 +11,12 @@
 }
 
 /* unvisited link & visited link */
-footer {
+.footer {
   //padding: 10px;
-  background-color: lightgrey;
+  background: #D9D9D9;
+  background: -webkit-linear-gradient(#DDDDDD, #AAAAAA);
+  background:    -moz-linear-gradient(#DDDDDD, #AAAAAA);
+  background:         linear-gradient(#DDDDDD, #AAAAAA);
   /*
   position: absolute;
   bottom: 0;
