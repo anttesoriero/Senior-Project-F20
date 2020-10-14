@@ -12,8 +12,8 @@ def test_register():
     endpoint = "register"
 
     inputData = {
-        "email": "abc",
-        "password": "xyz"
+        "email": "auth_routes_test_user",
+        "password": "password"
     }
     inputData = json.dumps(inputData)
 
@@ -22,7 +22,7 @@ def test_register():
         headers=headers,
         data=inputData
     )
-    assert response.status_code == 200
+    assert response.status_code == 200, "test_register()"
 
 test_register()
 
@@ -31,8 +31,8 @@ def test_login():
     endpoint = "login"
 
     inputData = {
-        "email": "abc",
-        "password": "xyz"
+        "email": "auth_routes_test_user",
+        "password": "password"
     }
     inputData = json.dumps(inputData)
 
@@ -42,7 +42,7 @@ def test_login():
         data=inputData
     )
     
-    assert response.status_code == 200
+    assert response.status_code == 200, "test_login()"
 
     return response.json()["access_token"]
 
@@ -56,8 +56,8 @@ def test_login_fail():
     endpoint = "login"
 
     inputData = {
-        "email": "abc",
-        "password": "123"
+        "email": "auth_routes_test_user",
+        "password": "password123"
     }
     inputData = json.dumps(inputData)
 
@@ -66,7 +66,7 @@ def test_login_fail():
         headers=headers,
         data=inputData
     )
-    assert response.status_code == 401
+    assert response.status_code == 401, "test_login_fail()"
 
 test_login_fail()
 
@@ -75,8 +75,8 @@ def test_changePasswordWithAuth():
     endpoint = "changePasswordWithAuth"
 
     inputData = {
-        "oldPassword": "xyz",
-        "newPassword": "123"
+        "oldPassword": "password",
+        "newPassword": "password123"
     }
     inputData = json.dumps(inputData)
 
@@ -86,7 +86,7 @@ def test_changePasswordWithAuth():
         data=inputData
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 200, "test_changePasswordWithAuth()"
 
 test_changePasswordWithAuth()
 
@@ -95,8 +95,8 @@ def test_changePasswordWithAuth_fail():
     endpoint = "changePasswordWithAuth"
 
     inputData = {
-        "oldPassword": "1234",
-        "newPassword": "xyz"
+        "oldPassword": "123password",
+        "newPassword": "password"
     }
     inputData = json.dumps(inputData)
 
@@ -106,6 +106,16 @@ def test_changePasswordWithAuth_fail():
         data=inputData
     )
 
-    assert response.status_code == 401
+    assert response.status_code == 401, "test_changePasswordWithAuth_fail()"
 
 test_changePasswordWithAuth_fail()
+
+
+
+
+
+
+
+
+
+# Removes auth_routes_test_user from Credentials table and Users table
