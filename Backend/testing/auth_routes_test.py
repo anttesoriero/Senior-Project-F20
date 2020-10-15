@@ -109,13 +109,3 @@ def test_changePasswordWithAuth_fail():
     assert response.status_code == 401, "test_changePasswordWithAuth_fail()"
 
 test_changePasswordWithAuth_fail()
-
-
-
-
-
-
-
-
-
-# Removes auth_routes_test_user from Credentials table and Users table
