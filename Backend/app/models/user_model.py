@@ -37,19 +37,31 @@ class User(db.Model):
     phoneNumber = db.Column(db.String(12), nullable=True)
 
     # Set-up Database Relationships
-    credentials = db.relationship('Credentials', backref="user", uselist=False)
-    accountBalance = db.relationship('AccountBalance', backref="user", uselist=False)
-    postedTasks = db.relationship('Task', backref="user", uselist=True)
-    extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False)
-    historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True)
+    credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
+    accountBalance = db.relationship('AccountBalance', backref="user", uselist=False, cascade="all, delete-orphan")
+    postedTasks = db.relationship('Task', backref="user", uselist=True, cascade="all, delete-orphan")
+    extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False, cascade="all, delete-orphan")
+    historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True, cascade="all, delete-orphan")
 
 
-    def setFirstName(self, newName):
-        self.firstName = newName
+    def setFirstName(self, newFirstName):
+        self.firstName = newFirstName
+        db.session.commit()
+
+    def setLastName(self, newLastName):
+        self.lastName = newLastName
+        db.session.commit()
+
+    def setPreferredName(self, newPreferredName):
+        self.preferredName = newPreferredName
         db.session.commit()
 
     def setEmail(self, newEmail):
         self.email = newEmail
+        db.session.commit()
+
+    def setPhoneNumber(self, newPhoneNumber):
+        self.phoneNumber = newPhoneNumber
         db.session.commit()
 
     def checkCredentials(self, password):
@@ -151,20 +163,23 @@ class User(db.Model):
         return not User.getByEmail(email)
 
     @classmethod
-    def createUser(cls, email, password, firstName=""):
+    def createUser(cls, email, password, firstName="", lastName="", preferredName="", phoneNumber=""):
         '''
         Creates a User
 
         :param email: User's email
         :param password: User's plaintext password
-        :param name: name of the user
+        :param firstName: first name of the user
+        :param lastName: last name of the user
+        :param preferredName: preferred name of the user
+        :param phoneNumber: phone number of the user
         '''
         # Check if user exists
         if not User.existsByEmail(email):
             return None
 
         # Create User
-        user = User(email=email, firstName=firstName)
+        user = User(email=email, firstName=firstName, lastName=lastName, preferredName=preferredName, phoneNumber=phoneNumber)
         Credentials.createCredentials(password=password, user=user)
         AccountBalance.createBalance(user=user, accountBalance=10.0)
         ExtendedUser.createExtendedUserModel(user=user)
@@ -173,3 +188,35 @@ class User(db.Model):
         db.session.add(user)
         db.session.commit()
         return user
+    
+    @classmethod
+    def deleteUser(cls, userId):
+        '''
+        Delete User by user_id
+
+        :param user_id: user_id to get User with
+        :return: None
+        '''
+        user = User.query.filter_by(
+            userId=userId
+        ).first()
+
+        db.session.delete(user)
+        db.session.commit()
+
+    @classmethod
+    def getPostedTaskIDs(cls, userId):
+        '''
+        Gets the task ids for a particular user
+        :param userId user_id to get user
+        :return list of task ids for a user
+        '''
+        tasks = db.session.query(User, Task).filter(User.userId == Task.posterUserId).all()
+        task_ids = []
+
+        # loop through table returned from user and task join
+        for user, task in tasks:
+            # add task ids to list
+            task_ids.append(task.taskId)
+
+        return task_ids
