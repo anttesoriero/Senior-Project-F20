@@ -52,10 +52,19 @@ const ProfilePage = () => {
                                 <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160"/>
                             </Media>
                             <Media body style={{padding: 10}}>
-                                <Media heading>
-                                    [FIRST NAME] [LAST NAME]
-                                </Media>
-                                    {user ? <p>Account balance ${String(user.accountBalance)}</p>  : <div></div>}
+                                    {user ?
+                                        <Media heading>{user.firstName} {user.lastName}</Media>
+                                        :
+                                        <Media heading>[FIRST NAME] [LAST NAME]</Media>
+                                    }
+
+                                    {user ?
+                                        <p>Account Balance: ${String(user.accountBalance)}</p>
+                                        :
+                                        <div>
+                                            Account Balance: $[__]
+                                            {/*{' '}<Button outline color="info" size="sm">Cash Out</Button>{' '}*/}
+                                        </div>}
                             </Media>
                         </Media>
                     </Col>
