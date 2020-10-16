@@ -14,6 +14,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 # Module imports
 from app.routes.me import me_blueprint
 from app.utilities.validation.validation import validateRequestJSON
+from app import blacklist
+from app import check_if_token_in_blacklist
 
 # Model imports
 from app.models.user_model import User
@@ -113,3 +115,28 @@ def editInformation():
         user.setPhoneNumber(inputJSON["phoneNumber"])
 
     return jsonify(message="New user information successfully set"), 200
+
+'''
+DELETES
+'''
+@me_blueprint.route('/deleteAccount', methods=['DELETE'])
+@jwt_required
+def deleteAccount():
+    '''
+    Deletes a user from the database
+    :return:
+    {
+        status message of the delete operation
+    }
+    '''
+    # Get current user
+    current_user_id = get_jwt_identity()
+
+    # Get user's task ids
+    User.deleteUser(current_user_id)
+
+    # Format output
+    responseInformation = {
+        'message': 'user deleted'
+    }
+    return jsonify(responseInformation), 200
