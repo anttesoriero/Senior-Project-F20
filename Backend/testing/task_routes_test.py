@@ -81,7 +81,11 @@ def test_createTask_required():
 
     assert response.status_code == 200, "test_createTask_required()"
 
+    return response.json()["taskId"]
+
 test_createTask_required()
+
+taskId=test_createTask_required()
 
 # Tests createTask for success with required params and optional params
 def test_createTask_optional():
@@ -107,16 +111,44 @@ def test_createTask_optional():
 
 test_createTask_optional()
 
-# Tests updateTask for success with required params and optional params
 
+# Tests updateTask for success
+def test_updateTask():
+    endpoint = "editTask"
+
+    inputData = {
+        "taskId": taskId,
+        "categoryId": 4,
+        "title": "Test_Update_Task",
+        "description": "This task tests updating a task",
+        "recommendedPrice": 100.0,
+        "estimatedDurationMinutes": 90
+
+    }
+    inputData = json.dumps(inputData)
+
+    response = requests.patch(
+        base_task + endpoint,
+        headers=headers,
+        data=inputData
+    )
+
+    assert response.status_code == 200, "test_updateTask()"
+
+test_updateTask()
 
 # Tests getBriefPublic for success
 def test_getBriefPublic():
     endpoint = "getBriefPublic"
 
+    inputData = {
+        "taskId": int(taskId),
+    }
+
     response = requests.get(
         base_task + endpoint,
-        headers=headers
+        headers=headers,
+        params=inputData
     )
     
     assert response.status_code == 200, "test_getBriefPublic()"
@@ -127,14 +159,71 @@ test_getBriefPublic()
 def test_getPublic():
     endpoint = "getPublic"
 
+    inputData = {
+        "taskId": int(taskId),
+    }
+
     response = requests.get(
         base_task + endpoint,
-        headers=headers
+        headers=headers,
+        params=inputData
     )
     
     assert response.status_code == 200, "test_getPublic()"
 
 test_getPublic()
 
-# Tests deleteTask for success
+# Tests getBriefPrivate for success
+def test_getBriefPrivate():
+    endpoint = "getBriefPrivate"
 
+    inputData = {
+        "taskId": int(taskId),
+    }
+
+    response = requests.get(
+        base_task + endpoint,
+        headers=headers,
+        params=inputData
+    )
+    
+    assert response.status_code == 200, "test_getBriefPrivate()"
+
+test_getBriefPrivate()
+
+# Tests getPrivate for success
+def test_getPrivate():
+    endpoint = "getPrivate"
+
+    inputData = {
+        "taskId": int(taskId),
+    }
+
+    response = requests.get(
+        base_task + endpoint,
+        headers=headers,
+        params=inputData
+    )
+    
+    assert response.status_code == 200, "test_getPrivate()"
+
+test_getPrivate()
+
+
+# Tests deleteTask for success
+def test_deleteTask():
+    endpoint = "deleteTask"
+
+    inputData = {
+        "taskId": int(taskId),
+    }
+
+    response = requests.delete(
+        base_task + endpoint,
+        headers=headers,
+        params=inputData
+    )
+    
+    assert response.status_code == 200, "test_deleteTask()"
+
+test_deleteTask()
