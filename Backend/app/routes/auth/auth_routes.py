@@ -100,14 +100,19 @@ def register():
     400 - Bad
     '''
     # Validate input
-    success, code, inputJSON = validateRequestJSON(request, ["email", "password"], [])
+    success, code, inputJSON = validateRequestJSON(request, ["email", "password"],
+                                                   ["firstName", "lastName", "preferredName", "phoneNumber"])
     if not success:
         return jsonify({}), code
 
     # Create user
     user = User.createUser(
-             email=inputJSON["email"],
-             password=inputJSON["password"]
+        email=inputJSON["email"],
+        password=inputJSON["password"],
+        firstName = inputJSON["firstName"],
+        lastName = inputJSON["lastName"],
+        preferredName = inputJSON["preferredName"],
+        phoneNumber = inputJSON["phoneNumber"]
     )
 
     # Check user created
