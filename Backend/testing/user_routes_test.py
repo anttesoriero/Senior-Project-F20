@@ -8,22 +8,25 @@ headers = {
     'Accept': 'application/json',
 }
 
-# Registers user for testing
+# Registers two users for testing
 def test_register():
-    endpoint = "register"
+    for n in range(2):
+        endpoint = "register"
 
-    inputData = {
-        "email": "user_routes_test_user",
-        "password": "password"
-    }
-    inputData = json.dumps(inputData)
+        email="user_routes_test_user(" + str(n) + ")"
 
-    response = requests.post(
-        base_auth + endpoint,
-        headers=headers,
-        data=inputData
-    )
-    assert response.status_code == 200, "test_register()"
+        inputData = {
+            "email": email,
+            "password": "password"
+        }
+        inputData = json.dumps(inputData)
+
+        response = requests.post(
+            base_auth + endpoint,
+            headers=headers,
+            data=inputData
+        )
+        assert response.status_code == 200, "test_register()"
 
 test_register()
 
@@ -32,7 +35,7 @@ def test_login():
     endpoint = "login"
 
     inputData = {
-        "email": "user_routes_test_user",
+        "email": "user_routes_test_user(0)",
         "password": "password"
     }
     inputData = json.dumps(inputData)
@@ -54,9 +57,14 @@ headers["Authorization"] = 'Bearer ' + test_login()
 def test_getBriefProfile():
     endpoint = "getBriefProfile"
 
+    inputData = {
+        "otherUser": 2
+    }
+
     response = requests.get(
         base_user + endpoint,
-        headers=headers
+        headers=headers,
+        params=inputData
     )
     
     assert response.status_code == 200, "test_getBriefProfile()"
@@ -67,9 +75,14 @@ test_getBriefProfile()
 def test_getProfile():
     endpoint = "getProfile"
 
+    inputData = {
+        "otherUser": 2
+    }
+
     response = requests.get(
         base_user + endpoint,
-        headers=headers
+        headers=headers,
+        params=inputData
     )
     
     assert response.status_code == 200, "test_getProfile()"
