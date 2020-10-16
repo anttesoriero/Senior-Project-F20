@@ -9,11 +9,14 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import sys
+
 # Init app
 app = Flask(__name__)
 #Cors setup to allow requests from frontend
 CORS(app)
+
+# Init app
+app = Flask(__name__)
 
 # Set up
 
@@ -33,7 +36,7 @@ DB_USER = "oddjobsuser"
 DB_PASSWORD = "asdllM$o2pecfsEEA"
 DB_NAME = "oddjobs"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@127.0.0.1/" + DB_NAME + "?host=localhost?port=3306"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@localhost/" + DB_NAME + "?host=127.0.0.1?port=3306"
 db = SQLAlchemy(app)
 
 '''
@@ -48,6 +51,7 @@ from app.routes.me import me_blueprint
 from app.routes.errors import errors_blueprint
 from app.routes.survey import survey_blueprint
 from app.routes.task import task_blueprint
+from app.routes.admin import admin_blueprint
 
 # Load in modules "Blueprints"
 app.register_blueprint(main_blueprint, url_prefix="/main")
@@ -56,6 +60,7 @@ app.register_blueprint(user_blueprint, url_prefix="/user")
 app.register_blueprint(me_blueprint, url_prefix="/me")
 app.register_blueprint(task_blueprint, url_prefix="/task")
 app.register_blueprint(survey_blueprint, url_prefix="/survey")
+app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(errors_blueprint)
 
 # Init database with referenced models from routes

@@ -1,9 +1,7 @@
 """
 Defines routes for survey related endpoints
-
 ! Try to use utilities outside of this file to do the heavy lifting !
 This file should be focused on annotating routes
-
 @author Matthew Schofield
 @version 9.21.2020
 """
@@ -18,7 +16,9 @@ from app.routes.survey import survey_blueprint
 # Model imports
 from app.models.user_model import User
 from app.models.survey_model import Survey
+from app.models.historical_survey_model import HistoricalSurvey
 
+from app.utilities.validation.validation import validateRequestJSON
 
 '''
 GETs
@@ -57,7 +57,6 @@ def getSurvey():
 def recommendSurvey():
     '''
     Return a recommended survey ID
-
     :return: survey ID recommendation
     '''
     # Get current user
@@ -66,19 +65,13 @@ def recommendSurvey():
 
     # Opening the file containing surveys
     file = open("./app/models/initializers/initialSurvey.txt", "r")
-    surveyNum = 0
 
     # Reading from the file
     Content = file.read()
     surveyList = Content.split("\n")
 
-    for i in surveyList:
-        if i:
-            surveyNum += 1
+    randomSurvey = random.randrange(0, len(surveyList))
 
-
-    randomSurvey = random.randrange(0, surveyNum)
-    
     return jsonify({"recommendedSurvey":randomSurvey}), 200
 
 '''
@@ -88,10 +81,23 @@ POSTs
 @jwt_required
 def respond():
     '''
+
+    In:
+    {
+        "surveyId": int,
+        "response": int
+    }
     '''
+    # Validate input
+    requiredParameters = ["surveyId", "response"]
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
     # Get current user
     current_user_id = get_jwt_identity()
-    user = User.getByUserId(current_user_id)
+    HistoricalSurvey.createHistoricalSurvey(current_user_id, inputJSON["surveyId"], inputJSON["response"])
 
-    return jsonify({}), 200
-
+    return jsonify({"success": True}), 200

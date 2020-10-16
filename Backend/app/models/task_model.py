@@ -44,6 +44,7 @@ class Task(db.Model):
     # Set-up Database Relationships
     acceptedOfferId = db.relationship('Offer', backref="offer", uselist=False)
 
+
     '''
     Read
     '''
@@ -166,12 +167,71 @@ class Task(db.Model):
 
     @classmethod
     def search(cls, queryP, max=100):
-        kwQuery = {}
-        for term in queryP.keys():
-            if term in ["categoryId"]:
-                kwQuery[term] = queryP[term]
+        '''
+        Search
 
-        tasks = [task.taskId for task in Task.query.filter_by(**kwQuery).limit(max)]
+        All optional
+        {
+            "title":{
+                "contains": str,
+                "startsWith": str,
+                "endsWith": str,
+                "matches": str
+            },
+            "categoryId":
+            {
+                "==": int
+            },
+            "recommendedPrice":
+            {
+                "<=": float,
+                ">=":float
+            }
+            "location":
+            {
+                "within':
+                {
+                    [Lower Lat, Upper Lat, Lower Long, Upper Long]
+                }
+            }
+        }
+
+        :param queryP:
+        :param max:
+        :return:
+        '''
+        filters = []
+
+        if "title" in queryP.keys():
+            if "contains" in queryP["title"].keys():
+                filters.append(cls.title.like("%" + queryP["title"]["contains"] + "%"))
+            if "startsWith" in queryP["title"].keys():
+                filters.append(cls.title.like(queryP["title"]["startsWith"] + "%"))
+            if "endsWith" in queryP["title"].keys():
+                filters.append(cls.title.like("%" + queryP["title"]["startsWith"]))
+            if "matches" in queryP["title"].keys():
+                filters.append(cls.title.like(queryP["title"]["startsWith"]))
+
+        if "categoryId" in queryP.keys():
+            if "==" in queryP["categoryId"].keys():
+                filters.append(cls.categoryId == queryP["categoryId"]["=="])
+
+        if "recommendedPrice" in queryP.keys():
+            if ">=" in queryP["recommendedPrice"].keys():
+                filters.append(cls.recommendedPrice >= queryP["recommendedPrice"][">="])
+            if "<=" in queryP["recommendedPrice"].keys():
+                filters.append(cls.recommendedPrice <= queryP["recommendedPrice"]["<="])
+
+        if "location" in queryP.keys():
+            if "within" in queryP["location"].keys():
+                if len(queryP["location"]["within"]) == 4:
+                    filters.append(cls.locationALatitude >= queryP["location"]["within"][0])
+                    filters.append(cls.locationALatitude <= queryP["location"]["within"][1])
+                    filters.append(cls.locationALongitude >= queryP["location"]["within"][2])
+                    filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
+
+
+        tasks = [task.taskId for task in Task.query.filter(*filters).limit(max)]
         return tasks
 
     @classmethod
