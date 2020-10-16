@@ -5,7 +5,7 @@ Defines routes for the main (Miscellaneous) endpoints
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 9.20.2020
+@version 10.14.2020
 """
 # Library imports
 from flask import jsonify, request
@@ -53,11 +53,11 @@ def getBriefPublic():
 
     return jsonify(responseInformation), 200
 
-
 @task_blueprint.route('/getPublic', methods=['GET'])
 @jwt_required
 def getPublic():
     '''
+    Get all public information about a task
 
     ?
     taskId=<taskId>
@@ -66,11 +66,16 @@ def getPublic():
     {
         "accepted": bool
         "categoryId": int
-        "description": str
+        "description": str nullable
         "posterTaskId": int
-        "recommendedPrice": float, nullable
+        "recommendedPrice": float nullable
         "taskId": int
         "title": str
+        "estimatedDurationMinutes": int nullable
+        "locationALongitude": float nullable
+        "locationALatitude": float nullable
+        "locationBLongitude": float nullable
+        "locationBLatitude": float nullable
     }
     '''
     # Validate inputs
@@ -86,29 +91,74 @@ def getPublic():
 
     return jsonify(responseInformation), 200
 
-
 @task_blueprint.route('/getBriefPrivate', methods=['GET'])
 @jwt_required
 def getBriefPrivate():
     '''
+    Get brief public information about a task
+
+    ?
+    taskId=<taskId>
+
+    Out:
+    {
+        "accepted": bool
+        "categoryId": int
+        "recommendedPrice": float nullable
+        "taskId": int
+        "title": str
+    }
     '''
     # Validate inputs
     taskId = request.args.get('taskId', type=int)
-    current_user_id = get_jwt_identity()
 
-    return jsonify({}), 200
+    # Get task
+    task = Task.getByTaskId(taskId)
+    if task is None:
+        return jsonify({"success":False}), 404
 
+    # Get information
+    responseInformation = task.getBriefPublicInfo()
+
+    return jsonify(responseInformation), 200
 
 @task_blueprint.route('/getPrivate', methods=['GET'])
 @jwt_required
 def getPrivate():
     '''
+    Get all public information about a task
+
+    ?
+    taskId=<taskId>
+
+    Out:
+    {
+        "accepted": bool
+        "categoryId": int
+        "description": str nullable
+        "posterTaskId": int
+        "recommendedPrice": float nullable
+        "taskId": int
+        "title": str
+        "estimatedDurationMinutes": int nullable
+        "locationALongitude": float nullable
+        "locationALatitude": float nullable
+        "locationBLongitude": float nullable
+        "locationBLatitude": float nullable
+    }
     '''
     # Validate inputs
     taskId = request.args.get('taskId', type=int)
-    current_user_id = get_jwt_identity()
 
-    return jsonify({}), 200
+    # Get task
+    task = Task.getByTaskId(taskId)
+    if task is None:
+        return jsonify({"success":False}), 404
+
+    # Get information
+    responseInformation = task.getPrivateInfo()
+
+    return jsonify(responseInformation), 200
 
 @task_blueprint.route('/recommendTasks', methods=['GET'])
 @jwt_required
@@ -182,7 +232,6 @@ def createTask():
         locationBLongitude=inputJSON["locationBLongitude"],
         locationBLatitude=inputJSON["locationBLatitude"]
     )
-    print(task.locationALatitude)
 
     # Build output
     output = {
@@ -191,6 +240,26 @@ def createTask():
 
     return jsonify(output), 200
 
+@task_blueprint.route('/searchPostedTasks', methods=['POST'])
+@jwt_required
+def searchTask():
+    # Validate input
+    requiredParameters = ["query"]
+    optionalParameters = ["max"]
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    # Output
+    foundTasks = Task.search(inputJSON["query"], inputJSON.get("max", 100))
+
+    # Build output
+    output = {
+        "taskIds": foundTasks
+    }
+
+    return jsonify(output), 200
 
 '''
 DELETEs
@@ -230,6 +299,7 @@ PUTs
 @jwt_required
 def editTask():
     '''
+    Edit a task
     '''
     # Validate input
     requiredParameters = ["taskId"]
@@ -240,12 +310,20 @@ def editTask():
     if not success:
         return jsonify({}), code
 
+    # Secondary specific validation
     editParams = {}
+
+    # Get task
     task = Task.getByTaskId(inputJSON["taskId"])
+
+    # If the task exists and does not have an accepted offer
     if task and not task.isAccepted():
+        # Filter out None parameters, accept None as string "None"
         for opt in optionalParameters:
             if inputJSON[opt] is not None:
                 editParams[opt] = inputJSON[opt]
+                if inputJSON[opt] == "None":
+                    inputJSON[opt] = None
         task.edit(editParams)
         return jsonify({"success":True}), 200
     else:
