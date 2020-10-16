@@ -10,6 +10,7 @@ This file should be focused on annotating routes
 # Library imports
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import random
 
 # Module imports
 from app.routes.survey import survey_blueprint
