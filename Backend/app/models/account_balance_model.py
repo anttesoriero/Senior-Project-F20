@@ -14,6 +14,7 @@ from app import db
 class AccountBalance(db.Model):
     '''
     Column definitions
+
     user_id
     account_balance
     '''
@@ -26,7 +27,7 @@ class AccountBalance(db.Model):
 
         :return: account balance of the user
         '''
-        return float(self.accountBalance)
+        return self.accountBalance
 
     def changeBalance(self, amountToChange):
         '''
@@ -35,7 +36,6 @@ class AccountBalance(db.Model):
         :param: amountToChange - amount to add/subtract to a user's balance
         :return: boolean based on success
         '''
-        self.accountBalance = float(self.accountBalance)
         if self.accountBalance + amountToChange < 0:
             return False
         self.accountBalance += amountToChange
@@ -60,5 +60,3 @@ class AccountBalance(db.Model):
         db.session.add(accountBalance)
         db.session.commit()
         return True
-
-    
