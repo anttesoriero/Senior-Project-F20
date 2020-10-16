@@ -37,6 +37,11 @@ class User(db.Model):
     phoneNumber = db.Column(db.String(12), nullable=True)
 
     # Set-up Database Relationships
+    # credentials = db.relationship('Credentials', backref="user", uselist=False)
+    # accountBalance = db.relationship('AccountBalance', backref="user", uselist=False)
+    # postedTasks = db.relationship('Task', backref="user", uselist=True)
+    # extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False)
+    # historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True)
     credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
     accountBalance = db.relationship('AccountBalance', backref="user", uselist=False, cascade="all, delete-orphan")
     postedTasks = db.relationship('Task', backref="user", uselist=True, cascade="all, delete-orphan")
