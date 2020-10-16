@@ -115,32 +115,52 @@ const ProfilePage = () => {
                         <h2 style={{ fontWeight: 'bold' }}>About</h2>
                         <hr/>
 
-                        <h4>Bio</h4>
-                        <p>General bio for profile owner</p>
+                        <Row>
+                            {/* Left - About Info */}
+                            <Col xs="6">
+                                <h4>Bio</h4>
+                                <p>General bio for profile owner</p>
 
-                        <h4>Liked Jobs</h4>
-                        <p>Selected liked job categories from survey</p>
+                                <h4>Liked Jobs</h4>
+                                <p>Selected liked job categories from survey</p>
 
-                        <h4>Contact Info</h4>
-                        {/* Phone */}
-                        <Row>
-                            <Col xs="2"><p>Phone:</p></Col>
-                            <Col xs="10"><p>(555) 555-5555</p></Col>
+                                <h4>Contact Info</h4>
+                                {/* Phone */}
+                                <Row>
+                                    <Col xs="2"><p>Phone:</p></Col>
+                                    <Col xs="10"><p>(555) 555-5555</p></Col>
+                                </Row>
+                                {/* Email */}
+                                <Row>
+                                    <Col xs="2"><p>Email:</p></Col>
+                                    {user ?
+                                        <Col xs="10"><p>{user.email}</p></Col>
+                                        :
+                                        <Col xs="10"><p>user@email.com</p></Col>
+                                    }
+                                </Row>
+                                {/* Website */}
+                                <Row>
+                                    <Col xs="2"><p>Site:</p></Col>
+                                    <Col xs="10"><p>usersite.com</p></Col>
+                                </Row>
+                            </Col>
+                            {/* Right - Location */}
+                            <Col xs="6">
+                                {user ?
+                                <div>
+                                    <h4>Address</h4>
+                                    <p>123 Main St, City, ST 12345</p>
+                                    <Media left>
+                                        <Media object src={PlaceholderImage} alt="Generic placeholder image" height="200" width="200"/>
+                                        <p>Google Map Location</p>
+                                    </Media>
+                                </div> : <div></div>}
+                            </Col>
                         </Row>
-                        {/* Email */}
-                        <Row>
-                            <Col xs="2"><p>Email:</p></Col>
-                            {user ? 
-                                <Col xs="10"><p>{user.email}</p></Col>
-                            : 
-                                <Col xs="10"><p>user@email.com</p></Col>
-                            }
-                        </Row>
-                        {/* Website */}
-                        <Row>
-                            <Col xs="2"><p>Website:</p></Col>
-                            <Col xs="10"><p>usersite.com</p></Col>
-                        </Row>
+
+
+
 
                     </Col>
                 </Row>

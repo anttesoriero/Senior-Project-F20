@@ -63,7 +63,22 @@ def recommendSurvey():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
-    return jsonify({"recommendedSurvey":0}), 200
+    # Opening the file containing surveys
+    file = open("./app/models/initializers/initialSurvey.txt", "r")
+    surveyNum = 0
+
+    # Reading from the file
+    Content = file.read()
+    surveyList = Content.split("\n")
+
+    for i in surveyList:
+        if i:
+            surveyNum += 1
+
+
+    randomSurvey = random.randrange(0, surveyNum)
+    
+    return jsonify({"recommendedSurvey":randomSurvey}), 200
 
 '''
 POSTs

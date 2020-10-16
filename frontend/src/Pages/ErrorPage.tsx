@@ -31,6 +31,7 @@ const ErrorPage = () => {
                 <br/>
 
                 <h3 id="centered">Not what you expected?</h3>
+                <br/>
                 <Row id="centered"><Button href="/contact" outline color="info">Contact Us</Button></Row>
 
                 <br/>

@@ -4,11 +4,10 @@ Task's model for database
 These are Tasks that Users post
 
 @author Matthew Schofield
-@version10.7.2020
+@version 10.14.2020
 '''
 # Module imports
 from app import db
-
 
 class Task(db.Model):
     '''
@@ -22,6 +21,7 @@ class Task(db.Model):
     recommendedPrice   Decimal(4,2) nullable
     acceptedOfferID    Integer nullable
     postedStartDate
+    estimatedDuration  Integer nullable
     estimatedDuration  Integer nullable
     locationALongitude
     locationALatitude
@@ -94,6 +94,51 @@ class Task(db.Model):
         }
         return output
 
+    def getBriefPrivateInfo(self):
+        '''
+        Package brief private information about a Task
+
+        :return: Brief private information about a Task
+        '''
+        recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
+        output = {
+            "taskId": self.taskId,
+            "title": self.title,
+            "categoryId": self.categoryId,
+            "recommendedPrice": recommendedPrice,
+            "accepted": self.isAccepted()
+        }
+        return output
+
+    def getPrivateInfo(self):
+        '''
+        Package private information about a Task
+
+        :return: Private information about a Task
+        '''
+        # Strip latitude and longitudes to only 2 decimals
+        locationALongitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
+        locationALatitude = str("%.1f" % self.locationALatitude) if self.locationALatitude else None
+        locationBLongitude = str("%.1f" % self.locationBLongitude) if self.locationBLongitude else None
+        locationBLatitude = str("%.1f" % self.locationBLatitude) if self.locationBLatitude else None
+        recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
+
+        output = {
+            "taskId": self.taskId,
+            "posterTaskId": self.posterUserId,
+            "description": self.description,
+            "title": self.title,
+            "categoryId": self.categoryId,
+            "recommendedPrice": recommendedPrice,
+            "accepted": self.isAccepted(),
+            "estimatedDurationMinutes": self.estimatedDurationMinutes,
+            "locationALongitude": locationALongitude,
+            "locationALatitude": locationALatitude,
+            "locationBLongitude": locationBLongitude,
+            "locationBLatitude": locationBLatitude
+        }
+        return output
+
     '''
     Update
     '''
@@ -108,7 +153,7 @@ class Task(db.Model):
         if "recommendedPrice" in k:
             self.recommendedPrice = paramDict["recommendedPrice"]
         if "estimatedDurationMinutes" in k:
-            self.estimatedDurationMinutes = paramDict["estimatedDuration"]
+            self.estimatedDurationMinutes = paramDict["estimatedDurationMinutes"]
         if "locationALongitude" in k:
             self.locationALongitude = paramDict["locationALongitude"]
         if "locationALatitude" in k:
@@ -118,6 +163,16 @@ class Task(db.Model):
         if "locationBLatitude" in k:
             self.locationBLatitude = paramDict["locationBLatitude"]
         db.session.commit()
+
+    @classmethod
+    def search(cls, queryP, max=100):
+        kwQuery = {}
+        for term in queryP.keys():
+            if term in ["categoryId"]:
+                kwQuery[term] = queryP[term]
+
+        tasks = [task.taskId for task in Task.query.filter_by(**kwQuery).limit(max)]
+        return tasks
 
     @classmethod
     def getRecommendTasks(cls):
