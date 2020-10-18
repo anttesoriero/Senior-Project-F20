@@ -22,7 +22,7 @@ const SurveyPage = () => {
   const getSurvey = async () => {
     {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
         First one is the endpoint and second is the authorization headers */}
-    await axios.get('http://127.0.0.1:5000/survey/getSurvey', 
+    await axios.get('localhost:5000/survey/getSurvey?surveyId=<insert survey id here>', 
     { headers: { Authorization: `Bearer ${token}` } })
     .then( response => {
         console.log(response);
@@ -91,7 +91,7 @@ const SurveyPage = () => {
                     {survey ?
                      <p>{survey.answerB}</p>
                      :
-                     <div></div>
+                     <p></p>
                     }
                     </div>
 
@@ -154,8 +154,7 @@ const SurveyPage = () => {
                   </Row>
                   <h4> </h4>
 
-                   </form>
-                
+                   </form>  
 
     </div>
   </div>
