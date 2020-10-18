@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
 import Footer from '../Components/Footer';
-import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
+import {Container, Row, Col, Button} from 'reactstrap';
 import axios from 'axios';
 
 type surveyState = {
@@ -38,6 +38,7 @@ const SurveyPage = () => {
 }, []);
 
     return (
+     <Fragment>
      <div>
       <Navigation/>
       <Container>
@@ -70,18 +71,28 @@ const SurveyPage = () => {
                      className="form-check-input"
                      />
                      </label>
-                   </div>
+                     {survey ?
+                     <p>{survey.answerA}</p>
+                     :
+                     <div></div>
+                    }
+                     </div>
 
                     <div className="form-check">
                       <label>
                       <input
                       type="radio"
                       name="choice"
-                      value="option1"
+                      value="option2"
                       checked={true}
                       className="form-check-input"
                      />
-                      </label>
+                    </label>
+                    {survey ?
+                     <p>{survey.answerB}</p>
+                     :
+                     <div></div>
+                    }
                     </div>
 
                   <div className="form-check">
@@ -89,11 +100,16 @@ const SurveyPage = () => {
                       <input
                       type="radio"
                       name="choice"
-                      value="option1"
+                      value="option3"
                       checked={true}
                       className="form-check-input"
                      />
                       </label>
+                      {survey ?
+                     <p>{survey.answerC}</p>
+                     :
+                     <div></div>
+                    }
                     </div>
 
                   <div className="form-check">
@@ -101,11 +117,16 @@ const SurveyPage = () => {
                       <input
                       type="radio"
                       name="choice"
-                      value="option1"
+                      value="option4"
                       checked={true}
                       className="form-check-input"
                      />
                       </label>
+                      {survey ?
+                     <p>{survey.answerD}</p>
+                     :
+                     <div></div>
+                    }
                     </div>
 
                   <div className="form-check">
@@ -113,11 +134,16 @@ const SurveyPage = () => {
                       <input
                       type="radio"
                       name="choice"
-                      value="option1"
+                      value="option5"
                       checked={true}
                       className="form-check-input"
                      />
                       </label>
+                      {survey ?
+                     <p>{survey.answerE}</p>
+                     :
+                     <div></div>
+                    }
                     </div>
 
                   <Row>
@@ -138,6 +164,7 @@ const SurveyPage = () => {
     </Container>
     <Footer/>
    </div>
+  </Fragment>
   );
 }
 
