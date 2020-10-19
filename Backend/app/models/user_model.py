@@ -43,9 +43,12 @@ class User(db.Model):
     extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False, cascade="all, delete-orphan")
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True, cascade="all, delete-orphan")
 
-
     def setFirstName(self, newName):
         self.firstName = newName
+        db.session.commit()
+
+    def setLastName(self, newName):
+        self.lastName = newName
         db.session.commit()
 
     def setEmail(self, newEmail):
