@@ -36,7 +36,8 @@ DB_USER = "oddjobsuser"
 DB_PASSWORD = "asdllM$o2pecfsEEA"
 DB_NAME = "oddjobs"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@localhost/" + DB_NAME + "?host=127.0.0.1?port=3306"
+HOST = "localhost"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@localhost/" + DB_NAME + "?host=" + HOST + "?port=3306"
 db = SQLAlchemy(app)
 
 '''
