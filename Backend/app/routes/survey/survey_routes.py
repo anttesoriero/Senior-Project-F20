@@ -70,7 +70,7 @@ def recommendSurvey():
     Content = file.read()
     surveyList = Content.split("\n")
 
-    randomSurvey = random.randrange(0, len(surveyList))
+    randomSurvey = random.randrange(1, len(surveyList))
 
     return jsonify({"recommendedSurvey":randomSurvey}), 200
 

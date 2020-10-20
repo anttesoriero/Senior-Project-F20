@@ -19,4 +19,4 @@ How much would you pay someone to move furniture; $10; $15; $20; $25; $30+
 How much would you like to be paid to clean bathrooms?; $10; $15; $20; $25; $30+
 How much would you pay someone to clean bathrooms; $10; $15; $20; $25; $30+
 How much would you like to be paid to rake leaves?; $10; $15; $20; $25; $30+
-How much would you pay someone to rake leaves; $10; $15; $20, $25; $30+
+How much would you pay someone to rake leaves; $10; $15; $20; $25; $30+

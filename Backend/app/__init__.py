@@ -82,5 +82,6 @@ from app.models.survey_model import Survey
 if Survey.empty():
     file = open("./app/models/initializers/initialSurvey.txt", 'r')
     for survey in file.read().split("\n"):
-        Survey.createSurvey(survey.split(";"))
+        if survey is not "":
+            Survey.createSurvey(survey.split(";"))
     file.close()
