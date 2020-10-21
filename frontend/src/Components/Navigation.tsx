@@ -14,7 +14,7 @@ const Navigation = ({history}: RouteComponentProps) => {
     const signOut = () => {
         localStorage.removeItem('access_token');
         {/* Removes token and refreshes page to refresh AuthContext */}
-        history.push('/profile');
+        history.push('/');
         window.location.reload(false);
     }
 
@@ -29,7 +29,7 @@ const Navigation = ({history}: RouteComponentProps) => {
                 {contextType ? 
                     <Nav navbar className="mr-auto">
                         <NavItem>
-                            <NavLink href="/taskboard">Task Board</NavLink>
+                            <NavLink href="/tasks">Task Board</NavLink>
                         </NavItem>
                         {/*<NavItem>
                             <NavLink href="/profile">Profile</NavLink>
@@ -39,6 +39,9 @@ const Navigation = ({history}: RouteComponentProps) => {
                         </NavItem>
                         <NavItem>
                             <NavLink href="/listtasks">List a Task</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink href="/survey">Surveys</NavLink>
                         </NavItem>
                     </Nav>
                     : <Nav navbar className='mr-auto'></Nav>

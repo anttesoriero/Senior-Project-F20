@@ -15,27 +15,38 @@ type surveyState = {
   surveyId: number
 }
 
+type surveyIDState = {
+  id: number;
+}
+
 const SurveyPage = () => {
   const token = localStorage.getItem('access_token');
   const [survey, setSurvey]  = useState<surveyState>();
 
   const getSurvey = async () => {
-    {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
-        First one is the endpoint and second is the authorization headers */}
-    await axios.get('localhost:5000/survey/getSurvey?surveyId=<insert survey id here>', 
+    await axios.get('http://127.0.0.1:5000/survey/recommendSurvey', 
     { headers: { Authorization: `Bearer ${token}` } })
-    .then( response => {
+    .then( async response => {
         console.log(response);
-        setSurvey(response.data)
+          await axios.get(`http://127.0.0.1:5000/survey/getSurvey?surveyId=${response.data.recommendedSurvey}`, 
+          { headers: { Authorization: `Bearer ${token}` } })
+          .then( response => {
+              console.log(response);
+              setSurvey(response.data)
+          })
+          .catch( error => {
+              console.log(error);
+          });   
     })
     .catch( error => {
         console.log(error);
-    });   
-}
+    });
+  }
+
 
   useEffect(()=> {
     getSurvey();
-}, []);
+  }, []);
 
     return (
      <Fragment>

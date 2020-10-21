@@ -3,7 +3,6 @@ import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
 import Footer from "../Components/Footer";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
-import * as JWT from "jwt-decode";
 import axios from 'axios';
 // <script src="holder.js"/>
 
@@ -34,7 +33,7 @@ const ProfilePage = () => {
     
     useEffect(()=> {
         getUser();
-    }, []);
+    }, [getUser]);
 
     return (
         <div>

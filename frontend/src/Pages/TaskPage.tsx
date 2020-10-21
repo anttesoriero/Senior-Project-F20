@@ -1,43 +1,76 @@
-import React, { useState, useCallback } from 'react';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Container, Col, Row } from 'reactstrap';
+import Navigation from '../Components/Navigation';
+import Footer from '../Components/Footer';
+import PaginationRow from '../Components/PaginationRow';
+import TaskCard from '../Components/TaskCard';
+import axios from 'axios';
 
-const containerStyle = {
-    width: '500px',
-    height: '500px'
-};
-
-const center = {
-    lat: -3.745,
-    lng: -38.523
-};
+type taskIDs = {
+    ids: []
+}
 
 const TaskPage = () => {
-    const [map, setMap] = useState(null);
+    const token = localStorage.getItem('access_token');
+    const [idList, setIdList] = useState<taskIDs>();
 
-    const onLoad = useCallback(function callback(mapLoad) {
-        const bounds = new window.google.maps.LatLngBounds();
-        mapLoad.fitBounds(bounds);
-        setMap(mapLoad)
-    }, [setMap]);
+    const getIds = async () => {
+        await axios.get(`http://127.0.0.1:5000/task/getBriefPublic`, 
+        { headers: { Authorization: `Bearer ${token}` } })
+        .then( response => {
+            console.log(response.data);
+        })
+        .catch( error => {
+            console.log(error);
+        });
+    }
 
-    const onUnmount = useCallback(function callback() {
-        setMap(null)
-    }, [setMap]);
+    useEffect(()=> {
+        getIds();
+      }, []);
 
     return (
         <div>
-            <LoadScript googleMapsApiKey="AIzaSyBcriJb-SLk7ljQmh1P_L9MaiNj8VbZj_o">
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={center}
-                    zoom={10}
-                    onLoad={onLoad}
-                    onUnmount={onUnmount}
-                >
-                    { /* Child components, such as markers, info windows, etc. */}
-                    <></>
-                </GoogleMap>
-            </LoadScript>
+            <Navigation />
+            <Container>
+                <h1>Task Board</h1>
+                <Row xs={'1'} sm={'2'} md={'3'} className={'centered'}>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                    <Col>
+                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
+                    </Col>
+                </Row>
+                <div className='centered'>
+                    <PaginationRow/>
+                </div>
+            </Container>
+            <Footer/>
         </div>
     );
 }

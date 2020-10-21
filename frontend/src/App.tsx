@@ -20,7 +20,7 @@ function App() {
           <Route exact={true} path="/signin" render={(props) => < Signin {...props}/>}/>
           <Route exact={true} path="/register" render={(props) => < Register {...props}/>}/>
           <Route exact={true} path="/contact" render={(props) => < ContactPage {...props}/>}/> */}
-        <Redirect to="/" />
+        <Redirect to="/error" />
       </Switch>
     </BrowserRouter>
   );

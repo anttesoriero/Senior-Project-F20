@@ -59,9 +59,11 @@ $purple-color:               #c178c1 !default;
 $purple-states-color:        darken($purple-color, 8%) !default;
 
 $brown-color:                #dcb285 !default;
-$brown-states-color:         darken($brown-color, 8%) !default;
+$brown-states-color:         darken($brown-color, 8%) !default;              
 
-
+// Costom colors
+$olive-color:                 rgb(71, 117, 11) !default;
+$olive-states-color:         darken($olive-color, 8%) !default;  
 
 
 /*      light colors - used for select dropdown         */

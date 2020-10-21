@@ -6,9 +6,9 @@
 .pagination > li:last-child > a,
 .pagination > li:last-child > span{
     background-color: transparent;
-    border: 2px solid $danger-color;
+    border: 2px solid $default-bg;
     border-radius: 20px;
-    color: $danger-color;
+    color: $default-bg;
     height: $line-height;
     margin: 0 2px;
     min-width: 36px;
@@ -149,8 +149,8 @@
 .pagination-danger > li:first-child > span,
 .pagination-danger > li:last-child > a,
 .pagination-danger > li:last-child > span{
-    border: 2px solid $danger-color;
-    color: $danger-color;
+    border: 2px solid $default-bg;
+    color: $default-bg;
 }
 
 .nav-pills-danger > li.active > a,
@@ -165,8 +165,8 @@
 .pagination-danger > li.active > span:hover,
 .pagination-danger > li.active > a:focus,
 .pagination-danger > li.active > span:focus{
-   background-color: $danger-color !important;
-   border-color: $danger-color !important;
+   background-color: $default-bg !important;
+   border-color: $default-bg !important;
    color: $white-color;
 }
 
@@ -224,7 +224,7 @@
     color: $warning-color;
 }
 .nav-red > li.active a{
-    color: $danger-color;
+    color: $default-bg;
 }
 
 .nav-text{
@@ -287,7 +287,7 @@
 }
 .nav-pills-danger .nav-item.show .nav-link,
 .nav-pills-danger .nav-link.active{
-    background-color: $danger-color !important;
+    background-color: $default-bg !important;
 }
 .pagination > li > a:hover,
 .pagination > li > a:focus,
@@ -298,15 +298,15 @@
 .pagination > li.active > span:hover,
 .pagination > li.active > a:focus,
 .pagination > li.active > span:focus{
-    background-color: $danger-color;
-    border-color: $danger-color;
+    background-color: $default-bg;
+    border-color: $default-bg;
     color: $white-color;
 }
 
 .page-item.active .page-link{
-    background-color: $danger-color;
+    background-color: $default-bg;
     color: white;
-    border-color: $danger-color;
+    border-color: $default-bg;
 }
 .nav-pills .nav-link{
     border-radius: 0;
