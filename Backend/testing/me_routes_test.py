@@ -84,8 +84,7 @@ def test_editInformation():
     inputData = {
         "email": "me_routes_test@gmail.com",
         "firstName": "Me",
-        "lastName": "Test",                     # me\me_routes.py", line 109
-                                                # Everything else sets correctly when last name isnt included
+        "lastName": "Test",
         "preferredName": "Nick",
         "phoneNumber": "8562564000"
     }
@@ -97,7 +96,7 @@ def test_editInformation():
         data=inputData
     )
     
-    assert response.status_code == 200, "test_editInformation()" # Returns 500 error
+    assert response.status_code == 200, "test_editInformation()"
 
 test_editInformation()
 
