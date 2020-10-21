@@ -16,8 +16,8 @@ const ErrorPage = () => {
                     <Media object src={ErrorImage} alt="ERROR IMAGE" height="200"/>
                 </Media>
 
-                <h1 id="centered" style={{ fontWeight: 'bold' }}>Uh-oh, something's wrong!</h1>
-                <h2 id="centered" style={{ fontWeight: 'bold' }}>ERROR [ID]: [MESSAGE]</h2>
+                <h2 id="centered" style={{ fontWeight: 'bold' }}>ERROR 404</h2>
+                <h1 id="centered" style={{ fontWeight: 'bold' }}>Looks like you're lost!</h1>
 
                 <br/>
 

@@ -53,7 +53,7 @@ const SurveyPage = () => {
      <div>
       <Navigation/>
       <Container>
-         <h1 id="centered" style={{ fontWeight: 'bold' }}>Survey Page</h1>
+        <h1 id="centered" style={{ fontWeight: 'bold' }}>Survey Page</h1>
         <br/>
 
         <h2 id="centered">Here's your daily survey</h2>
@@ -61,12 +61,11 @@ const SurveyPage = () => {
         <hr/>
       <Row>
         {survey ?
-           <h4 id="centered" style={{ fontWeight: 'bold' }} >Example Question : {survey.question}</h4>
+           <h4 id="centered" style={{ fontWeight: 'bold' }} >{survey.question}</h4>
            :
            <p id="centered">Some more information if needed</p>
          }
       </Row>
-
           <div className="container">
             <div className="row mt-5">
               <div className="col-sm-12">
@@ -140,22 +139,21 @@ const SurveyPage = () => {
                     }
                     </div>
 
-                  <div className="form-check">
-                      <label>
-                      <input
-                      type="radio"
-                      name="choice"
-                      value="option5"
-                      checked={true}
-                      className="form-check-input"
-                     />
-                      </label>
-                      {survey ?
-                     <p>{survey.answerE}</p>
-                     :
-                     <div></div>
+                    {survey ? 
+                      <div className="form-check">
+                          <label>
+                            <input
+                            type="radio"
+                            name="choice"
+                            value="option5"
+                            checked={true}
+                            className="form-check-input"
+                          />
+                          </label>
+                        <p>{survey.answerE}</p>
+                      </div>
+                      : <div></div>
                     }
-                    </div>
 
                   <Row>
                     <Col><hr/></Col>

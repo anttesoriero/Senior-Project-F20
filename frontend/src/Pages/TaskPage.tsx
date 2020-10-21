@@ -62,9 +62,6 @@ const TaskPage = () => {
                     <Col>
                         <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
                     </Col>
-                    <Col>
-                        <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.'/>
-                    </Col>
                 </Row>
                 <div className='centered'>
                     <PaginationRow/>
