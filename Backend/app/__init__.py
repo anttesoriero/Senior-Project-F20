@@ -15,9 +15,6 @@ app = Flask(__name__)
 #Cors setup to allow requests from frontend
 CORS(app)
 
-# Init app
-app = Flask(__name__)
-
 # Set up
 
 # Setup the JWT configuration
