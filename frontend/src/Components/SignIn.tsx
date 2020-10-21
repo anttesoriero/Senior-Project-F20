@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const SignIn = ({history}: RouteComponentProps) => {
     const [submitting, setSubmitting] = useState(false);
+    const [serror, seetSerror] = useState(false);
 
     const signIn = data => {
         setSubmitting(true);
@@ -21,6 +22,7 @@ const SignIn = ({history}: RouteComponentProps) => {
           })
           .catch(function (error) {
             setSubmitting(false);
+            seetSerror(true);
             console.log(error);
           });   
     }
@@ -30,13 +32,16 @@ const SignIn = ({history}: RouteComponentProps) => {
         {() => (
             <Form >
                 <FormGroup>
-                    <Label for="email">Email</Label>
+                    <Label className='drop' for="email">Email</Label>
                     <Field placeholder='Email' name='email' type='email' required as={Input}/>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="password">Password</Label>
+                    <Label className='drop' for="password">Password</Label>
                     <Field placeholder='Password' name='password' type='password' required as={Input}/>
                 </FormGroup>
+                <div className='centered'>
+                    {serror ? <p className='error'>Incorrect Credentials!</p> : <div></div>}
+                </div>
                 <FormGroup className='centered'>
                     {submitting ? <Button color='primary'><Spinner size='sm'/>&nbsp;Signing in...</Button>: <Button type='submit' color="primary">Sign In</Button>}
                 </FormGroup>

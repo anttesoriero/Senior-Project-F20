@@ -33,7 +33,7 @@ const ProfilePage = () => {
     
     useEffect(()=> {
         getUser();
-    }, [getUser]);
+    }, []);
 
     return (
         <div>

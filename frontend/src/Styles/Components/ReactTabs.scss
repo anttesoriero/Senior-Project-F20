@@ -55,3 +55,14 @@
     }
   }
   
+.drop {
+  font-weight: bolder;
+  text-shadow: rgb(70, 70, 70) 1px 0 10px;
+}
+
+.error {
+  color: $danger-color;
+  font-weight: bold;
+  font-size: medium;
+  //text-shadow: rgb(75, 75, 75) 1px 0 10px;
+}
