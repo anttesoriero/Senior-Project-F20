@@ -4,3 +4,4 @@ Flask-SQLAlchemy==2.4.4
 waitress==1.4.4
 Werkzeug==1.0.0
 flask-cors==3.0.9
+oauthlib==3.1.0
