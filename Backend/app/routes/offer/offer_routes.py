@@ -48,7 +48,6 @@ def createOffer():
         *"startDate": date
         *"jobDurationMinutes": int
         *"note": str
-        *"accepted": bool
         *"responseMessage": str
     }
     Out
@@ -60,7 +59,7 @@ def createOffer():
     # Validate input
     requiredParameters = ["taskId", "userIdFrom", "payment"]
 
-    optionalParameters = ["jobDurationMinutes", "note", "accepted",
+    optionalParameters = ["jobDurationMinutes", "note", 
                           "responseMessage"]
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
@@ -79,7 +78,6 @@ def createOffer():
         startDate=inputJSON["startDate"],
         jobDurationMinutes=inputJSON["jobDurationMinutes"],
         note=inputJSON["note"],
-        accepted=inputJSON["accepted"],
         responseMessage=inputJSON["responseMessage"]
     )
 
