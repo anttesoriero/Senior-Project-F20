@@ -3,6 +3,7 @@ Start point of the web server
 """
 # Library imports
 from waitress import serve
+import os
 
 # Module imports
 from app import app
@@ -19,4 +20,7 @@ if __name__ == '__main__':
         serve(app, host='0.0.0.0', port=80)
     else:
         # Runs as dev server, should be on localhost 5000
+        
+        # OAuth2 requires https, so for development, we can turn the check off
+        os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
         app.run()
