@@ -34,7 +34,7 @@ class Offer(db.Model):
     taskId = db.Column(db.Integer(), db.ForeignKey("task.taskId"), index=True)
     userIdFrom = db.Column(db.Integer(), db.ForeignKey("user.userId"), index=True)
     payment = db.Column(db.Integer())
-    startDate = db.Column(db.DateTime(), nullabel=True)
+    startDate = db.Column(db.DateTime(), nullable=True)
     jobDurationMinutes = db.Column(db.Integer(), nullable=True)
     note = db.Column(db.Text(240), nullable=True)
     accepted = db.Column(db.Boolean())
