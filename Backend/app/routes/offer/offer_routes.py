@@ -37,12 +37,58 @@ POSTs
 @jwt_required
 def createOffer():
     '''
+    Create an offer
+
+    In
+    * optional
+    {
+        "taskId": int
+        "userIdFrom": int
+        "payment": int
+        *"startDate": date
+        *"jobDurationMinutes": int
+        *"note": str
+        *"accepted": bool
+        *"responseMessage": str
+    }
+    Out
+    {
+        "offerId": int
+    }
     '''
+
+    # Validate input
+    requiredParameters = ["taskId", "userIdFrom", "payment"]
+
+    optionalParameters = ["jobDurationMinutes", "note", "accepted",
+                          "responseMessage"]
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
-    return jsonify({}), 200
+    # Create task
+    offer = Offer.createOffer(
+        taskId=task.taskId,
+        userIdFrom=user.userId,
+        payment=inputJSON["payment"],
+        startDate=inputJSON["startDate"],
+        jobDurationMinutes=inputJSON["jobDurationMinutes"],
+        note=inputJSON["note"],
+        accepted=inputJSON["accepted"],
+        responseMessage=inputJSON["responseMessage"]
+    )
+
+    # Build output
+    output = {
+        "offerId": offer.offerId
+    }
+
+    return jsonify(output), 200
 
 @offer_blueprint.route('/acceptOffer', methods=['POST'])
 @jwt_required
