@@ -26,7 +26,7 @@
     "react-icons": "^3.11.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^3.4.4",
     "react-tabs": "^3.1.1",
     "reactstrap": "^8.5.1",
     "styled-components": "^5.2.0",
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@types/googlemaps": "^3.40.0",
-    "@types/react-router-dom": "^5.1.5"
+    "@types/react-router-dom": "^5.1.5",
+    "react-openlayers": "^0.3.0"
   }
 }
