@@ -32,8 +32,10 @@ Open endpoints
 
 @auth_blueprint.route('/oauth')
 def oauth_login():
-    # Find out what URL to hit for Google login
+    # Set up a Google provider
     google_provider_cfg = get_google_provider_cfg()
+
+    # We want to hit the provider's 'authorization' URL
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
     # Use library to construct the request for login and provide
@@ -43,11 +45,13 @@ def oauth_login():
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
+    # Redirect to the /oauth/callback route
+    # GCP wanted a callback route when the client is ready
     return redirect(request_uri)
 
 @auth_blueprint.route("/oauth/callback")
 def oauth_callback():
-    # Get authorization code Google sent back to you
+    # Get authorization code that Google sent back to you
     code = request.args.get("code")
 
     # Find out what URL to hit to get tokens that allow you to ask for
@@ -55,7 +59,7 @@ def oauth_callback():
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
 
-    # Prepare and send request to get tokens! Yay tokens!
+    # Prepare and send request to get tokens
     token_url, headers, body = client.prepare_token_request(
         token_endpoint,
         authorization_response=request.url,
@@ -69,50 +73,55 @@ def oauth_callback():
         auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
     )
 
-    # Parse the tokens!
+    # Parse the tokens
     client.parse_request_body_response(json.dumps(token_response.json()))
 
-    # Now that we have tokens (yay) let's find and hit URL
-    # from Google that gives you user's profile information,
-    # including their Google Profile Image and Email
+    # Now that we have tokens, find and hit URL from Google that gives
+    # user's profile information, including their Google Profile Image and Email
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = client.add_token(userinfo_endpoint)
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
     # We want to make sure their email is verified.
     # The user authenticated with Google, authorized our
-    # app, and now we've verified their email through Google!
+    # app, and now we've verified their email through Google
     if userinfo_response.json().get("email_verified"):
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["given_name"]
+        family_name = userinfo_response.json()["family_name"]
     else:
         return "User email not available or not verified by Google.", 400
 
-    # Create a user in our db with the information provided
-    # by Google
-    # user = User(
-    #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
-    # )
+    # At this point, we will create the user and send them a JWT token
 
-    # # Doesn't exist? Add to database
-    # if not User.get(unique_id):
-    #     User.create(unique_id, users_name, users_email, picture)
+    # Create user
+    user = User.createUser(
+        email = users_email,
+        password = unique_id,
+        firstName = users_name,
+        lastName = family_name,
+        preferredName = "",
+        # TODO : add "picture" column to the user table
+        phoneNumber = ""
+    )
 
-    # Begin user session by logging the user in
-    # login_user(user)
-
-    # Send user back to homepage
-    # return redirect(url_for("index"))
-    responseInformation = {
-        "unique_id": unique_id,
-        "users_email": users_email,
-        "picture": picture,
-        "users_name": users_name
-    }
-
-    return jsonify(responseInformation), 200
+    # Check user created
+    if user is not None:
+        # Generate and return JWT token
+        access_token = create_access_token(identity=user.userId)
+        response = {
+            'success': True,
+            'access_token': access_token
+        }
+        return jsonify(response), 200
+    else:
+        # Failed to register
+        response = {
+            'success': False
+        }
+        return jsonify(response), 400
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
