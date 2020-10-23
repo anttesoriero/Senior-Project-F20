@@ -7,6 +7,7 @@ import ErrorPage from './Pages/ErrorPage';
 import SurveyPage from './Pages/SurveyPage';
 import TaskPage from './Pages/TaskPage';
 import ListingPage from './Pages/ListingPage';
+import EditPage from './Pages/EditPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/list" render={(props) => <ListingPage />} />
+        <Route exact={true} path="/edit-profile" render={(props) => <EditPage />} />
         {/* <Route exact={true} path="/shop" render={(props) => < Shop {...props}/>}/>
           <Route exact={true} path="/signin" render={(props) => < Signin {...props}/>}/>
           <Route exact={true} path="/register" render={(props) => < Register {...props}/>}/>
