@@ -6,15 +6,38 @@ import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 
-type userState = {
-    email: string,
-    firstName: string,
-    lastName: string,
-    accountBalance: number
+{/* Not sure if this stuff is right */}
+type taskState = {
+    description: string,
+    recommendedPrice: number,
+    estimatedDurationMinutes: number,
+    locationALongitude: number,
+    locationALatitude: number,
+    locationBLongitude: number,
+    locationBLatitude: number
 }
 
 const ListingPage = () => {
     const token = localStorage.getItem('access_token');
+    const [task, createTask]  = useState<taskState>();
+
+    const getPrivate = async () => {
+        {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
+            First one is the endpoint and second is the authorization headers */}
+        await axios.get('http://127.0.0.1:5000/me/getProfile', 
+        { headers: { Authorization: `Bearer ${token}` } })
+        .then( response => {
+            console.log(response.data);
+            createTask(response.data)
+        })
+        .catch( error => {
+            console.log(error);
+        });   
+    }
+    
+    useEffect(()=> {
+        getPrivate();
+    }, []);
 
     return (
         <div>
