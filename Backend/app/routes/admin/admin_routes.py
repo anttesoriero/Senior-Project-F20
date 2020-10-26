@@ -11,7 +11,7 @@ This file should be focused on annotating routes
 from flask import jsonify, request
 
 # Module imports
-from app.routes.survey import survey_blueprint
+from app.routes.admin import admin_blueprint
 from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
@@ -22,7 +22,7 @@ adminToken = "SuperSecureLongAdminToken"
 '''
 POSTs
 '''
-@survey_blueprint.route('/addToAccount', methods=['POST'])
+@admin_blueprint.route('/addToAccount', methods=['POST'])
 def addToAccount():
     '''
     Add money to a user's account
