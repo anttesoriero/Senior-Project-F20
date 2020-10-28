@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef, Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media} from 'reactstrap';
 import Footer from "../Components/Footer";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
+import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
+
 
 type editState = {
     email: string,
@@ -33,6 +35,9 @@ const EditPage = () => {
     useEffect(()=> {
         getProfile();
     }, []);
+    
+    {/* TO DO : */}
+    {/*const deleteAcc = window.confirm("Are you sure you want to delete your account?");*/}
 
     return (
         <div>
@@ -73,8 +78,8 @@ const EditPage = () => {
                     {/*Upper buttons*/}
                     <div>
                     <Row>
-                    <Col xs="6">
-                        <h3 id="left" style={{ fontWeight: 'bold' }}>Profile Information</h3>
+                    <Col xs="8">
+                        <h3 id="centered" style={{ fontWeight: 'bold' }}>Profile Information</h3>
                         <hr/>  
                         <div className="input-group">
                             <div className="input-group-prepend">
@@ -90,7 +95,7 @@ const EditPage = () => {
                                 aria-describedby="inputGroupFileAddon"
                             />
                             <label color="primary" className="custom-file-label" htmlFor="inputFileAddon">
-                                Choose image from browser
+                                Choose new image from file browser
                             </label>
                         </div>
                     </div>
@@ -110,16 +115,20 @@ const EditPage = () => {
                         <Col xs="10">
                              <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
                              <hr/>
-                            <Button id="centered" outline color="primary" size="sm">Deposit Funds</Button>{' '}
+                            <Button id="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
                             <hr/>
                             <Button id="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
-                            <hr/>
                         </Col>
                     </Row>
 
                     {/*Account deletion*/}
-                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
-                    <Button id="centered" color="secondary" size="sm">Delete Account</Button>{' '}
+                    <Row>
+                        <Col>
+                            <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
+                            <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
+                            <hr/>
+                        </Col>
+                    </Row>    
                 </div>
             </Container>
             <br/>
