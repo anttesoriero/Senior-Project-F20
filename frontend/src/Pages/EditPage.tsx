@@ -125,8 +125,8 @@ const EditPage = () => {
                     <Row>
                         <Col xs="8">
                             <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
-                            <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
                             <hr/>
+                            <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
                         </Col>
                     </Row>    
                 </div>
