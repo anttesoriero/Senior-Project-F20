@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, Component } from 'react';
 import Navigation from '../Components/Navigation';
-import {Container, Row, Col, Button, Media, Badge} from 'reactstrap';
+import {Container, Row, Col, Button, Media} from 'reactstrap';
 import Footer from "../Components/Footer";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
-// <script src="holder.js"/>
 
 type editState = {
     email: string,
@@ -39,7 +38,7 @@ const EditPage = () => {
         <div>
             <Navigation/>
             <Container>
-                <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile Page</h1>
+                <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
                 <br/>
 
                 <Row>
@@ -55,19 +54,78 @@ const EditPage = () => {
                                         :
                                         <Media heading>[FIRST NAME] [LAST NAME]</Media>
                                     }
+                                    
+                                    {profile ?
+                                        <p>Account Balance: ${String(profile.accountBalance)}</p>
+                                        :
+                                        <div>
+                                            Account Balance: $[__]
+                                            {/*{' '}<Button outline color="info" size="sm">Cash Out</Button>{' '}*/}
+                                        </div>}
+                                        <br/>
+                                        <h6 id="centered"> Edit Your Profile Information Below </h6> 
+                                        <hr/>         
                             </Media>
                         </Media>
                     </Col>
-
-                    <Button outline color="primary" size="sm">Edit Picture</Button>{' '}
-                    <Button outline color="primary" size="sm">Change Name</Button>{' '}
-                    <Button outline color="primary" size="sm">Change Password</Button>{' '}
-                    
                     </Row>
+                    
+                    {/*Upper buttons*/}
+                    <div>
+                    <Row>
+                    <Col xs="6">
+                        <h3 id="left" style={{ fontWeight: 'bold' }}>Profile Information</h3>
+                        <hr/>  
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text" id="inputFileAddon">
+                                Edit Picture
+                                </span>
+                            </div>
+                            <div className="custom-file">
+                             <input
+                                type="file"
+                                className="custom-file-input"
+                                id="inputFile"
+                                aria-describedby="inputGroupFileAddon"
+                            />
+                            <label color="primary" className="custom-file-label" htmlFor="inputFileAddon">
+                                Choose image from browser
+                            </label>
+                        </div>
+                    </div>
+                            <hr/>
+                            <Button id="centered" color="primary" size="sm">Edit Name</Button>{' '}
+                            <hr/>
+                            <Button id="centered" color="primary" size="sm">Update Location</Button>{' '}
+                            <hr/>
+                            <Button id="centered" color="primary" size="sm">Edit Contact Information</Button>{' '}
+                            <hr/>
+                            <Button id="centered" color="primary" size="sm">Change Password</Button>{' '}  
+                        </Col>
+                    </Row>      
+                    
+                    {/*Bottom hand buttons*/}
+                    <Row>
+                        <Col xs="10">
+                             <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
+                             <hr/>
+                            <Button id="centered" outline color="primary" size="sm">Deposit Funds</Button>{' '}
+                            <hr/>
+                            <Button id="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
+                            <hr/>
+                        </Col>
+                    </Row>
+
+                    {/*Account deletion*/}
+                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
+                    <Button id="centered" color="secondary" size="sm">Delete Account</Button>{' '}
+                </div>
             </Container>
-            <br />
+            <br/>
             <Footer/>
         </div>
     );
 }
+
     export default EditPage;

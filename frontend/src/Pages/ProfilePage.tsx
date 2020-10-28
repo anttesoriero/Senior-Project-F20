@@ -70,7 +70,7 @@ const ProfilePage = () => {
 
                     {/* Right - Edit Profile button */}
                     <Col xs="2" id="right">
-                        <Button outline color="primary" size="sm">Edit Profile</Button>{' '}
+                        <Button href="/edit-profile" outline color="primary" size="sm">Edit Profile</Button>{' '}
                     </Col>
                 </Row>
                 <br/>
