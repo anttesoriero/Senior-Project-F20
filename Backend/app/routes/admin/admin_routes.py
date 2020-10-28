@@ -44,7 +44,7 @@ def addToAccount():
     if not success:
         return jsonify({}), code
 
-    if str(inputJSON["adminPassword"]) == adminToken:
+    if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
     user = User.getByUserId(int(inputJSON["userId"]))
@@ -53,3 +53,27 @@ def addToAccount():
         return jsonify({"success":True}), 200
     else:
         return jsonify({}), 404
+
+'''
+GET
+'''
+@admin_blueprint.route('/getAllUsers', methods=['POST'])
+def getAllUsers():
+    '''
+    Returns all user Id's
+    '''
+    # Validate input
+    requiredParameters = ["adminPassword"]
+
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+
+    return jsonify({"User ID":User.getUserIDs()}), 200
+
+    
