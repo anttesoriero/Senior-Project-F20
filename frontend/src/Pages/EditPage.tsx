@@ -48,7 +48,7 @@ const EditPage = () => {
 
                 <Row>
                     {/* Left - Prof Pic, name, and basic info */}
-                    <Col xs="10">
+                    <Col xs="9">
                         <Media>
                             <Media left href="#">
                                 <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160"/>
@@ -112,7 +112,7 @@ const EditPage = () => {
                     
                     {/*Bottom hand buttons*/}
                     <Row>
-                        <Col xs="10">
+                        <Col xs="8">
                              <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
                              <hr/>
                             <Button id="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
@@ -123,7 +123,7 @@ const EditPage = () => {
 
                     {/*Account deletion*/}
                     <Row>
-                        <Col>
+                        <Col xs="8">
                             <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
                             <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
                             <hr/>
