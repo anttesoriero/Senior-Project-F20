@@ -55,7 +55,7 @@ def addToAccount():
         return jsonify({}), 404
 
 '''
-GET
+POST
 '''
 @admin_blueprint.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
