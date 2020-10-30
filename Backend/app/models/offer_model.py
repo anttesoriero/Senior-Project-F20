@@ -111,3 +111,18 @@ class Offer(db.Model):
             offer.archived = True
         db.session.commit()
 
+    @classmethod
+    def getOfferIDs(cls):
+        '''
+        Gets the offer ids from the User table
+        :return list of offer ids
+        '''
+
+        offers = db.session.query(Offer)
+        offer_ids = []
+
+        for offer in offers:
+            # add offer ids to list
+            offer_ids.append(offer.offerId)
+        
+        return offer_ids

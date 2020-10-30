@@ -18,6 +18,7 @@ from app.utilities.validation.validation import validateRequestJSON
 from app.models.user_model import User
 from app.models.user_model import Task
 from app.models.user_model import Survey
+from app.models.user_model import Offer
 
 adminToken = "SuperSecureLongAdminToken"
 
@@ -121,3 +122,25 @@ def getAllSurveys():
         return jsonify({}), 403
 
     return jsonify({"Survey ID":Survey.getSurveyIDs()}), 200
+
+'''
+POST
+'''
+@admin_blueprint.route('/getAllOffers', methods=['POST'])
+def getAllOffers():
+    '''
+    Returns all offer Id's
+    '''
+    # Validate input
+    requiredParameters = ["adminPassword"]
+
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+
+    return jsonify({"Offer ID":Offer.getOfferIDs()}), 200
