@@ -13,9 +13,12 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Module imports
 from app.routes.offer import offer_blueprint
+from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
 from app.models.user_model import User
+from app.models.offer_model import Offer
+from app.routes import task
 
 '''
 GETs
