@@ -16,6 +16,7 @@ from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
 from app.models.user_model import User
+from app.models.user_model import Task
 
 adminToken = "SuperSecureLongAdminToken"
 
@@ -76,4 +77,25 @@ def getAllUsers():
 
     return jsonify({"User ID":User.getUserIDs()}), 200
 
-    
+
+'''
+POST
+'''
+@admin_blueprint.route('/getAllTasks', methods=['POST'])
+def getAllTasks():
+    '''
+    Returns all task Id's
+    '''
+    # Validate input
+    requiredParameters = ["adminPassword"]
+
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+
+    return jsonify({"Task ID":Task.getTaskIDs()}), 200
