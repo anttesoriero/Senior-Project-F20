@@ -29,3 +29,19 @@ class HistoricalSurvey(db.Model):
         db.session.add(historicalSurvey)
         db.session.commit()
         return historicalSurvey
+
+    @classmethod
+    def getHistoricalSurveyIDs(cls):
+        '''
+        Gets the HistoricalSurvey ids from the User table
+        :return list of HistoricalSurvey ids
+        '''
+
+        historicalSurveys = db.session.query(HistoricalSurvey)
+        historicalSurvey_ids = []
+
+        for historicalSurvey in historicalSurveys:
+            # add historicalSurvey ids to list
+            historicalSurvey_ids.append(historicalSurvey.historicalSurveyId)
+        
+        return historicalSurvey_ids
