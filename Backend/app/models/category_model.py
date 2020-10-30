@@ -50,3 +50,18 @@ class Category(db.Model):
 
         return category
 
+    @classmethod
+    def getCategoryIDs(cls):
+        '''
+        Gets the category ids from the User table
+        :return list of category ids
+        '''
+
+        categories = db.session.query(Category)
+        category_ids = []
+
+        for category in categories:
+            # add category ids to list
+            category_ids.append(category.categoryId)
+        
+        return category_ids

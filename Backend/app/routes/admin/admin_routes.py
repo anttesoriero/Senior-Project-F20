@@ -20,6 +20,7 @@ from app.models.user_model import Task
 from app.models.user_model import Survey
 from app.models.user_model import Offer
 from app.models.user_model import HistoricalSurvey
+from app.models.user_model import Category
 
 adminToken = "SuperSecureLongAdminToken"
 
@@ -167,3 +168,25 @@ def getAllHistoricalSurveys():
         return jsonify({}), 403
 
     return jsonify({"HistoricalSurvey ID":HistoricalSurvey.getHistoricalSurveyIDs()}), 200
+
+'''
+POST
+'''
+@admin_blueprint.route('/getAllCategories', methods=['POST'])
+def getAllCategories():
+    '''
+    Returns all category Id's
+    '''
+    # Validate input
+    requiredParameters = ["adminPassword"]
+
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+
+    return jsonify({"Category ID":Category.getCategoryIDs()}), 200
