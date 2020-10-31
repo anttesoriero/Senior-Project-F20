@@ -5,6 +5,7 @@ import Footer from "../Components/Footer";
 import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
+import CategoryDropdown from '../Components/CategoryDropdown';
 
 {/* Not sure if this stuff is right */}
 type taskState = {
@@ -61,10 +62,8 @@ const ListingPage = () => {
                                     <Label for="taskCategory"><h4>Task Category</h4></Label>
                                     <Input type="select" name="taskCategory" id="taskCategory" required>
                                         <option selected disabled>Select Category</option>
-                                        <option>Cat 1</option>
-                                        <option>Cat 2</option>
-                                        <option>Cat 3</option>
-                                        <option>Cat 4</option>
+                                        <option>Test</option>
+                                        <CategoryDropdown categoryList={['SAMPLE USAGE','Educational','Fitness','IMPORT OTHERS FROM FULL LIST']} />
                                     </Input>
                                 </FormGroup>
                             </Col>
