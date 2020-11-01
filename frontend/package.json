@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@types/googlemaps": "^3.40.0",
+    "@types/leaflet": "^1.5.19",
     "@types/react-router-dom": "^5.1.5",
     "react-openlayers": "^0.3.0"
   }
