@@ -6,6 +6,8 @@ import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import CategoryDropdown from '../Components/CategoryDropdown';
+import { DateTimePicker } from 'react-rainbow-components';
+{/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */}
 
 {/* Not sure if this stuff is right */}
 type taskState = {
@@ -35,6 +37,10 @@ const ListingPage = () => {
         .catch( error => {
             console.log(error);
         });   
+    }
+    
+    const inputStyles = {
+        maxWidth: 320,
     }
     
     useEffect(()=> {
@@ -115,6 +121,33 @@ const ListingPage = () => {
                                 <FormGroup>
                                     <Label for="time"><h4>Time</h4></Label>
                                     <Input type="time" name="time" id="time" placeholder="12:00PM" required/>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+
+                        {/* Row 3.5 - DateTimePicker & Extra */}
+                        <Row>
+                            <Col>
+                                <FormGroup>
+                                    <Label for="DateTime"><h4>Date & Time</h4></Label>
+                                    <DateTimePicker
+                                        formatStyle="large"
+                                        name="DateTime"
+                                        value={Date()}
+                                        className="rainbow-m-around_small"
+                                        required
+                                    />
+                                </FormGroup>
+                                {/* REMOVED FROM DateTimePicker
+                                    label="DateTimePicker Label"
+                                    value={state.value} 
+                                    onChange={value => setState({ value })} 
+                                */}
+                            </Col>
+                            <Col>
+                                <FormGroup>
+                                    <Label for="Duration"><h4>Duration in Minutes</h4></Label>
+                                    <Input type="text" name="duration" id="duration" placeholder="60" value={task?.estimatedDurationMinutes} required/>
                                 </FormGroup>
                             </Col>
                         </Row>
