@@ -9,6 +9,8 @@ import CategoryDropdown from '../Components/CategoryDropdown';
 
 {/* Not sure if this stuff is right */}
 type taskState = {
+    categoryId: number,
+    title: string,
     description: string,
     recommendedPrice: number,
     estimatedDurationMinutes: number,
@@ -17,14 +19,13 @@ type taskState = {
     locationBLongitude: number,
     locationBLatitude: number
 }
+{/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */}
 
 const ListingPage = () => {
     const token = localStorage.getItem('access_token');
     const [task, createTask]  = useState<taskState>();
 
     const getPrivate = async () => {
-        {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
-            First one is the endpoint and second is the authorization headers */}
         await axios.get('http://127.0.0.1:5000/me/getProfile', 
         { headers: { Authorization: `Bearer ${token}` } })
         .then( response => {
@@ -54,13 +55,13 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="taskTitle"><h4>Task Title</h4></Label>
-                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" required/>
+                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" value={task?.title} required/>
                                 </FormGroup>
                             </Col>
                             <Col>
                                 <FormGroup>
                                     <Label for="taskCategory"><h4>Task Category</h4></Label>
-                                    <Input type="select" name="taskCategory" id="taskCategory" required>
+                                    <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required>
                                         <option selected disabled>Select Category</option>
                                         <option>Test</option>
                                         <CategoryDropdown categoryList={['SAMPLE USAGE','Educational','Fitness','IMPORT OTHERS FROM FULL LIST']} />
@@ -74,7 +75,7 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="taskDesc"><h4>Task Description</h4></Label>
-                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" required/>
+                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" value={task?.description} required/>
                                 </FormGroup>
                             </Col>
                             <Col>
@@ -95,7 +96,7 @@ const ListingPage = () => {
                             <FormGroup>
                                 <Label for="taskPayRate"><h5>$</h5></Label>
                                 <Label inline for="taskPayRate"><h4 className="centered">Pay Rate</h4>
-                                    <Input type="number" name="taskPayRate" id="taskPayRate" placeholder="60" min="15" required/>
+                                    <Input type="number" name="taskPayRate" id="taskPayRate" placeholder="60" min="15" value={task?.recommendedPrice} required/>
                                 </Label>
                             </FormGroup>
                         </div>
@@ -156,7 +157,7 @@ const ListingPage = () => {
                             </Col>
                         </Row>
 
-                        <div className="centered"><Button color="primary" size="lg">List Task</Button></div>
+                        <div className="centered"><Button color="primary" size="lg" type="submit">List Task</Button></div>
 
                     </Form>
                 </div>
