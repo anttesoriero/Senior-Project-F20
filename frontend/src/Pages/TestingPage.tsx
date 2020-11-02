@@ -4,6 +4,7 @@ import {Col, Container, Row} from 'reactstrap';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import Maps from "../Components/Maps";
+import TaskCard from '../Components/TaskCard';
 // import {Map, L} from 'leaflet';
 // <script src="holder.js"/>
 
@@ -25,6 +26,7 @@ const TestingPage = () => {
             
             <Maps scrollBool={false} />
             <br />
+                <TaskCard title='Testing Hover' offerer='USER' price='00' description='DESCRIPTION'/>
             <Footer/>
         </div>
     );

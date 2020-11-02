@@ -15,10 +15,22 @@ const Maps = (prop: {scrollBool: boolean}) => {
             />
             <Marker position={anthony} >
                 <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
+                    <div>This is a popup - It opens on click</div>
                 </Popup>
                 <Tooltip>This is a Marker</Tooltip>
             </Marker>
+            <Marker position={rowanLocation} >
+                <Popup>
+                    <div>This is a popup - It opens on click</div>
+                </Popup>
+                <Tooltip>This is a Marker</Tooltip>
+            </Marker>
+            <Marker position={[39.703, -75.113]}>
+                <Popup>
+                    <span>A pretty CSS3 popup. <br/> Easily customizable.</span>
+                </Popup>
+            </Marker>
+
             <Circle
                 center={anthony}
                 pathOptions={{ fillColor: 'blue' }}
