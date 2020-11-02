@@ -7,6 +7,7 @@ import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import CategoryDropdown from '../Components/CategoryDropdown';
 import { DateTimePicker } from 'react-rainbow-components';
+import { create } from 'domain';
 {/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */}
 
 {/* Not sure if this stuff is right */}
@@ -14,25 +15,42 @@ type taskState = {
     categoryId: number,
     title: string,
     description: string,
-    recommendedPrice: number,
-    estimatedDurationMinutes: number,
+    recommendedPrice: number | undefined,
+    estimatedDurationMinutes: number | undefined,
     locationALongitude: number,
     locationALatitude: number,
     locationBLongitude: number,
     locationBLatitude: number
 }
+
 {/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */}
+
+const taskFields = {
+    // TODO: associate categories with their respective category ID's
+    // Default initial values for the task fields
+    categoryId: 1,
+    title: "",
+    description: "",
+    recommendedPrice: undefined,
+    estimatedDurationMinutes: undefined,
+    locationALongitude: 15,
+    locationALatitude: 15,
+    locationBLongitude: 15,
+    locationBLatitude: 15
+}
 
 const ListingPage = () => {
     const token = localStorage.getItem('access_token');
-    const [task, createTask]  = useState<taskState>();
+    const [task, setTask]  = useState<taskState>(taskFields);
 
-    const getPrivate = async () => {
-        await axios.get('http://127.0.0.1:5000/me/getProfile', 
-        { headers: { Authorization: `Bearer ${token}` } })
+    const createTask = async () => {
+        await axios.post('http://127.0.0.1:5000/task/createTask', task,
+        { 
+            headers: { Authorization: `Bearer ${token}` }
+        })
         .then( response => {
             console.log(response.data);
-            createTask(response.data)
+            // createTask(response.data)
         })
         .catch( error => {
             console.log(error);
@@ -43,14 +61,18 @@ const ListingPage = () => {
         maxWidth: 320,
     }
     
-    useEffect(()=> {
-        getPrivate();
-    }, []);
+    // Update: Steven J.
+    // I leaned away from useEffect() since it runs when the component renders
+    // and doesn't allow the page to create tasks for some reason
+
+    // useEffect(()=> {
+    //     createTask();
+    // }, []);
 
     return (
         <div>
             <Navigation/>
-            <Container>
+            <Container onSubmit={createTask}>
                 <h1 id="centered" style={{ fontWeight: 'bold' }}>List a new Task</h1>
                 <br/>
 
@@ -61,13 +83,15 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="taskTitle"><h4>Task Title</h4></Label>
-                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" value={task?.title} required/>
+                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" value={task.title} onChange={e => setTask({...task, title: e.target.value})} required/>
                                 </FormGroup>
                             </Col>
                             <Col>
                                 <FormGroup>
                                     <Label for="taskCategory"><h4>Task Category</h4></Label>
-                                    <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required>
+                                    {/* <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required> */}
+                                    <Input type="select" name="taskCategory" id="taskCategory" value={1} required>
+                                        {/* TODO: Change hardcoded category id to their respective ids */}
                                         <option selected disabled>Select Category</option>
                                         <option>Test</option>
                                         <CategoryDropdown categoryList={['SAMPLE USAGE','Educational','Fitness','IMPORT OTHERS FROM FULL LIST']} />
@@ -81,7 +105,7 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="taskDesc"><h4>Task Description</h4></Label>
-                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" value={task?.description} required/>
+                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" value={task.description} onChange={e => setTask({...task, description: e.target.value})} required/>
                                 </FormGroup>
                             </Col>
                             <Col>
@@ -102,7 +126,13 @@ const ListingPage = () => {
                             <FormGroup>
                                 <Label for="taskPayRate"><h5>$</h5></Label>
                                 <Label inline for="taskPayRate"><h4 className="centered">Pay Rate</h4>
-                                    <Input type="number" name="taskPayRate" id="taskPayRate" placeholder="60" min="15" value={task?.recommendedPrice} required/>
+                                    <Input type="number" 
+                                           name="taskPayRate" 
+                                           id="taskPayRate" 
+                                           placeholder="60" 
+                                           min="15" 
+                                           value={task.recommendedPrice} 
+                                           onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
                                 </Label>
                             </FormGroup>
                         </div>
@@ -147,7 +177,12 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="Duration"><h4>Duration in Minutes</h4></Label>
-                                    <Input type="text" name="duration" id="duration" placeholder="60" value={task?.estimatedDurationMinutes} required/>
+                                    <Input type="text" 
+                                           name="duration"
+                                           id="duration" 
+                                           placeholder="60" 
+                                           value={task.estimatedDurationMinutes} 
+                                           onChange={e => setTask({...task, estimatedDurationMinutes: Number(e.target.value)})} required/>
                                 </FormGroup>
                             </Col>
                         </Row>
