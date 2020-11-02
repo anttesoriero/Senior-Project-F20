@@ -36,7 +36,6 @@ const Footer = () => {
                     </Row>
                 {/* Temp remove - </div> */}
 
-                <br />
                 <hr />
 
                 {/* Lower - Name & Copyright */}
