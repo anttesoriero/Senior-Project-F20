@@ -38,7 +38,7 @@ const Navigation = ({history}: RouteComponentProps) => {
                             <NavLink href="/findtasks">Find a Task</NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href="/listtasks">List a Task</NavLink>
+                            <NavLink href="/listtask">List a Task</NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink href="/survey">Surveys</NavLink>
