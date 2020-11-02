@@ -14,9 +14,9 @@ const TestingPage = () => {
         <div>
             <Navigation/>
             <Container>
-                <h1>testing page top</h1>
-                {/* Maps /> */}
-                <h1>testing page bottom</h1>
+                <h1>React-Leaflet Map</h1>
+                <h5>Use "Maps" Component</h5>
+                <Maps />
             </Container>
             <br />
             <Footer/>
