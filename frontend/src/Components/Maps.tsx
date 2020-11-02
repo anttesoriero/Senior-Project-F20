@@ -3,12 +3,12 @@ import axios from 'axios';
 import { TileLayer, Marker, Popup, MapContainer, CircleMarker, Tooltip, Circle } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 
-const Maps = () => {
+const Maps = (prop: {scrollBool: boolean}) => {
     const rowanLocation: LatLngTuple = [39.7089, -75.1183]
     const anthony: LatLngTuple = [39.7051596, -75.11357028778912]
     
     return (
-        <MapContainer center={rowanLocation} zoom={15} scrollWheelZoom={true} style={{height: 550}}>
+        <MapContainer center={rowanLocation} zoom={15} scrollWheelZoom={prop.scrollBool} style={{height: 550}}>
             <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
