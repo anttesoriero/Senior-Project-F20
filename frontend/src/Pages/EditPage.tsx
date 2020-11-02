@@ -196,7 +196,7 @@ const EditPage = () => {
                             </Col>
                             <Col>
                                 <FormGroup>
-                                    <Label for="website"><h4>Phone Number</h4></Label>
+                                    <Label for="website"><h4>User Website</h4></Label>
                                     <Input type="text" name="website" id="website" placeholder="wwww.usersite.com"/>
                                 </FormGroup>
                             </Col>
