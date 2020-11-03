@@ -143,6 +143,10 @@ class Task(db.Model):
     '''
     Update
     '''
+    def acceptOffer(self, offer):
+        self.acceptedOfferId = offer
+        db.session.commit()
+
     def edit(self, paramDict):
         k = paramDict.keys()
         if "title" in k:
@@ -320,19 +324,3 @@ class Task(db.Model):
         db.session.add(task)
         db.session.commit()
         return task
-
-    @classmethod
-    def getTaskIDs(cls):
-        '''
-        Gets the task ids from the User table
-        :return list of task ids
-        '''
-
-        tasks = db.session.query(Task)
-        task_ids = []
-
-        for task in tasks:
-            # add task ids to list
-            task_ids.append(task.taskId)
-        
-        return task_ids

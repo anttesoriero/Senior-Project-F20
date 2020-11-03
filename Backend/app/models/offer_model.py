@@ -60,11 +60,13 @@ class Offer(db.Model):
         self.archived = False
         self.accepted = True
         self.responseMessage = responseMessage
+        db.session.commit()
 
     def reject(self, responseMessage):
         self.archived = True
         self.accepted = False
         self.responseMessage = responseMessage
+        db.session.commit()
 
     '''
     Class method
@@ -78,6 +80,7 @@ class Offer(db.Model):
         if startDate is not None:
             startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d %H:%M")
         # Create Offer
+
         offer = Offer(
             taskId=taskId,
             userIdFrom=userIdFrom,
@@ -89,40 +92,29 @@ class Offer(db.Model):
             accepted=False
         )
 
-        # Save User to database
+        # Save Offer to database
         db.session.add(offer)
         db.session.commit()
         return offer
 
     @classmethod
     def getOffer(cls, offerId):
-        return db.query.filter(offerId=offerId).first()
+        return Offer.query.filter_by(offerId=offerId).first()
 
     @classmethod
     def getOffersForTask(cls, taskId, includeArchived=False):
         if not includeArchived:
-            return [offer.offerId for offer in db.query.filter(taskId=taskId, archived=False).all()]
+            return [offer.offerId for offer in Offer.query.filter_by(taskId=taskId, archived=False).all()]
         else:
-            return [offer.offerId for offer in db.query.filter(taskId=taskId).all()]
+            return [offer.offerId for offer in Offer.query.filter_by(taskId=taskId).all()]
 
     @classmethod
     def archiveOffersForATask(cls, taskId):
-        for offer in db.query.filter(taskId=taskId, archived=False).all():
+        for offer in Offer.query.filter_by(taskId=taskId, archived=False).all():
             offer.archived = True
         db.session.commit()
 
     @classmethod
-    def getOfferIDs(cls):
-        '''
-        Gets the offer ids from the User table
-        :return list of offer ids
-        '''
-
-        offers = db.session.query(Offer)
-        offer_ids = []
-
-        for offer in offers:
-            # add offer ids to list
-            offer_ids.append(offer.offerId)
-        
-        return offer_ids
+    def deleteOffer(cls, offer):
+        db.session.delete(offer)
+        db.session.commit()
