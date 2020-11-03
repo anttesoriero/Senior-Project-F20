@@ -6,6 +6,7 @@ import axios from 'axios';
 import Maps from "../Components/Maps";
 import TaskCard from '../Components/TaskCard';
 import RefineSearch from '../Components/RefineSearch';
+import PaginationRow from '../Components/PaginationRow';
 // import {Map, L} from 'leaflet';
 // <script src="holder.js"/>
 
@@ -43,6 +44,10 @@ const TestingPage = () => {
                                     <div><Button className={'task centered'} href="#top">Back to Top</Button></div>
                                 </CardBody>
                             </Card>
+
+                            <div className='centered'>
+                                <PaginationRow />
+                            </div>
 
                     </Container>
 
