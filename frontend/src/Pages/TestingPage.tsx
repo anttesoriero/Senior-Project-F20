@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
-import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
+import {Button, Card, CardBody, Col, Collapse, Container, Row} from 'reactstrap';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import Maps from "../Components/Maps";
@@ -10,6 +10,9 @@ import TaskCard from '../Components/TaskCard';
 
 
 const TestingPage = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(!isOpen);
+
     return (
         <div>
             <Navigation/>
@@ -67,8 +70,12 @@ const TestingPage = () => {
                     <Maps scrollBool={true} />
                 </Col>
             </Row>
-                
-            <Footer/>
+            
+            <br />
+
+            <div className="centered"><Button  color="grey" onClick={toggle} style={{ marginBottom: '1rem' }}>Open Footer</Button></div>
+            <Collapse isOpen={isOpen}><Footer/></Collapse>
+            
         </div>
     );
 }

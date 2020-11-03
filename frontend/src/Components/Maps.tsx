@@ -10,7 +10,7 @@ const Maps = (prop: {scrollBool: boolean}) => {
     const anthony: LatLngTuple = [39.7051596, -75.11357028778912]
     
     return (
-        <MapContainer center={rowanLocation} zoom={15} scrollWheelZoom={prop.scrollBool} style={{height: 700}}>
+        <MapContainer center={rowanLocation} zoom={15} scrollWheelZoom={prop.scrollBool} style={{height: 800}}>
             <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
