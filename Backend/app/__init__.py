@@ -15,6 +15,9 @@ app = Flask(__name__)
 #Cors setup to allow requests from frontend
 CORS(app)
 
+# Init app
+app = Flask(__name__)
+
 # Set up
 
 # Setup the JWT configuration
@@ -34,7 +37,7 @@ DB_PASSWORD = "asdllM$o2pecfsEEA"
 DB_NAME = "oddjobs"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 HOST = "localhost"
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@localhost/" + DB_NAME + "?host=" + HOST + "?port=3306"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@" + HOST + "/" + DB_NAME + "?host=" + HOST + "?port=3306"
 db = SQLAlchemy(app)
 
 '''
@@ -50,6 +53,7 @@ from app.routes.errors import errors_blueprint
 from app.routes.survey import survey_blueprint
 from app.routes.task import task_blueprint
 from app.routes.admin import admin_blueprint
+from app.routes.offer import offer_blueprint
 
 # Load in modules "Blueprints"
 app.register_blueprint(main_blueprint, url_prefix="/main")
@@ -59,6 +63,7 @@ app.register_blueprint(me_blueprint, url_prefix="/me")
 app.register_blueprint(task_blueprint, url_prefix="/task")
 app.register_blueprint(survey_blueprint, url_prefix="/survey")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
+app.register_blueprint(offer_blueprint, url_prefix="/offer")
 app.register_blueprint(errors_blueprint)
 
 # Init database with referenced models from routes

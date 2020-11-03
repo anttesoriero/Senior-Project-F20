@@ -143,6 +143,10 @@ class Task(db.Model):
     '''
     Update
     '''
+    def acceptOffer(self, offer):
+        self.acceptedOfferId = offer
+        db.session.commit()
+
     def edit(self, paramDict):
         k = paramDict.keys()
         if "title" in k:
@@ -334,5 +338,5 @@ class Task(db.Model):
         for task in tasks:
             # add task ids to list
             task_ids.append(task.taskId)
-        
+
         return task_ids

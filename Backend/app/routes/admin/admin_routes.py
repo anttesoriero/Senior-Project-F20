@@ -57,7 +57,6 @@ def addToAccount():
         return jsonify({"success":True}), 200
     else:
         return jsonify({}), 404
-
 '''
 POST
 '''
@@ -101,7 +100,7 @@ def getAllTasks():
         return jsonify({}), 403
 
     return jsonify({"Task ID":Task.getTaskIDs()}), 200
-    
+
 '''
 POST
 '''

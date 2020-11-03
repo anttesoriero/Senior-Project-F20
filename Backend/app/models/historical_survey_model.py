@@ -29,7 +29,7 @@ class HistoricalSurvey(db.Model):
         db.session.add(historicalSurvey)
         db.session.commit()
         return historicalSurvey
-
+    
     @classmethod
     def getHistoricalSurveyIDs(cls):
         '''
@@ -43,5 +43,5 @@ class HistoricalSurvey(db.Model):
         for historicalSurvey in historicalSurveys:
             # add historicalSurvey ids to list
             historicalSurvey_ids.append(historicalSurvey.historicalSurveyId)
-        
+
         return historicalSurvey_ids
