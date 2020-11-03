@@ -35,7 +35,7 @@ def check_if_token_in_blacklist(decrypted_token):
 DB_USER = "oddjobsuser"
 DB_PASSWORD = "asdllM$o2pecfsEEA"
 DB_NAME = "oddjobs"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = FalseHOST = "localhost"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 HOST = "localhost"
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + DB_USER + ":" + DB_PASSWORD + "@" + HOST + "/" + DB_NAME + "?host=" + HOST + "?port=3306"
 db = SQLAlchemy(app)
