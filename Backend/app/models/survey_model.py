@@ -94,7 +94,7 @@ class Survey(db.Model):
         surveys = Survey.query
         surveys = [survey.surveyId for survey in surveys]
         return surveys
-
+    
     @classmethod
     def getSurveyIDs(cls):
         '''
@@ -108,5 +108,5 @@ class Survey(db.Model):
         for survey in surveys:
             # add survey ids to list
             survey_ids.append(survey.surveyId)
-        
+
         return survey_ids

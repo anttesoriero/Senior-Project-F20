@@ -20,29 +20,3 @@ How much would you like to be paid to clean bathrooms?; $10; $15; $20; $25; $30+
 How much would you pay someone to clean bathrooms; $10; $15; $20; $25; $30+
 How much would you like to be paid to rake leaves?; $10; $15; $20; $25; $30+
 How much would you pay someone to rake leaves; $10; $15; $20; $25; $30+
-How much would you like to be paid to shovel snow?; $10; $15; $20; $25; $30+
-How much would you pay someone to shovel snow?; $10; $15; $20; $25; $30+
-How much would you like to be paid to walk dogs?; $10; $15; $20; $25; $30+
-How much would you pay someone to walk dogs?; $10; $15; $20; $25; $30+
-How much would you like to be paid to garden?; $10; $15; $20; $25; $30+
-How much would you pay someone to garden?; $10; $15; $20; $25; $30+
-How much would you like to be paid to tutor?; $10; $15; $20; $25; $30+
-How much would you pay someone to tutor?; $10; $15; $20; $25; $30+
-How much would you like to be paid to help train?; $10; $15; $20; $25; $30+
-How much would you pay someone to help train?; $10; $15; $20; $25; $30+
-How much would you like to be paid to babysit?; $10; $15; $20; $25; $30+
-How much would you pay someone to babysit?; $10; $15; $20; $25; $30+
-How much would you like to be paid to cook?; $10; $15; $20; $25; $30+
-How much would you pay someone to cook?; $10; $15; $20; $25; $30+
-How much would you like to be paid to repair furniture?; $10; $15; $20; $25; $30+
-How much would you pay someone to repair furniture?; $10; $15; $20; $25; $30+
-How much would you like to be paid to paint the house?; $10; $15; $20; $25; $30+
-How much would you pay someone to paint the house?; $10; $15; $20; $25; $30+
-How much would you like to be paid to wash pets?; $10; $15; $20; $25; $30+
-How much would you pay someone to wash pets?; $10; $15; $20; $25; $30+
-How much would you like to be paid to tour attractions?; $10; $15; $20; $25; $30+
-How much would you pay someone to tour attractions?; $10; $15; $20; $25; $30+
-How much would you like to be paid to teach dance?; $10; $15; $20; $25; $30+
-How much would you pay someone to teach dance?; $10; $15; $20; $25; $30+
-How did you discover OddJobs?; Recommended by friend; Advertisement; Social Media; Search Engine; Other;
-How simple is it to navigate the website?; Extremely Simple; Simple; Difficult; Extremely Difficult;
