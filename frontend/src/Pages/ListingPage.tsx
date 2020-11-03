@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
-import {Container, Row, Col, Button, Media, Badge, Form, FormGroup, Input, Label, CustomInput} from 'reactstrap';
+import {Container, Row, Col, Button, Media, Badge, Form, FormGroup, Input, Label, CustomInput, InputGroup, InputGroupAddon} from 'reactstrap';
 import Footer from "../Components/Footer";
 import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
@@ -121,21 +121,37 @@ const ListingPage = () => {
                             </Col>
                         </Row>
 
-                        {/* Pay Rate */}
-                        <div className="centered">
-                            <FormGroup>
+                        {/* Pay Rate Old */}
+                        {/* <FormGroup>
                                 <Label for="taskPayRate"><h5>$</h5></Label>
                                 <Label inline for="taskPayRate"><h4 className="centered">Pay Rate</h4>
                                     <Input type="number" 
-                                           name="taskPayRate" 
-                                           id="taskPayRate" 
-                                           placeholder="60" 
-                                           min="15" 
-                                           value={task.recommendedPrice} 
-                                           onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
+                                        name="taskPayRate" 
+                                        id="taskPayRate" 
+                                        placeholder="60" 
+                                        min="15" 
+                                        value={task.recommendedPrice} 
+                                        onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
                                 </Label>
-                            </FormGroup>
-                        </div>
+                        </FormGroup> */}
+
+                        {/* Pay Rate New */}
+                        <Row>
+                            <Col sm="12" md={{ size: 6, offset: 3 }}>
+                                <Label  className="centered" for="taskPayRate"><h4>Pay Rate</h4></Label>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                    <Input type="number" 
+                                        name="taskPayRate" 
+                                        id="taskPayRate" 
+                                        placeholder="60" 
+                                        min="15" 
+                                        value={task.recommendedPrice} 
+                                        onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
+                                    <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                </InputGroup>
+                            </Col>
+                        </Row>
 
                         <hr />
 
