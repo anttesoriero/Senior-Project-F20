@@ -47,7 +47,7 @@ const Footer = () => {
 
                     {/* Right - Copyright */}
                     <Col xs="2" id="right">
-                        <p style={{color: "black"}}>Copyright &copy; 2020</p>
+                        <p style={{color: "black"}}>&copy; 2020</p>
                     </Col>
                 </Row>
             </Container>
