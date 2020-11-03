@@ -5,6 +5,7 @@ import Footer from "../Components/Footer";
 import axios from 'axios';
 import Maps from "../Components/Maps";
 import TaskCard from '../Components/TaskCard';
+import RefineSearch from '../Components/RefineSearch';
 // import {Map, L} from 'leaflet';
 // <script src="holder.js"/>
 
@@ -16,35 +17,16 @@ const TestingPage = () => {
     return (
         <div>
             <Navigation/>
+            {/* <div className="centered float"><Button color="grey" onClick={toggle} style={{ marginBottom: '1rem' }}>Open Footer</Button></div>
+            <Collapse isOpen={isOpen}><Footer/></Collapse> */}
 
-            {/*}
-            <Container>
-                <h1>React-Leaflet Map (Maps Component)</h1>
-                <br />
-                
-                <h5>Scrollable - Inside Container</h5>
-                <Maps scrollBool={true} />
-
-                <br />
-                <h5>Not Scrollable - Outside Container</h5>
-            </Container>
-            
-            <Maps scrollBool={false} />
-            <br />
-
-            <Container><h5 >Two sided</h5></Container>
-            */}
-
-            {/* 
-                TODO: Make map markers popup onHover for Taskcards 
-                NOTE: Circle color could correspond to main super-categories
-            */}
+            {/* Search Bar */}
+            <RefineSearch className="centered"/>
 
             <Row>
                 {/* Left - TaskCards */}
-                <Col xs="4">
+                <Col xs="4" className="col-scroll">
                     <Container>
-                        <div className="col-scroll">
                             <h3 id="top" className="centered">Tasks</h3>
                             <TaskCard title='Task 1' offerer='USER' price='00' description='DESCRIPTION'/>
                             <TaskCard title='Task 2' offerer='USER' price='00' description='DESCRIPTION'/>
@@ -61,20 +43,17 @@ const TestingPage = () => {
                                     <div><Button className={'task centered'} href="#top">Back to Top</Button></div>
                                 </CardBody>
                             </Card>
-                        </div>
+
                     </Container>
+
+                    <Footer/>
                 </Col>
 
                 {/* Right - Map */}
                 <Col xs="8">
                     <Maps scrollBool={true} />
                 </Col>
-            </Row>
-            
-            <br />
-
-            <div className="centered"><Button  color="grey" onClick={toggle} style={{ marginBottom: '1rem' }}>Open Footer</Button></div>
-            <Collapse isOpen={isOpen}><Footer/></Collapse>
+            </Row>        
             
         </div>
     );
