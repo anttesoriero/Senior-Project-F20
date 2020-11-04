@@ -11,6 +11,7 @@ type surveyState = {
   answerC: string;
   answerD: string;
   answerE: string;
+  answerF: string;
   question: string;
   surveyId: number
 }
@@ -151,6 +152,22 @@ const SurveyPage = () => {
                           />
                           </label>
                         <p>{survey.answerE}</p>
+                      </div>
+                      : <div></div>
+                    }
+
+                    {survey ? 
+                      <div className="form-check">
+                          <label>
+                            <input
+                            type="radio"
+                            name="choice"
+                            value="option5"
+                            checked={true}
+                            className="form-check-input"
+                          />
+                          </label>
+                        <p>{survey.answerF}</p>
                       </div>
                       : <div></div>
                     }

@@ -1,8 +1,8 @@
 '''
 User's model for database
 
-@author Matthew Schofield
-@version 9.12.2020
+@author Matthew Schofield, Steven Jiang
+@version 10.19.2020
 '''
 # Module imports
 from app import db
@@ -218,7 +218,7 @@ class User(db.Model):
             task_ids.append(task.taskId)
 
         return task_ids
-
+    
     @classmethod
     def getUserIDs(cls):
         '''
@@ -232,5 +232,5 @@ class User(db.Model):
         for user in users:
             # add user ids to list
             user_ids.append(user.userId)
-        
-        return user_ids
+
+        return user_ids 

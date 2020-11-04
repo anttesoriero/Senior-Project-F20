@@ -8,27 +8,23 @@ This file should be focused on annotating routes
 @version 9.27.2020
 """
 # Library imports
-from flask import jsonify, request, redirect
+from flask import jsonify, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_raw_jwt
-import requests
-import json
 
 # Module imports
 from app.routes.auth import auth_blueprint
 from app.utilities.validation.validation import validateRequestJSON
 from app import blacklist
-from app.utilities.oauth import get_google_provider_cfg
-from app.utilities.oauth import client
-from app.utilities.oauth import GOOGLE_CLIENT_ID
-from app.utilities.oauth import GOOGLE_CLIENT_SECRET
-from app.utilities.oauth import GOOGLE_DISCOVERY_URL
 
 # Database Models
 from app.models.user_model import User
 
+import datetime
+
 '''
 Open endpoints
 '''
+
 
 @auth_blueprint.route('/oauth')
 def oauth_login():
@@ -165,7 +161,7 @@ def login():
     # If user exists check their credentials
     if user and user.checkCredentials(inputJSON["password"]):
         # Generate JWT token
-        access_token = create_access_token(identity=user.userId)
+        access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
         return jsonify({"success":True, "access_token": access_token}), 200
     else:
         # Send back error
@@ -219,7 +215,7 @@ def register():
     # Check user created
     if user is not None:
         # Generate and return JWT token
-        access_token = create_access_token(identity=user.userId)
+        access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
         response = {
             'success': True,
             'access_token': access_token

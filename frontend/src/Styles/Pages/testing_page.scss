@@ -1,0 +1,31 @@
+.flex-col-scroll {
+    flex-grow: 1;
+    // overflow: auto;
+    min-height: 100%;
+    height: 800;
+    position: absolute;
+    overflow-y: scroll;
+  }
+  
+.col-scroll {
+    overflow-y:auto;
+    height: 92.4vh;
+}
+
+.centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	color:#FFF;
+	border-radius:50px;
+    text-align:center;
+    z-index: 99 !important;
+}

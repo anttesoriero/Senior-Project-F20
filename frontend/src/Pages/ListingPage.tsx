@@ -1,48 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
-import {Container, Row, Col, Button, Media, Badge, Form, FormGroup, Input, Label, CustomInput} from 'reactstrap';
+import {Container, Row, Col, Button, Media, Badge, Form, FormGroup, Input, Label, CustomInput, InputGroup, InputGroupAddon} from 'reactstrap';
 import Footer from "../Components/Footer";
 import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
+import CategoryDropdown from '../Components/CategoryDropdown';
+import { DateTimePicker } from 'react-rainbow-components';
+import { create } from 'domain';
+{/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */}
 
 {/* Not sure if this stuff is right */}
 type taskState = {
+    categoryId: number,
+    title: string,
     description: string,
-    recommendedPrice: number,
-    estimatedDurationMinutes: number,
+    recommendedPrice: number | undefined,
+    estimatedDurationMinutes: number | undefined,
     locationALongitude: number,
     locationALatitude: number,
     locationBLongitude: number,
     locationBLatitude: number
 }
 
+{/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */}
+
+const taskFields = {
+    // TODO: associate categories with their respective category ID's
+    // Default initial values for the task fields
+    categoryId: 1,
+    title: "",
+    description: "",
+    recommendedPrice: undefined,
+    estimatedDurationMinutes: undefined,
+    locationALongitude: 15,
+    locationALatitude: 15,
+    locationBLongitude: 15,
+    locationBLatitude: 15
+}
+
 const ListingPage = () => {
     const token = localStorage.getItem('access_token');
-    const [task, createTask]  = useState<taskState>();
+    const [task, setTask]  = useState<taskState>(taskFields);
 
-    const getPrivate = async () => {
-        {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
-            First one is the endpoint and second is the authorization headers */}
-        await axios.get('http://127.0.0.1:5000/me/getProfile', 
-        { headers: { Authorization: `Bearer ${token}` } })
+    const createTask = async () => {
+        await axios.post('http://127.0.0.1:5000/task/createTask', task,
+        { 
+            headers: { Authorization: `Bearer ${token}` }
+        })
         .then( response => {
             console.log(response.data);
-            createTask(response.data)
+            // createTask(response.data)
         })
         .catch( error => {
             console.log(error);
         });   
     }
     
-    useEffect(()=> {
-        getPrivate();
-    }, []);
+    const inputStyles = {
+        maxWidth: 320,
+    }
+    
+    // Update: Steven J.
+    // I leaned away from useEffect() since it runs when the component renders
+    // and doesn't allow the page to create tasks for some reason
+
+    // useEffect(()=> {
+    //     createTask();
+    // }, []);
 
     return (
         <div>
             <Navigation/>
-            <Container>
+            <Container onSubmit={createTask}>
                 <h1 id="centered" style={{ fontWeight: 'bold' }}>List a new Task</h1>
                 <br/>
 
@@ -53,18 +83,18 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="taskTitle"><h4>Task Title</h4></Label>
-                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" required/>
+                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" value={task.title} onChange={e => setTask({...task, title: e.target.value})} required/>
                                 </FormGroup>
                             </Col>
                             <Col>
                                 <FormGroup>
                                     <Label for="taskCategory"><h4>Task Category</h4></Label>
-                                    <Input type="select" name="taskCategory" id="taskCategory" required>
+                                    {/* <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required> */}
+                                    <Input type="select" name="taskCategory" id="taskCategory" value={1} required>
+                                        {/* TODO: Change hardcoded category id to their respective ids */}
                                         <option selected disabled>Select Category</option>
-                                        <option>Cat 1</option>
-                                        <option>Cat 2</option>
-                                        <option>Cat 3</option>
-                                        <option>Cat 4</option>
+                                        <option>Test</option>
+                                        <CategoryDropdown categoryList={['SAMPLE USAGE','Educational','Fitness','IMPORT OTHERS FROM FULL LIST']} />
                                     </Input>
                                 </FormGroup>
                             </Col>
@@ -75,7 +105,7 @@ const ListingPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="taskDesc"><h4>Task Description</h4></Label>
-                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" required/>
+                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" value={task.description} onChange={e => setTask({...task, description: e.target.value})} required/>
                                 </FormGroup>
                             </Col>
                             <Col>
@@ -91,15 +121,37 @@ const ListingPage = () => {
                             </Col>
                         </Row>
 
-                        {/* Pay Rate */}
-                        <div className="centered">
-                            <FormGroup>
+                        {/* Pay Rate Old */}
+                        {/* <FormGroup>
                                 <Label for="taskPayRate"><h5>$</h5></Label>
                                 <Label inline for="taskPayRate"><h4 className="centered">Pay Rate</h4>
-                                    <Input type="number" name="taskPayRate" id="taskPayRate" placeholder="60" min="15" required/>
+                                    <Input type="number" 
+                                        name="taskPayRate" 
+                                        id="taskPayRate" 
+                                        placeholder="60" 
+                                        min="15" 
+                                        value={task.recommendedPrice} 
+                                        onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
                                 </Label>
-                            </FormGroup>
-                        </div>
+                        </FormGroup> */}
+
+                        {/* Pay Rate New */}
+                        <Row>
+                            <Col sm="12" md={{ size: 6, offset: 3 }}>
+                                <Label  className="centered" for="taskPayRate"><h4>Pay Rate</h4></Label>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                    <Input type="number" 
+                                        name="taskPayRate" 
+                                        id="taskPayRate" 
+                                        placeholder="60" 
+                                        min="15" 
+                                        value={task.recommendedPrice} 
+                                        onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
+                                    <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                </InputGroup>
+                            </Col>
+                        </Row>
 
                         <hr />
 
@@ -115,6 +167,38 @@ const ListingPage = () => {
                                 <FormGroup>
                                     <Label for="time"><h4>Time</h4></Label>
                                     <Input type="time" name="time" id="time" placeholder="12:00PM" required/>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+
+                        {/* Row 3.5 - DateTimePicker & Extra */}
+                        <Row>
+                            <Col>
+                                <FormGroup>
+                                    <Label for="DateTime"><h4>Date & Time</h4></Label>
+                                    <DateTimePicker
+                                        formatStyle="large"
+                                        name="DateTime"
+                                        value={Date()}
+                                        className="rainbow-m-around_small"
+                                        required
+                                    />
+                                </FormGroup>
+                                {/* REMOVED FROM DateTimePicker
+                                    label="DateTimePicker Label"
+                                    value={state.value} 
+                                    onChange={value => setState({ value })} 
+                                */}
+                            </Col>
+                            <Col>
+                                <FormGroup>
+                                    <Label for="Duration"><h4>Duration in Minutes</h4></Label>
+                                    <Input type="text" 
+                                           name="duration"
+                                           id="duration" 
+                                           placeholder="60" 
+                                           value={task.estimatedDurationMinutes} 
+                                           onChange={e => setTask({...task, estimatedDurationMinutes: Number(e.target.value)})} required/>
                                 </FormGroup>
                             </Col>
                         </Row>
@@ -157,7 +241,7 @@ const ListingPage = () => {
                             </Col>
                         </Row>
 
-                        <div className="centered"><Button color="primary" size="lg">List Task</Button></div>
+                        <div className="centered"><Button color="primary" size="lg" type="submit">List Task</Button></div>
 
                     </Form>
                 </div>
