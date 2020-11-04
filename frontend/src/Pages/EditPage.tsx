@@ -23,13 +23,12 @@ const EditPage = () => {
     const [profile, editUser]  = useState<editState>();
 
     const editProfile = async () => {
-        await axios.post('http://127.0.0.1:5000/task/createTask', profile,
+        await axios.put('http://127.0.0.1:5000/me/editInformation', profile,
         { 
             headers: { Authorization: `Bearer ${token}` }
         })
         .then( response => {
             console.log(response.data);
-            // createTask(response.data)
         })
         .catch( error => {
             console.log(error);
