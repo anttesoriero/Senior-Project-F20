@@ -19,6 +19,8 @@ from app import blacklist
 # Database Models
 from app.models.user_model import User
 
+import datetime
+
 '''
 Open endpoints
 '''
@@ -64,7 +66,7 @@ def login():
     # If user exists check their credentials
     if user and user.checkCredentials(inputJSON["password"]):
         # Generate JWT token
-        access_token = create_access_token(identity=user.userId)
+        access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
         return jsonify({"success":True, "access_token": access_token}), 200
     else:
         # Send back error
@@ -118,7 +120,7 @@ def register():
     # Check user created
     if user is not None:
         # Generate and return JWT token
-        access_token = create_access_token(identity=user.userId)
+        access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
         response = {
             'success': True,
             'access_token': access_token
