@@ -35,6 +35,7 @@ class User(db.Model):
     lastName = db.Column(db.String(120), nullable=True)
     preferredName = db.Column(db.String(120), nullable=True)
     phoneNumber = db.Column(db.String(12), nullable=True)
+    activeAccount = db.Column(db.Boolean(), default=True)
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
