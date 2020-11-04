@@ -167,7 +167,6 @@ def getAllHistoricalSurveys():
         return jsonify({}), 403
 
     return jsonify({"HistoricalSurvey ID":HistoricalSurvey.getHistoricalSurveyIDs()}), 200
-<<<<<<< HEAD
 
 '''
 POST
@@ -228,5 +227,3 @@ def changeAdminToken():
     }
     return jsonify(response), 200
     
-=======
->>>>>>> acad8a3db706b36aac5b24ea0f09dc9aebf66a15
