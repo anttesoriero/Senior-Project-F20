@@ -190,3 +190,41 @@ def getAllCategories():
         return jsonify({}), 403
 
     return jsonify({"Category ID":Category.getCategoryIDs()}), 200
+
+'''
+POST
+'''
+@admin_blueprint.route('/changeAdminToken', methods=['POST'])
+def changeAdminToken():
+    '''
+    Given the old admin token, admin is able to change
+    to a new admin token.
+
+    In:
+    {
+        adminPassword: str, current admin password
+        new_adminPassword: str, new admin password
+    }
+    '''
+   
+    global adminToken
+
+    # Validate input
+    requiredParameters = ["adminPassword", "new_adminPassword"]
+
+    optionalParameters = []
+    
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+    
+    adminToken = str(inputJSON["new_adminPassword"])
+    response = {
+        "success": True,
+        "adminToken": adminToken
+    }
+    return jsonify(response), 200
+    
