@@ -35,7 +35,7 @@ class User(db.Model):
     lastName = db.Column(db.String(120), nullable=True)
     preferredName = db.Column(db.String(120), nullable=True)
     phoneNumber = db.Column(db.String(12), nullable=True)
-    activeAccount = db.Column(db.Boolean(), default=True)
+    activeAccount = db.Column(db.Integer(), default=1)
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
@@ -235,3 +235,7 @@ class User(db.Model):
             user_ids.append(user.userId)
 
         return user_ids 
+
+    def changeAccountActivity(self, newAccountActivity):
+        self.activeAccount = newAccountActivity
+        db.session.commit()
