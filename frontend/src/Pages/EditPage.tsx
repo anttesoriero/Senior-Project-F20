@@ -5,6 +5,7 @@ import Footer from "../Components/Footer";
 import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import 'reactjs-popup/dist/index.css';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -12,23 +13,50 @@ type editState = {
     email: string,
     firstName: string,
     lastName: string,
-    password: string,
-    confirmPass: string,
+    preferredName: string,
+    // Commented changing password, should probably be its own small screen
+    // password: string,
+    // confirmPass: string,
     accountBalance: number
+}
+
+const userInfo = {
+    email: "",
+    firstName: "",
+    lastName: "",
+    preferredName: "",
+    // password: "",
+    // confirmPass: "",
+    accountBalance: 0
 }
 
 
 const EditPage = () => {
     const token = localStorage.getItem('access_token');
-    const [profile, editUser]  = useState<editState>();
+    const [user, setUser]  = useState<editState>(userInfo);
+
+    const getUser = async () => {
+        {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
+            First one is the endpoint and second is the authorization headers */}
+        await axios.get('http://127.0.0.1:5000/me/getProfile', 
+        { headers: { Authorization: `Bearer ${token}` } })
+        .then( response => {
+            console.log(response.data);
+            setUser(response.data)
+        })
+        .catch( error => {
+            console.log(error);
+        });   
+    }
 
     const editProfile = async () => {
-        await axios.put('http://127.0.0.1:5000/me/editInformation', profile,
+        await axios.put('http://127.0.0.1:5000/me/editInformation', user,
         { 
             headers: { Authorization: `Bearer ${token}` }
         })
         .then( response => {
             console.log(response.data);
+            // <Link to='/profile' />
         })
         .catch( error => {
             console.log(error);
@@ -36,7 +64,7 @@ const EditPage = () => {
     }
     
     useEffect(()=> {
-        editProfile();
+        getUser();
     }, []);
 
     const inputStyles = {
@@ -61,14 +89,14 @@ const EditPage = () => {
                                 <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160"/>
                             </Media>
                             <Media body style={{padding: 10}}>
-                                    {profile ?
-                                        <Media heading>{profile.firstName} {profile.lastName}</Media>
+                                    {user ?
+                                        <Media heading>{user.firstName} {user.lastName}</Media>
                                         :
                                         <Media heading>[FIRST NAME] [LAST NAME]</Media>
                                     }
                                     
-                                    {profile ?
-                                        <p>Account Balance: ${String(profile.accountBalance)}</p>
+                                    {user ?
+                                        <p>Account Balance: ${String(user.accountBalance)}</p>
                                         :
                                         <div>
                                             Account Balance: $[__]
@@ -118,13 +146,25 @@ const EditPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="firstName"><h4>First Name</h4></Label>
-                                    <Input type="text" name="firstName" id="firstName" placeholder="John"/>
+                                    <Input 
+                                        type="text" 
+                                        name="firstName" 
+                                        id="firstName" 
+                                        value={user?.firstName} 
+                                        onChange={e => setUser({...user, firstName: e.target.value})}
+                                    />
                                 </FormGroup>
                             </Col>
                             <Col>
                             <FormGroup>
                                     <Label for="lastName"><h4>Last Name</h4></Label>
-                                    <Input type="text" name="lastName" id="lastName" placeholder="Smith"/>
+                                    <Input 
+                                        type="text" 
+                                        name="lastName" 
+                                        id="lastName" 
+                                        value={user?.lastName}
+                                        onChange={e => setUser({...user, lastName: e.target.value})}
+                                    />
                                 </FormGroup>
                             </Col>
                         </Row>
@@ -139,7 +179,7 @@ const EditPage = () => {
                                 </FormGroup>
                             </Col>
                             <Col>
-                            <FormGroup>
+                                <FormGroup>
                                     <Label for="lastName"><h4>Confirm Password</h4></Label>
                                     <Input type="text" name="confirmPass" id="confirmPass" placeholder=""/>
                                 </FormGroup>
@@ -152,13 +192,25 @@ const EditPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="address"><h4>Address</h4></Label>
-                                    <Input type="text" name="address" id="address" placeholder="123 Main St"/>
+                                    <Input 
+                                        type="text" 
+                                        name="address" 
+                                        id="address" 
+                                        placeholder="123 Main St"
+                                        // onChange={e => setUser({...user, address: e.target.value})}
+                                    />
                                 </FormGroup>
                             </Col>
                             <Col>
                                 <FormGroup>
                                     <Label for="number"><h4>Phone Number</h4></Label>
-                                    <Input type="text" name="number" id="number" placeholder="(555)-555-5555"/>
+                                    <Input 
+                                        type="text" 
+                                        name="number" 
+                                        id="number" 
+                                        placeholder="(555)-555-5555"
+                                        // onChange={e => setUser({...user, phoneNumber: e.target.value})}
+                                    />
                                 </FormGroup>
                             </Col>
                         </Row>
@@ -190,7 +242,14 @@ const EditPage = () => {
                             <Col>
                                 <FormGroup>
                                     <Label for="email"><h4>Email Address</h4></Label>
-                                    <Input type="text" name="email" id="email" placeholder="joesmith@email.com"/>
+                                    <Input 
+                                        type="text" 
+                                        name="email" 
+                                        id="email" 
+                                        // placeholder="joesmith@email.com"
+                                        value={user?.email}
+                                        onChange={e => setUser({...user, email: e.target.value})}
+                                    />
                                 </FormGroup>
                             </Col>
                             <Col>
@@ -223,7 +282,7 @@ const EditPage = () => {
 
                     <br/>
                     <br/>
-                    <div className="centered"><Button color="primary" size="lg" type="submit">Save Changes</Button></div>
+                    <div className="centered"><Button color="primary" size="lg" type="submit" onSubmit={editProfile}>Save Changes</Button></div>
 
                     </Form>
                 </div>

@@ -20,7 +20,7 @@ function App() {
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/listtask" render={(props) => <ListingPage />} />
-        <Route exact={true} path="/edit-profile" render={(props) => <EditPage />} />
+        {/* <Route exact={true} path="/edit-profile" render={(props) => <EditPage />} /> */}
         <Route exact={true} path="/testing" render={(props) => <TestingPage />} />
         {/* <Route exact={true} path="/shop" render={(props) => < Shop {...props}/>}/>
           <Route exact={true} path="/signin" render={(props) => < Signin {...props}/>}/>

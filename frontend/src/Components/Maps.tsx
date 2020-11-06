@@ -49,7 +49,7 @@ const Maps = (prop: {scrollBool: boolean}) => {
             </Circle>
             <Circle
                 center={[39.705, -75.112]}
-                pathOptions={{ fillColor: 'green' }}
+                pathOptions={{ color:'green', fillColor: 'green' }}
                 radius={200}>
                 <Tooltip sticky>This is a Circle - It's overlapping, and has a sticky Tooltip</Tooltip>
             </Circle>
