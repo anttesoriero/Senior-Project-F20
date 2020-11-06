@@ -26,6 +26,7 @@ class Survey(db.Model):
     answerF
     '''
     # Column definitions
+    type = db.Column(db.String(120), nullable=False)
     surveyId = db.Column(db.Integer(),  primary_key=True)
     active = db.Column(db.Boolean(), nullable=False)
     question = db.Column(db.String(120), nullable=False)
