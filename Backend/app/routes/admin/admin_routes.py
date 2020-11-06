@@ -227,3 +227,39 @@ def changeAdminToken():
     }
     return jsonify(response), 200
     
+'''
+POST
+'''
+@admin_blueprint.route('/changeAccountActivity', methods=['POST'])
+def changeAccountActivity():
+    '''
+    Given the userId, the accounts activity will be changed
+    based on the newAccountActivity boolean
+
+    In:
+    {
+        adminPassword: str,
+        userId: int,
+        newAccountActivity: bool
+    }
+    '''
+    
+    # Validate input
+    requiredParameters = ["adminPassword", "userId", "newAccountActivity"]
+
+    optionalParameters = []
+    
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({"success":False}), code
+
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+
+    user = User.getByUserId(int(inputJSON["userId"]))
+    if user is not None:
+        user.changeAccountActivity(int(inputJSON["newAccountActivity"]))
+        return jsonify({"success":True}), 200
+    else:
+        return jsonify({}), 404
+    
