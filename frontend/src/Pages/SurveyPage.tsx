@@ -44,6 +44,18 @@ const SurveyPage = () => {
     });
   }
 
+  const postSurvey = async () => {
+    await axios.post('http://127.0.0.1:5000/survey/respond', survey,
+    { 
+        headers: { Authorization: `Bearer ${token}` }
+    })
+    .then( response => {
+        console.log(response.data);
+    })
+    .catch( error => {
+        console.log(error);
+    });   
+}
 
   useEffect(()=> {
     getSurvey();
@@ -77,7 +89,7 @@ const SurveyPage = () => {
                      <input
                      type="radio"
                      name="choice"
-                     value="option1"
+                     value={survey?.answerA}
                      checked={true}
                      className="form-check-input"
                      />
@@ -94,7 +106,7 @@ const SurveyPage = () => {
                       <input
                       type="radio"
                       name="choice"
-                      value="option2"
+                      value={survey?.answerB}
                       checked={true}
                       className="form-check-input"
                      />
@@ -111,7 +123,7 @@ const SurveyPage = () => {
                       <input
                       type="radio"
                       name="choice"
-                      value="option3"
+                      value={survey?.answerC}
                       checked={true}
                       className="form-check-input"
                      />
@@ -128,7 +140,7 @@ const SurveyPage = () => {
                       <input
                       type="radio"
                       name="choice"
-                      value="option4"
+                      value={survey?.answerD}
                       checked={true}
                       className="form-check-input"
                      />
@@ -146,7 +158,7 @@ const SurveyPage = () => {
                             <input
                             type="radio"
                             name="choice"
-                            value="option5"
+                            value={survey?.answerE}
                             checked={true}
                             className="form-check-input"
                           />
@@ -162,7 +174,7 @@ const SurveyPage = () => {
                             <input
                             type="radio"
                             name="choice"
-                            value="option5"
+                            value={survey?.answerF}
                             checked={true}
                             className="form-check-input"
                           />
@@ -175,7 +187,7 @@ const SurveyPage = () => {
                   <Row>
                     <Col><hr/></Col>
                     <Col id="centered"><Button href="javascript:history.go(-1)" color="secondary">Previous</Button></Col>
-                    <Col id="centered"><Button href="/survey" color="primary">Next</Button></Col>
+                    <Col id="centered"><Button href="/survey" color="primary" type="submit" onSubmit={postSurvey}>Next</Button></Col>
                     <Col><hr/></Col>
                   </Row>
                   <h4> </h4>
