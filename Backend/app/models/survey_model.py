@@ -23,6 +23,7 @@ class Survey(db.Model):
     answerC
     answerD
     answerE
+    answerF
     '''
     # Column definitions
     surveyId = db.Column(db.Integer(),  primary_key=True)
@@ -33,6 +34,7 @@ class Survey(db.Model):
     answerC = db.Column(db.String(120), nullable=True)
     answerD = db.Column(db.String(120), nullable=True)
     answerE = db.Column(db.String(120), nullable=True)
+    answerF = db.Column(db.String(120), nullable=True)
 
     def getPublicInfo(self):
         output = {
@@ -43,7 +45,8 @@ class Survey(db.Model):
             "answerB": self.answerB,
             "answerC": self.answerC,
             "answerD": self.answerD,
-            "answerE": self.answerE
+            "answerE": self.answerE,
+            "answerF": self.answerF
         }
         return output
     
@@ -61,12 +64,14 @@ class Survey(db.Model):
         # Create Survey
         survey = Survey(
             active=True,
-            question=inputList[0],
-            answerA=inputList[1],
-            answerB=inputList[2] if 2 < len(inputList) else None,
-            answerC=inputList[3] if 3 < len(inputList) else None,
-            answerD=inputList[4] if 4 < len(inputList) else None,
-            answerE=inputList[5] if 5 < len(inputList) else None
+            type=inputList[0],
+            question=inputList[1],
+            answerA=inputList[2],
+            answerB=inputList[3] if 3 < len(inputList) else "",
+            answerC=inputList[4] if 4 < len(inputList) else "",
+            answerD=inputList[5] if 5 < len(inputList) else "",
+            answerE=inputList[6] if 6 < len(inputList) else "",
+            answerF=inputList[7] if 7 < len(inputList) else ""
         )
 
         # Save User to database
