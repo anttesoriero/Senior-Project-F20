@@ -14,7 +14,14 @@ type userState = {
     firstName: string,
     lastName: string,
     preferredName: string,
-    accountBalance: number
+    accountBalance: number,
+    address: string,
+    city: string,
+    state: string,
+    zipCode: string,
+    phoneNumber: string,
+    website: string,
+    bio: string
 }
 
 const userInfo = {
@@ -22,7 +29,14 @@ const userInfo = {
     firstName: "",
     lastName: "",
     preferredName: "",
-    accountBalance: 0
+    accountBalance: 0,
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    phoneNumber: "",
+    website: "",
+    bio: ""
 }
 
 const ProfilePage = () => {
@@ -169,7 +183,11 @@ const ProfilePage = () => {
                                     {/* Website */}
                                     <Row>
                                         <Col xs="2"><p>Site:</p></Col>
-                                        <Col xs="10"><p>usersite.com</p></Col>
+                                        {user.website ?
+                                            <Col xs="10"><p>{user.website}</p></Col>
+                                            :
+                                            <Col xs="10"><p>user@website.com</p></Col>
+                                        }
                                     </Row>
                                 </Col>
                                 {/* Right - Location */}
@@ -177,7 +195,11 @@ const ProfilePage = () => {
                                     {user ?
                                     <div>
                                         <h4>Address</h4>
-                                        <p>123 Main St, City, ST 12345</p>
+                                        {user.address ?
+                                            <p>{user.address}, {user.city}, {user.state} {user.zipCode}</p>
+                                            :
+                                            <p>123 Main St, City, ST 12345</p>
+                                        }
                                         <Media left>
                                             <Media object src={PlaceholderImage} alt="Generic placeholder image" height="200" width="200"/>
                                             <p>Google Map Location</p>
@@ -309,7 +331,8 @@ const ProfilePage = () => {
                                             name="address" 
                                             id="address" 
                                             placeholder="123 Main St"
-                                            // onChange={e => setUser({...user, address: e.target.value})}
+                                            value={user.address}
+                                            onChange={e => setUser({...user, address: e.target.value})}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -321,7 +344,8 @@ const ProfilePage = () => {
                                             name="number" 
                                             id="number" 
                                             placeholder="(555)-555-5555"
-                                            // onChange={e => setUser({...user, phoneNumber: e.target.value})}
+                                            value={user.phoneNumber}
+                                            onChange={e => setUser({...user, phoneNumber: e.target.value})}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -332,7 +356,14 @@ const ProfilePage = () => {
                                 <Col md="6">
                                     <FormGroup>
                                         <Label for="city"><h4>City</h4></Label>
-                                        <Input type="text" name="city" id="city" placeholder="Glassboro"/>
+                                        <Input 
+                                            type="text" 
+                                            name="city" 
+                                            id="city" 
+                                            placeholder="City"
+                                            value={user.city}
+                                            onChange={e => setUser({...user, city: e.target.value})}
+                                        />
                                     </FormGroup>
                                 </Col>
                                 <Col md="4">
@@ -344,7 +375,14 @@ const ProfilePage = () => {
                                 <Col md="2">
                                     <FormGroup>
                                         <Label for="zip"><h4>Zip</h4></Label>
-                                        <Input type="text" name="zip" id="zip" placeholder="08028"/>
+                                        <Input 
+                                            type="text" 
+                                            name="zip" 
+                                            id="zip" 
+                                            placeholder="Zip Code"
+                                            value={user.zipCode}
+                                            onChange={e => setUser({...user, zipCode: e.target.value})}
+                                        />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -367,7 +405,14 @@ const ProfilePage = () => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="website"><h4>User Website</h4></Label>
-                                        <Input type="text" name="website" id="website" placeholder="wwww.usersite.com"/>
+                                        <Input 
+                                            type="text" 
+                                            name="website" 
+                                            id="website" 
+                                            placeholder="user@website.com"
+                                            value={user.website}
+                                            onChange={e => setUser({...user, website: e.target.value})}
+                                        />
                                     </FormGroup>
                                 </Col>
                             </Row>
