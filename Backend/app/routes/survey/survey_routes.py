@@ -29,6 +29,7 @@ def getSurvey():
     '''
         Out:
     {
+        "type": str
         "surveyId": int
         "active": bool
         "question": str
@@ -37,6 +38,7 @@ def getSurvey():
         "answerC": str
         "answerD": str
         "answerE": str
+        "answerF": str
     }
     '''
 
