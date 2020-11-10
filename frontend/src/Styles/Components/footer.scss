@@ -18,10 +18,6 @@
   background: -webkit-linear-gradient(#DDDDDD, #cecece);
   background:    -moz-linear-gradient(#DDDDDD, #cecece);
   background:         linear-gradient(#DDDDDD, #cecece);
-  /*
-  position: absolute;
-  bottom: 0;
-   */
 
   a:link, a:visited {
     color: black;
@@ -32,4 +28,9 @@
     //color: hotpink;
     text-decoration: underline;
   }
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
 }
