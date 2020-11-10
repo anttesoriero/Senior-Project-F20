@@ -11,6 +11,7 @@ from app import db
 from app.models.credentials_model import Credentials
 from app.models.account_balance_model import AccountBalance
 from app.models.offer_model import Offer
+from app.models.mostRelatedCategories_model import MostRelatedCategories
 from app.models.category_model import Category
 from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser

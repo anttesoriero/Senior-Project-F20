@@ -28,6 +28,7 @@ class Category(db.Model):
 
     # Set-up Relational connections
     task = db.relationship('Task', backref="category", uselist=False)
+    mostRelatedCategory = db.relationship('MostRelatedCategories', backref="category", uselist=False)
 
     def getName(self):
         return self.categoryName
