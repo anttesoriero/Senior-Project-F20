@@ -17,8 +17,8 @@ const MapsCircle = (prop: {categoryId: number, title: string}) => {
         description: "",
         recommendedPrice: undefined,
         estimatedDurationMinutes: undefined,
-        locationALongitude: 39.7087,
-        locationALatitude: -75.110,
+        locationALongitude: 39.7087,  // testing
+        locationALatitude: -75.110,  // testing
         locationBLongitude: 15,
         locationBLatitude: 15
     }
