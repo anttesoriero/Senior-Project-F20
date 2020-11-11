@@ -7,7 +7,7 @@ import { FaUsers, FaTasks } from 'react-icons/fa';
 const Sidenav = () => {
     return (
         <div>
-            <h3 style={{ fontWeight: 'bolder', color: "#e0e0e0" }}>&nbsp;Administrator</h3><hr />
+            <h3 style={{ fontWeight: 'bolder', color: "#e0e0e0" }}>&nbsp;Admin</h3><hr />
             <Nav vertical className="justify-content-center">
                 <NavItem>
                     <NavLink href="/adminDash" style={{ fontWeight: 'bolder' }}><AiFillDashboard />&nbsp;Dashboard</NavLink>

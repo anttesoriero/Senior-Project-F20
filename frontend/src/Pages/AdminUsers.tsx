@@ -4,55 +4,53 @@ import Sidenav from '../Components/Sidenav';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 
-type userIds = {
-    ids: Array<Int32List>[];
+type user = {
+    email: string,
+    gender: string,
+    name: string,
+    phoneNumber: string,
+    preferredName: string
 }
 
 const AdminUsers = () => {
-    const [ids, setIds] = useState<userIds>();
-
-    const getUsers = async () => {
-        await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/admin/getAllUsers', {
-            adminPassword: sessionStorage.getItem('admin_pass')
-        })
-            .then(function (response) {
-                console.log(response.data["User ID"]);
-                setIds(response.data["User ID"]);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        console.log(ids);
-    }
+    let a: user[] = []
+    const [users, setUsers] = useState(a);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getUsers();
-    }, [])
+        async function getUsers() {
+            await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/admin/getAllUsers', {
+                adminPassword: sessionStorage.getItem('admin_pass')
+            })
+                .then(function (response) {
+                    console.log(response.data.users);
+                    setUsers(response.data.users);
+                    setLoading(false);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
 
-    const userData = [{ id: 1, name: 'Daniel Sanchez', pName: 'Dan', phone: '123-456-7890', email: 'sanchezd6@students.rowan.edu', gender: 'M' },
-    { id: 2, name: 'Melisaa Beach', pName: 'Melissa', phone: '123-456-7890', email: 'beachm1@students.rowan.edu', gender: 'F' }];
+
+        getUsers();
+    }, [setUsers])
+
+    let formatPhoneNumber = (str) => {
+        //Filter only numbers from the input
+        let cleaned = ('' + str).replace(/\D/g, '');
+
+        //Check if the input is of correct length
+        let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+
+        if (match) {
+            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+        };
+
+        return null
+    };
 
     const userCols = [
-        {
-            name: 'Id',
-            selector: 'id',
-            sortable: true
-        },
-        {
-            name: 'Name',
-            selector: 'name',
-            sortable: true
-        },
-        {
-            name: 'Preffered Name',
-            selector: 'pName',
-            sortable: true
-        },
-        {
-            name: 'Phone Number',
-            selector: 'phone',
-            sortable: true
-        },
         {
             name: 'Email',
             selector: 'email',
@@ -62,6 +60,21 @@ const AdminUsers = () => {
         {
             name: 'Gender',
             selector: 'gender',
+            sortable: true
+        },
+        {
+            name: 'Name',
+            selector: 'name',
+            sortable: true
+        },
+        {
+            name: 'Phone Number',
+            selector: 'phoneNumber',
+            sortable: true
+        },
+        {
+            name: 'Preffered Name',
+            selector: 'prefferedName',
             sortable: true
         },
         {
@@ -88,7 +101,7 @@ const AdminUsers = () => {
                 </Col>
                 <Col>
                     <h1>Users</h1><hr />
-                    <DataTable title='Users' columns={userCols} data={userData} pagination />
+                    <DataTable title='Users' columns={userCols} data={users} striped={true} highlightOnHover={true} progressPending={loading} pagination />
                 </Col>
             </Row>
         </div>
