@@ -16,7 +16,7 @@ const LandingPage = () => {
     const [visible, setVisible] = useState(true);
     const onDismiss = () => setVisible(false);
 
-    const contextType = useContext(AuthContext);
+    const contextType = localStorage.getItem('access_token');
 
     return (
         <div>
@@ -24,12 +24,12 @@ const LandingPage = () => {
 
             <Jumbotron fluid>
                 <Container >
-                    {!contextType ? 
+                    {!contextType ?
                         <Row>
                             {/* Left - Main info */}
                             <Col xs="8">
-                                <h1 className="display-3" style={{fontWeight: 'bolder'}}>OddJobs</h1>
-                                <p className="lead" style={{fontWeight: 'bolder'}}>No Job is too Odd</p>
+                                <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
+                                <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
                             </Col>
 
                             {/* Right - Login */}
@@ -37,12 +37,12 @@ const LandingPage = () => {
                                 <AuthTabs />
                             </Col>
                         </Row>
-                    : 
+                        :
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <div>
-                                <h1 className="display-3" style={{fontWeight: 'bolder'}}>OddJobs</h1>
+                                <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <p className="lead" style={{fontWeight: 'bolder'}}>No Job is too Odd</p>
+                                    <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
                                 </div>
                             </div>
                         </div>

@@ -10,7 +10,7 @@ const Register = ({ history }: RouteComponentProps) => {
 
     const signIn = data => {
         setSubmitting(true);
-        axios.post('http://127.0.0.1:5000/auth/register', {
+        axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/auth/register', {
             email: data.email,
             password: data.password,
             firstName: data.firstName,
@@ -30,13 +30,13 @@ const Register = ({ history }: RouteComponentProps) => {
     }
 
     return (
-        <Formik initialValues={{ email: '', password: '',  firstName: '', lastName: '', phoneNumber: ''}} onSubmit={(data => signIn(data))}>
+        <Formik initialValues={{ email: '', password: '', firstName: '', lastName: '', phoneNumber: '' }} onSubmit={(data => signIn(data))}>
             {() => (
                 <Form>
                     <FormGroup>
                         <Row>
                             <Col>
-                                <Label  className='drop' for="firstName">First Name</Label>
+                                <Label className='drop' for="firstName">First Name</Label>
                                 <Field placeholder='First Name' name='firstName' type='input' as={Input} />
                             </Col>
                             <Col>
