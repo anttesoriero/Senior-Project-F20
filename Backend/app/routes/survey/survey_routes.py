@@ -103,3 +103,31 @@ def respond():
     HistoricalSurvey.createHistoricalSurvey(current_user_id, inputJSON["surveyId"], inputJSON["response"])
 
     return jsonify({"success": True}), 200
+
+'''
+GETs
+'''
+@survey_blueprint.route('/getAvailableSurveys', methods=['GET'])
+@jwt_required
+def getAvailableSurveys():
+    '''
+    Compares surveys with historical surveys to
+    see which surveys have yet to be answered
+    '''
+    
+    # Get current user
+    current_user_id = get_jwt_identity()
+    user = User.getByUserId(current_user_id)
+    
+    # Get both lists to compare
+    surveyIds = Survey.getSurveyIDs()
+    historicalSurveyIds = HistoricalSurvey.getHistoricalSurveyIDs()
+
+    availableSurveyIds = []
+
+    for surveyId in surveyIds:
+        for historicalSurveyId in historicalSurveyIds:
+            if surveyId is not historicalSurveyId:
+                availableSurveyIds.append(surveyId)
+    
+    return jsonify({"Available Survey Id": availableSurveyIds}), 200
