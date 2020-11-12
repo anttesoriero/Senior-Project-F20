@@ -4,7 +4,7 @@ Stores account balance of Users
 OneToOne relationship with the User table
 
 @author Matthew Schofield
-@version 10.8.2020
+@version 11.11.2020
 '''
 # Library imports
 
@@ -15,8 +15,8 @@ class AccountBalance(db.Model):
     '''
     Column definitions
 
-    user_id
-    account_balance
+    user_id         Integer PK
+    account_balance Numeric 7.2
     '''
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"),  primary_key=True)
     accountBalance = db.Column(db.Numeric(9,2))
@@ -36,8 +36,11 @@ class AccountBalance(db.Model):
         :param: amountToChange - amount to add/subtract to a user's balance
         :return: boolean based on success
         '''
-        if self.accountBalance + amountToChange < 0:
+        # Check that the amount to change will not put balance in the negative
+        if (self.accountBalance + amountToChange) < 0:
             return False
+
+        # Make change
         self.accountBalance += amountToChange
         db.session.commit()
         return True
@@ -48,8 +51,9 @@ class AccountBalance(db.Model):
         Create an Account Balance
 
         :param user: User connected to
-        :param password: account balance to start with
+        :param accountBalance: initial balance
         '''
+        # Balance cannot be negative
         if accountBalance < 0:
             return False
 

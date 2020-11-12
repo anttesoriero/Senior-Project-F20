@@ -4,7 +4,7 @@ Task's model for database
 These are Tasks that Users post
 
 @author Matthew Schofield
-@version 10.14.2020
+@version 11.11.2020
 '''
 # Module imports
 from app import db
@@ -305,6 +305,17 @@ class Task(db.Model):
         '''
         Creates a Task
 
+        :param posterUserId:
+        :param categoryId:
+        :param title:
+        :param description:
+        :param recommendedPrice:
+        :param estimatedDurationMinutes:
+        :param locationALongitude:
+        :param locationALatitude:
+        :param locationBLongitude:
+        :param locationBLatitude:
+        :return: Task created
         '''
         # Create Task
         task = Task(
@@ -326,17 +337,10 @@ class Task(db.Model):
         return task
 
     @classmethod
-    def getTaskIDs(cls):
+    def getAll(cls):
         '''
-        Gets the task ids from the User table
+        Gets the task ids from the Task table
+
         :return list of task ids
         '''
-
-        tasks = db.session.query(Task)
-        task_ids = []
-
-        for task in tasks:
-            # add task ids to list
-            task_ids.append(task.taskId)
-
-        return task_ids
+        return [task.getPublicInfo() for task in Task.query.all()]

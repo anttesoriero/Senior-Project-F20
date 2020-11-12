@@ -2,16 +2,16 @@
 User's model for database
 
 @author Matthew Schofield, Steven Jiang
-@version 10.19.2020
+@version 11.11.2020
 '''
 # Module imports
 from app import db
 
 # Models imports
+# ! THIS BUILDS THE DATABASE !
 from app.models.credentials_model import Credentials
 from app.models.account_balance_model import AccountBalance
 from app.models.offer_model import Offer
-from app.models.mostRelatedCategories_model import MostRelatedCategories
 from app.models.category_model import Category
 from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
@@ -22,21 +22,24 @@ class User(db.Model):
     '''
     Column definitions
 
-    userId        Integer  PK
-    email         String   Unique
-    firstName     String   Nullable
-    lastName      String   Nullable
-    preferredName String   Nullable
-    phoneNumber   String   Nullable
+    userId         Integer  PK
+    email          String   Unique
+    firstName      String   Nullable
+    lastName       String   Nullable
+    preferredName  String   Nullable
+    phoneNumber    String   Nullable
+    activeAccount  Boolean  default=True
+    profilePicture String   Nullable
     '''
     # Column definitions
     userId = db.Column(db.Integer(), primary_key=True)
     email = db.Column(db.String(120), index=True, unique=True)
-    firstName = db.Column(db.String(120), nullable=True)
-    lastName = db.Column(db.String(120), nullable=True)
+    firstName = db.Column(db.String(120), nullable=False, default="")
+    lastName = db.Column(db.String(120), nullable=True, default="")
     preferredName = db.Column(db.String(120), nullable=True)
     phoneNumber = db.Column(db.String(12), nullable=True)
-    activeAccount = db.Column(db.Integer(), default=1)
+    activeAccount = db.Column(db.Boolean(), default=True)
+    profilePicture = db.Column(db.String(240), nullable=True)
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
@@ -44,6 +47,14 @@ class User(db.Model):
     postedTasks = db.relationship('Task', backref="user", uselist=True, cascade="all, delete-orphan")
     extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False, cascade="all, delete-orphan")
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True, cascade="all, delete-orphan")
+
+
+    '''
+    General Setters and Getters
+    '''
+    def setProfilePicture(self, newProfilePicture):
+        self.profilePicture = newProfilePicture
+        db.session.commit()
 
     def setFirstName(self, newName):
         self.firstName = newName
@@ -65,15 +76,6 @@ class User(db.Model):
         self.phoneNumber = newPhoneNumber
         db.session.commit()
 
-    def checkCredentials(self, password):
-        '''
-        Check if a plain text password matches the User's hashed password
-
-        :param password: plain text password
-        :return: Boolean whether password is the User's password
-        '''
-        return self.credentials.checkPassword(password)
-
     def getTaskIds(self):
         return [task.taskId for task in self.postedTasks]
 
@@ -82,6 +84,15 @@ class User(db.Model):
     '''
     def setPassword(self, password):
         self.credentials.changePassword(password=password)
+
+    def checkCredentials(self, password):
+        '''
+        Check if a plain text password matches the User's hashed password
+
+        :param password: plain text password
+        :return: Boolean whether password is the User's password
+        '''
+        return self.credentials.checkPassword(password)
 
     '''
     Interactions with account balance are routed through Account Balance object
@@ -95,30 +106,55 @@ class User(db.Model):
     def getBriefPublicInfo(self):
         '''
         Get a brief overview of information about a user
-        :return:
+
+        :return: dictionary of general User information
         '''
+        name = self.firstName + ' ' + self.lastName
         output = {
-            "name": self.firstName + ' ' + self.lastName,
+            "id": self.userId,
+            "name": name,
             "preferredName": self.preferredName,
             "phoneNumber": self.phoneNumber,
-            "email": self.email
+            "email": self.email,
+            "profilePicture": self.profilePicture
         }
         return output
 
     def getPublicInfo(self):
         '''
         Get a more in-depth overview of information about a user
-        :return:
-        '''
 
+        :return: dictionary of more in-depth user information
+        '''
+        name = self.firstName + ' ' + self.lastName
         output = {
-            "name": self.firstName + ' ' + self.lastName,
+            "id": self.userId,
+            "name": name,
             "preferredName": self.preferredName,
             "phoneNumber": self.phoneNumber,
             "email": self.email,
-            "gender": self.extendedModel.gender
+            "gender": self.extendedModel.gender,
+            "profilePicture": self.profilePicture
         }
         return output
+
+    def recommendSurvey(self):
+        '''
+        Recommend a Survey for a User
+
+        :return: recommended survey Id
+        '''
+        # Get both lists to compare
+        survey_ids = Survey.getSurveyIDs()
+        completed_survey_ids = HistoricalSurvey.getHistoricalSurveyIdsForUserId(self.userId)
+        availableSurveyIds = {}
+
+        for survey_id in survey_ids:
+            availableSurveyIds[survey_id] = completed_survey_ids.count(survey_id)
+
+        recommendedSurvey = min(availableSurveyIds.keys(), key=(lambda k: availableSurveyIds[k]))
+
+        return recommendedSurvey
 
     @classmethod
     def getByEmail(cls, email):
@@ -126,7 +162,8 @@ class User(db.Model):
         Get User by email
 
         :param email: email to get User with
-        :return: User object connected to given email
+        :return: User object connected to given email,
+            or None
         '''
         # User or None
         user = User.query.filter_by(
@@ -141,19 +178,12 @@ class User(db.Model):
 
         :param user_id: user_id to get User with
         :return: User object connected to given user_id
+            or None
         '''
         user = User.query.filter_by(
             userId=userId
         ).first()
-        if user is not None:
-            if user.extendedModel.gender is None:
-                user.extendedModel.gender = ''
-            if user.firstName is None:
-                user.firstName = ''
-            if user.lastName is None:
-                user.lastName = ''
-            # Type conversion
-            user.accountBalance.accountBalance = float(user.accountBalance.accountBalance)
+
         return user
 
     @classmethod
@@ -173,7 +203,6 @@ class User(db.Model):
 
         :param email: User's email
         :param password: User's plaintext password
-        :param name: name of the user
         '''
         # Check if user exists
         if not User.existsByEmail(email):
@@ -194,6 +223,7 @@ class User(db.Model):
     def deleteUser(cls, userId):
         '''
         Delete User by user_id
+
         :param user_id: user_id to get User with
         :return: None
         '''
@@ -205,38 +235,21 @@ class User(db.Model):
         db.session.commit()
 
     @classmethod
-    def getPostedTaskIDs(cls, userId):
+    def getPostedTasks(cls, userId):
         '''
-        Gets the task ids for a particular user
+        Gets the Tasks for a particular user
+
         :param userId user_id to get user
         :return list of task ids for a user
         '''
-        tasks = db.session.query(User, Task).filter(User.userId == Task.posterUserId).all()
-        task_ids = []
+        tasks = Task.query.filter_by(userId == Task.posterUserId).all()
+        return tasks
 
-        # loop through table returned from user and task join
-        for user, task in tasks:
-            # add task ids to list
-            task_ids.append(task.taskId)
-
-        return task_ids
-    
     @classmethod
-    def getUserIDs(cls):
+    def getAll(cls):
         '''
-        Gets the user ids from the User table
-        :return list of user ids
+        Gets all User object from the User table
+
+        :return list of User
         '''
-
-        users = db.session.query(User)
-        user_ids = []
-
-        for user in users:
-            # add user ids to list
-            user_ids.append(user.userId)
-
-        return user_ids 
-
-    def changeAccountActivity(self, newAccountActivity):
-        self.activeAccount = newAccountActivity
-        db.session.commit()
+        return [u.getPublicInfo() for u in User.query.all()]

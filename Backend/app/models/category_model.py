@@ -1,26 +1,20 @@
 '''
 Database model for Categories that are used to encapsulate jobs
 
-Things here are specific categories of jobs
-Mowing the lawn
-Picking up groceries
-Move furniture
-
 @author Matthew Schofield
-@version 9.25.2020
+@version 11.11.2020
 '''
 # Module imports
 from app import db
-import sys
 
 class Category(db.Model):
     '''
     Column definitions
-    categoryId
-    categoryName
+    categoryId   Integer
+    categoryName String
 
     Relational Connections
-    survey
+    task
     '''
     # Columns
     categoryId = db.Column(db.Integer(),  primary_key=True)
@@ -28,13 +22,17 @@ class Category(db.Model):
 
     # Set-up Relational connections
     task = db.relationship('Task', backref="category", uselist=False)
-    mostRelatedCategory = db.relationship('MostRelatedCategories', backref="category", uselist=False)
 
     def getName(self):
         return self.categoryName
 
     @classmethod
     def empty(cls):
+        '''
+        Check if there are Categories
+
+        :return: boolean whether the table is empty
+        '''
         return Category.query.first() is None
 
     @classmethod
@@ -54,15 +52,8 @@ class Category(db.Model):
     @classmethod
     def getCategoryIDs(cls):
         '''
-        Gets the category ids from the User table
+        Gets the category ids from the Category table
+
         :return list of category ids
         '''
-
-        categories = db.session.query(Category)
-        category_ids = []
-
-        for category in categories:
-            # add category ids to list
-            category_ids.append(category.categoryId)
-        
-        return category_ids
+        return [category.categoryId for category in Category.query.all()]

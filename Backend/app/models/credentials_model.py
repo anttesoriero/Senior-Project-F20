@@ -4,7 +4,7 @@ Stores the password hashes for Users
 OneToOne relationship with the User table
 
 @author Matthew Schofield
-@version 9.25.2020
+@version 11.11.2020
 '''
 # Library imports
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,8 +15,8 @@ from app import db
 class Credentials(db.Model):
     '''
     Column definitions
-    user_id
-    password_hash
+    user_id       | Integer
+    password_hash | String
     '''
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"),  primary_key=True)
     passwordHash = db.Column(db.String(128))
@@ -32,10 +32,11 @@ class Credentials(db.Model):
 
     def changePassword(self, password):
         '''
+        Change password
 
-        :param password:
-        :return:
+        :param password: new password
         '''
+        # Hash password
         self.passwordHash = generate_password_hash(password)
         db.session.commit()
 

@@ -2,41 +2,34 @@
 Stores specific information for informing the service more
 deeply about the User
 
-TODO:
-Check userId, it may not need primary_key=True
-
-@author Matthew Schofield & Jasdip Dhillon
-@version 10.11.2020
+@author Matthew Schofield, Jasdip Dhillon
+@version 11.11.2020
 '''
-# Library imports
-# Place holding
-
 # Module imports
 from app import db
 
-
 class ExtendedUser(db.Model):
     '''
-    Column definitions
-    extendedUserId
-    userId
-    gender
-    age
-    uiSatisfaction
-    overallSatisfaction
-    securitySatisfaction
-    locationInterestedInALongitude
-    locationInterestedInALatitude
-    locationInterestedInBLongitude
-    locationInterestedInBLatitude
-    tasksPosted
-    tasksAccepted
-    offersSent
-    posterPreference
-    pricePerDrivingMinute
+    Extended User Model = EUM
 
-    Connections
-    User table, userId
+    Stores META data about users to be used in customizations and analysis
+
+    Column definitions
+    userId                          | Integer | PK
+    gender                          | String  | Nullable
+    age                             | Integer | Nullable
+    uiSatisfaction                  | Integer | Nullable
+    overallSatisfaction             | Integer | Nullable
+    securitySatisfaction            | Integer | Nullable
+    locationInterestedInALongitude  | Numeric | Nullable
+    locationInterestedInALatitude   | Numeric | Nullable
+    locationInterestedInBLongitude  | Numeric | Nullable
+    locationInterestedInBLatitude   | Numeric | Nullable
+    tasksPosted                     | Integer
+    tasksAccepted                   | Integer
+    offersSent                      | Integer
+    posterPreference                | Numeric | Nullable
+    pricePerDrivingMinute           | Numeric | Nullable
     '''
     # Column definitions
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"), primary_key=True)
@@ -49,10 +42,11 @@ class ExtendedUser(db.Model):
     locationInterestedInALatitude = db.Column(db.Numeric(9, 6), nullable=True)
     locationInterestedInBLongitude = db.Column(db.Numeric(9, 6), nullable=True)
     locationInterestedInBLatitude = db.Column(db.Numeric(9, 6), nullable=True)
-    tasksPosted = db.Column(db.Integer(), nullable=True)
-    tasksAccepted = db.Column(db.Integer(), nullable=True)
-    offersSent = db.Column(db.Integer(), nullable=True)
+    tasksPosted = db.Column(db.Integer())
+    tasksAccepted = db.Column(db.Integer())
+    offersSent = db.Column(db.Integer())
     pricePerDrivingMinute = db.Column(db.Numeric(10, 2), nullable=True)
+    # User's reported preference
     posterPreference = db.Column(db.Integer(), nullable=True)
 
     def setGender(self, newGender):
@@ -83,11 +77,11 @@ class ExtendedUser(db.Model):
         self.locationInterestedInALatitude = newLatitudeA
         db.session.commit()
 
-    def setLocationInterestedInALongitude(self, newLongitudeB):
+    def setLocationInterestedInBLongitude(self, newLongitudeB):
         self.locationInterestedInBLongitude = newLongitudeB
         db.session.commit()
 
-    def setLocationInterestedInALongitude(self, newLatitudeB):
+    def setLocationInterestedInBLatitude(self, newLatitudeB):
         self.locationInterestedInBLatitude = newLatitudeB
         db.session.commit()
 
@@ -119,7 +113,11 @@ class ExtendedUser(db.Model):
         :param user: User connected to
         '''
         # Create Credentials object
-        extendedUser = ExtendedUser(user=user)
+        extendedUser = ExtendedUser(user=user,
+                                    taskPosted=0,
+                                    tasksAccepted=0,
+                                    offersSent=0
+        )
 
         # Save to database
         db.session.add(extendedUser)

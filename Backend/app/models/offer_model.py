@@ -4,7 +4,7 @@ Offer's model for database
 These are offers a User makes for being hired to complete a Task
 
 @author Matthew Schofield
-@version 9.25.2020
+@version 11.11.2020
 '''
 # Module imports
 from app import db
@@ -15,25 +15,22 @@ import datetime
 class Offer(db.Model):
     '''
     Column definitions
-    offerId
-    taskId
-    userIdFrom
-    payment
-    startDate
-    jobDurationMinutes
-    note
-    accepted
-    responseMessage
-
-    Relationships
-    Task.taskId
-    User.userId
+    offerId            | Integer  | PK
+    taskId             | Integer
+    userIdFrom         | Integer
+    payment            | Numeric
+    startDate          | DateTime | Nullable
+    jobDurationMinutes | Integer  | Integer
+    note               | Text     | Nullable
+    accepted           | Boolean
+    archived           | Boolean
+    responseMessage    | Text     | Nullable
     '''
     # Column definitions
     offerId = db.Column(db.Integer(), primary_key=True)
     taskId = db.Column(db.Integer(), db.ForeignKey("task.taskId"), index=True)
     userIdFrom = db.Column(db.Integer(), db.ForeignKey("user.userId"), index=True)
-    payment = db.Column(db.Integer())
+    payment = db.Column(db.Numeric(6,2))
     startDate = db.Column(db.DateTime(), nullable=True)
     jobDurationMinutes = db.Column(db.Integer(), nullable=True)
     note = db.Column(db.Text(240), nullable=True)
@@ -42,7 +39,13 @@ class Offer(db.Model):
     responseMessage = db.Column(db.Text(240), nullable=True)
 
     def getInfo(self):
+        '''
+        Get information about Offer
+
+        :return: Dictionary of information
+        '''
         output = {
+            "offerId": self.offerId,
             "taskId": self.taskId,
             "userIdFrom": self.userIdFrom,
             "payment": self.payment,
@@ -56,31 +59,52 @@ class Offer(db.Model):
         return output
 
     def accept(self, responseMessage):
+        '''
+        Set this Offer as accepted
+
+        :param responseMessage: attached response message for an accepted offer
+        '''
+        # Archive other Offers
         self.archiveOffersForATask(self.taskId)
+
+        # Set necessary fields and save
         self.archived = False
         self.accepted = True
         self.responseMessage = responseMessage
         db.session.commit()
 
     def reject(self, responseMessage):
+        '''
+        Set this Offer as rejected
+
+        :param responseMessage: attached response message for the rejected offer
+        '''
+        # Archive only this Offer
         self.archived = True
         self.accepted = False
         self.responseMessage = responseMessage
         db.session.commit()
 
     '''
-    Class method
+    Class methods
     '''
     @classmethod
-    def createOffer(cls, taskId, userIdFrom, payment, startDate, jobDurationMinutes=None, note=None):
+    def createOffer(cls, taskId, userIdFrom, payment, startDate=None, jobDurationMinutes=None, note=None):
         '''
         Creates an Offer
 
+        :param taskId: Task connected to
+        :param userIdFrom: User from
+        :param payment: payment offered
+        :param startDate: datetime to do Task
+        :param jobDurationMinutes: Expected minutes to do task
+        :param note: Attached note
         '''
+        # Convert startDate to correct format
         if startDate is not None:
             startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d %H:%M")
-        # Create Offer
 
+        # Create Offer
         offer = Offer(
             taskId=taskId,
             userIdFrom=userIdFrom,
@@ -99,38 +123,61 @@ class Offer(db.Model):
 
     @classmethod
     def getOffer(cls, offerId):
+        '''
+        Get offer by offerId
+
+        :param offerId: offerId to find
+        :return: Offer found or None
+        '''
         return Offer.query.filter_by(offerId=offerId).first()
 
     @classmethod
     def getOffersForTask(cls, taskId, includeArchived=False):
+        '''
+        Find offers for a Task
+
+        :param taskId: taskId to find Task that Offers are for
+        :param includeArchived: boolean whether to include archived Offers
+        :return: List of Offers for a Task supplied by taskId
+        '''
         if not includeArchived:
-            return [offer.offerId for offer in Offer.query.filter_by(taskId=taskId, archived=False).all()]
+            # Get non-Archived Offers for a Task
+            return Offer.query.filter_by(taskId=taskId, archived=False).all()
         else:
-            return [offer.offerId for offer in Offer.query.filter_by(taskId=taskId).all()]
+            # Get all Offers for a Task
+            return Offer.query.filter_by(taskId=taskId).all()
 
     @classmethod
     def archiveOffersForATask(cls, taskId):
+        '''
+        Archive all Offers for a Task, found by taskId
+
+        :param taskId: id to find Task by
+        '''
+        # Find all not archived Offers for a Task, and set them to archived
         for offer in Offer.query.filter_by(taskId=taskId, archived=False).all():
             offer.archived = True
         db.session.commit()
 
     @classmethod
-    def getOfferIDs(cls):
+    def getAll(cls):
         '''
         Gets the offer ids from the User table
+
         :return list of offer ids
         '''
-
-        offers = db.session.query(Offer)
-        offer_ids = []
-
-        for offer in offers:
-            # add offer ids to list
-            offer_ids.append(offer.offerId)
-
-        return offer_ids
+        return [offer.getInfo() for offer in Offer.query.all()]
         
     @classmethod
     def deleteOffer(cls, offer):
-        db.session.delete(offer)
-        db.session.commit()
+        '''
+        Delete an archived offer
+
+        :param offer: Offer to delete
+        :return: Boolean whether delete was successful
+        '''
+        if offer.archived:
+            db.session.delete(offer)
+            db.session.commit()
+            return True
+        return False
