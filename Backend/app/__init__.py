@@ -10,6 +10,8 @@ from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
+# Log start time
+
 # Init app
 app = Flask(__name__)
 #Cors setup to allow requests from frontend
