@@ -20,7 +20,7 @@ def validateRequestJSON(request, requiredParamaters, variableParameters):
     # Check for missing parameters
     for paramName in requiredParamaters:
         parameter = request.json.get(paramName, None)
-        if parameter is None:
+        if not parameter:
             success = False
             return success, errorCode, {}
         outputJSON[paramName] = parameter
