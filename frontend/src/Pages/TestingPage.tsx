@@ -4,16 +4,57 @@ import {Button, Card, CardBody, Col, Collapse, Container, Row} from 'reactstrap'
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import Maps from "../Components/Maps";
+import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import TaskCard from '../Components/TaskCard';
 import RefineSearch from '../Components/RefineSearch';
 import PaginationRow from '../Components/PaginationRow';
+import { TileLayer, Marker, Popup, MapContainer, CircleMarker, Tooltip, Circle } from 'react-leaflet';
+import { LatLngTuple } from 'leaflet';
+import MapsCircle from '../Components/MapsCircle';
 // import {Map, L} from 'leaflet';
 // <script src="holder.js"/>
 
+type taskIDState = {
+    ids: []
+}
+
+const taskIDs = {
+    ids: []
+}
 
 const TestingPage = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
+    const token = localStorage.getItem('access_token');
+    /* const [task, getTaskList] = useState<taskIDState>(taskIDs); ERRORS */
+
+    const getTaskList = async () => {
+        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/recommendTasks`,
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+    
+    const getIds = async () => {
+        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/getPublic`,
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        getTaskList();
+        getIds();
+    }, []);
+
+    const centerLocation: LatLngTuple = [39.7089, -75.1183]
+    const sample: LatLngTuple = [39.7051596, -75.11357028778912]
 
     return (
         <div>
@@ -55,8 +96,28 @@ const TestingPage = () => {
                 </Col>
 
                 {/* Right - Map */}
+                {/* - NOTE: Removed Maps component to make it easier to add markers - 
                 <Col xs="8">
                     <Maps scrollBool={true} />
+                </Col> */}
+
+                <Col xs="8">
+                    <MapContainer className="leaflet-container" center={centerLocation} zoom={15} scrollWheelZoom={true} >
+                        <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' 
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+                        {/* Map Circle Markers - MapsCircle */}
+                        {/* <Circle center={[39.7085, -75.110]} pathOptions={{ fillColor: 'orange' }} radius={100}>
+                            <Popup>
+                                <h1>Task Title</h1>
+                                <h2>Category</h2>
+                                <h3>$20 for 2 hours</h3>
+                            </Popup>
+                        </Circle> */}
+
+                        <MapsCircle title='TITLE' categoryId={1} amount={60} duration={60} latitude={39.7086} longitute={-75.1101} /> {/* Ready for correct inputs */}
+                        
+                    </MapContainer>
                 </Col>
             </Row>        
             

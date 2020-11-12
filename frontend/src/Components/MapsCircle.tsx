@@ -5,34 +5,26 @@ import { LatLngTuple } from 'leaflet';
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import { Container } from 'reactstrap';
 
-const MapsCircle = (prop: {categoryId: number, title: string}) => {
-    
-    const circleFields = {
-        // TODO: associate categories with their respective category ID's
-        // Default initial values for the task fields
-        // categoryId: 1,
-        categoryId: prop.categoryId,
-        // title: "",
-        title: prop.title,
-        description: "",
-        recommendedPrice: undefined,
-        estimatedDurationMinutes: undefined,
-        locationALongitude: 39.7087,  // testing
-        locationALatitude: -75.110,  // testing
-        locationBLongitude: 15,
-        locationBLatitude: 15
-    }
+const MapsCircle = (prop: {
+    title: string,
+    categoryId: number, 
+    amount: number,
+    duration: number,
+    latitude: number,
+    longitute: number
+
+}) => {
     
     return (
         <Circle
-            center={[circleFields.locationALatitude, circleFields.locationALongitude]}
-            pathOptions={{ color:'orange', fillColor: 'orange' }}
+            center={[prop.latitude, prop.longitute]}
+            pathOptions={{ color:'blue', fillColor: 'blue' }}
             radius={100}>
             <Popup>
-                <img src={PlaceholderImage} width="100%vw"/>
-                <h1>{circleFields.title}</h1>
-                <h2>{circleFields.categoryId}</h2>
-                <h3>${circleFields.recommendedPrice} for {circleFields.estimatedDurationMinutes} minutes</h3>
+                {/* Stretch Goal - <img src={PlaceholderImage} width="100%vw"/> */}
+                <h1>{prop.title}</h1>
+                <h2>Category: {prop.categoryId}</h2>
+                <h3>${prop.amount} for {prop.duration} minutes</h3>
             </Popup>
         </Circle>
     );
