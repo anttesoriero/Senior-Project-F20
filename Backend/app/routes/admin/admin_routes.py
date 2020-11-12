@@ -5,7 +5,7 @@ Defines routes for admin related endpoints
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 10.16.2020
+@version 11.11.2020
 """
 # Library imports
 from flask import jsonify, request
@@ -16,12 +16,13 @@ from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
 from app.models.user_model import User
-from app.models.user_model import Task
-from app.models.user_model import Survey
-from app.models.user_model import Offer
-from app.models.user_model import HistoricalSurvey
-from app.models.user_model import Category
+from app.models.task_model import Task
+from app.models.survey_model import Survey
+from app.models.offer_model import Offer
+from app.models.historical_survey_model import HistoricalSurvey
+from app.models.category_model import Category
 
+# Static password for admin queries
 adminToken = "SuperSecureLongAdminToken"
 
 '''
@@ -38,11 +39,14 @@ def addToAccount():
         "userId": int,
         "amountToChange": int
     }
-    '''
 
+    Out:
+    {
+        "success": bool
+    }
+    '''
     # Validate input
     requiredParameters = ["adminPassword", "amountToChange"]
-
     optionalParameters = []
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
@@ -52,41 +56,40 @@ def addToAccount():
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
+    # Get User
     user = User.getByUserId(int(inputJSON["userId"]))
+
+    # If User was found execute command, otherwise 404
     if user is not None:
         user.changeAccountBalance(int(inputJSON["amountToChange"]))
-        return jsonify({"success":True}), 200
+        return jsonify({"success": True}), 200
     else:
         return jsonify({}), 404
-'''
-POST
-'''
+
 @admin_blueprint.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
     '''
-    Returns all user Id's
+    Returns all Users
     '''
     # Validate input
     requiredParameters = ["adminPassword"]
-
     optionalParameters = []
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
 
+    # Check Admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
-    return jsonify({"User ID":User.getUserIDs()}), 200
+    # Return all Users
+    return jsonify({"users": User.getAll()}), 200
 
-'''
-POST
-'''
 @admin_blueprint.route('/getAllTasks', methods=['POST'])
 def getAllTasks():
     '''
-    Returns all task Id's
+    Returns all Tasks
     '''
     # Validate input
     requiredParameters = ["adminPassword"]
@@ -97,18 +100,16 @@ def getAllTasks():
     if not success:
         return jsonify({}), code
 
+    # Check Admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
-    return jsonify({"Task ID":Task.getTaskIDs()}), 200
+    return jsonify({"tasks": Task.getAll()}), 200
 
-'''
-POST
-'''
 @admin_blueprint.route('/getAllSurveys', methods=['POST'])
 def getAllSurveys():
     '''
-    Returns all survey Id's
+    Returns all Surveys
     '''
     # Validate input
     requiredParameters = ["adminPassword"]
@@ -119,18 +120,16 @@ def getAllSurveys():
     if not success:
         return jsonify({}), code
 
+    # Check Admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
-    return jsonify({"Survey ID":Survey.getSurveyIDs()}), 200
+    return jsonify({"surveys": Survey.getAll()}), 200
 
-'''
-POST
-'''
 @admin_blueprint.route('/getAllOffers', methods=['POST'])
 def getAllOffers():
     '''
-    Returns all offer Id's
+    Returns all Offers
     '''
     # Validate input
     requiredParameters = ["adminPassword"]
@@ -141,18 +140,16 @@ def getAllOffers():
     if not success:
         return jsonify({}), code
 
+    # Check Admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
-    return jsonify({"Offer ID":Offer.getOfferIDs()}), 200
+    return jsonify({"offers": Offer.getAll()}), 200
 
-'''
-POST
-'''
 @admin_blueprint.route('/getAllHistoricalSurveys', methods=['POST'])
 def getAllHistoricalSurveys():
     '''
-    Returns all historicalSurvey Id's
+    Returns all HistoricalSurveys
     '''
     # Validate input
     requiredParameters = ["adminPassword"]
@@ -163,18 +160,16 @@ def getAllHistoricalSurveys():
     if not success:
         return jsonify({}), code
 
+    # Check Admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
-    return jsonify({"HistoricalSurvey ID":HistoricalSurvey.getHistoricalSurveyIDs()}), 200
+    return jsonify({"historicalSurveys": HistoricalSurvey.getAll()}), 200
 
-'''
-POST
-'''
 @admin_blueprint.route('/getAllCategories', methods=['POST'])
 def getAllCategories():
     '''
-    Returns all category Id's
+    Returns all Categories
     '''
     # Validate input
     requiredParameters = ["adminPassword"]
@@ -185,14 +180,12 @@ def getAllCategories():
     if not success:
         return jsonify({}), code
 
+    # Check admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
 
-    return jsonify({"Category ID":Category.getCategoryIDs()}), 200
+    return jsonify({"categories": Category.getAll()}), 200
 
-'''
-POST
-'''
 @admin_blueprint.route('/changeAdminToken', methods=['POST'])
 def changeAdminToken():
     '''
@@ -203,6 +196,12 @@ def changeAdminToken():
     {
         adminPassword: str, current admin password
         new_adminPassword: str, new admin password
+    }
+
+    Out:
+    {
+        success: bool, whether the change was a success
+        adminToken: new admin token
     }
     '''
    
@@ -217,49 +216,14 @@ def changeAdminToken():
     if not success:
         return jsonify({}), code
 
+    # Check admin token
     if str(inputJSON["adminPassword"]) != adminToken:
         return jsonify({}), 403
-    
+
+    # Respond with new admin token
     adminToken = str(inputJSON["new_adminPassword"])
     response = {
         "success": True,
         "adminToken": adminToken
     }
     return jsonify(response), 200
-    
-'''
-POST
-'''
-@admin_blueprint.route('/changeAccountActivity', methods=['POST'])
-def changeAccountActivity():
-    '''
-    Given the userId, the accounts activity will be changed
-    based on the newAccountActivity boolean
-
-    In:
-    {
-        adminPassword: str,
-        userId: int,
-        newAccountActivity: bool
-    }
-    '''
-    
-    # Validate input
-    requiredParameters = ["adminPassword", "userId", "newAccountActivity"]
-
-    optionalParameters = []
-    
-    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
-    if not success:
-        return jsonify({"success":False}), code
-
-    if str(inputJSON["adminPassword"]) != adminToken:
-        return jsonify({}), 403
-
-    user = User.getByUserId(int(inputJSON["userId"]))
-    if user is not None:
-        user.changeAccountActivity(int(inputJSON["newAccountActivity"]))
-        return jsonify({"success":True}), 200
-    else:
-        return jsonify({}), 404
-    

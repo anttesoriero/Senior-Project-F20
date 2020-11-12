@@ -24,7 +24,7 @@ def getBriefProfile():
     Gets a brief profile about a user
 
     :return: brief profile about a given user
-    see output of User.getBriefPublicInfo()
+        see output of User.getBriefPublicInfo()
     '''
     # Validate inputs
     otherUserId = request.args.get('otherUser', type=int)
@@ -45,7 +45,7 @@ def getProfile():
     Gets an in-depth profile about a user
 
     :return: profile about a given user
-    see output of User.getPublicInfo()
+        see output of User.getPublicInfo()
     '''
     # Validate inputs
     otherUserId = request.args.get('otherUser', type=int)

@@ -5,11 +5,12 @@ Try to use utilities outside of this file to do the heavy lifting
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 9.27.2020
+@version 11.11.2020
 """
 # Library imports
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_raw_jwt
+import datetime
 
 # Module imports
 from app.routes.auth import auth_blueprint
@@ -19,13 +20,9 @@ from app import blacklist
 # Database Models
 from app.models.user_model import User
 
-import datetime
 
 '''
 Open endpoints
-'''
-
-
 @auth_blueprint.route('/oauth')
 def oauth_login():
     # Set up a Google provider
@@ -118,6 +115,7 @@ def oauth_callback():
             'success': False
         }
         return jsonify(response), 400
+'''
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
@@ -137,13 +135,8 @@ def login():
     Success
     {
         access_token: str, JWT access token
-        success: bool[=True]
+        success: bool
     }
-    Failure
-    {
-        success: bool[=False]
-    }
-
 
     HTTP codes:
     401 - Login failed
@@ -184,13 +177,8 @@ def register():
     Success
     {
         access_token: str, JWT access token
-        success: bool[=True]
+        success: bool
     }
-    Failure
-    {
-        success: bool[=False]
-    }
-
 
     HTTP codes:
     200 - OK
@@ -328,9 +316,12 @@ def changePasswordWithAuth():
     if not success:
         return jsonify({}), code
 
+    # get User
     user = User.getByUserId(get_jwt_identity())
 
+    # Check that the user and password are valid
     if user and user.checkCredentials(inputJSON["oldPassword"]):
+        # Change password
         user.setPassword(inputJSON["newPassword"])
         return jsonify({"success": True}), 200
     else:

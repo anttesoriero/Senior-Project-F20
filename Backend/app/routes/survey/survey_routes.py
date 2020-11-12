@@ -1,9 +1,11 @@
 """
 Defines routes for survey related endpoints
 ! Try to use utilities outside of this file to do the heavy lifting !
+
 This file should be focused on annotating routes
-@author Matthew Schofield
-@version 9.21.2020
+
+@author Matthew Schofield, Steven Jiang, Jasdip Dhillon
+@version 11.11.2020
 """
 # Library imports
 from flask import jsonify, request
@@ -12,13 +14,12 @@ import random
 
 # Module imports
 from app.routes.survey import survey_blueprint
+from app.utilities.validation.validation import validateRequestJSON
 
 # Model imports
 from app.models.user_model import User
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
-
-from app.utilities.validation.validation import validateRequestJSON
 
 '''
 GETs
@@ -27,7 +28,12 @@ GETs
 @jwt_required
 def getSurvey():
     '''
-        Out:
+    Get a survey by surveyId
+
+    In:
+    <surveyId int>
+
+    Out:
     {
         "type": str
         "surveyId": int
@@ -41,7 +47,6 @@ def getSurvey():
         "answerF": str
     }
     '''
-
     # Validate inputs
     surveyId = request.args.get('surveyId', type=int)
 
@@ -50,31 +55,34 @@ def getSurvey():
     if survey is None:
         return jsonify({"success":False}), 404
 
+    # Get survey's public information
     responseInformation = survey.getPublicInfo()
 
+    # Send info
     return jsonify(responseInformation), 200
 
 @survey_blueprint.route('/recommendSurvey', methods=['GET'])
 @jwt_required
 def recommendSurvey():
     '''
-    Return a recommended survey ID
-    :return: survey ID recommendation
+    Recommend a survey based on randomness and EUM meta information
+
+    In:
+    ---
+
+    Out:
+    {
+        "recommendSurvey": int
+    }
     '''
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
-    # Opening the file containing surveys
-    file = open("./app/models/initializers/initialSurvey.txt", "r")
+    # Recommend a survey for a User
+    recommended_survey = user.recommendSurvey()
 
-    # Reading from the file
-    Content = file.read()
-    surveyList = Content.split("\n")
-
-    randomSurvey = random.randrange(1, len(surveyList))
-
-    return jsonify({"recommendedSurvey":randomSurvey}), 200
+    return jsonify({"recommendedSurvey":recommended_survey}), 200
 
 '''
 POSTs
@@ -83,12 +91,16 @@ POSTs
 @jwt_required
 def respond():
     '''
+    Respond to a Survey as a User
 
     In:
     {
         "surveyId": int,
         "response": int
     }
+
+    Out:
+
     '''
     # Validate input
     requiredParameters = ["surveyId", "response"]
@@ -103,31 +115,3 @@ def respond():
     HistoricalSurvey.createHistoricalSurvey(current_user_id, inputJSON["surveyId"], inputJSON["response"])
 
     return jsonify({"success": True}), 200
-
-'''
-GETs
-'''
-@survey_blueprint.route('/getAvailableSurveys', methods=['GET'])
-@jwt_required
-def getAvailableSurveys():
-    '''
-    Compares surveys with historical surveys to
-    see which surveys have yet to be answered
-    '''
-    
-    # Get current user
-    current_user_id = get_jwt_identity()
-    user = User.getByUserId(current_user_id)
-    
-    # Get both lists to compare
-    surveyIds = Survey.getSurveyIDs()
-    historicalSurveyIds = HistoricalSurvey.getHistoricalSurveyIDs()
-
-    availableSurveyIds = []
-
-    for surveyId in surveyIds:
-        for historicalSurveyId in historicalSurveyIds:
-            if surveyId is not historicalSurveyId:
-                availableSurveyIds.append(surveyId)
-    
-    return jsonify({"Available Survey Id": availableSurveyIds}), 200

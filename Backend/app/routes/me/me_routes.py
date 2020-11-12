@@ -5,7 +5,7 @@ Defines routes for the endpoints related to a user's own account operations
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 9.13.2020
+@version 11.11.2020
 """
 # Library imports
 from flask import jsonify, request
@@ -30,15 +30,13 @@ def getProfile():
     Gets a users own profile information
 
     :return: profile information of a user
-    {
-        email: str, email of user,
-        name: str, name of user
-    }
+        see dictionary below
     '''
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
+    # Construct User information
     responseInformation = {
         "email": user.email,
         "firstName": user.firstName,
@@ -57,18 +55,18 @@ def getPostedTasks():
 
     :return: list of posted task IDs
     {
-        tasks: [int], list of task IDs that the user has posted
+        tasks: [Task], list of Tasks that the user has posted
     }
     '''
     # Get current user
     current_user_id = get_jwt_identity()
     
     # Get user's task ids
-    task_ids = User.getPostedTaskIDs(current_user_id)
+    tasks = User.getPostedTasks(current_user_id)
 
     # Format output
     responseInformation = {
-        "taskIDs": task_ids
+        "tasks": tasks
     }
 
     return jsonify(responseInformation), 200
@@ -84,11 +82,7 @@ def editInformation():
 
     :return:
     {
-        email:         str, email to set
-        firstName:     str, first name to set
-        lastName:      str, last name to set
-        preferredName: str, preferred name to set
-        phoneNumber:   str, phone number to set
+        "message": str, success message
     }
     '''
     # Validate input
@@ -124,6 +118,7 @@ DELETES
 def deleteAccount():
     '''
     Deletes a user from the database
+
     :return:
     {
         status message of the delete operation

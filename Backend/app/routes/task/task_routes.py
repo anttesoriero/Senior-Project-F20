@@ -14,6 +14,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 # Module imports
 from app.routes.task import task_blueprint
 from app.utilities.validation.validation import validateRequestJSON
+from app.utilities.global_account import completeDeal
 
 # Model imports
 from app.models.user_model import User
@@ -310,11 +311,20 @@ def editTask():
     if not success:
         return jsonify({}), code
 
+    # Get current user
+    current_user_id = get_jwt_identity()
+
     # Secondary specific validation
     editParams = {}
 
     # Get task
     task = Task.getByTaskId(inputJSON["taskId"])
+    if task is None:
+        return jsonify({}), 404
+
+    if task.posterUserId is not current_user_id:
+        # User does not have permission to delete the task
+        return jsonify({"success": False}), 403
 
     # If the task exists and does not have an accepted offer
     if task and not task.isAccepted():
@@ -328,3 +338,36 @@ def editTask():
         return jsonify({"success":True}), 200
     else:
         return jsonify({"success": False}), 403
+
+
+@task_blueprint.route('/completed', methods=["POST"])
+@jwt_required
+def completeTask():
+    '''
+    Mark a Task as completed
+
+    :return:
+    '''
+    # Validate Inputs
+    requiredParameters = ["taskId"]
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    # Get current user
+    current_user_id = get_jwt_identity()
+
+    task = Task.getByTaskId(inputJSON["taskId"])
+    if task is None:
+        return jsonify({}), 404
+
+    if task.posterUserId is not current_user_id:
+        # User does not have permission to delete the task
+        return jsonify({"success": False}), 403
+
+    if completeDeal(task.taskId):
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False}), 400
