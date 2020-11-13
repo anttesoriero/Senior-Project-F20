@@ -197,7 +197,7 @@ class User(db.Model):
         return not User.getByEmail(email)
 
     @classmethod
-    def createUser(cls, email, password, firstName="", lastName="", preferredName="", phoneNumber=""):
+    def createUser(cls, email, password, firstName="", lastName="", preferredName="", phoneNumber="", profilePicture=""):
         '''
         Creates a User
 
@@ -209,7 +209,7 @@ class User(db.Model):
             return None
 
         # Create User
-        user = User(email=email, firstName=firstName, lastName=lastName, preferredName=preferredName, phoneNumber=phoneNumber)
+        user = User(email=email, firstName=firstName, lastName=lastName, preferredName=preferredName, phoneNumber=phoneNumber, profilePicture=profilePicture)
         Credentials.createCredentials(password=password, user=user)
         AccountBalance.createBalance(user=user, accountBalance=10.0)
         ExtendedUser.createExtendedUserModel(user=user)
