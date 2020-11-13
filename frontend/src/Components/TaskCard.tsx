@@ -4,7 +4,7 @@ import { Card, CardText, CardBody, CardTitle, CardSubtitle, Button } from 'react
 type CardProps = {
     title: string,
     offerer: string,
-    price: string,
+    price: number,
     description: string
 }
 

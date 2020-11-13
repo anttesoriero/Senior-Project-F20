@@ -34,7 +34,7 @@ const TaskBoard = () => {
             <Container>
                 <h1>Task Board</h1>
                 <Row xs={'1'} sm={'2'} md={'3'} className={'centered'}>
-                    <Col>
+                    {/* <Col>
                         <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.' />
                     </Col>
                     <Col>
@@ -60,7 +60,7 @@ const TaskBoard = () => {
                     </Col>
                     <Col>
                         <TaskCard title='Lawn Mowing' offerer='John Smith' price='20' description='Need help mowing lawn, cannot do it because I have a broken leg.' />
-                    </Col>
+                    </Col> */}
                 </Row>
                 <div className='centered'>
                     <PaginationRow />

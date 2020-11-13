@@ -7,11 +7,6 @@ import AuthTabs from '../Components/AuthTabs';
 import Footer from "../Components/Footer";
 import CardCategories from '../Components/CardCategories';
 
-type event = {
-    email: string,
-    password: string
-};
-
 const LandingPage = () => {
     const [visible, setVisible] = useState(true);
     const onDismiss = () => setVisible(false);

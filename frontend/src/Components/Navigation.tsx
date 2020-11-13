@@ -9,7 +9,11 @@ import { MdPerson } from 'react-icons/md';
 import { IconContext } from 'react-icons';
 import axios from 'axios';
 
-const Navigation = ({ history }: RouteComponentProps) => {
+interface NavProps {
+    redirect: boolean
+}
+
+const Navigation = ({ history }: RouteComponentProps , { redirect }: NavProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const token = localStorage.getItem('access_token');
@@ -21,8 +25,10 @@ const Navigation = ({ history }: RouteComponentProps) => {
                 console.log(response.data);
             })
             .catch(error => {
-                localStorage.removeItem('access_token');
-                history.push('/');
+                if(!redirect){   
+                    localStorage.removeItem('access_token');
+                    history.push('/');
+                }
             });
     }, [history])
 

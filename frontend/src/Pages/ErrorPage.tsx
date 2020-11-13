@@ -7,7 +7,7 @@ import Footer from '../Components/Footer';
 const ErrorPage = () => {
     return (
         <div>
-            <Navigation/>
+            <Navigation />
             <Container>
 
                 <br/>

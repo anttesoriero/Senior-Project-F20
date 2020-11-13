@@ -14,15 +14,31 @@ import MapsCircle from '../Components/MapsCircle';
 // import {Map, L} from 'leaflet';
 // <script src="holder.js"/>
 
+type task = {
+    categoryId: number,
+    amount: number,
+    duration: number,
+    latitude: number,
+    longitute: number,
+    title: string,
+    offerer: string,
+    description: string
+}
+
 const TestingPage = () => {
     const token = localStorage.getItem('access_token');
+
+    let a: task[] = [];
+    const [tasks, setTasks] = useState(a);
     /* const [task, getTaskList] = useState<taskIDState>(taskIDs); ERRORS */
+
 
     const getTaskList = async () => {
         await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/recommendTasks`,
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data);
+                setTasks(response.data.tasks);
             })
             .catch(error => {
                 console.log(error);
@@ -51,8 +67,6 @@ const TestingPage = () => {
     return (
         <div>
             <Navigation/>
-            {/* <div className="centered float"><Button color="grey" onClick={toggle} style={{ marginBottom: '1rem' }}>Open Footer</Button></div>
-            <Collapse isOpen={isOpen}><Footer/></Collapse> */}
 
             {/* Search Bar */}
             <RefineSearch className="centered"/>
@@ -62,13 +76,9 @@ const TestingPage = () => {
                 <Col xs="4" className="col-scroll">
                     <Container>
                             <h3 id="top" className="centered">Tasks</h3>
-                            <TaskCard title='Task 1' offerer='USER' price='00' description='DESCRIPTION'/>
-                            <TaskCard title='Task 2' offerer='USER' price='00' description='DESCRIPTION'/>
-                            <TaskCard title='Task 3' offerer='USER' price='00' description='DESCRIPTION'/>
-                            <TaskCard title='Task 4' offerer='USER' price='00' description='DESCRIPTION'/>
-                            <TaskCard title='Task 5' offerer='USER' price='00' description='DESCRIPTION'/>
-                            <TaskCard title='Task 6' offerer='USER' price='00' description='DESCRIPTION'/>
-                            <TaskCard title='Task 7' offerer='USER' price='00' description='DESCRIPTION'/>
+                            {tasks.map( task => (
+                                <TaskCard title={task.title} offerer={task.offerer} price={task.amount} description={task.description}/>
+                            ))}
 
                             <Card>
                                 <CardBody>
@@ -87,27 +97,15 @@ const TestingPage = () => {
                     <Footer/>
                 </Col>
 
-                {/* Right - Map */}
-                {/* - NOTE: Removed Maps component to make it easier to add markers - 
-                <Col xs="8">
-                    <Maps scrollBool={true} />
-                </Col> */}
-
                 <Col xs="8">
                     <MapContainer className="leaflet-container" center={centerLocation} zoom={15} scrollWheelZoom={true} >
                         <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' 
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                         {/* Map Circle Markers - MapsCircle */}
-                        {/* <Circle center={[39.7085, -75.110]} pathOptions={{ fillColor: 'orange' }} radius={100}>
-                            <Popup>
-                                <h1>Task Title</h1>
-                                <h2>Category</h2>
-                                <h3>$20 for 2 hours</h3>
-                            </Popup>
-                        </Circle> */}
-
-                        <MapsCircle title='TITLE' categoryId={1} amount={60} duration={60} latitude={39.7086} longitute={-75.1101} /> {/* Ready for correct inputs */}
+                        {tasks.map( task => (
+                            <MapsCircle title='TITLE' categoryId={task.categoryId} amount={task.amount} duration={task.duration} latitude={task.latitude} longitute={task.longitute} />
+                        ))}
                         
                     </MapContainer>
                 </Col>
