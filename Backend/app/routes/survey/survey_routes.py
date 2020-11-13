@@ -20,6 +20,7 @@ from app.utilities.validation.validation import validateRequestJSON
 from app.models.user_model import User
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
+from app.routes.survey.survey_recommender import survey_recommender
 
 '''
 GETs
@@ -80,9 +81,9 @@ def recommendSurvey():
     user = User.getByUserId(current_user_id)
 
     # Recommend a survey for a User
-    recommended_survey = user.recommendSurvey()
+    recommended_survey = survey_recommender.recommendSurvey(user)
 
-    return jsonify({"recommendedSurvey":recommended_survey}), 200
+    return jsonify({"recommendedSurvey": recommended_survey}), 200
 
 '''
 POSTs
@@ -96,7 +97,7 @@ def respond():
     In:
     {
         "surveyId": int,
-        "response": int
+        "response": str
     }
 
     Out:

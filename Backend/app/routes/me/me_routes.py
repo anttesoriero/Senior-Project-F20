@@ -42,7 +42,7 @@ def getProfile():
         "firstName": user.firstName,
         "lastName": user.lastName,
         "preferredName": user.preferredName,
-        "accountBalance": user.getAccountBalance()
+        "accountBalance": float(user.getAccountBalance())
     }
 
     return jsonify(responseInformation), 200

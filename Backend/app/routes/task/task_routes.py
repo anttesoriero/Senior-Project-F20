@@ -15,6 +15,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.routes.task import task_blueprint
 from app.utilities.validation.validation import validateRequestJSON
 from app.utilities.global_account import completeDeal
+from app.routes.task.task_recommender import task_recommender
 
 # Model imports
 from app.models.user_model import User
@@ -174,9 +175,9 @@ def recommendTasks():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
-    recommendTasks = Task.getRecommendTasks()
+    result = task_recommender.recommend(user)
 
-    return jsonify({"recommendedTasks":recommendTasks}), 200
+    return jsonify(result), 200
 
 '''
 POSTs
