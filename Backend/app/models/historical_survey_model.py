@@ -21,7 +21,7 @@ class HistoricalSurvey(db.Model):
     historicalSurveyId = db.Column(db.Integer(), primary_key=True)
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"))
     surveyId = db.Column(db.Integer(), nullable=False)
-    response = db.Column(db.Integer(), nullable=False)
+    response = db.Column(db.String(1), nullable=False)
 
     def getInfo(self):
         '''

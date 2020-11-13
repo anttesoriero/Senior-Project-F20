@@ -233,8 +233,7 @@ class Task(db.Model):
                     filters.append(cls.locationALatitude <= queryP["location"]["within"][1])
                     filters.append(cls.locationALongitude >= queryP["location"]["within"][2])
                     filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
-
-
+        print(queryP["location"]["within"])
         tasks = [task.taskId for task in Task.query.filter(*filters).limit(max)]
         return tasks
 
