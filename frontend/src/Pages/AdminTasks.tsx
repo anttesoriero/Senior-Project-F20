@@ -23,7 +23,7 @@ const AdminTasks = () => {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {
-                    console.log(response.data);
+                    console.log(response.data["Task ID"]);
                     //setUsers(response.data.users);
                     setLoading(false);
                 })
@@ -31,8 +31,6 @@ const AdminTasks = () => {
                     console.log(error);
                 });
         }
-
-
         getTasks();
     }, [setTasks])
 
@@ -100,8 +98,8 @@ const AdminTasks = () => {
                     <Sidenav />
                 </Col>
                 <Col>
-                    <h1>Users</h1><hr />
-                    <DataTable title='Users' columns={userCols} data={tasks} striped={true} highlightOnHover={true} progressPending={loading} pagination />
+                    <h1>Tasks</h1><hr />
+                    <DataTable title='Tasks' columns={userCols} data={tasks} striped={true} highlightOnHover={true} progressPending={loading} pagination />
                 </Col>
             </Row>
         </div>

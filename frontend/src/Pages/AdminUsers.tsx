@@ -31,8 +31,6 @@ const AdminUsers = () => {
                     console.log(error);
                 });
         }
-
-
         getUsers();
     }, [setUsers])
 

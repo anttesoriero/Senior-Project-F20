@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
 import Footer from '../Components/Footer';
-import {Container, Row, Col, Button} from 'reactstrap';
+import { Container, Row, Col, Button, FormGroup, Input, Spinner, Label } from 'reactstrap';
+import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 
 type surveyState = {
@@ -22,186 +23,114 @@ type surveyIDState = {
 
 const SurveyPage = () => {
   const token = localStorage.getItem('access_token');
-  const [survey, setSurvey]  = useState<surveyState>();
+  const [survey, setSurvey] = useState<surveyState>();
+  const [serror, setSerror] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const getSurvey = async () => {
-    await axios.get('http://127.0.0.1:5000/survey/recommendSurvey', 
-    { headers: { Authorization: `Bearer ${token}` } })
-    .then( async response => {
+    await axios.get('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/survey/recommendSurvey',
+      { headers: { Authorization: `Bearer ${token}` } })
+      .then(async response => {
         console.log(response);
-          await axios.get(`http://127.0.0.1:5000/survey/getSurvey?surveyId=${response.data.recommendedSurvey}`, 
+        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/survey/getSurvey?surveyId=${response.data.recommendedSurvey}`,
           { headers: { Authorization: `Bearer ${token}` } })
-          .then( response => {
-              console.log(response);
-              setSurvey(response.data)
+          .then(response => {
+            console.log(response);
+            setSurvey(response.data)
           })
-          .catch( error => {
-              console.log(error);
-          });   
-    })
-    .catch( error => {
+          .catch(error => {
+            console.log(error);
+          });
+      })
+      .catch(error => {
         console.log(error);
-    });
+      });
   }
 
-  const postSurvey = async () => {
-    await axios.post('http://127.0.0.1:5000/survey/respond', survey,
-    { 
+  const postSurvey = async (response) => {
+    setSubmitting(true);
+    console.log(response)
+    await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/survey/respond', {
+      surveyId: survey?.surveyId,
+      answer: response
+    },
+      {
         headers: { Authorization: `Bearer ${token}` }
-    })
-    .then( response => {
+      })
+      .then(response => {
+        setSubmitting(false);
         console.log(response.data);
-    })
-    .catch( error => {
+      })
+      .catch(error => {
         console.log(error);
-    });   
-}
+        setSubmitting(false);
+        setSerror(true);
+      });
+  }
 
-  useEffect(()=> {
+  useEffect(() => {
     getSurvey();
   }, []);
 
-    return (
-     <Fragment>
-     <div>
-      <Navigation/>
+  return (
+    <Fragment>
+      <Navigation />
       <Container>
         <h1 id="centered" style={{ fontWeight: 'bold' }}>Survey Page</h1>
-        <br/>
+        <br />
 
         <h2 id="centered">Here's your daily survey</h2>
-        <p id="centered">This survey helps us make your experience better!</p>
-        <hr/>
-      <Row>
-        {survey ?
-           <h4 id="centered" style={{ fontWeight: 'bold' }} >{survey.question}</h4>
-           :
-           <p id="centered">Some more information if needed</p>
-         }
-      </Row>
-          <div className="container">
-            <div className="row mt-5">
-              <div className="col-sm-12">
-                  
-                   <form>
-                    <div className="form-check">
-                     <label>
-                     <input
-                     type="radio"
-                     name="choice"
-                     value={survey?.answerA}
-                     checked={true}
-                     className="form-check-input"
-                     />
-                     </label>
-                     {survey ?
-                     <p>{survey.answerA}</p>
-                     :
-                     <div></div>
-                    }
-                     </div>
+        <p id="centered">These surveys help make your experience better!</p>
+        <hr />
+        <Row>
+          {survey ?
+            <h4 id="centered" style={{ fontWeight: 'bold' }} >{survey.question}</h4>
+            :
+            <p id="centered">Some more information if needed</p>
+          }
+        </Row>
 
-                    <div className="form-check">
-                      <label>
-                      <input
-                      type="radio"
-                      name="choice"
-                      value={survey?.answerB}
-                      checked={true}
-                      className="form-check-input"
-                     />
-                    </label>
-                    {survey ?
-                     <p>{survey.answerB}</p>
-                     :
-                     <p></p>
-                    }
-                    </div>
+        <Formik initialValues={{ response: '' }} onSubmit={(data => postSurvey(data))}>
+          {() => (
+            <Form >
+              <FormGroup check>
+                <Label check>
+                  <Field name='response' type='radio' value={survey?.answerA} as={Input} />{survey?.answerA}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Field name='response' type='radio' value={survey?.answerB} as={Input} />{survey?.answerB}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Field name='response' type='radio' value={survey?.answerC} as={Input} />{survey?.answerC}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Field name='response' type='radio' value={survey?.answerD} as={Input} />{survey?.answerD}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Field name='response' type='radio' value={survey?.answerE} as={Input} />{survey?.answerF}
+                </Label>
+              </FormGroup>
+              <div className='centered'>
+                {serror ? <p className='error'>There was an error submitting the survey?</p> : <div></div>}
+              </div>
+              <FormGroup className='centered'>
+                {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Submitting...</Button> : <Button type='submit' color="primary">Submit</Button>}&nbsp;
+                    </FormGroup>
+            </Form>
+          )}
+        </Formik>
 
-                  <div className="form-check">
-                      <label>
-                      <input
-                      type="radio"
-                      name="choice"
-                      value={survey?.answerC}
-                      checked={true}
-                      className="form-check-input"
-                     />
-                      </label>
-                      {survey ?
-                     <p>{survey.answerC}</p>
-                     :
-                     <div></div>
-                    }
-                    </div>
-
-                  <div className="form-check">
-                      <label>
-                      <input
-                      type="radio"
-                      name="choice"
-                      value={survey?.answerD}
-                      checked={true}
-                      className="form-check-input"
-                     />
-                      </label>
-                      {survey ?
-                     <p>{survey.answerD}</p>
-                     :
-                     <div></div>
-                    }
-                    </div>
-
-                    {survey ? 
-                      <div className="form-check">
-                          <label>
-                            <input
-                            type="radio"
-                            name="choice"
-                            value={survey?.answerE}
-                            checked={true}
-                            className="form-check-input"
-                          />
-                          </label>
-                        <p>{survey.answerE}</p>
-                      </div>
-                      : <div></div>
-                    }
-
-                    {survey ? 
-                      <div className="form-check">
-                          <label>
-                            <input
-                            type="radio"
-                            name="choice"
-                            value={survey?.answerF}
-                            checked={true}
-                            className="form-check-input"
-                          />
-                          </label>
-                        <p>{survey.answerF}</p>
-                      </div>
-                      : <div></div>
-                    }
-
-                  <Row>
-                    <Col><hr/></Col>
-                    <Col id="centered"><Button href="javascript:history.go(-1)" color="secondary">Previous</Button></Col>
-                    <Col id="centered"><Button href="/survey" color="primary" type="submit" onSubmit={postSurvey}>Next</Button></Col>
-                    <Col><hr/></Col>
-                  </Row>
-                  <h4> </h4>
-
-                   </form>  
-
-    </div>
-  </div>
-</div>
-
-    </Container>
-    <Footer/>
-   </div>
-  </Fragment>
+      </Container>
+      <Footer />
+    </Fragment>
   );
 }
 
