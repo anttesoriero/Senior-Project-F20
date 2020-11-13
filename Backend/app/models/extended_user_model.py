@@ -114,7 +114,7 @@ class ExtendedUser(db.Model):
         '''
         # Create Credentials object
         extendedUser = ExtendedUser(user=user,
-                                    taskPosted=0,
+                                    tasksPosted=0,
                                     tasksAccepted=0,
                                     offersSent=0
         )
