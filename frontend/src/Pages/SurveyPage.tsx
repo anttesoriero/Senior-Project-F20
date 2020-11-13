@@ -17,10 +17,6 @@ type surveyState = {
   surveyId: number
 }
 
-type surveyIDState = {
-  id: number;
-}
-
 const SurveyPage = () => {
   const token = localStorage.getItem('access_token');
   const [survey, setSurvey] = useState<surveyState>();
@@ -74,7 +70,7 @@ const SurveyPage = () => {
 
   return (
     <Fragment>
-      <Navigation />
+      {/* <Navigation /> */}
       <Container>
         <h1 id="centered" style={{ fontWeight: 'bold' }}>Survey Page</h1>
         <br />
@@ -95,29 +91,38 @@ const SurveyPage = () => {
             <Form >
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={survey?.answerA} as={Input} />{survey?.answerA}
+                  <Field name='response' type='radio' value={'a'} as={Input} />{survey?.answerA}
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={survey?.answerB} as={Input} />{survey?.answerB}
+                  <Field name='response' type='radio' value={'b'} as={Input} />{survey?.answerB}
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={survey?.answerC} as={Input} />{survey?.answerC}
+                  <Field name='response' type='radio' value={'c'} as={Input} />{survey?.answerC}
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={survey?.answerD} as={Input} />{survey?.answerD}
+                  <Field name='response' type='radio' value={'d'} as={Input} />{survey?.answerD}
                 </Label>
               </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Field name='response' type='radio' value={survey?.answerE} as={Input} />{survey?.answerF}
-                </Label>
-              </FormGroup>
+              {survey?.answerE ?               
+                <FormGroup check>
+                  <Label check>
+                    <Field name='response' type='radio' value={'e'} as={Input} />{survey?.answerE}
+                  </Label>
+                </FormGroup>: <div></div>
+              }
+              {survey?.answerF ?               
+                <FormGroup check>
+                  <Label check>
+                    <Field name='response' type='radio' value={'f'} as={Input} />{survey?.answerF}
+                  </Label>
+                </FormGroup>: <div></div>
+              }
               <div className='centered'>
                 {serror ? <p className='error'>There was an error submitting the survey?</p> : <div></div>}
               </div>
@@ -127,7 +132,6 @@ const SurveyPage = () => {
             </Form>
           )}
         </Formik>
-
       </Container>
       <Footer />
     </Fragment>

@@ -14,14 +14,6 @@ import MapsCircle from '../Components/MapsCircle';
 // import {Map, L} from 'leaflet';
 // <script src="holder.js"/>
 
-type taskIDState = {
-    ids: []
-}
-
-const taskIDs = {
-    ids: []
-}
-
 const TestingPage = () => {
     const token = localStorage.getItem('access_token');
     /* const [task, getTaskList] = useState<taskIDState>(taskIDs); ERRORS */
