@@ -8,14 +8,21 @@ This file should be focused on annotating routes
 @version 11.11.2020
 """
 # Library imports
-from flask import jsonify, request
+from flask import jsonify, request, redirect
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_raw_jwt
 import datetime
+import requests
+import json
 
 # Module imports
 from app.routes.auth import auth_blueprint
 from app.utilities.validation.validation import validateRequestJSON
 from app import blacklist
+from app.utilities.oauth import get_google_provider_cfg
+from app.utilities.oauth import client
+from app.utilities.oauth import GOOGLE_CLIENT_ID
+from app.utilities.oauth import GOOGLE_CLIENT_SECRET
+from app.utilities.oauth import GOOGLE_DISCOVERY_URL
 
 # Database Models
 from app.models.user_model import User
@@ -23,6 +30,8 @@ from app.models.user_model import User
 
 '''
 Open endpoints
+'''
+
 @auth_blueprint.route('/oauth')
 def oauth_login():
     # Set up a Google provider
@@ -38,9 +47,10 @@ def oauth_login():
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
-    # Redirect to the /oauth/callback route
+    # Returns the url to be redirected to the /oauth/callback route
     # GCP wanted a callback route when the client is ready
-    return redirect(request_uri)
+
+    return request_uri
 
 @auth_blueprint.route("/oauth/callback")
 def oauth_callback():
@@ -89,16 +99,39 @@ def oauth_callback():
 
     # At this point, we will create the user and send them a JWT token
 
-    # Create user
-    user = User.createUser(
-        email = users_email,
-        password = unique_id,
-        firstName = users_name,
-        lastName = family_name,
-        preferredName = "",
-        # TODO : add "picture" column to the user table
-        phoneNumber = ""
-    )
+    # At this point, user is verified
+    # Check whether the user has already been created or not
+    user = User.getByEmail(users_email)
+
+    # If user exists, just refresh their JWT token
+    if user:
+        # Generate JWT token
+        access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
+        return jsonify({"success": True, "access_token": access_token}), 200
+    else:
+        # Create user
+        user = User.createUser(
+            email = users_email,
+            password = unique_id,
+            firstName = users_name,
+            lastName = family_name,
+            preferredName = "",
+            profilePicture = picture,
+            phoneNumber = ""
+        )
+
+        # Check user created
+        if user is not None:
+            # Generate and return JWT token
+            access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
+            response = {
+                'success': True,
+                'access_token': access_token
+            }
+            return jsonify(response), 200
+        else:
+            # Send back error
+            return jsonify({"success": False}), 401
 
     # Check user created
     if user is not None:
@@ -114,8 +147,7 @@ def oauth_callback():
         response = {
             'success': False
         }
-        return jsonify(response), 400
-'''
+        return jsonify(response), 401
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
