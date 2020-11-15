@@ -20,7 +20,7 @@ function App() {
       <Switch>
         <Route exact={true} path="/" render={(props) => <LandingPage />} />
         <Route exact={true} path="/survey" render={(props) => <SurveyPage />} />
-        {/* <Route exact={true} path="/tasks" render={(props) => <TaskBoard />} /> */}
+        <Route exact={true} path="/tasks" render={(props) => <TaskBoard />} />
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/listtask" render={(props) => <ListingPage />} />

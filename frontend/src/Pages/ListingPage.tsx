@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, Badge, Form, FormGroup, Input, Label, CustomInput, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Container, Row, Col, Button, FormGroup, Input, Label, CustomInput, InputGroup, InputGroupAddon } from 'reactstrap';
 import Footer from "../Components/Footer";
 import StateSelector from "../Components/StateSelector";
-import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
-import CategoryDropdown from '../Components/CategoryDropdown';
-import { DateTimePicker } from 'react-rainbow-components';
-import { create } from 'domain';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
+
 {/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */ }
 
 {/* Not sure if this stuff is right */ }
@@ -15,8 +14,8 @@ type taskState = {
     categoryId: number,
     title: string,
     description: string,
-    recommendedPrice: number | undefined,
-    estimatedDurationMinutes: number | undefined,
+    recommendedPrice: number,
+    estimatedDurationMinutes: number,
     locationALongitude: number,
     locationALatitude: number,
     locationBLongitude: number,
@@ -39,18 +38,26 @@ const taskFields = {
     locationBLatitude: 15
 }
 
-const ListingPage = () => {
+const ListingPage = ({ history }: RouteComponentProps) => {
     const token = localStorage.getItem('access_token');
-    const [task, setTask] = useState<taskState>(taskFields);
 
-    const createTask = async () => {
-        await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/createTask', task,
+    const createTask = async (data) => {
+        console.log(data)
+        await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/createTask', {
+            categoryId: data.categoryId,
+            title: data.title,
+            description: data.description,
+            recommendedPrice: Number(data.recommendedPrice),
+            estimatedDurationMinutes: data.estimatedDurationMinutes,
+            locationALongitude: 39.7089,
+            locationALatitude: 39.7089
+        },
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
                 console.log(response.data);
-                // createTask(response.data)
+                history.push('/')
             })
             .catch(error => {
                 console.log(error);
@@ -72,185 +79,149 @@ const ListingPage = () => {
     return (
         <div>
             <Navigation />
-            <Container onSubmit={createTask}>
+            <Container>
                 <h1 id="centered" style={{ fontWeight: 'bold' }}>List a new Task</h1>
                 <br />
 
                 <div className="centered">
-                    <Form>
-                        {/* Row 1 - Name & Category */}
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="taskTitle"><h4>Task Title</h4></Label>
-                                    <Input type="text" name="taskTitle" id="taskTitle" placeholder="Lawn Mowing" value={task.title} onChange={e => setTask({ ...task, title: e.target.value })} required />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="taskCategory"><h4>Task Category</h4></Label>
-                                    {/* <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required> */}
-                                    <Input type="select" name="taskCategory" id="taskCategory" value={1} required>
-                                        {/* TODO: Change hardcoded category id to their respective ids */}
-                                        <option selected disabled>Select Category</option>
-                                        <option>Test</option>
-                                        <CategoryDropdown categoryList={['SAMPLE USAGE', 'Educational', 'Fitness', 'IMPORT OTHERS FROM FULL LIST']} />
-                                    </Input>
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                    <Formik initialValues={{ categoryId: 2, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => createTask(data)} >
+                        <Form>
+                            {/* Row 1 - Name & Category */}
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="title"><h4>Task Title *</h4></Label>
+                                        <Field type="text" name="title" placeholder="Title" as={Input} required />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="categoryId"><h4>Task Category *</h4></Label>
+                                        {/* <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required> */}
+                                        <Field type="select" name="categoryId" value={1} as={Input} required>
+                                            {/* TODO: Change hardcoded category id to their respective ids */}
+                                            <option selected disabled>Select Category</option>
+                                            <option>Test</option>
+                                        </Field>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
-                        {/* Row 2 - Description & Tools */}
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="taskDesc"><h4>Task Description</h4></Label>
-                                    <Input type="textarea" name="taskDesc" id="taskDesc" placeholder="Description" value={task.description} onChange={e => setTask({ ...task, description: e.target.value })} required />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="taskTools"><h4>Required Tools</h4></Label>
-                                    <div>
-                                        <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 1" />
-                                        <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 2" />
-                                        <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 3" />
-                                        <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 4" />
-                                    </div>
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                            {/* Row 2 - Description & Tools */}
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="taskDesc"><h4>Task Description</h4></Label>
+                                        <Field type="textarea" name="description" placeholder="Description" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="taskTools"><h4>Required Tools</h4></Label>
+                                        <div>
+                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 1" />
+                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 2" />
+                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 3" />
+                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 4" />
+                                        </div>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
-                        {/* Pay Rate Old */}
-                        {/* <FormGroup>
-                                <Label for="taskPayRate"><h5>$</h5></Label>
-                                <Label inline for="taskPayRate"><h4 className="centered">Pay Rate</h4>
-                                    <Input type="number" 
-                                        name="taskPayRate" 
-                                        id="taskPayRate" 
-                                        placeholder="60" 
-                                        min="15" 
-                                        value={task.recommendedPrice} 
-                                        onChange={e => setTask({...task, recommendedPrice: Number(e.target.value)})} required/>
-                                </Label>
-                        </FormGroup> */}
+                            {/* Pay Rate New */}
+                            <Row>
+                                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                                    <Label className="centered" for="recommendedPrice"><h4>Pay Rate *</h4></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                        <Field type="number" name="recommendedPrice" placeholder="60" min="15" as={Input} required />
+                                        <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
 
-                        {/* Pay Rate New */}
-                        <Row>
-                            <Col sm="12" md={{ size: 6, offset: 3 }}>
-                                <Label className="centered" for="taskPayRate"><h4>Pay Rate</h4></Label>
-                                <InputGroup>
-                                    <InputGroupAddon addonType="prepend">$</InputGroupAddon>
-                                    <Input type="number"
-                                        name="taskPayRate"
-                                        id="taskPayRate"
-                                        placeholder="60"
-                                        min="15"
-                                        value={task.recommendedPrice}
-                                        onChange={e => setTask({ ...task, recommendedPrice: Number(e.target.value) })} required />
-                                    <InputGroupAddon addonType="append">.00</InputGroupAddon>
-                                </InputGroup>
-                            </Col>
-                        </Row>
+                            <hr />
 
-                        <hr />
+                            {/* Row 3 - Date & Time */}
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="date"><h4>Date</h4></Label>
+                                        <Field type="date" name="date" id="date" placeholder="01-20-2021" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="time"><h4>Time</h4></Label>
+                                        <Field type="time" name="time" id="time" placeholder="12:00PM" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
-                        {/* Row 3 - Date & Time */}
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="date"><h4>Date</h4></Label>
-                                    <Input type="date" name="date" id="date" placeholder="01-20-2021" required />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="time"><h4>Time</h4></Label>
-                                    <Input type="time" name="time" id="time" placeholder="12:00PM" required />
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                            {/* Row 3.5 - DateTimePicker & Extra */}
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="estimatedDurationMinutes"><h4>Duration in Minutes</h4></Label>
+                                        <Input type="text" name="estimatedDurationMinutes" placeholder="60" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
-                        {/* Row 3.5 - DateTimePicker & Extra */}
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="DateTime"><h4>Date & Time</h4></Label>
-                                    <DateTimePicker
-                                        formatStyle="large"
-                                        name="DateTime"
-                                        value={Date()}
-                                        className="rainbow-m-around_small"
-                                        required
-                                    />
-                                </FormGroup>
-                                {/* REMOVED FROM DateTimePicker
-                                    label="DateTimePicker Label"
-                                    value={state.value} 
-                                    onChange={value => setState({ value })} 
-                                */}
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="Duration"><h4>Duration in Minutes</h4></Label>
-                                    <Input type="text"
-                                        name="duration"
-                                        id="duration"
-                                        placeholder="60"
-                                        value={task.estimatedDurationMinutes}
-                                        onChange={e => setTask({ ...task, estimatedDurationMinutes: Number(e.target.value) })} required />
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                            {/* Row 4 - Address 1 & Address 2 */}
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="address"><h4>Address</h4></Label>
+                                        <Field type="text" name="address" id="address" placeholder="123 Main St" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="address2"><h4>Address 2</h4></Label>
+                                        <Field type="text" name="address2" id="address2" placeholder="Apartment, studio, floor, etc." as={Input} />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
-                        {/* Row 4 - Address 1 & Address 2 */}
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="address"><h4>Address</h4></Label>
-                                    <Input type="text" name="address" id="address" placeholder="123 Main St" required />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="address2"><h4>Address 2</h4></Label>
-                                    <Input type="text" name="address2" id="address2" placeholder="Apartment, studio, floor, etc." />
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                            {/* Row 5 - City - State - Zip */}
+                            <Row>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <Label for="city"><h4>City</h4></Label>
+                                        <Field type="text" name="city" id="city" placeholder="Glassboro" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                                <Col md="4">
+                                    <FormGroup>
+                                        <Label for="state"><h4>State</h4></Label>
+                                        <StateSelector />
+                                    </FormGroup>
+                                </Col>
+                                <Col md="2">
+                                    <FormGroup>
+                                        <Label for="zip"><h4>Zip</h4></Label>
+                                        <Field type="text" name="zip" id="zip" placeholder="08028" as={Input} />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <div className='centered'>
 
-                        {/* Row 5 - City - State - Zip */}
-                        <Row>
-                            <Col md="6">
-                                <FormGroup>
-                                    <Label for="city"><h4>City</h4></Label>
-                                    <Input type="text" name="city" id="city" placeholder="Glassboro" required />
-                                </FormGroup>
-                            </Col>
-                            <Col md="4">
-                                <FormGroup>
-                                    <Label for="state"><h4>State</h4></Label>
-                                    <StateSelector />
-                                </FormGroup>
-                            </Col>
-                            <Col md="2">
-                                <FormGroup>
-                                    <Label for="zip"><h4>Zip</h4></Label>
-                                    <Input type="text" name="zip" id="zip" placeholder="08028" />
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                                <p>* are required fields</p> <br />
+                            </div>
+                            <div className="centered">
+                                <Button color="primary" size="lg" type="submit">List Task</Button>
+                            </div>
 
-                        <div className="centered"><Button color="primary" size="lg" type="submit">List Task</Button></div>
-
-                    </Form>
+                        </Form>
+                    </Formik>
                 </div>
 
             </Container>
             <br />
             <Footer />
-        </div>
+        </div >
     );
 }
 
-export default ListingPage;
+export default withRouter(ListingPage);

@@ -13,7 +13,7 @@ interface NavProps {
     redirect: boolean
 }
 
-const Navigation = ({ history }: RouteComponentProps , { redirect }: NavProps) => {
+const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const token = localStorage.getItem('access_token');
@@ -25,7 +25,7 @@ const Navigation = ({ history }: RouteComponentProps , { redirect }: NavProps) =
                 console.log(response.data);
             })
             .catch(error => {
-                if(!redirect){   
+                if (!redirect) {
                     localStorage.removeItem('access_token');
                     history.push('/');
                 }
@@ -53,12 +53,6 @@ const Navigation = ({ history }: RouteComponentProps , { redirect }: NavProps) =
                     <Nav navbar className="mr-auto">
                         <NavItem>
                             <NavLink href="/tasks">Task Board</NavLink>
-                        </NavItem>
-                        {/*<NavItem>
-                            <NavLink href="/profile">Profile</NavLink>
-                        </NavItem>*/}
-                        <NavItem>
-                            <NavLink href="/findtasks">Find a Task</NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink href="/listtask">List a Task</NavLink>

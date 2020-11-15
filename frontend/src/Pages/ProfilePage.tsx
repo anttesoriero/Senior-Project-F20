@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, Badge, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label } from 'reactstrap';
 import Footer from "../Components/Footer";
 import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
-import { transpileModule } from 'typescript';
+import { Formik, Form, Field } from 'formik';
 // <script src="holder.js"/>
 
 type userState = {
@@ -43,6 +43,7 @@ const ProfilePage = () => {
     const token = localStorage.getItem('access_token');
     const [user, setUser] = useState<userState>(userInfo);
     const [editing, setEditing] = useState<boolean>(false);
+    const [changing, setChanging] = useState<boolean>(false);
 
     const getUser = async () => {
         {/* Example of sending authorized request. Get can take multiple parameters, in this case 2.
@@ -58,13 +59,28 @@ const ProfilePage = () => {
             });
     }
 
-    const editProfile = async () => {
-        await axios.put('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/me/editInformation', user,
+    const editProfile = async (data) => {
+        await axios.put('http://ec2-54-165-213-235.compute-1.amazonaws.com:80//me/editInformation', data,
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
                 console.log(response.data);
+                window.location.reload(false);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    const changePass = async (data) => {
+        await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80//auth/changePasswordWithAuth', data,
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(response => {
+                console.log(response.data);
+                window.location.reload(false);
             })
             .catch(error => {
                 console.log(error);
@@ -73,6 +89,10 @@ const ProfilePage = () => {
 
     const wantToEdit = () => {
         setEditing(!editing)
+    }
+
+    const wantToChange = () => {
+        setChanging(!changing)
     }
 
     useEffect(() => {
@@ -104,7 +124,10 @@ const ProfilePage = () => {
                                     }
 
                                     {user ?
-                                        <p>Account Balance: ${String(user.accountBalance)}</p>
+                                        <div>
+                                            <p>Goes by: {user.preferredName}</p>
+                                            <p>Account Balance: ${String(user.accountBalance)}</p>
+                                        </div>
                                         :
                                         <div>
                                             Account Balance: $[__]
@@ -117,6 +140,8 @@ const ProfilePage = () => {
                         {/* Right - Edit Profile button */}
                         <Col xs="2" id="right">
                             <Button onClick={wantToEdit} outline color="primary" size="sm">Edit Profile</Button>{' '}
+                            &nbsp;&nbsp;
+                            <Button onClick={wantToChange} outline color="primary" size="sm">Change Password</Button>{' '}
                         </Col>
                     </Row>
                     <br />
@@ -213,240 +238,99 @@ const ProfilePage = () => {
 
                 : // Editing page stuff below
 
-                <Container onSubmit={editProfile}>
-                    <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
-                    <br />
-
-                    <Row>
-                        {/* Left - Prof Pic, name, and basic info */}
-                        <Col xs="9">
-                            <Media>
-                                <Media left href="#">
-                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
-                                </Media>
-                                <Media body style={{ padding: 10 }}>
-                                    {user ?
-                                        <Media heading>{user.firstName} {user.lastName}</Media>
-                                        :
-                                        <Media heading>[FIRST NAME] [LAST NAME]</Media>
-                                    }
-
-                                    {user ?
-                                        <p>Account Balance: ${String(user.accountBalance)}</p>
-                                        :
-                                        <div>
-                                            Account Balance: $[__]
-                                            {/*{' '}<Button outline color="info" size="sm">Cash Out</Button>{' '}*/}
-                                        </div>}
-                                    <br />
-                                    <br />
-                                </Media>
-                            </Media>
-                        </Col>
-                    </Row>
-
-                    {/*Edit picture*/}
-                    <div>
-                        <Row>
-                            <Col xs="8">
-                                <div className="centered"></div>
-                                <hr />
-                                <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="inputFileAddon">
-                                            Edit Picture
-                                    </span>
-                                    </div>
-                                    <div className="custom-file">
-                                        <input
-                                            type="file"
-                                            className="custom-file-input"
-                                            id="inputFile"
-                                            aria-describedby="inputGroupFileAddon"
-                                        />
-                                        <label color="primary" className="custom-file-label" htmlFor="inputFileAddon">
-                                            Choose new image from file browser
-                                </label>
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
-
-                    <div className="centered">
+                (changing ?
+                    <Formik initialValues={{ oldPass: '', password: '', confirmPass: '' }} onSubmit={data => editProfile(data)}>
                         <Form>
-                            {/* Row 1 - Change Name */}
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="firstName"><h4>First Name</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="firstName"
-                                            id="firstName"
-                                            value={user?.firstName}
-                                            onChange={e => setUser({ ...user, firstName: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="lastName"><h4>Last Name</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="lastName"
-                                            id="lastName"
-                                            value={user?.lastName}
-                                            onChange={e => setUser({ ...user, lastName: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <hr />
+                            <FormGroup>
+                                <Label for='oldPassword'>Old Password</Label>
+                                <Field name='oldPassword' type='password' placeholder='Old Password' />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for='password'>New Password</Label>
+                                <Field name='password' type='password' placeholder='New Password' />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for='passwordConfirm'>New Password</Label>
+                                <Field name='passwordConfirm' type='password' placeholder='New Password Confirm' />
+                            </FormGroup>
+                        </Form>
+                    </Formik>
 
-                            {/*Row 2 - Change Password */}
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="password"><h4>New Password</h4></Label>
-                                        <Input type="text" name="password" id="password" placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="lastName"><h4>Confirm Password</h4></Label>
-                                        <Input type="text" name="confirmPass" id="confirmPass" placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <hr />
+                    :
 
-                            {/* Row 3 - Change Address & Phone Number */}
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="address"><h4>Address</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="address"
-                                            id="address"
-                                            placeholder="123 Main St"
-                                            value={user.address}
-                                            onChange={e => setUser({ ...user, address: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="number"><h4>Phone Number</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="number"
-                                            id="number"
-                                            placeholder="(555)-555-5555"
-                                            value={user.phoneNumber}
-                                            onChange={e => setUser({ ...user, phoneNumber: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-
-                            {/* Row 4 - Change City, State, Zip */}
-                            <Row>
-                                <Col md="6">
-                                    <FormGroup>
-                                        <Label for="city"><h4>City</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="city"
-                                            id="city"
-                                            placeholder="City"
-                                            value={user.city}
-                                            onChange={e => setUser({ ...user, city: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col md="4">
-                                    <FormGroup>
-                                        <Label for="state"><h4>State</h4></Label>
-                                        <StateSelector />
-                                    </FormGroup>
-                                </Col>
-                                <Col md="2">
-                                    <FormGroup>
-                                        <Label for="zip"><h4>Zip</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="zip"
-                                            id="zip"
-                                            placeholder="Zip Code"
-                                            value={user.zipCode}
-                                            onChange={e => setUser({ ...user, zipCode: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-
-                            {/* Row 5 - Change email and website */}
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="email"><h4>Email Address</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="email"
-                                            id="email"
-                                            // placeholder="joesmith@email.com"
-                                            value={user?.email}
-                                            onChange={e => setUser({ ...user, email: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="website"><h4>User Website</h4></Label>
-                                        <Input
-                                            type="text"
-                                            name="website"
-                                            id="website"
-                                            placeholder="user@website.com"
-                                            value={user.website}
-                                            onChange={e => setUser({ ...user, website: e.target.value })}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-
-                            {/*Manage funds buttons*/}
-                            <Row>
-                                <Col xs="8">
-                                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
+                    <Container onSubmit={editProfile}>
+                        <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
+                        <br />
+                        <div className="centered">
+                            <Formik initialValues={{ email: user.email, firstName: user.firstName, lastName: user.lastName, preferredName: user.preferredName }} onSubmit={data => editProfile(data)}>
+                                <Form>
+                                    {/* Row 1 - Change Name */}
+                                    <Row>
+                                        <Col>
+                                            <FormGroup>
+                                                <Label for="firstName"><h4>First Name</h4></Label>
+                                                <Field name='firstName' type='text' placeholder={user.firstName} as={Input} />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col>
+                                            <FormGroup>
+                                                <Label for="lastName"><h4>Last Name</h4></Label>
+                                                <Field name='lastName' type='text' placeholder={user.lastName} as={Input} />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
                                     <hr />
-                                    <Button id="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
+
+                                    {/*Change email and preferred name */}
+                                    <Row>
+                                        <Col>
+                                            <FormGroup>
+                                                <Label for="email"><h4>Email Address</h4></Label>
+                                                <Field name='email' type='email' placeholder={user.email} as={Input} />
+
+                                            </FormGroup>
+                                        </Col>
+                                        <Col>
+                                            <FormGroup>
+                                                <Label for="preferredName"><h3>Preferred Name</h3></Label>
+                                                <Field name='preferredName' type='text' placeholder={user.preferredName} as={Input} />
+
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+
+                                    {/*Manage funds buttons*/}
+                                    <Row>
+                                        <Col xs="8">
+                                            <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
+                                            <hr />
+                                            <Button id="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
+                                            <br />
+                                            <Button id="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
+                                        </Col>
+                                    </Row>
+
+                                    {/*Account deletion*/}
+                                    <Row>
+                                        <Col xs="8">
+                                            <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
+                                            <hr />
+                                            <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
+                                        </Col>
+                                    </Row>
+
                                     <br />
-                                    <Button id="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
-                                </Col>
-                            </Row>
-
-                            {/*Account deletion*/}
-                            <Row>
-                                <Col xs="8">
-                                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
-                                    <hr />
-                                    <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
-                                </Col>
-                            </Row>
-
-                            <br />
-                            <br />
-                            <Row className='centered'>
-                                <div className="centered"><Button color="primary" size="md" type="submit" onSubmit={editProfile}>Save Changes</Button></div>
+                                    <br />
+                                    <Row className='centered'>
+                                        <div className="centered"><Button color="primary" size="md" type="submit" onSubmit={editProfile}>Save Changes</Button></div>
                                 &nbsp;&nbsp;
                                 <div className="centered"><Button color="secondary" size="md" type="submit" onClick={wantToEdit}>Cancel</Button></div>
-                            </Row>
-                        </Form>
-                    </div>
-                </Container>
+                                    </Row>
+                                </Form>
+                            </Formik>
+                        </div>
+                    </Container>
+                )
             }
             <br />
             <Footer />

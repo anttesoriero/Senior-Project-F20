@@ -5,11 +5,18 @@ import axios from 'axios';
 import DataTable from 'react-data-table-component';
 
 type task = {
-    email: string,
-    gender: string,
-    name: string,
-    phoneNumber: string,
-    preferredName: string
+    accepted: boolean
+    categoryId: number
+    description: string
+    estimatedDurationMinutes: number
+    locationALatitude: string
+    locationALongitude: string
+    locationBLatitude: string
+    locationBLongitude: string
+    posterTaskId: number
+    recommendedPrice: string
+    taskId: number
+    title: string
 }
 
 const AdminTasks = () => {
@@ -23,8 +30,8 @@ const AdminTasks = () => {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {
-                    console.log(response.data["Task ID"]);
-                    //setUsers(response.data.users);
+                    console.log(response.data);
+                    setTasks(response.data.tasks);
                     setLoading(false);
                 })
                 .catch(function (error) {
@@ -48,49 +55,6 @@ const AdminTasks = () => {
         return null
     };
 
-    const userCols = [
-        {
-            name: 'Email',
-            selector: 'email',
-            sortable: true,
-            grow: 2.5
-        },
-        {
-            name: 'Gender',
-            selector: 'gender',
-            sortable: true
-        },
-        {
-            name: 'Name',
-            selector: 'name',
-            sortable: true
-        },
-        {
-            name: 'Phone Number',
-            selector: 'phoneNumber',
-            sortable: true
-        },
-        {
-            name: 'Preffered Name',
-            selector: 'prefferedName',
-            sortable: true
-        },
-        {
-            name: 'Edit',
-            cell: () => <Button size='sm' color='primary'>Edit</Button>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
-        {
-            name: 'Delete',
-            cell: () => <Button size='sm' color='danger'>Delete</Button>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
-    ];
-
     return (
         <div>
             <Row>
@@ -99,7 +63,76 @@ const AdminTasks = () => {
                 </Col>
                 <Col>
                     <h1>Tasks</h1><hr />
-                    <DataTable title='Tasks' columns={userCols} data={tasks} striped={true} highlightOnHover={true} progressPending={loading} pagination />
+                    <DataTable title='Tasks'
+                        data={tasks}
+                        columns={[
+                            {
+                                name: 'Task ID',
+                                selector: 'taskId',
+                                sortable: true,
+                                grow: .5
+                            },
+                            {
+                                name: 'Title',
+                                selector: 'title',
+                                sortable: true
+                            },
+                            {
+                                name: 'Accepted',
+                                selector: t => t.accepted.toString(),
+                                sortable: true
+                            },
+                            {
+                                name: 'Description',
+                                selector: 'description',
+                                sortable: true,
+                                grow: 2
+                            },
+                            {
+                                name: 'Category ID',
+                                selector: 'categoryId',
+                                sortable: true
+                            },
+                            {
+                                name: 'Duration',
+                                selector: 'estimatedDurationMinutes',
+                                sortable: true
+                            },
+                            {
+                                name: 'Offerer ID',
+                                selector: 'posterTaskId',
+                                sortable: true
+                            },
+                            {
+                                name: 'Price',
+                                selector: 'recommendedPrice',
+                                sortable: true
+                            },
+                            {
+                                name: 'Latitude',
+                                selector: 'locationALatitude',
+                                sortable: true
+                            },
+                            {
+                                name: 'Longitude',
+                                selector: 'locationALongitude',
+                                sortable: true
+                            },
+                            {
+                                name: 'Edit',
+                                cell: () => <Button size='sm' color='primary'>Edit</Button>,
+                                ignoreRowClick: true,
+                                allowOverflow: true,
+                                button: true,
+                            },
+                            {
+                                name: 'Delete',
+                                cell: () => <Button size='sm' color='danger'>Delete</Button>,
+                                ignoreRowClick: true,
+                                allowOverflow: true,
+                                button: true,
+                            },
+                        ]} striped={true} highlightOnHover={true} progressPending={loading} pagination />
                 </Col>
             </Row>
         </div>

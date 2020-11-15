@@ -5,6 +5,7 @@ import axios from 'axios';
 import DataTable from 'react-data-table-component';
 
 type user = {
+    id: number,
     email: string,
     gender: string,
     name: string,
@@ -48,17 +49,33 @@ const AdminUsers = () => {
         return null
     };
 
+    const deleteUser = async id => {
+        await axios.delete('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/me/deleteUser')
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     const userCols = [
+        {
+            name: 'Id',
+            selector: 'id',
+            sortable: true
+        },
         {
             name: 'Email',
             selector: 'email',
             sortable: true,
-            grow: 2.5
+            grow: 2
         },
         {
             name: 'Gender',
             selector: 'gender',
-            sortable: true
+            sortable: true,
+            grow: .5
         },
         {
             name: 'Name',
@@ -67,12 +84,12 @@ const AdminUsers = () => {
         },
         {
             name: 'Phone Number',
-            selector: 'phoneNumber',
+            selector: u => formatPhoneNumber(u.phoneNumber),
             sortable: true
         },
         {
-            name: 'Preffered Name',
-            selector: 'prefferedName',
+            name: 'Preferred Name',
+            selector: 'preferredName',
             sortable: true
         },
         {
@@ -84,7 +101,7 @@ const AdminUsers = () => {
         },
         {
             name: 'Delete',
-            cell: () => <Button size='sm' color='danger'>Delete</Button>,
+            cell: () => <Button size='sm' color='danger' onClick={deleteUser}>Delete</Button>,
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,
