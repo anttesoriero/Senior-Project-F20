@@ -103,8 +103,8 @@ const TaskBoard = () => {
                                 categoryId={task.categoryId}
                                 amount={Number(task.recommendedPrice)}
                                 duration={task.duration}
-                                latitude={Number(task.locationALatitude)}
-                                longitute={Number(task.locationALongitude)} />
+                                latitude={39.7089}
+                                longitute={-75.1183} />
                         ))}
 
                     </MapContainer>

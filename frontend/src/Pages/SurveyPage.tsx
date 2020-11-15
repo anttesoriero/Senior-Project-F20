@@ -21,6 +21,7 @@ const SurveyPage = () => {
   const token = localStorage.getItem('access_token');
   const [survey, setSurvey] = useState<surveyState>();
   const [serror, setSerror] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const getSurvey = async () => {
@@ -28,7 +29,7 @@ const SurveyPage = () => {
       { headers: { Authorization: `Bearer ${token}` } })
       .then(async response => {
         console.log(response.data.recommendedSurvey);
-        setSurvey(response.data.recommendedSurvey)
+        setSurvey(response.data.recommendedSurvey);
       })
       .catch(error => {
         console.log(error);
@@ -40,7 +41,7 @@ const SurveyPage = () => {
     setSubmitting(true);
     await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/survey/respond', {
       surveyId: survey?.surveyId,
-      answer: response.response
+      response: response.response
     },
       {
         headers: { Authorization: `Bearer ${token}` }
@@ -48,6 +49,7 @@ const SurveyPage = () => {
       .then(response => {
         setSubmitting(false);
         console.log(response.data);
+        setSuccess(true);
       })
       .catch(error => {
         console.log(error);
@@ -88,35 +90,38 @@ const SurveyPage = () => {
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={'b'} as={Input} />{survey?.answerB}
+                  <Field name='response' type='radio' value={'B'} as={Input} />{survey?.answerB}
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={'c'} as={Input} />{survey?.answerC}
+                  <Field name='response' type='radio' value={'C'} as={Input} />{survey?.answerC}
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Field name='response' type='radio' value={'d'} as={Input} />{survey?.answerD}
+                  <Field name='response' type='radio' value={'D'} as={Input} />{survey?.answerD}
                 </Label>
               </FormGroup>
               {survey?.answerE ?
                 <FormGroup check>
                   <Label check>
-                    <Field name='response' type='radio' value={'e'} as={Input} />{survey?.answerE}
+                    <Field name='response' type='radio' value={'E'} as={Input} />{survey?.answerE}
                   </Label>
                 </FormGroup> : <div></div>
               }
               {survey?.answerF ?
                 <FormGroup check>
                   <Label check>
-                    <Field name='response' type='radio' value={'f'} as={Input} />{survey?.answerF}
+                    <Field name='response' type='radio' value={'F'} as={Input} />{survey?.answerF}
                   </Label>
                 </FormGroup> : <div></div>
               }
               <div className='centered'>
                 {serror ? <p className='error'>There was an error submitting the survey!</p> : <div></div>}
+              </div>
+              <div className='centered'>
+                {success ? <p style={{ fontWeight: 'bolder' }}>Thank you for completing the survey!</p> : <div></div>}
               </div>
               <FormGroup className='centered'>
                 {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Submitting...</Button> : <Button type='submit' color="primary">Submit</Button>}&nbsp;

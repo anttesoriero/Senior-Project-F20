@@ -7,19 +7,19 @@ import { Container } from 'reactstrap';
 
 const MapsCircle = (prop: {
     title: string,
-    categoryId: number, 
+    categoryId: number,
     amount: number,
     duration: number,
     latitude: number,
     longitute: number
 
 }) => {
-    
+
     return (
         <Circle
             center={[prop.latitude, prop.longitute]}
-            pathOptions={{ color:'blue', fillColor: 'blue' }}
-            radius={100}>
+            pathOptions={{ color: 'blue', fillColor: 'blue' }}
+            radius={500}>
             <Popup>
                 {/* Stretch Goal - <img src={PlaceholderImage} width="100%vw"/> */}
                 <h1>{prop.title}</h1>
@@ -28,6 +28,6 @@ const MapsCircle = (prop: {
             </Popup>
         </Circle>
     );
-  }
-  
-  export default MapsCircle
+}
+
+export default MapsCircle

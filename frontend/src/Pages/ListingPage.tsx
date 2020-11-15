@@ -40,6 +40,7 @@ const taskFields = {
 
 const ListingPage = ({ history }: RouteComponentProps) => {
     const token = localStorage.getItem('access_token');
+    const [serror, setSerror] = useState(false);
 
     const createTask = async (data) => {
         console.log(data)
@@ -47,10 +48,10 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             categoryId: data.categoryId,
             title: data.title,
             description: data.description,
-            recommendedPrice: Number(data.recommendedPrice),
+            recommendedPrice: data.recommendedPrice,
             estimatedDurationMinutes: data.estimatedDurationMinutes,
-            locationALongitude: 39.7089,
-            locationALatitude: 39.7089
+            locationALatitude: 39.7089,
+            locationALongitude: -75.1183
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
@@ -61,6 +62,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             })
             .catch(error => {
                 console.log(error);
+                setSerror(true);
             });
     }
 
@@ -84,7 +86,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                 <br />
 
                 <div className="centered">
-                    <Formik initialValues={{ categoryId: 2, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => createTask(data)} >
+                    <Formik initialValues={{ categoryId: 1, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => createTask(data)} >
                         <Form>
                             {/* Row 1 - Name & Category */}
                             <Row>
@@ -208,6 +210,9 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                             <div className='centered'>
 
                                 <p>* are required fields</p> <br />
+                            </div>
+                            <div className='centered'>
+                                {serror ? <p className='error'>There was an error submitting the task!</p> : <div></div>}
                             </div>
                             <div className="centered">
                                 <Button color="primary" size="lg" type="submit">List Task</Button>
