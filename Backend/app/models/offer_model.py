@@ -48,7 +48,7 @@ class Offer(db.Model):
             "offerId": self.offerId,
             "taskId": self.taskId,
             "userIdFrom": self.userIdFrom,
-            "payment": self.payment,
+            "payment": float(self.payment),
             "startDate": self.startDate,
             "jobDurationMinutes": self.jobDurationMinutes,
             "note": self.note,

@@ -244,8 +244,8 @@ class User(db.Model):
         :param userId user_id to get user
         :return list of task ids for a user
         '''
-        tasks = Task.query.filter_by(userId == Task.posterUserId).all()
-        return tasks
+        tasks = Task.query.filter_by(posterUserId = userId).all()
+        return [task.getPublicInfo() for task in tasks]
 
     @classmethod
     def getAll(cls):

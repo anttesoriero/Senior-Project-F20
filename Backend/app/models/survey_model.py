@@ -114,3 +114,13 @@ class Survey(db.Model):
         '''
 
         return [survey.getPublicInfo() for survey in Survey.query.all()]
+
+    @classmethod
+    def getSurveyIds(cls):
+        '''
+        Gets the Survey ids from the Survey table
+
+        :return list of survey ids
+        '''
+
+        return [survey.surveyId for survey in Survey.query.all()]

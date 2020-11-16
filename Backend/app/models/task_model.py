@@ -42,14 +42,15 @@ class Task(db.Model):
     locationBLatitude = db.Column(db.Numeric(8,5), nullable=True)
 
     # Set-up Database Relationships
-    acceptedOfferId = db.relationship('Offer', backref="offer", uselist=False)
+    acceptedOfferId = db.relationship('Offer', backref="offer", uselist=True)
 
 
     '''
     Read
     '''
     def isAccepted(self):
-        return self.acceptedOfferId is not None
+        return True in [offer.accepted for offer in self.acceptedOfferId]
+
 
     def getBriefPublicInfo(self):
         '''
@@ -143,9 +144,6 @@ class Task(db.Model):
     '''
     Update
     '''
-    def acceptOffer(self, offer):
-        self.acceptedOfferId = offer
-        db.session.commit()
 
     def edit(self, paramDict):
         k = paramDict.keys()
@@ -233,8 +231,8 @@ class Task(db.Model):
                     filters.append(cls.locationALatitude <= queryP["location"]["within"][1])
                     filters.append(cls.locationALongitude >= queryP["location"]["within"][2])
                     filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
-        print(queryP["location"]["within"])
-        tasks = [task.taskId for task in Task.query.filter(*filters).limit(max)]
+
+        tasks = Task.query.filter(*filters).limit(max)
         return tasks
 
     @classmethod
@@ -297,7 +295,7 @@ class Task(db.Model):
     Create
     '''
     @classmethod
-    def createTask(cls, posterUserId, categoryId, title,
+    def createTask(cls, user, categoryId, title,
                    description=None, recommendedPrice=None, estimatedDurationMinutes=None,
                    locationALongitude=None, locationALatitude=None, locationBLongitude=None,
                     locationBLatitude=None):
@@ -318,7 +316,7 @@ class Task(db.Model):
         '''
         # Create Task
         task = Task(
-            posterUserId=posterUserId,
+            posterUserId=user.userId,
             categoryId=categoryId,
             title=title,
             description=description,
@@ -329,6 +327,11 @@ class Task(db.Model):
             locationBLongitude=locationBLongitude,
             locationBLatitude=locationBLatitude
         )
+
+
+        if not locationALongitude is None and not locationALatitude is None:
+            user.extendedModel.setLocationInterestedInALongitude(locationALongitude)
+            user.extendedModel.setLocationInterestedInALatitude(locationALatitude)
 
         # Save User to database
         db.session.add(task)

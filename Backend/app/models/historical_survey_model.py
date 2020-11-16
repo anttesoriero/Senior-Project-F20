@@ -47,7 +47,7 @@ class HistoricalSurvey(db.Model):
         :return: List of survey's responded to
         '''
         # Historical Survey records for a User
-        historicalSurveys = HistoricalSurvey.query.filter(userId=userId)
+        historicalSurveys = HistoricalSurvey.query.filter_by(userId=userId)
 
         # List of Survey Id's a user has responded to, (can and likely will contain duplicates)
         return [historicalSurvey.surveyId for historicalSurvey in historicalSurveys]
