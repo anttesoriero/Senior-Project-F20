@@ -19,7 +19,7 @@ const MapsCircle = (prop: {
         <Circle
             center={[prop.latitude, prop.longitute]}
             pathOptions={{ color: 'blue', fillColor: 'blue' }}
-            radius={500}>
+            radius={150}>
             <Popup>
                 {/* Stretch Goal - <img src={PlaceholderImage} width="100%vw"/> */}
                 <h1>{prop.title}</h1>
