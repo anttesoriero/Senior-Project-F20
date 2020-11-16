@@ -14,7 +14,7 @@ class SurveyRecommender:
         :return: recommended survey Id
         '''
         # Get both lists to compare
-        survey_ids = Survey.getSurveyIDs()
+        survey_ids = Survey.getSurveyIds()
         completed_survey_ids = HistoricalSurvey.getHistoricalSurveyIdsForUserId(user.userId)
         availableSurveyIds = {}
 

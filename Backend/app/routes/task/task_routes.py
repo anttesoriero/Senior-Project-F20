@@ -223,7 +223,7 @@ def createTask():
 
     # Create task
     task = Task.createTask(
-        posterUserId=user.userId,
+        user=user,
         categoryId=inputJSON["categoryId"],
         title=inputJSON["title"],
         description=inputJSON["description"],
@@ -258,7 +258,7 @@ def searchTask():
 
     # Build output
     output = {
-        "taskIds": foundTasks
+        "tasks": [task.getPublicInfo() for task in foundTasks]
     }
 
     return jsonify(output), 200

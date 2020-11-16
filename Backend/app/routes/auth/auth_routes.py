@@ -27,11 +27,6 @@ from app.utilities.oauth import GOOGLE_DISCOVERY_URL
 # Database Models
 from app.models.user_model import User
 
-
-'''
-Open endpoints
-'''
-
 @auth_blueprint.route('/oauth')
 def oauth_login():
     # Set up a Google provider
@@ -110,13 +105,13 @@ def oauth_callback():
     else:
         # Create user
         user = User.createUser(
-            email = users_email,
-            password = unique_id,
-            firstName = users_name,
-            lastName = family_name,
-            preferredName = "",
-            profilePicture = picture,
-            phoneNumber = ""
+            email=users_email,
+            password=unique_id,
+            firstName=users_name,
+            lastName=family_name,
+            preferredName="",
+            profilePicture=picture,
+            phoneNumber=""
         )
 
         # Check user created
@@ -131,6 +126,7 @@ def oauth_callback():
         else:
             # Send back error
             return jsonify({"success": False}), 400
+
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():

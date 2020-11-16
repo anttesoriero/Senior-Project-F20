@@ -84,7 +84,7 @@ def getOffers():
     # Get offers
     offers = Offer.getOffersForTask(taskId, includeArchived)
 
-    return jsonify({"offers": offers}), 200
+    return jsonify({"offers": [offer.getInfo() for offer in offers]}), 200
 
 '''
 POSTs
@@ -139,7 +139,7 @@ def createOffer():
 
     # Build output
     output = {
-        "offer": offer
+        "offer": offer.getInfo()
     }
 
     return jsonify(output), 200
@@ -192,7 +192,6 @@ def acceptOffer():
         return jsonify({"success": False, "message": "Not the posting user"}), 401
 
     # TODO, atomize db commits better, right now there are two seperate commits that COULD cause issues
-    task.acceptOffer(offer)
     offer.accept(inputJSON["responseMessage"])
 
     addDeal(task.taskId, offer.userIdFrom, task.posterUserId, offer.payment)

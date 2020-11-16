@@ -81,9 +81,10 @@ def recommendSurvey():
     user = User.getByUserId(current_user_id)
 
     # Recommend a survey for a User
-    recommended_survey = survey_recommender.recommendSurvey(user)
+    recommended_survey = survey_recommender.recommend(user)
 
-    return jsonify({"recommendedSurvey": recommended_survey}), 200
+    survey = Survey.getBySurveyId(recommended_survey)
+    return jsonify({"recommendedSurvey": survey.getPublicInfo()}), 200
 
 '''
 POSTs

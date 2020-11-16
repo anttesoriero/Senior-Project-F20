@@ -37,13 +37,8 @@ def getProfile():
     user = User.getByUserId(current_user_id)
 
     # Construct User information
-    responseInformation = {
-        "email": user.email,
-        "firstName": user.firstName,
-        "lastName": user.lastName,
-        "preferredName": user.preferredName,
-        "accountBalance": float(user.getAccountBalance())
-    }
+    responseInformation = user.getPublicInfo()
+    responseInformation["accountBalance"] = float(user.getAccountBalance())
 
     return jsonify(responseInformation), 200
 
@@ -87,7 +82,7 @@ def editInformation():
     '''
     # Validate input
     success, code, inputJSON = validateRequestJSON(request, [], 
-                                ["email", "firstName", "lastName", "preferredName", "phoneNumber"])
+                                ["email", "firstName", "lastName", "preferredName", "phoneNumber", "profilePicture"])
     if not success:
         return jsonify({}), code
 
@@ -107,6 +102,8 @@ def editInformation():
         user.setPreferredName(inputJSON["preferredName"])
     if inputJSON["phoneNumber"] != None:
         user.setPhoneNumber(inputJSON["phoneNumber"])
+    if inputJSON["profilePicture"] != None:
+        user.setProfilePicture(inputJSON["profilePicture"])
 
     return jsonify(message="New user information successfully set"), 200
 

@@ -21,17 +21,18 @@ class TaskRecommender:
 
         eum = user.extendedModel
 
-        latA = float(eum.locationInterestedInALongitude)
-        lonA = float(eum.locationInterestedInALatitude)
-        if latA is not None and lonA is not None:
-            filters["location"]["within"] = [
-                    lonA-1,
-                    lonA+1,
-                    latA-1,
-                    latA+1
-                ]
+        if not eum.locationInterestedInALatitude is None and not eum.locationInterestedInALongitude is None:
+            latA = float(eum.locationInterestedInALongitude)
+            lonA = float(eum.locationInterestedInALatitude)
+            if latA is not None and lonA is not None:
+                filters["location"]["within"] = [
+                        lonA-1,
+                        lonA+1,
+                        latA-1,
+                        latA+1
+                    ]
 
-        tasks = Task.search(filters, 10)
+        tasks = [task.getPublicInfo() for task in Task.search(filters, 10)]
         return {"query": filters, "tasks": tasks}
 
 task_recommender = TaskRecommender()
