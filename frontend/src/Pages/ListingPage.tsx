@@ -109,7 +109,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 </Col>
                             </Row>
 
-                            {/* Row 2 - Description & Tools */}
+                            {/* Row 2 - Description & Pay Rate */}
                             <Row>
                                 <Col>
                                     <FormGroup>
@@ -118,6 +118,19 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                     </FormGroup>
                                 </Col>
                                 <Col>
+                                    <Label className="centered" for="recommendedPrice"><h4>Pay Rate *</h4></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                        <Field type="number" name="recommendedPrice" placeholder="60" min="15" as={Input} required />
+                                        <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+
+                            {/* Required Tools */}
+                            {/* 
+                            <Row>
+                                <Col sm="12" md={{ size: 6, offset: 3 }}>
                                     <FormGroup>
                                         <Label for="taskTools"><h4>Required Tools</h4></Label>
                                         <div>
@@ -129,18 +142,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                     </FormGroup>
                                 </Col>
                             </Row>
-
-                            {/* Pay Rate New */}
-                            <Row>
-                                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                                    <Label className="centered" for="recommendedPrice"><h4>Pay Rate *</h4></Label>
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">$</InputGroupAddon>
-                                        <Field type="number" name="recommendedPrice" placeholder="60" min="15" as={Input} required />
-                                        <InputGroupAddon addonType="append">.00</InputGroupAddon>
-                                    </InputGroup>
-                                </Col>
-                            </Row>
+                             */}
 
                             <hr />
 
@@ -148,14 +150,14 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="date"><h4>Date</h4></Label>
-                                        <Field type="date" name="date" id="date" placeholder="01-20-2021" as={Input} />
+                                        <Label for="date"><h4>Date *</h4></Label>
+                                        <Field type="date" name="date" id="date" placeholder="01-20-2021" as={Input} required/>
                                     </FormGroup>
                                 </Col>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="time"><h4>Time</h4></Label>
-                                        <Field type="time" name="time" id="time" placeholder="12:00PM" as={Input} />
+                                        <Label for="time"><h4>Time *</h4></Label>
+                                        <Field type="time" name="time" id="time" placeholder="12:00PM" as={Input} required/>
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -164,8 +166,8 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="estimatedDurationMinutes"><h4>Duration in Minutes</h4></Label>
-                                        <Input type="text" name="estimatedDurationMinutes" placeholder="60" as={Input} />
+                                        <Label for="estimatedDurationMinutes"><h4>Duration in Minutes *</h4></Label>
+                                        <Input type="text" name="estimatedDurationMinutes" placeholder="60" as={Input} required/>
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -174,8 +176,8 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="address"><h4>Address</h4></Label>
-                                        <Field type="text" name="address" id="address" placeholder="123 Main St" as={Input} />
+                                        <Label for="address"><h4>Address *</h4></Label>
+                                        <Field type="text" name="address" id="address" placeholder="123 Main St" as={Input} required/>
                                     </FormGroup>
                                 </Col>
                                 <Col>
@@ -190,20 +192,20 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                             <Row>
                                 <Col md="6">
                                     <FormGroup>
-                                        <Label for="city"><h4>City</h4></Label>
-                                        <Field type="text" name="city" id="city" placeholder="Glassboro" as={Input} />
+                                        <Label for="city"><h4>City *</h4></Label>
+                                        <Field type="text" name="city" id="city" placeholder="Glassboro" as={Input} required/>
                                     </FormGroup>
                                 </Col>
                                 <Col md="4">
                                     <FormGroup>
-                                        <Label for="state"><h4>State</h4></Label>
+                                        <Label for="state"><h4>State *</h4></Label>
                                         <StateSelector />
                                     </FormGroup>
                                 </Col>
                                 <Col md="2">
                                     <FormGroup>
-                                        <Label for="zip"><h4>Zip</h4></Label>
-                                        <Field type="text" name="zip" id="zip" placeholder="08028" as={Input} />
+                                        <Label for="zip"><h4>Zip *</h4></Label>
+                                        <Field type="text" name="zip" id="zip" placeholder="08028" as={Input} required/>
                                     </FormGroup>
                                 </Col>
                             </Row>
