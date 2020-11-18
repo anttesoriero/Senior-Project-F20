@@ -10,7 +10,7 @@ const CardCategories = () => {
                     <Card>
                         <CardImg top style={{ height: '250px', objectFit: 'cover' }} src="https://www.fox13memphis.com/resizer/JCCEXFjPNprRMRjdcLoc037KrUE=/1200x675/cloudfront-us-east-1.images.arcpublishing.com/cmg/HKBIHNHFRBF4HMRRGJT6KZCXAQ.jpg" alt="Card image cap" />
                         <CardBody>
-                            <CardTitle>Geting Groceries</CardTitle>
+                            <CardTitle>Getting Groceries</CardTitle>
                         </CardBody>
                     </Card>
                 </Col>
