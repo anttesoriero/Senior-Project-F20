@@ -7,6 +7,9 @@ import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { TileLayer, MapContainer, Circle, Popup, Marker, Tooltip } from 'react-leaflet';
+import { LatLngTuple } from 'leaflet';
+import MapsCircle from '../Components/MapsCircle';
 
 type userState = {
     email: string,
@@ -140,7 +143,8 @@ const ProfilePage = () => {
                                     <Media body style={{ padding: 10 }}>
                                         {user ?
                                             <div>
-                                                <p>Goes by: {user.preferredName}</p>
+                                                <h5>Goes by: {user.preferredName}</h5>
+                                                <p>Rating: </p>
                                                 <p>Account Balance: ${String(user.accountBalance)}</p>
                                             </div>
                                             :
@@ -226,7 +230,7 @@ const ProfilePage = () => {
                                             {user.website ?
                                                 <Col xs="10"><p>{user.website}</p></Col>
                                                 :
-                                                <Col xs="10"><p>user@website.com</p></Col>
+                                                <Col xs="10"><p>website.com</p></Col>
                                             }
                                         </Row>
                                     </Col>
@@ -240,10 +244,17 @@ const ProfilePage = () => {
                                                     :
                                                     <p>123 Main St, City, ST 12345</p>
                                                 }
-                                                <Media left>
-                                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="200" width="200" />
-                                                    <p>Google Map Location</p>
-                                                </Media>
+
+                                                <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15.5} scrollWheelZoom={false} style={{height:"200px"}} >
+                                                    <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+                                                    {/* Map Circle Markers - MapsCircle */}
+                                                    <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
+                                                        <Tooltip sticky>Radius Users See</Tooltip>
+                                                    </Circle>
+                                                    <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
+                                                </MapContainer>
                                             </div> : <div></div>}
                                     </Col>
                                 </Row>
