@@ -127,23 +127,6 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 </Col>
                             </Row>
 
-                            {/* Required Tools */}
-                            {/* 
-                            <Row>
-                                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                                    <FormGroup>
-                                        <Label for="taskTools"><h4>Required Tools</h4></Label>
-                                        <div>
-                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 1" />
-                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 2" />
-                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 3" />
-                                            <CustomInput type="checkbox" id="exampleCustomCheckbox" label="Tool 4" />
-                                        </div>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                             */}
-
                             <hr />
 
                             {/* Row 3 - Date & Time */}
