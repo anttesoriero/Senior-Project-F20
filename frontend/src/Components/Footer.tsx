@@ -8,33 +8,31 @@ const Footer = () => {
                 <hr />
                 <br />
                 {/* Upper - Menu */}
-                {/* Temp remove - <div className='centeredFoot'> - */}
-                    <Row>
-                        {/* Left - Menu */}
-                        <Col xs="6" sm="4">
-                            <h6>Menu</h6>
-                            <p><a href="/">Home</a></p>
-                            <p><a href="/taskboard">Task Board</a></p>
-                            <p><a href="/profile">Profile</a></p>
-                        </Col>
+                <Row>
+                    {/* Left - Menu */}
+                    <Col xs="6" sm="4">
+                        <h6>Menu</h6>
+                        <p><a href="/">Home</a></p>
+                        <p><a href="/tasks">Task Board</a></p>
+                        <p><a href="/profile">Profile</a></p>
+                    </Col>
 
-                        {/* Middle - About */}
-                        <Col xs="6" sm="4">
-                            <h6>About</h6>
-                            <p><a href="/about">About Us</a></p>
-                            <p><a href="/privacy">Privacy</a></p>
-                            <p><a href="https://github.com/anttesoriero/Senior-Project-F20" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-                        </Col>
-                        <br />
-                        {/* Right - Help */}
-                        <Col sm="4">
-                            <h6>HELP</h6>
-                            <p><a href="/contact">Contact</a></p>
-                            <p><a href="/getstarted">Get Started</a></p>
-                            <p><a href="/terms">Terms</a></p>
-                        </Col>
-                    </Row>
-                {/* Temp remove - </div> */}
+                    {/* Middle - About */}
+                    <Col xs="6" sm="4">
+                        <h6>About</h6>
+                        <p><a href="/about">About Us</a></p>
+                        <p><a href="/privacy">Privacy</a></p>
+                        <p><a href="https://github.com/anttesoriero/Senior-Project-F20" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+                    </Col>
+                    
+                    {/* Right - Help */}
+                    <Col sm="4">
+                        <h6>HELP</h6>
+                        <p><a href="/contact">Contact</a></p>
+                        <p><a href="/getstarted">Get Started</a></p>
+                        <p><a href="/terms">Terms</a></p>
+                    </Col>
+                </Row>
 
                 <hr />
 
