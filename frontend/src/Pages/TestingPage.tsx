@@ -3,7 +3,6 @@ import Navigation from '../Components/Navigation';
 import {Button, Card, CardBody, Col, Collapse, Container, Row} from 'reactstrap';
 import Footer from "../Components/Footer";
 import axios from 'axios';
-import Maps from "../Components/Maps";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import TaskCard from '../Components/TaskCard';
 import RefineSearch from '../Components/RefineSearch';

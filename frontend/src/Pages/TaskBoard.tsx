@@ -9,8 +9,6 @@ import PaginationRow from '../Components/PaginationRow';
 import { TileLayer, MapContainer } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import MapsCircle from '../Components/MapsCircle';
-// import {Map, L} from 'leaflet';
-// <script src="holder.js"/>
 
 type task = {
     categoryId: number,

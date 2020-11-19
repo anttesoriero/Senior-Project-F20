@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
 import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label } from 'reactstrap';
 import Footer from "../Components/Footer";
-import StateSelector from "../Components/StateSelector";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { TileLayer, MapContainer, Circle, Popup, Marker, Tooltip } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
-import MapsCircle from '../Components/MapsCircle';
 
 type userState = {
     email: string,

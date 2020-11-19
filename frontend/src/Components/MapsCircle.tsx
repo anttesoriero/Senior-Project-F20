@@ -1,6 +1,5 @@
 import React from 'react'
-import axios from 'axios';
-import { TileLayer, Marker, Popup, MapContainer, CircleMarker, Tooltip, Circle } from 'react-leaflet';
+import { Popup,   Circle } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import { Container } from 'reactstrap';

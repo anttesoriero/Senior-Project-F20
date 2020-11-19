@@ -1,9 +1,4 @@
-import React, { useContext, useState } from 'react';
-import { Button } from 'reactstrap';
-import { isNoSubstitutionTemplateLiteral } from 'typescript';
-
-{/*import { MdPerson } from 'react-icons/md';
-import { IconContext } from 'react-icons'; */}
+import React from 'react';
 
 const CategoryDropdown = (prop: {categoryList: string[]}) => {
     return (
