@@ -64,7 +64,9 @@ const AboutPage = () => {
                 </Row>
 
                 <br />
-                <h5 className="centered">Special thanks to Dr. Ganesh Baliga for advising us through this project - <a href="https://csm.rowan.edu/departments/cs/facultystaff/compsci_full_part/baliga.html">Rowan Site</a></h5>
+                <h5 className="centered">Special thanks to Dr. Ganesh Baliga for advising us through this project - <a href="https://csm.rowan.edu/departments/cs/facultystaff/compsci_full_part/baliga.html">Rowan Bio</a></h5>
+
+                <h5 className="centered">This project was made as part of Rowan CS Senior Project, Fall 2020 - <a href="https://csm.rowan.edu/departments/cs/index.html">Rowan CS</a></h5>
 
             </Container>
 

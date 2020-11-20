@@ -15,6 +15,9 @@ import AdminUsers from './Pages/AdminUsers';
 import AdminTasks from './Pages/AdminTasks';
 import PrivacyPage from './Pages/PrivacyPage';
 import AboutPage from './Pages/AboutPage';
+import ContactPage from './Pages/ContactPage';
+import TermsPage from './Pages/TermsPage';
+import GetStarted from './Pages/GetStarted';
 
 function App() {
   return (
@@ -33,6 +36,9 @@ function App() {
         <Route exact={true} path="/testing" render={(props) => <TestingPage />} />
         <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />
         <Route exact={true} path="/about" render={(props) => <AboutPage />} />
+        <Route exact={true} path="/contact" render={(props) => <ContactPage />} />
+        <Route exact={true} path="/terms" render={(props) => <TermsPage />} />
+        <Route exact={true} path="/getStarted" render={(props) => <GetStarted />} />
         <Redirect to="/error" />
       </Switch>
     </BrowserRouter>
