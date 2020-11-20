@@ -10,58 +10,65 @@ import PaginationRow from '../Components/PaginationRow';
 import { TileLayer, Marker, Popup, MapContainer, CircleMarker, Tooltip, Circle } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import MapsCircle from '../Components/MapsCircle';
-// import {Map, L} from 'leaflet';
-// <script src="holder.js"/>
+import Geocode from 'react-geocode'
 
-type task = {
-    categoryId: number,
-    amount: number,
-    duration: number,
-    latitude: number,
-    longitute: number,
-    title: string,
-    offerer: string,
-    description: string
-}
+// react-geocode setup
+Geocode.setApiKey("AIzaSyBcriJb-SLk7ljQmh1P_L9MaiNj8VbZj_o");  // Google Maps API Key
+Geocode.setLanguage("en");  // Set Language
+Geocode.setRegion("us");  // Set Region
+
+// Get address from latitude & longitude.
+Geocode.fromLatLng("48.8583701", "2.2922926").then(
+    response => {
+      const address = response.results[0].formatted_address;
+      console.log(address);
+    },
+    error => {
+      console.error(error);
+    }
+  );
+
+// Get latitude & longitude from address.
+Geocode.fromAddress("Eiffel Tower").then(
+    response => {
+    const { lat, lng } = response.results[0].geometry.location;
+    console.log(lat, lng);
+    },
+    error => {
+    console.error(error);
+    }
+);
+
+
 
 const TestingPage = () => {
     const token = localStorage.getItem('access_token');
 
-    let a: task[] = [];
-    const [tasks, setTasks] = useState(a);
-    /* const [task, getTaskList] = useState<taskIDState>(taskIDs); ERRORS */
-
-
-    const getTaskList = async () => {
-        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/recommendTasks`,
-            { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                console.log(response.data);
-                setTasks(response.data.tasks);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-    
-    const getIds = async () => {
-        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/getPublic`,
-            { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
-    useEffect(() => {
-        getTaskList();
-        getIds();
-    }, []);
-
     const centerLocation: LatLngTuple = [39.7089, -75.1183]
     const sample: LatLngTuple = [39.7051596, -75.11357028778912]
+
+    const lat: number = 39.7089;
+    const lng: number = -75.1183;
+
+    const getCoords = (lat, lng) => {Geocode.fromLatLng(String(lat), String(lng)).then(
+        response => {
+          const address = response.results[0].formatted_address;
+          console.log(address);
+        },
+        error => {
+          console.error(error);
+        }
+      )}
+
+    //   const getCoordinates = (lat, lng) => {Geocode.fromLatLng(String(lat), String(lng)).then(
+    //     response => {
+    //       const address = response.results[0].formatted_address;
+    //       console.log(address);
+    //     },
+    //     error => {
+    //       console.error(error);
+    //     }
+    //   )}
 
     return (
         <div>
@@ -75,9 +82,19 @@ const TestingPage = () => {
                 <Col xs="4" className="col-scroll">
                     <Container>
                             <h3 id="top" className="centered">Tasks</h3>
-                            {tasks.map( task => (
-                                <TaskCard title={task.title} offerer={task.offerer} price={task.amount} description={task.description}/>
-                            ))}
+                            <hr />
+
+                            <h4>Lat, Lng: {lat}, {lng}</h4>
+                            <h4>
+                                Address: {getCoords(lat, lng)}
+                            </h4>
+
+                            {/* <h4>
+                                Address: {getCoordinates}
+                            </h4> */}
+
+                            <hr />
+                            <TaskCard title="title" offerer='tester' price={10} description="desc"/>
 
                             <Card>
                                 <CardBody>
@@ -102,9 +119,7 @@ const TestingPage = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                         {/* Map Circle Markers - MapsCircle */}
-                        {tasks.map( task => (
-                            <MapsCircle title='TITLE' categoryId={task.categoryId} amount={task.amount} duration={task.duration} latitude={task.latitude} longitute={task.longitute} />
-                        ))}
+                        <MapsCircle title='TITLE' categoryId={1} amount={10} duration={60} latitude={39.7089} longitute={-75.1183} />
                         
                     </MapContainer>
                 </Col>

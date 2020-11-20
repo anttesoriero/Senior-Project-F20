@@ -141,7 +141,10 @@ const ProfilePage = () => {
                                     <Media body style={{ padding: 10 }}>
                                         {user ?
                                             <div>
-                                                <h5>Goes by: {user.preferredName}</h5>
+                                                <h5>Goes by:  
+                                                    {/* {user.preferredName} */}
+                                                    {user.preferredName != "" ? user.preferredName : user.firstName}
+                                                </h5>
                                                 <p>Rating: </p>
                                                 <p>Account Balance: ${String(user.accountBalance)}</p>
                                             </div>
