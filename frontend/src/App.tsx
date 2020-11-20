@@ -13,6 +13,8 @@ import AdminLogin from './Pages/AdminLogin';
 import AdminDashboard from './Pages/AdminDashboard';
 import AdminUsers from './Pages/AdminUsers';
 import AdminTasks from './Pages/AdminTasks';
+import PrivacyPage from './Pages/PrivacyPage';
+import AboutPage from './Pages/AboutPage';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route exact={true} path="/adminUsers" render={(props) => <AdminUsers />} />
         <Route exact={true} path="/adminTasks" render={(props) => <AdminTasks />} />
         <Route exact={true} path="/testing" render={(props) => <TestingPage />} />
+        <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />
+        <Route exact={true} path="/about" render={(props) => <AboutPage />} />
         <Redirect to="/error" />
       </Switch>
     </BrowserRouter>
