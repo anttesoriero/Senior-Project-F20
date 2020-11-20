@@ -143,7 +143,7 @@ const ProfilePage = () => {
                                             <div>
                                                 <h5>Goes by:  
                                                     {/* {user.preferredName} */}
-                                                    {user.preferredName != "" ? user.preferredName : user.firstName}
+                                                    {user.preferredName !== "" ? user.preferredName : user.firstName}
                                                 </h5>
                                                 <p>Rating: </p>
                                                 <p>Account Balance: ${String(user.accountBalance)}</p>
