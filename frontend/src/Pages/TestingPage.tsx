@@ -14,7 +14,7 @@ import Geocode from 'react-geocode'
 
 // react-geocode setup
 Geocode.setApiKey("AIzaSyBcriJb-SLk7ljQmh1P_L9MaiNj8VbZj_o");  // Google Maps API Key from Dan
-// Geocode.setApiKey("AIzaSyArphxvQgThDCur8DpOhtwO0sAheLh4_n8");
+// Geocode.setApiKey("AIzaSyArphxvQgThDCur8DpOhtwO0sAheLh4_n8");  // Testing second free API Key from Anthony
 
 Geocode.setLanguage("en");  // Set Language
 Geocode.setRegion("us");  // Set Region
@@ -49,29 +49,32 @@ const TestingPage = () => {
     const centerLocation: LatLngTuple = [39.7089, -75.1183]
     const sample: LatLngTuple = [39.7051596, -75.11357028778912]
 
-    const lat: number = 39.7089;
-    const lng: number = -75.1183;
+    const latTest: number = 39.7089;
+    const lngTest: number = -75.1183;
 
+    //- Not working
     const getCoords = (lat, lng) => {Geocode.fromLatLng(String(lat), String(lng)).then(
         response => {
           const address = response.results[0].formatted_address;
           console.log(address);
-          return address;  // Line added by Anthony
         },
         error => {
           console.error(error);
         }
       )}
 
-    //   const getCoordinates = (lat, lng) => {Geocode.fromLatLng(String(lat), String(lng)).then(
-    //     response => {
-    //       const address = response.results[0].formatted_address;
-    //       console.log(address);
-    //     },
-    //     error => {
-    //       console.error(error);
-    //     }
-    //   )}
+    Geocode.fromLatLng(String(latTest), String(lngTest))
+
+    const getLoc = (address) => {Geocode.fromAddress(address).then(
+        response => {
+        const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
+        },
+        error => {
+        console.error(error);
+        }
+    )}
+    //-
 
     return (
         <div>
@@ -86,15 +89,21 @@ const TestingPage = () => {
                     <Container>
                             <h3 id="top" className="centered">Tasks</h3>
                             <hr /><hr /><hr />
-                            <h3 className="centered">GEOCODE TESTING</h3>
+                            <h3 className="centered"><b>Geocode Testing</b></h3>
 
-                            <h4>Lat, Lng: {lat}, {lng}</h4>
+                            {/* <h4>Lat, Lng: {latTest}, {lngTest}</h4> */}
+                            <h4>Lat, Lng: "48.8583701", "2.2922926"</h4>
+                            <h4>Address: Eiffel Tower</h4>
+                            <hr />
                             <h4>
-                                Address: {getCoords(lat, lng)}
+                                Address from Coords: {getCoords("48.8583701", "2.2922926")}
+                            </h4>
+                            <h4>
+                                Coords from Address: {getLoc("Eiffel Tower")}
                             </h4>
 
                             {/* <h4>
-                                Address: {getCoordinates}
+                                Address: {Geocode.fromLatLng(String(latTest), String(lngTest))}
                             </h4> */}
 
                             <hr /><hr /><hr />
