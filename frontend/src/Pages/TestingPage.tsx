@@ -13,7 +13,9 @@ import MapsCircle from '../Components/MapsCircle';
 import Geocode from 'react-geocode'
 
 // react-geocode setup
-Geocode.setApiKey("AIzaSyBcriJb-SLk7ljQmh1P_L9MaiNj8VbZj_o");  // Google Maps API Key
+Geocode.setApiKey("AIzaSyBcriJb-SLk7ljQmh1P_L9MaiNj8VbZj_o");  // Google Maps API Key from Dan
+// Geocode.setApiKey("AIzaSyArphxvQgThDCur8DpOhtwO0sAheLh4_n8");
+
 Geocode.setLanguage("en");  // Set Language
 Geocode.setRegion("us");  // Set Region
 
@@ -54,6 +56,7 @@ const TestingPage = () => {
         response => {
           const address = response.results[0].formatted_address;
           console.log(address);
+          return address;  // Line added by Anthony
         },
         error => {
           console.error(error);
@@ -82,7 +85,8 @@ const TestingPage = () => {
                 <Col xs="4" className="col-scroll">
                     <Container>
                             <h3 id="top" className="centered">Tasks</h3>
-                            <hr />
+                            <hr /><hr /><hr />
+                            <h3 className="centered">GEOCODE TESTING</h3>
 
                             <h4>Lat, Lng: {lat}, {lng}</h4>
                             <h4>
@@ -93,16 +97,13 @@ const TestingPage = () => {
                                 Address: {getCoordinates}
                             </h4> */}
 
-                            <hr />
+                            <hr /><hr /><hr />
                             <TaskCard title="title" offerer='tester' price={10} description="desc"/>
 
-                            <Card>
-                                <CardBody>
-                                    <h4 className="centered">No More Tasks in this Area</h4>
-                                    <br />
-                                    <div><Button className={'task centered'} href="#top">Back to Top</Button></div>
-                                </CardBody>
-                            </Card>
+                            <h4 className="centered">No More Tasks in this Area</h4>
+                            <br />
+                            <div><Button className={'task centered'} href="#top">Back to Top</Button></div>
+                            <br />
 
                             <div className='centered'>
                                 <PaginationRow />
