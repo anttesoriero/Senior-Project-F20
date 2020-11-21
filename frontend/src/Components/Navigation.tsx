@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import AuthContext from '../Contexts/AuthContext';
+import AuthContext from '../Contexts/APIContext';
 import {
     Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, UncontrolledDropdown,
     DropdownToggle, DropdownMenu, DropdownItem
@@ -8,18 +8,20 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MdPerson } from 'react-icons/md';
 import { IconContext } from 'react-icons';
 import axios from 'axios';
+import APIContext from '../Contexts/APIContext';
 
 interface NavProps {
     redirect: boolean
 }
 
 const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) => {
+    const url = useContext(APIContext);
     const [isOpen, setIsOpen] = useState(false);
 
     const token = localStorage.getItem('access_token');
     useEffect(() => {
 
-        axios.get('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/me/getProfile',
+        axios.get(url + 'me/getProfile',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data);
@@ -41,7 +43,6 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
         window.location.reload(false);
     }
 
-    const contextType = useContext(AuthContext);
 
     return (
         <Navbar color="dark" dark expand="md">

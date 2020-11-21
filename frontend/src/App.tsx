@@ -18,6 +18,7 @@ import AboutPage from './Pages/AboutPage';
 import ContactPage from './Pages/ContactPage';
 import TermsPage from './Pages/TermsPage';
 import GetStarted from './Pages/GetStarted';
+import OfferPage from './Pages/OfferPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route exact={true} path="/" render={(props) => <LandingPage />} />
         <Route exact={true} path="/survey" render={(props) => <SurveyPage />} />
         <Route exact={true} path="/tasks" render={(props) => <TaskBoard />} />
+        <Route exact={true} path="/offers" render={(props) => <OfferPage />} />
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/listtask" render={(props) => <ListingPage />} />

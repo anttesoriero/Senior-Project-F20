@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { FormGroup, Button, Spinner, Input } from 'reactstrap';
 import axios from 'axios';
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Container } from 'reactstrap';
-import Footer from '../Components/Footer';
+import APIContext from '../Contexts/APIContext';
 
 const AdminLogin = ({ history }: RouteComponentProps) => {
+    const url = useContext(APIContext);
+
     const [submitting, setSubmitting] = useState(false);
     const [serror, seetSerror] = useState(false);
 
@@ -20,7 +22,7 @@ const AdminLogin = ({ history }: RouteComponentProps) => {
 
     const signIn = data => {
         setSubmitting(true);
-        axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/admin/getAllUsers', {
+        axios.post(url + 'admin/getAllUsers', {
             adminPassword: data.password
         })
             .then(function (response) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Footer from "../Components/Footer";
@@ -9,6 +9,7 @@ import PaginationRow from '../Components/PaginationRow';
 import { TileLayer, MapContainer } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import MapsCircle from '../Components/MapsCircle';
+import APIContext from '../Contexts/APIContext';
 
 type task = {
     categoryId: number,
@@ -23,6 +24,8 @@ type task = {
 }
 
 const TaskBoard = () => {
+    const url = useContext(APIContext);
+
     const token = localStorage.getItem('access_token');
 
     let a: task[] = [];
@@ -31,7 +34,7 @@ const TaskBoard = () => {
 
 
     const getTaskList = async () => {
-        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/recommendTasks`,
+        await axios.get(url + 'task/recommendTasks',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data.tasks);
@@ -43,7 +46,7 @@ const TaskBoard = () => {
     }
 
     const getIds = async () => {
-        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/getPublic`,
+        await axios.get(url + 'task/getPublic',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
 import { Container, Row, Col, Button, FormGroup, Input, Label, InputGroup, InputGroupAddon } from 'reactstrap';
 import Footer from "../Components/Footer";
@@ -6,6 +6,7 @@ import StateSelector from "../Components/StateSelector";
 import axios from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
+import APIContext from '../Contexts/APIContext';
 
 {/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */ }
 
@@ -40,11 +41,13 @@ const taskFields = {
 
 const ListingPage = ({ history }: RouteComponentProps) => {
     const token = localStorage.getItem('access_token');
+    const url = useContext(APIContext);
+
     const [serror, setSerror] = useState(false);
 
     const createTask = async (data) => {
         console.log(data)
-        await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/createTask', {
+        await axios.post(url + 'task/createTask', {
             categoryId: data.categoryId,
             title: data.title,
             description: data.description,
@@ -134,13 +137,13 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="date"><h4>Date *</h4></Label>
-                                        <Field type="date" name="date" id="date" placeholder="01-20-2021" as={Input} required/>
+                                        <Field type="date" name="date" id="date" placeholder="01-20-2021" as={Input} required />
                                     </FormGroup>
                                 </Col>
                                 <Col>
                                     <FormGroup>
                                         <Label for="time"><h4>Time *</h4></Label>
-                                        <Field type="time" name="time" id="time" placeholder="12:00PM" as={Input} required/>
+                                        <Field type="time" name="time" id="time" placeholder="12:00PM" as={Input} required />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -150,7 +153,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="estimatedDurationMinutes"><h4>Duration in Minutes *</h4></Label>
-                                        <Input type="text" name="estimatedDurationMinutes" placeholder="60" as={Input} required/>
+                                        <Input type="text" name="estimatedDurationMinutes" placeholder="60" as={Input} required />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -160,7 +163,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="address"><h4>Address *</h4></Label>
-                                        <Field type="text" name="address" id="address" placeholder="123 Main St" as={Input} required/>
+                                        <Field type="text" name="address" id="address" placeholder="123 Main St" as={Input} required />
                                     </FormGroup>
                                 </Col>
                                 <Col>
@@ -176,7 +179,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col md="6">
                                     <FormGroup>
                                         <Label for="city"><h4>City *</h4></Label>
-                                        <Field type="text" name="city" id="city" placeholder="Glassboro" as={Input} required/>
+                                        <Field type="text" name="city" id="city" placeholder="Glassboro" as={Input} required />
                                     </FormGroup>
                                 </Col>
                                 <Col md="4">
@@ -188,7 +191,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col md="2">
                                     <FormGroup>
                                         <Label for="zip"><h4>Zip *</h4></Label>
-                                        <Field type="text" name="zip" id="zip" placeholder="08028" as={Input} required/>
+                                        <Field type="text" name="zip" id="zip" placeholder="08028" as={Input} required />
                                     </FormGroup>
                                 </Col>
                             </Row>

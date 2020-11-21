@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { FormGroup, Input, Label, Button, Spinner } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc'
 import axios from 'axios';
+import APIContext from '../Contexts/APIContext';
 
 const SignIn = ({ history }: RouteComponentProps) => {
+    const url = useContext(APIContext);
+    const [didDailySurvey, setDidDailySurvey] = useState(false);
+
     const [submitting, setSubmitting] = useState(false);
     const [serror, seetSerror] = useState(false);
 
+    useEffect(() => {
+        checkDaily()
+    }, [])
+
+    const checkDaily = () => {
+        var timestamp = localStorage.getItem('daily_survey')?.substring(0, 15)
+        console.log(timestamp)
+        let hoy = new Date();
+        localStorage.setItem('today', hoy as unknown as string)
+        var today = localStorage.getItem('today')?.substring(0, 15)
+        console.log(today)
+        if (timestamp === today)
+            setDidDailySurvey(true)
+        else return;
+    }
+
     const oauth = () => {
-        axios.get('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/auth/oauth')
+        axios.get(url + 'auth/oauth')
             .then(function (response) {
                 setSubmitting(false);
                 //localStorage.setItem('access_token', response.data.access_token);
@@ -26,14 +46,14 @@ const SignIn = ({ history }: RouteComponentProps) => {
 
     const signIn = data => {
         setSubmitting(true);
-        axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/auth/login', {
+        axios.post(url + 'auth/login', {
             email: data.email,
             password: data.password
         })
             .then(function (response) {
                 setSubmitting(false);
                 localStorage.setItem('access_token', response.data.access_token);
-                history.push('/profile')
+                didDailySurvey ? history.push('/profile') : history.push('/survey')
                 console.log(response);
             })
             .catch(function (error) {
