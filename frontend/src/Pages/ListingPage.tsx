@@ -47,8 +47,9 @@ const ListingPage = ({ history }: RouteComponentProps) => {
 
     const createTask = async (data) => {
         console.log(data)
+        
         await axios.post(url + 'task/createTask', {
-            categoryId: data.categoryId,
+            categoryId: data.categoryId - 1,
             title: data.title,
             description: data.description,
             recommendedPrice: data.recommendedPrice,
@@ -102,11 +103,17 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="categoryId"><h4>Task Category *</h4></Label>
-                                        {/* <Input type="select" name="taskCategory" id="taskCategory" value={task?.categoryId} required> */}
-                                        <Field type="select" name="categoryId" value={1} as={Input} required>
-                                            {/* TODO: Change hardcoded category id to their respective ids */}
-                                            <option selected disabled>Select Category</option>
-                                            <option>Test</option>
+                                        <Field type="select" name="categoryId" as={Input} required>
+                                            {/* "Select Category" is value=1 because "Yard Work" 
+                                                keeps displaying first even though it's second.
+                                                When calling the endpoint, the categoryId is substracted by one. */}
+                                            <option value="1" disabled>Select Category</option>
+                                            <option value="2">Yard Work</option>
+                                            <option value="3">Transportation</option>
+                                            <option value="4">Cleaning</option>
+                                            <option value="5">Moving</option>
+                                            <option value="6">Care-Taking</option>
+                                            <option value="7" selected>Cooking</option>
                                         </Field>
                                     </FormGroup>
                                 </Col>
