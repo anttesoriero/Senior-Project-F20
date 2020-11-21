@@ -17,7 +17,7 @@ const RefineSearch = (props) => {
     const toggle = () => setModal(!modal);
 
     const changeKeyboard = e => {
-    setKeyboard(e.currentTarget.checked);
+        setKeyboard(e.currentTarget.checked);
     }
     
     
@@ -76,11 +76,19 @@ const RefineSearch = (props) => {
                             
                             <Col>
                             <FormGroup>
-                                    <Input type="select" name="taskCategory" id="taskCategory" value={1}>
-                                        {/* TODO: Change hardcoded category id to their respective ids */}
-                                        <option selected disabled>Select Category</option>
-                                        <option>Test</option>
-                                        <CategoryDropdown categoryList={['SAMPLE USAGE','Educational','Fitness','IMPORT OTHERS FROM FULL LIST']} />
+                                    <Input type="select" name="taskCategory" id="taskCategory">
+                                            {/* "Select Category" is value=1 because "Yard Work" 
+                                                keeps displaying first even though it's second.
+                                                When calling the endpoint, the categoryId is substracted by one. */}
+                                            <option value="1" selected disabled>Select Category</option>
+                                            <option value="2">Yard Work</option>
+                                            <option value="3">Transportation</option>
+                                            <option value="4">Cleaning</option>
+                                            <option value="5">Moving</option>
+                                            <option value="6">Care-Taking</option>
+                                            <option value="7">Cooking</option>
+                                        {/* The Component below doesn't work */}
+                                        {/* <CategoryDropdown categoryList={['SAMPLE USAGE','Educational','Fitness','IMPORT OTHERS FROM FULL LIST']} /> */}
                                     </Input>
                                 </FormGroup>
                             </Col>
@@ -102,13 +110,13 @@ const RefineSearch = (props) => {
                             
                             <Col>
                             <FormGroup>
-                                    <Input type="select" name="distance" id="distance" value={1}>
+                                    <Input type="select" name="distance" id="distance">
                                         <option selected>Select Distance</option>
-                                        <option>{"< 5 Miles"}</option>
-                                        <option>{"< 10 Miles"}</option>
-                                        <option>{"< 20 Miles"}</option>
-                                        <option>{"< 50 Miles"}</option>
-                                        <option>{"> 50 Miles"}</option>
+                                        <option value="1">{"< 5 Miles"}</option>
+                                        <option value="2">{"< 10 Miles"}</option>
+                                        <option value="3">{"< 20 Miles"}</option>
+                                        <option value="4">{"< 50 Miles"}</option>
+                                        <option value="5">{"> 50 Miles"}</option>
                                     </Input>
                                 </FormGroup>
                             </Col>

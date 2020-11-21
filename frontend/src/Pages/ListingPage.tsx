@@ -113,7 +113,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                             <option value="4">Cleaning</option>
                                             <option value="5">Moving</option>
                                             <option value="6">Care-Taking</option>
-                                            <option value="7" selected>Cooking</option>
+                                            <option value="7">Cooking</option>
                                         </Field>
                                     </FormGroup>
                                 </Col>
