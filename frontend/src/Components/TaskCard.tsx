@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
-import { Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col } from 'reactstrap';
+import React, { useState, useContext } from 'react';
+import {
+    Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader,
+    ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label
+} from 'reactstrap';
+import { Formik, Form, Field } from 'formik';
+import axios from 'axios';
+import APIContext from '../Contexts/APIContext';
 
 type CardProps = {
+    id: number,
     title: string,
     offerer: string,
     price: number,
-    description: string
+    description: string,
+    duration: number
 }
 
-const TaskCard = ({ title, offerer, price, description }: CardProps) => {
+const TaskCard = ({ title, offerer, price, description, duration, id }: CardProps) => {
+    const url = useContext(APIContext);
+    const token = localStorage.getItem('access_token');
+
     const [open, setOpen] = useState(false)
+    const [submitting, setSubmitting] = useState(false);
+    const [serror, setSerror] = useState(false);
 
     const launchModal = () => {
         setOpen(true)
+    }
+
+    const createOffer = async (data) => {
+        await axios.post(url + 'offer/createOffer',
+            {
+                taskId: id,
+                payment: data.payment,
+                startDate: data.startDate,
+                jobDurationMinutes: data.jobDurationMinutes
+            },
+            { headers: { Authorization: `Bearer ${token}` } })
     }
 
     return (
@@ -36,7 +60,30 @@ const TaskCard = ({ title, offerer, price, description }: CardProps) => {
                     </Button>
                 </ModalHeader>
                 <ModalBody>
-                    <p>{title}</p>
+                    <Formik initialValues={{ payment: '', startDate: '', jobDurationMinutes: '' }} onSubmit={(data => createOffer(data))}>
+                        {() => (
+                            <Form >
+                                <FormGroup>
+                                    <Label for="payment">Payment</Label>
+                                    <Field name='payment' type='text' required as={Input}>{price}</Field>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="startDate">Start Date</Label>
+                                    <Field name='startDate' type='date' required as={Input} />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for='jobDurationMinutes'>Job Duration in Minutes</Label>
+                                    <Field name='jobDurationMinutes' type='text' requires as={Input} />
+                                </FormGroup>
+                                <div className='centered'>
+                                    {serror ? <p className='error'>Incorrect Credentials!</p> : <div></div>}
+                                </div>
+                                <FormGroup className='centered'>
+                                    {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Signing in...</Button> : <Button type='submit' color="primary">Sign In</Button>}&nbsp;
+                                </FormGroup>
+                            </Form>
+                        )}
+                    </Formik>
                 </ModalBody>
                 <ModalFooter style={{ display: 'flex', justifyContent: 'center', marginBottom: '5px', marginTop: '5px' }}>
                     &nbsp;

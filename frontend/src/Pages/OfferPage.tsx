@@ -32,32 +32,32 @@ const OfferPage = () => {
             .then(response => {
                 console.log(response.data.tasks)
                 setTasks(response.data.tasks)
+                tasks.map(task => (
+                    axios.post(url + 'offer/getOffers', {
+                        taskId: task.taskId as unknown as string,
+                        includeArchived: true
+                    },
+                        { headers: { Authorization: `Bearer ${token}` } })
+                        .then(response => {
+                            console.log(response)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                ))
             })
             .catch(error => {
                 console.log(error)
             })
     }
 
-    const getOffers = async () => {
-        tasks.map(task => (
-            axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/offer/getOffers',
-                {
-                    taskId: task.taskId as unknown as string
-                },
-                { headers: { Authorization: `Bearer ${token}` } })
-                .then(response => {
-                    console.log(response.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        ))
+    const getOffers = () => {
 
     }
 
     useEffect(() => {
-        getTaskIds()
-        getOffers()
+        getTaskIds();
+        getOffers();
     }, [])
 
     return (
@@ -65,7 +65,7 @@ const OfferPage = () => {
             <Navigation />
             <h2>Offer Page</h2>
             {tasks.map(task => (
-                <p>{task.title}</p>
+                <p key={task.taskId}>{task.title}</p>
             ))}
             <Footer />
         </div>

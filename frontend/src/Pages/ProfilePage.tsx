@@ -269,7 +269,78 @@ const ProfilePage = () => {
 
                     case 'edit profile':
                         return (
-                            <div></div>
+                            <Container onSubmit={editProfile}>
+                                <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
+                                <br />
+                                <div className="centered">
+                                    <Formik initialValues={{ email: user.email, firstName: user.firstName, lastName: user.lastName, preferredName: user.preferredName }} onSubmit={data => editProfile(data)}>
+                                        <Form>
+                                            {/* Row 1 - Change Name */}
+                                            <Row>
+                                                <Col>
+                                                    <FormGroup>
+                                                        <Label for="firstName"><h4>First Name</h4></Label>
+                                                        <Field name='firstName' type='text' placeholder={user.firstName} as={Input} />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col>
+                                                    <FormGroup>
+                                                        <Label for="lastName"><h4>Last Name</h4></Label>
+                                                        <Field name='lastName' type='text' placeholder={user.lastName} as={Input} />
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                            <hr />
+
+                                            {/*Change email and preferred name */}
+                                            <Row>
+                                                <Col>
+                                                    <FormGroup>
+                                                        <Label for="email"><h4>Email Address</h4></Label>
+                                                        <Field name='email' type='email' placeholder={user.email} as={Input} />
+
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col>
+                                                    <FormGroup>
+                                                        <Label for="preferredName"><h3>Preferred Name</h3></Label>
+                                                        <Field name='preferredName' type='text' placeholder={user.preferredName} as={Input} />
+
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+
+                                            {/*Manage funds buttons*/}
+                                            <Row>
+                                                <Col xs="8">
+                                                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
+                                                    <hr />
+                                                    <Button id="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
+                                                    <br />
+                                                    <Button id="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
+                                                </Col>
+                                            </Row>
+
+                                            {/*Account deletion*/}
+                                            <Row>
+                                                <Col xs="8">
+                                                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
+                                                    <hr />
+                                                    <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
+                                                </Col>
+                                            </Row>
+
+                                            <br />
+                                            <br />
+                                            <Row className='centered'>
+                                                <div className="centered"><Button color="primary" size="md" type="submit" onSubmit={editProfile}>Save Changes</Button></div>
+                                                &nbsp;&nbsp;
+                                                <div className="centered"><Button color="secondary" size="md" type="submit" onClick={wantToEdit}>Cancel</Button></div>
+                                            </Row>
+                                        </Form>
+                                    </Formik>
+                                </div>
+                            </Container>
                         )
 
                     case 'change password':

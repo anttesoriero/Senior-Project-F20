@@ -12,6 +12,7 @@ import MapsCircle from '../Components/MapsCircle';
 import APIContext from '../Contexts/APIContext';
 
 type task = {
+    taskId: number,
     categoryId: number,
     recommendedPrice: string,
     amount: number,
@@ -77,7 +78,14 @@ const TaskBoard = () => {
                     <Container>
                         <h3 id="top" className="centered">Tasks</h3>
                         {tasks.map(task => (
-                            <TaskCard title={task.title} offerer={task.offerer} price={Number(task.recommendedPrice)} description={task.description} />
+                            <TaskCard
+                                id={task.taskId}
+                                title={task.title}
+                                offerer={task.offerer}
+                                price={Number(task.recommendedPrice)}
+                                description={task.description}
+                                duration={task.duration}
+                            />
                         ))}
 
                         <h4 className="centered">No More Tasks in this Area</h4>

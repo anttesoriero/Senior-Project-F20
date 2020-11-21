@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../Components/Navigation';
-import {Button, Card, CardBody, Col, Collapse, Container, Row} from 'reactstrap';
+import { Button, Card, CardBody, Col, Collapse, Container, Row } from 'reactstrap';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
@@ -22,22 +22,22 @@ Geocode.setRegion("us");  // Set Region
 // Get address from latitude & longitude.
 Geocode.fromLatLng("48.8583701", "2.2922926").then(
     response => {
-      const address = response.results[0].formatted_address;
-      console.log(address);
+        const address = response.results[0].formatted_address;
+        console.log(address);
     },
     error => {
-      console.error(error);
+        console.error(error);
     }
-  );
+);
 
 // Get latitude & longitude from address.
 Geocode.fromAddress("Eiffel Tower").then(
     response => {
-    const { lat, lng } = response.results[0].geometry.location;
-    console.log(lat, lng);
+        const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
     },
     error => {
-    console.error(error);
+        console.error(error);
     }
 );
 
@@ -53,88 +53,92 @@ const TestingPage = () => {
     const lngTest: number = -75.1183;
 
     //- Not working
-    const getCoords = (lat, lng) => {Geocode.fromLatLng(String(lat), String(lng)).then(
-        response => {
-          const address = response.results[0].formatted_address;
-          console.log(address);
-        },
-        error => {
-          console.error(error);
-        }
-      )}
+    const getCoords = (lat, lng) => {
+        Geocode.fromLatLng(String(lat), String(lng)).then(
+            response => {
+                const address = response.results[0].formatted_address;
+                console.log(address);
+            },
+            error => {
+                console.error(error);
+            }
+        )
+    }
 
     Geocode.fromLatLng(String(latTest), String(lngTest))
 
-    const getLoc = (address) => {Geocode.fromAddress(address).then(
-        response => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.log(lat, lng);
-        },
-        error => {
-        console.error(error);
-        }
-    )}
+    const getLoc = (address) => {
+        Geocode.fromAddress(address).then(
+            response => {
+                const { lat, lng } = response.results[0].geometry.location;
+                console.log(lat, lng);
+            },
+            error => {
+                console.error(error);
+            }
+        )
+    }
     //-
 
     return (
         <div>
-            <Navigation/>
+            <Navigation />
 
             {/* Search Bar */}
-            <RefineSearch className="centered"/>
+            <RefineSearch className="centered" />
 
             <Row>
                 {/* Left - TaskCards */}
                 <Col xs="4" className="col-scroll">
                     <Container>
-                            <h3 id="top" className="centered">Tasks</h3>
-                            <hr /><hr /><hr />
-                            <h3 className="centered"><b>Geocode Testing</b></h3>
+                        <h3 id="top" className="centered">Tasks</h3>
+                        <hr /><hr /><hr />
+                        <h3 className="centered"><b>Geocode Testing</b></h3>
 
-                            {/* <h4>Lat, Lng: {latTest}, {lngTest}</h4> */}
-                            <h4>Lat, Lng: "48.8583701", "2.2922926"</h4>
-                            <h4>Address: Eiffel Tower</h4>
-                            <hr />
-                            <h4>
-                                Address from Coords: {getCoords("48.8583701", "2.2922926")}
-                            </h4>
-                            <h4>
-                                Coords from Address: {getLoc("Eiffel Tower")}
-                            </h4>
+                        {/* <h4>Lat, Lng: {latTest}, {lngTest}</h4> */}
+                        <h4>Lat, Lng: "48.8583701", "2.2922926"</h4>
+                        <h4>Address: Eiffel Tower</h4>
+                        <hr />
+                        <h4>
+                            Address from Coords: {getCoords("48.8583701", "2.2922926")}
+                        </h4>
+                        <h4>
+                            Coords from Address: {getLoc("Eiffel Tower")}
+                        </h4>
 
-                            {/* <h4>
+                        {/* <h4>
                                 Address: {Geocode.fromLatLng(String(latTest), String(lngTest))}
                             </h4> */}
 
-                            <hr /><hr /><hr />
-                            <TaskCard title="title" offerer='tester' price={10} description="desc"/>
+                        <hr /><hr /><hr />
+                        <TaskCard id={1} title="title" offerer='tester' price={10} description="desc" duration={10} />
 
-                            <h4 className="centered">No More Tasks in this Area</h4>
-                            <br />
-                            <div><Button className={'task centered'} href="#top">Back to Top</Button></div>
-                            <br />
+                        <h4 className="centered">No More Tasks in this Area</h4>
+                        <br />
+                        <div><Button className={'task centered'} href="#top">Back to Top</Button></div>
+                        <br />
 
-                            <div className='centered'>
-                                <PaginationRow />
-                            </div>
+                        <div className='centered'>
+                            <PaginationRow />
+                        </div>
 
                     </Container>
 
-                    <Footer/>
+                    <Footer />
                 </Col>
 
                 <Col xs="8">
                     <MapContainer className="leaflet-container" center={centerLocation} zoom={15} scrollWheelZoom={true} >
-                        <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' 
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                         {/* Map Circle Markers - MapsCircle */}
                         <MapsCircle title='TITLE' categoryId={1} amount={10} duration={60} latitude={39.7089} longitute={-75.1183} />
-                        
+
                     </MapContainer>
                 </Col>
-            </Row>        
-            
+            </Row>
+
         </div>
     );
 }
