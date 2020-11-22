@@ -55,15 +55,16 @@ from app.routes.admin import admin_blueprint
 from app.routes.offer import offer_blueprint
 
 # Load in modules "Blueprints"
-app.register_blueprint(main_blueprint, url_prefix="/main")
-app.register_blueprint(auth_blueprint, url_prefix="/auth")
-app.register_blueprint(user_blueprint, url_prefix="/user")
-app.register_blueprint(me_blueprint, url_prefix="/me")
-app.register_blueprint(task_blueprint, url_prefix="/task")
-app.register_blueprint(survey_blueprint, url_prefix="/survey")
-app.register_blueprint(admin_blueprint, url_prefix="/admin")
-app.register_blueprint(offer_blueprint, url_prefix="/offer")
-app.register_blueprint(errors_blueprint)
+basePath = ""
+app.register_blueprint(main_blueprint, url_prefix=basePath+"/main")
+app.register_blueprint(auth_blueprint, url_prefix=basePath+"/auth")
+app.register_blueprint(user_blueprint, url_prefix=basePath+"/user")
+app.register_blueprint(me_blueprint, url_prefix=basePath+"/me")
+app.register_blueprint(task_blueprint, url_prefix=basePath+"/task")
+app.register_blueprint(survey_blueprint, url_prefix=basePath+"/survey")
+app.register_blueprint(admin_blueprint, url_prefix=basePath+"/admin")
+app.register_blueprint(offer_blueprint, url_prefix=basePath+"/offer")
+app.register_blueprint(errors_blueprint, url_prefix=basePath+"/errors")
 
 # Init database with referenced models from routes
 db.create_all()
