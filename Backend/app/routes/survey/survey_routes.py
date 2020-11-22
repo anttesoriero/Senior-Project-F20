@@ -115,5 +115,23 @@ def respond():
     # Get current user
     current_user_id = get_jwt_identity()
     HistoricalSurvey.createHistoricalSurvey(current_user_id, inputJSON["surveyId"], inputJSON["response"])
+    
+    # Inputs overall satisfaction rating into database
+    if inputJSON["surveyId"] == "10":
+        rating = (ord(inputJSON["response"][0]) - 64)
+        current_user = User.getByUserId(get_jwt_identity())
+        current_user.extendedModel.setOverallSatisfaction(rating)
+
+    # Inputs UI satisfaction rating into database
+    if inputJSON["surveyId"] == "11":
+        rating = (ord(inputJSON["response"][0]) - 64)
+        current_user = User.getByUserId(get_jwt_identity())
+        current_user.extendedModel.setUISatisfaction(rating)
+
+    # Inputs security satisfaction rating into database
+    if inputJSON["surveyId"] == "15":
+        rating = (ord(inputJSON["response"][0]) - 64)
+        current_user = User.getByUserId(get_jwt_identity())
+        current_user.extendedModel.setSecuritySatisfaction(rating)
 
     return jsonify({"success": True}), 200
