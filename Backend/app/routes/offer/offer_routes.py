@@ -139,8 +139,12 @@ def createOffer():
     if task.isAccepted():
         return jsonify({"success": False, "message": "Task already accepted"}), 400
 
+
     # Get current user
     current_user_id = get_jwt_identity()
+
+    if task.posterUserId is current_user_id:
+        return jsonify({"success": False, "message": "Cannot post an offer on your own task"}), 400
 
     # Create Offer
     offer = Offer.createOffer(
