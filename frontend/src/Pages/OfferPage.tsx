@@ -32,14 +32,14 @@ const OfferPage = () => {
             .then(response => {
                 console.log(response.data.tasks)
                 setTasks(response.data.tasks)
-                tasks.map(task => (
+                response.data.tasks.map(task => (
                     axios.post(url + 'offer/getOffers', {
                         taskId: task.taskId as unknown as string,
                         includeArchived: true
                     },
                         { headers: { Authorization: `Bearer ${token}` } })
                         .then(response => {
-                            console.log(response)
+                            console.log(response.data.offers)
                         })
                         .catch(error => {
                             console.log(error)

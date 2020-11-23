@@ -16,11 +16,11 @@ type task = {
     categoryId: number,
     recommendedPrice: string,
     amount: number,
-    duration: number,
+    estimatedDurationMinutes: number,
     locationALatitude: number,
     locationALongitude: number,
     title: string,
-    offerer: string,
+    posterTaskId: number,
     description: string
 }
 
@@ -79,12 +79,13 @@ const TaskBoard = () => {
                         <h3 id="top" className="centered">Tasks</h3>
                         {tasks.map(task => (
                             <TaskCard
+                                key={task.taskId}
                                 id={task.taskId}
                                 title={task.title}
-                                offerer={task.offerer}
+                                offerer={task.posterTaskId}
                                 price={Number(task.recommendedPrice)}
                                 description={task.description}
-                                duration={task.duration}
+                                duration={task.estimatedDurationMinutes}
                             />
                         ))}
 
@@ -108,10 +109,11 @@ const TaskBoard = () => {
                         {/* Map Circle Markers - MapsCircle */}
                         {tasks.map(task => (
                             <MapsCircle
+                                key={task.taskId}
                                 title={task.title}
                                 categoryId={task.categoryId}
                                 amount={Number(task.recommendedPrice)}
-                                duration={task.duration}
+                                duration={task.estimatedDurationMinutes}
                                 latitude={39.7089}
                                 longitute={-75.1183} />
                         ))}

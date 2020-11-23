@@ -12,8 +12,7 @@ import APIContext from '../Contexts/APIContext';
 
 type userState = {
     email: string,
-    firstName: string,
-    lastName: string,
+    name: string,
     preferredName: string,
     accountBalance: number,
     address: string,
@@ -27,8 +26,7 @@ type userState = {
 
 const userInfo = {
     email: "",
-    firstName: "",
-    lastName: "",
+    name: "",
     preferredName: "",
     accountBalance: 0,
     address: "",
@@ -64,7 +62,12 @@ const ProfilePage = () => {
 
     // Have to refactor this if using Formik for edit profile
     const editProfile = async (data) => {
-        await axios.put(url + 'me/editInformation', data,
+        await axios.put(url + 'me/editInformation', {
+            email: data.email,
+            firstName: data.name.split(' ')[0],
+            preferredName: data.preferredName,
+            phoneNumber: data.phoneNumber
+        },
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
@@ -146,7 +149,7 @@ const ProfilePage = () => {
                                                     <div>
                                                         <h5>Goes by:
                                                     {/* {user.preferredName} */}
-                                                            {user.preferredName !== "" ? user.preferredName : user.firstName}
+                                                            {user.preferredName !== "" ? user.preferredName : user.name.split(' ')[0]}
                                                         </h5>
                                                         <p>Rating: </p>
                                                         <p>Account Balance: ${String(user.accountBalance)}</p>
@@ -273,20 +276,20 @@ const ProfilePage = () => {
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
                                 <br />
                                 <div className="centered">
-                                    <Formik initialValues={{ email: user.email, firstName: user.firstName, lastName: user.lastName, preferredName: user.preferredName }} onSubmit={data => editProfile(data)}>
+                                    <Formik initialValues={{ email: user.email, name: user.name, preferredName: user.preferredName, phoneNumber: user.phoneNumber }} onSubmit={data => editProfile(data)}>
                                         <Form>
                                             {/* Row 1 - Change Name */}
                                             <Row>
                                                 <Col>
                                                     <FormGroup>
-                                                        <Label for="firstName"><h4>First Name</h4></Label>
-                                                        <Field name='firstName' type='text' placeholder={user.firstName} as={Input} />
+                                                        <Label for="name"><h4>First Name</h4></Label>
+                                                        <Field name='name' type='text' placeholder={user.name} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                                 <Col>
                                                     <FormGroup>
-                                                        <Label for="lastName"><h4>Last Name</h4></Label>
-                                                        <Field name='lastName' type='text' placeholder={user.lastName} as={Input} />
+                                                        <Label for="preferredName"><h3>Preferred Name</h3></Label>
+                                                        <Field name='preferredName' type='text' placeholder={user.preferredName} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
@@ -298,14 +301,12 @@ const ProfilePage = () => {
                                                     <FormGroup>
                                                         <Label for="email"><h4>Email Address</h4></Label>
                                                         <Field name='email' type='email' placeholder={user.email} as={Input} />
-
                                                     </FormGroup>
                                                 </Col>
                                                 <Col>
                                                     <FormGroup>
-                                                        <Label for="preferredName"><h3>Preferred Name</h3></Label>
-                                                        <Field name='preferredName' type='text' placeholder={user.preferredName} as={Input} />
-
+                                                        <Label for="phoneNumber"><h4>Phone Number</h4></Label>
+                                                        <Field name='phoneNumber' type='text' placeholder={user.phoneNumber} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>

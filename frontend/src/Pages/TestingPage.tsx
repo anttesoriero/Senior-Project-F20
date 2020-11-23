@@ -111,7 +111,7 @@ const TestingPage = () => {
                             </h4> */}
 
                         <hr /><hr /><hr />
-                        <TaskCard id={1} title="title" offerer='tester' price={10} description="desc" duration={10} />
+                        <TaskCard id={1} title="title" offerer={1} price={10} description="desc" duration={10} />
 
                         <h4 className="centered">No More Tasks in this Area</h4>
                         <br />
