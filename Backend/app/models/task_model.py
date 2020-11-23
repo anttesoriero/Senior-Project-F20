@@ -9,6 +9,8 @@ These are Tasks that Users post
 # Module imports
 from app import db
 
+import datetime
+
 class Task(db.Model):
     '''
     Column definitions
@@ -18,6 +20,7 @@ class Task(db.Model):
     categoryId         Integer
     description        String
     title              String
+    startDate          DateTime
     recommendedPrice   Decimal(4,2) nullable
     acceptedOfferID    Integer nullable
     postedStartDate
@@ -34,6 +37,7 @@ class Task(db.Model):
     categoryId = db.Column(db.Integer(), db.ForeignKey("category.categoryId"))
     description = db.Column(db.String(300), nullable=True)
     title = db.Column(db.String(60), nullable=True)
+    startDate = db.Column(db.DateTime(), nullable=True)
     recommendedPrice = db.Column(db.Numeric(6,2), nullable=True)
     estimatedDurationMinutes = db.Column(db.Integer(), nullable=True)
     locationALongitude = db.Column(db.Numeric(8,5), nullable=True)
@@ -64,7 +68,8 @@ class Task(db.Model):
             "title": self.title,
             "categoryId": self.categoryId,
             "recommendedPrice": recommendedPrice,
-            "accepted": self.isAccepted()
+            "accepted": self.isAccepted(),
+            "startDate": self.startDate
         }
         return output
 
@@ -85,6 +90,7 @@ class Task(db.Model):
             "posterTaskId": self.posterUserId,
             "description": self.description,
             "title": self.title,
+            "startDate": self.startDate,
             "categoryId": self.categoryId,
             "recommendedPrice": recommendedPrice,
             "accepted": self.isAccepted(),
@@ -107,6 +113,8 @@ class Task(db.Model):
             "taskId": self.taskId,
             "title": self.title,
             "categoryId": self.categoryId,
+
+            "startDate": self.startDate,
             "recommendedPrice": recommendedPrice,
             "accepted": self.isAccepted()
         }
@@ -130,6 +138,7 @@ class Task(db.Model):
             "posterTaskId": self.posterUserId,
             "description": self.description,
             "title": self.title,
+            "startDate": self.startDate,
             "categoryId": self.categoryId,
             "recommendedPrice": recommendedPrice,
             "accepted": self.isAccepted(),
@@ -165,6 +174,8 @@ class Task(db.Model):
             self.locationBLongitude = paramDict["locationBLongitude"]
         if "locationBLatitude" in k:
             self.locationBLatitude = paramDict["locationBLatitude"]
+        if "startDate" in k:
+            self.startDate = paramDict["startDate"]
         db.session.commit()
 
     @classmethod
@@ -298,7 +309,7 @@ class Task(db.Model):
     def createTask(cls, user, categoryId, title,
                    description=None, recommendedPrice=None, estimatedDurationMinutes=None,
                    locationALongitude=None, locationALatitude=None, locationBLongitude=None,
-                    locationBLatitude=None):
+                    locationBLatitude=None, startDate=None):
         '''
         Creates a Task
 
@@ -314,11 +325,15 @@ class Task(db.Model):
         :param locationBLatitude:
         :return: Task created
         '''
+        # Convert startDate to correct format
+        if startDate is not None:
+            startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d %H:%M")
         # Create Task
         task = Task(
             posterUserId=user.userId,
             categoryId=categoryId,
             title=title,
+            startDate=startDate,
             description=description,
             recommendedPrice=recommendedPrice,
             estimatedDurationMinutes=estimatedDurationMinutes,

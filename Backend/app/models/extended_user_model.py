@@ -18,9 +18,11 @@ class ExtendedUser(db.Model):
     userId                          | Integer | PK
     gender                          | String  | Nullable
     age                             | Integer | Nullable
-    uiSatisfaction                  | Integer | Nullable
+    simplicitySatisfaction          | Integer | Nullable
+    visualSatisfaction              | Integer | Nullable
     overallSatisfaction             | Integer | Nullable
-    securitySatisfaction            | Integer | Nullable
+    reliabilitySatisfaction         | Integer | Nullable
+    trustSatisfaction               | Integer | Nullable
     locationInterestedInALongitude  | Numeric | Nullable
     locationInterestedInALatitude   | Numeric | Nullable
     locationInterestedInBLongitude  | Numeric | Nullable
@@ -28,16 +30,18 @@ class ExtendedUser(db.Model):
     tasksPosted                     | Integer
     tasksAccepted                   | Integer
     offersSent                      | Integer
-    posterPreference                | Numeric | Nullable
+    posterPreference                | Integer | Nullable
     pricePerDrivingMinute           | Numeric | Nullable
     '''
     # Column definitions
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"), primary_key=True)
     gender = db.Column(db.String(10), nullable=True)
-    age = db.Column(db.Integer(), nullable=True)
-    uiSatisfaction = db.Column(db.Integer(), nullable=True)
+    age = db.Column(db.String(10), nullable=True)
+    simplicitySatisfaction = db.Column(db.Integer(), nullable=True)
+    visualSatisfaction = db.Column(db.Integer(), nullable=True)
     overallSatisfaction = db.Column(db.Integer(), nullable=True)
-    securitySatisfaction = db.Column(db.Integer(), nullable=True)
+    reliabilitySatisfaction = db.Column(db.Integer(), nullable=True)
+    trustSatisfaction = db.Column(db.Integer(), nullable=True)
     locationInterestedInALongitude = db.Column(db.Numeric(9, 6), nullable=True)
     locationInterestedInALatitude = db.Column(db.Numeric(9, 6), nullable=True)
     locationInterestedInBLongitude = db.Column(db.Numeric(9, 6), nullable=True)
@@ -57,16 +61,24 @@ class ExtendedUser(db.Model):
         self.age = newAge
         db.session.commit()
 
-    def setUISatisfaction(self, newUISat):
-        self.uiSatisfaction = newUISat
+    def setSimplicitySatisfaction(self, newSimplicitySat):
+        self.simplicitySatisfaction = newSimplicitySat
+        db.session.commit()
+
+    def setVisualSatisfaction(self, newVisualSat):
+        self.visualSatisfaction = newVisualSat
         db.session.commit()
 
     def setOverallSatisfaction(self, newOverallSat):
         self.overallSatisfaction = newOverallSat
         db.session.commit()
 
-    def setSecuritySatisfaction(self, newSecSat):
-        self.securitySatisfaction = newSecSat
+    def setTrustSatisfaction(self, newTrustSat):
+        self.trustSatisfaction = newTrustSat
+        db.session.commit()
+
+    def setReliabilitySatisfaction(self, newReliabilitySat):
+        self.reliabilitySatisfaction = newReliabilitySat
         db.session.commit()
 
     def setLocationInterestedInALongitude(self, newLongitudeA):
@@ -85,8 +97,8 @@ class ExtendedUser(db.Model):
         self.locationInterestedInBLatitude = newLatitudeB
         db.session.commit()
 
-    def setTasksPosted(self, newTasksPosted):
-        self.tasksPosted = newTasksPosted
+    def incTasksPosted(self):
+        self.tasksPosted += 1
         db.session.commit()
 
     def setTasksAccepted(self, newTasksAccepted):
