@@ -211,7 +211,7 @@ def createTask():
 
     optionalParameters = ["description", "recommendedPrice", "estimatedDurationMinutes",
                           "locationALongitude", "locationALatitude", "locationBLongitude",
-                          "locationBLatitude"]
+                          "locationBLatitude", "startDate"]
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
@@ -226,6 +226,7 @@ def createTask():
         user=user,
         categoryId=inputJSON["categoryId"],
         title=inputJSON["title"],
+        startDate=inputJSON["startDate"],
         description=inputJSON["description"],
         recommendedPrice=inputJSON["recommendedPrice"],
         estimatedDurationMinutes=inputJSON["estimatedDurationMinutes"],
@@ -307,7 +308,7 @@ def editTask():
     requiredParameters = ["taskId"]
     optionalParameters = ["title", "categroyId", "description", "recommendedPrice", "estimatedDurationMinutes",
                           "locationALongitude", "locationALatitude", "locationBLongitude",
-                          "locationBLatitude"]
+                          "locationBLatitude", "startDate"]
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code

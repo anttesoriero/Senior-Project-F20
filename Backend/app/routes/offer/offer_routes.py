@@ -23,7 +23,7 @@ from app.models.task_model import Task
 '''
 GETs
 '''
-@offer_blueprint.route('/getOffer', methods=['GET'])
+@offer_blueprint.route('/getOffer', methods=['POST'])
 @jwt_required
 def getBriefPublic():
     '''
@@ -38,8 +38,15 @@ def getBriefPublic():
         "message": str
     }
     '''
-    # Validate inputs
-    offerId = request.args.get('offerId', type=int)
+    # Validate input
+    requiredParameters = ["offerId"]
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    offerId = int(inputJSON["offerId"])
 
     # Get Offer
     offer = Offer.getOffer(offerId)
@@ -59,7 +66,7 @@ def getBriefPublic():
     # Send Offer info
     return jsonify(offer.getInfo()), 200
 
-@offer_blueprint.route('/getOffers', methods=['GET'])
+@offer_blueprint.route('/getOffers', methods=['POST'])
 @jwt_required
 def getOffers():
     '''
@@ -68,9 +75,17 @@ def getOffers():
     <taskId: int>
     <includeArchived: bool>
     '''
-    # Validate inputs
-    taskId = request.args.get('taskId', type=int)
-    includeArchived = request.args.get('includeArchived', False, type=bool)
+
+    # Validate input
+    requiredParameters = ["taskId", "includeArchived"]
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    taskId = int(inputJSON["taskId"])
+    includeArchived = bool(inputJSON["includeArchived"])
 
     # Get Task
     task = Task.getByTaskId(taskId)
