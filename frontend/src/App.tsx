@@ -13,6 +13,12 @@ import AdminLogin from './Pages/AdminLogin';
 import AdminDashboard from './Pages/AdminDashboard';
 import AdminUsers from './Pages/AdminUsers';
 import AdminTasks from './Pages/AdminTasks';
+import PrivacyPage from './Pages/PrivacyPage';
+import AboutPage from './Pages/AboutPage';
+import ContactPage from './Pages/ContactPage';
+import TermsPage from './Pages/TermsPage';
+import GetStarted from './Pages/GetStarted';
+import OfferPage from './Pages/OfferPage';
 
 function App() {
   return (
@@ -21,6 +27,7 @@ function App() {
         <Route exact={true} path="/" render={(props) => <LandingPage />} />
         <Route exact={true} path="/survey" render={(props) => <SurveyPage />} />
         <Route exact={true} path="/tasks" render={(props) => <TaskBoard />} />
+        <Route exact={true} path="/offers" render={(props) => <OfferPage />} />
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/listtask" render={(props) => <ListingPage />} />
@@ -28,7 +35,12 @@ function App() {
         <Route exact={true} path="/adminDash" render={(props) => <AdminDashboard />} />
         <Route exact={true} path="/adminUsers" render={(props) => <AdminUsers />} />
         <Route exact={true} path="/adminTasks" render={(props) => <AdminTasks />} />
-        <Route exact={true} path="/testing" render={(props) => <TestingPage />} />
+        {/* <Route exact={true} path="/testing" render={(props) => <TestingPage />} /> */}
+        <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />
+        <Route exact={true} path="/about" render={(props) => <AboutPage />} />
+        <Route exact={true} path="/contact" render={(props) => <ContactPage />} />
+        <Route exact={true} path="/terms" render={(props) => <TermsPage />} />
+        <Route exact={true} path="/getStarted" render={(props) => <GetStarted />} />
         <Redirect to="/error" />
       </Switch>
     </BrowserRouter>

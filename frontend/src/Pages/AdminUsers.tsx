@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Button, Row, Col } from 'reactstrap';
 import Sidenav from '../Components/Sidenav';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
+import APIContext from '../Contexts/APIContext';
 
 type user = {
     id: number,
@@ -14,13 +15,15 @@ type user = {
 }
 
 const AdminUsers = () => {
+    const url = useContext(APIContext);
     let a: user[] = []
+
     const [users, setUsers] = useState(a);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getUsers() {
-            await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/admin/getAllUsers', {
+            await axios.post(url + 'admin/getAllUsers', {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {
@@ -50,7 +53,7 @@ const AdminUsers = () => {
     };
 
     const deleteUser = async id => {
-        await axios.delete('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/me/deleteUser')
+        await axios.delete(url + 'me/deleteUser')
             .then(function (response) {
                 console.log(response);
             })

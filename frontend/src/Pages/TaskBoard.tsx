@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Footer from "../Components/Footer";
@@ -9,20 +9,24 @@ import PaginationRow from '../Components/PaginationRow';
 import { TileLayer, MapContainer } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import MapsCircle from '../Components/MapsCircle';
+import APIContext from '../Contexts/APIContext';
 
 type task = {
+    taskId: number,
     categoryId: number,
     recommendedPrice: string,
     amount: number,
-    duration: number,
+    estimatedDurationMinutes: number,
     locationALatitude: number,
     locationALongitude: number,
     title: string,
-    offerer: string,
+    posterTaskId: number,
     description: string
 }
 
 const TaskBoard = () => {
+    const url = useContext(APIContext);
+
     const token = localStorage.getItem('access_token');
 
     let a: task[] = [];
@@ -31,7 +35,7 @@ const TaskBoard = () => {
 
 
     const getTaskList = async () => {
-        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/recommendTasks`,
+        await axios.get(url + 'task/recommendTasks',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data.tasks);
@@ -43,7 +47,7 @@ const TaskBoard = () => {
     }
 
     const getIds = async () => {
-        await axios.get(`http://ec2-54-165-213-235.compute-1.amazonaws.com:80/task/getPublic`,
+        await axios.get(url + 'task/getPublic',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data);
@@ -74,7 +78,15 @@ const TaskBoard = () => {
                     <Container>
                         <h3 id="top" className="centered">Tasks</h3>
                         {tasks.map(task => (
-                            <TaskCard title={task.title} offerer={task.offerer} price={Number(task.recommendedPrice)} description={task.description} />
+                            <TaskCard
+                                key={task.taskId}
+                                id={task.taskId}
+                                title={task.title}
+                                offerer={task.posterTaskId}
+                                price={Number(task.recommendedPrice)}
+                                description={task.description}
+                                duration={task.estimatedDurationMinutes}
+                            />
                         ))}
 
                         <h4 className="centered">No More Tasks in this Area</h4>
@@ -97,10 +109,11 @@ const TaskBoard = () => {
                         {/* Map Circle Markers - MapsCircle */}
                         {tasks.map(task => (
                             <MapsCircle
+                                key={task.taskId}
                                 title={task.title}
                                 categoryId={task.categoryId}
                                 amount={Number(task.recommendedPrice)}
-                                duration={task.duration}
+                                duration={task.estimatedDurationMinutes}
                                 latitude={39.7089}
                                 longitute={-75.1183} />
                         ))}

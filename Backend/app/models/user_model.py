@@ -8,11 +8,8 @@ User's model for database
 from app import db
 
 # Models imports
-# ! THIS BUILDS THE DATABASE !
 from app.models.credentials_model import Credentials
 from app.models.account_balance_model import AccountBalance
-from app.models.offer_model import Offer
-from app.models.category_model import Category
 from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey

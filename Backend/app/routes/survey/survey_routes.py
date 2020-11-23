@@ -1,9 +1,7 @@
 """
 Defines routes for survey related endpoints
 ! Try to use utilities outside of this file to do the heavy lifting !
-
 This file should be focused on annotating routes
-
 @author Matthew Schofield, Steven Jiang, Jasdip Dhillon
 @version 11.11.2020
 """
@@ -19,8 +17,8 @@ from app.utilities.validation.validation import validateRequestJSON
 # Model imports
 from app.models.user_model import User
 from app.models.survey_model import Survey
-from app.models.historical_survey_model import HistoricalSurvey
 from app.routes.survey.survey_recommender import survey_recommender
+from app.routes.survey.survey_responder import survey_response_handler
 
 '''
 GETs
@@ -30,10 +28,8 @@ GETs
 def getSurvey():
     '''
     Get a survey by surveyId
-
     In:
     <surveyId int>
-
     Out:
     {
         "type": str
@@ -67,10 +63,8 @@ def getSurvey():
 def recommendSurvey():
     '''
     Recommend a survey based on randomness and EUM meta information
-
     In:
     ---
-
     Out:
     {
         "recommendSurvey": int
@@ -94,15 +88,12 @@ POSTs
 def respond():
     '''
     Respond to a Survey as a User
-
     In:
     {
         "surveyId": int,
         "response": str
     }
-
     Out:
-
     '''
     # Validate input
     requiredParameters = ["surveyId", "response"]
@@ -112,8 +103,13 @@ def respond():
     if not success:
         return jsonify({}), code
 
+    if not inputJSON["response"] in ["A", "B", "C", "D", "E", "F"]:
+        return jsonify({}), 400
+
     # Get current user
-    current_user_id = get_jwt_identity()
-    HistoricalSurvey.createHistoricalSurvey(current_user_id, inputJSON["surveyId"], inputJSON["response"])
+    current_user = User.getByUserId(get_jwt_identity())
+
+    # Handle Survey response
+    survey_response_handler.respond(current_user, inputJSON["surveyId"], inputJSON["response"])
 
     return jsonify({"success": True}), 200

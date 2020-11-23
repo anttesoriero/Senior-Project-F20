@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { FormGroup, Input, Label, Button, Spinner, Row, Col } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import axios from 'axios';
+import APIContext from '../Contexts/APIContext';
 
 const Register = ({ history }: RouteComponentProps) => {
+    const url = useContext(APIContext);
+
     const [submitting, setSubmitting] = useState(false);
     const [rerror, setRError] = useState(false);
 
     const signIn = data => {
         setSubmitting(true);
-        axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/auth/register', {
+        axios.post(url + 'auth/register', {
             email: data.email,
             password: data.password,
             firstName: data.firstName,

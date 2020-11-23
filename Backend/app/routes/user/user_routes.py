@@ -10,6 +10,7 @@ This file should be focused on annotating routes
 # Library imports
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required
+from app.utilities.validation.validation import validateRequestJSON
 
 # Module imports
 from app.routes.user import user_blueprint
@@ -38,7 +39,7 @@ def getBriefProfile():
 
     return jsonify(responseInformation), 200
 
-@user_blueprint.route('/getProfile', methods=['GET'])
+@user_blueprint.route('/getProfile', methods=['POST'])
 @jwt_required
 def getProfile():
     '''
@@ -47,8 +48,13 @@ def getProfile():
     :return: profile about a given user
         see output of User.getPublicInfo()
     '''
-    # Validate inputs
-    otherUserId = request.args.get('otherUser', type=int)
+    # Validate input
+    success, code, inputJSON = validateRequestJSON(request, ["otherUser"], [])
+
+    if not success:
+        return jsonify({}), code
+
+    otherUserId = int(inputJSON["otherUser"])
 
     # Get models
     otherUser = User.getByUserId(otherUserId)

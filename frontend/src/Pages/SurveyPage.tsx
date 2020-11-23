@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
 import Footer from '../Components/Footer';
 import { Container, Row, Button, FormGroup, Input, Spinner, Label } from 'reactstrap';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
+import APIContext from '../Contexts/APIContext';
 
 type surveyState = {
   active: boolean;
@@ -18,14 +19,16 @@ type surveyState = {
 }
 
 const SurveyPage = () => {
+  const url = useContext(APIContext);
   const token = localStorage.getItem('access_token');
+
   const [survey, setSurvey] = useState<surveyState>();
   const [serror, setSerror] = useState(false);
   const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const getSurvey = async () => {
-    await axios.get('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/survey/recommendSurvey',
+    await axios.get(url + 'survey/recommendSurvey',
       { headers: { Authorization: `Bearer ${token}` } })
       .then(async response => {
         console.log(response.data.recommendedSurvey);
@@ -39,7 +42,7 @@ const SurveyPage = () => {
   const postSurvey = async (response) => {
     console.log(response.response)
     setSubmitting(true);
-    await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/survey/respond', {
+    await axios.post(url + 'survey/respond', {
       surveyId: survey?.surveyId,
       response: response.response
     },
@@ -50,6 +53,8 @@ const SurveyPage = () => {
         setSubmitting(false);
         console.log(response.data);
         setSuccess(true);
+        var today = new Date();
+        localStorage.setItem('daily_survey', today as unknown as string);
       })
       .catch(error => {
         console.log(error);
@@ -98,11 +103,13 @@ const SurveyPage = () => {
                   <Field name='response' type='radio' value={'C'} as={Input} />{survey?.answerC}
                 </Label>
               </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Field name='response' type='radio' value={'D'} as={Input} />{survey?.answerD}
-                </Label>
-              </FormGroup>
+              {survey?.answerD ?
+                <FormGroup check>
+                  <Label check>
+                    <Field name='response' type='radio' value={'D'} as={Input} />{survey?.answerD}
+                  </Label>
+                </FormGroup> : <div></div>
+              }
               {survey?.answerE ?
                 <FormGroup check>
                   <Label check>

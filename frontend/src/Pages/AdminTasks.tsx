@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Button, Row, Col } from 'reactstrap';
 import Sidenav from '../Components/Sidenav';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
+import APIContext from '../Contexts/APIContext';
 
 type task = {
     accepted: boolean
@@ -21,12 +22,14 @@ type task = {
 
 const AdminTasks = () => {
     let a: task[] = []
+    const url = useContext(APIContext);
+
     const [tasks, setTasks] = useState(a);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getTasks() {
-            await axios.post('http://ec2-54-165-213-235.compute-1.amazonaws.com:80/admin/getAllTasks', {
+            await axios.post(url + 'admin/getAllTasks', {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {

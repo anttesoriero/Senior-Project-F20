@@ -10,6 +10,7 @@ def validateRequestJSON(request, requiredParamaters, variableParameters):
     goodCode = 200
 
     # This is useful to drop unexpected parameters
+    # This is useful to drop unexpected parameters
     outputJSON = {}
 
     # Validate input is JSON
@@ -20,7 +21,7 @@ def validateRequestJSON(request, requiredParamaters, variableParameters):
     # Check for missing parameters
     for paramName in requiredParamaters:
         parameter = request.json.get(paramName, None)
-        if not parameter:
+        if parameter is None:
             success = False
             return success, errorCode, {}
         outputJSON[paramName] = parameter
