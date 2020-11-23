@@ -19,6 +19,7 @@ from app import check_if_token_in_blacklist
 
 # Model imports
 from app.models.user_model import User
+from app.models.report_model import Report
 
 '''
 GETs
@@ -132,3 +133,33 @@ def deleteAccount():
         'message': 'user deleted'
     }
     return jsonify(responseInformation), 200
+
+'''
+PUTs
+'''
+@me_blueprint.route('/reportUser', methods=['PUT'])
+@jwt_required
+def reportUser():
+    '''
+    Reports a user from the database
+    '''
+    # Validate input
+    requiredParameters = ["userId_2", "reportType", "description"]
+
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    # Get current user
+    userId_1 = get_jwt_identity()
+    # Get user being reported
+    userId_2 = User.getByUserId(int(inputJSON["userId_2"]))
+    
+    if userId_2 is not None:
+        Report.createReport(userId_1, userId_2.userId, inputJSON["reportType"], inputJSON["description"])
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({}), 404
+

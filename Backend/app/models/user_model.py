@@ -17,6 +17,7 @@ from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
+from app.models.report_model import Report
 
 class User(db.Model):
     '''
@@ -47,6 +48,7 @@ class User(db.Model):
     postedTasks = db.relationship('Task', backref="user", uselist=True, cascade="all, delete-orphan")
     extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False, cascade="all, delete-orphan")
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True, cascade="all, delete-orphan")
+    report = db.relationship('Report', backref="user", uselist=True, cascade="all, delete-orphan")
 
 
     '''

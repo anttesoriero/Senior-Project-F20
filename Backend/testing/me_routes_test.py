@@ -44,7 +44,7 @@ def test_login():
     )
     
     assert response.status_code == 200, "test_login()"
-
+    print(response.json()["access_token"])
     return response.json()["access_token"]
 
 test_login()
@@ -101,15 +101,15 @@ def test_editInformation():
 
 test_editInformation()
 
-# Tests deleteAccount for success
-def test_deleteAccount():
-    endpoint = "deleteAccount"
+# # Tests deleteAccount for success
+# def test_deleteAccount():
+#     endpoint = "deleteAccount"
 
-    response = requests.delete(
-        base_me + endpoint,
-        headers=headers
-    )
+#     response = requests.delete(
+#         base_me + endpoint,
+#         headers=headers
+#     )
     
-    assert response.status_code == 200, "test_deleteAccount()"
+#     assert response.status_code == 200, "test_deleteAccount()"
 
-test_deleteAccount()
+# test_deleteAccount()
