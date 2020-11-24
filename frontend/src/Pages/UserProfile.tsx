@@ -52,9 +52,13 @@ const UserProfile = () => {
             });
     }
 
+    useEffect(() => {
+        getUser();
+    }, []);
+
     return (
         <Container>
-            <h1 id="centered" style={{ fontWeight: 'bold' }}>Profile Page</h1>
+            <h1 id="centered" style={{ fontWeight: 'bold' }}>User's Profile</h1>
             <br />
 
             {/* Upper - Main user info and edit button */}
@@ -66,7 +70,7 @@ const UserProfile = () => {
                             <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                         </Media>
                         <Media body style={{ padding: 10 }}>
-                        <h4>Bio</h4>
+                        <h4>Name</h4>
                             {user.preferredName ?
                                     <Col xs="10"><p>{user.preferredName}</p></Col>
                                     :
@@ -180,5 +184,6 @@ const UserProfile = () => {
             </Row>
         </Container>
     )
-
 }
+
+export default UserProfile;
