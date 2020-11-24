@@ -103,6 +103,8 @@ const TaskBoard = () => {
 
                 <Col xs="8">
                     <MapContainer className="leaflet-container" center={centerLocation} zoom={15} scrollWheelZoom={true} >
+                        {/* Need to change "center" to users location - center{[userLat, userLong]} */}
+
                         <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
@@ -114,8 +116,8 @@ const TaskBoard = () => {
                                 categoryId={task.categoryId}
                                 amount={Number(task.recommendedPrice)}
                                 duration={task.estimatedDurationMinutes}
-                                latitude={39.7089}
-                                longitute={-75.1183} />
+                                latitude={Number(task.locationALatitude)}
+                                longitute={Number(task.locationALongitude)} />
                         ))}
 
                     </MapContainer>
