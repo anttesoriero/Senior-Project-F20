@@ -1,8 +1,5 @@
 import React from 'react'
-import { Popup,   Circle } from 'react-leaflet';
-import { LatLngTuple } from 'leaflet';
-import PlaceholderImage from "../Styles/Images/placeholder.jpg"
-import { Container } from 'reactstrap';
+import { Popup, Circle } from 'react-leaflet';
 
 const MapsCircle = (prop: {
     title: string,
@@ -23,7 +20,6 @@ const MapsCircle = (prop: {
             pathOptions={{ color: categoryColor[prop.categoryId-1], fillColor: categoryColor[prop.categoryId-1] }}
             radius={150}>
             <Popup>
-                {/* Stretch Goal - <img src={PlaceholderImage} width="100%vw"/> */}
                 <h2>{prop.title}</h2>
                 <h3>Category: {categoryNames[prop.categoryId-1]}</h3>
                 <h4>${prop.amount} for {prop.duration} minutes</h4>
