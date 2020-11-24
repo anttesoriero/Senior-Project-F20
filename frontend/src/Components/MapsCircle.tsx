@@ -14,16 +14,19 @@ const MapsCircle = (prop: {
 
 }) => {
 
+    const categoryNames = ["Yard Work", "Transportation", "Cleaning", "Moving", "Care-Taking", "Cooking"]
+    const categoryColor = ["green", "gray", "blue", "red", "purple", "orange"]
+
     return (
         <Circle
             center={[prop.latitude, prop.longitute]}
-            pathOptions={{ color: 'blue', fillColor: 'blue' }}
+            pathOptions={{ color: categoryColor[prop.categoryId-1], fillColor: categoryColor[prop.categoryId-1] }}
             radius={150}>
             <Popup>
                 {/* Stretch Goal - <img src={PlaceholderImage} width="100%vw"/> */}
-                <h1>{prop.title}</h1>
-                <h2>Category: {prop.categoryId}</h2>
-                <h3>${prop.amount} for {prop.duration} minutes</h3>
+                <h2>{prop.title}</h2>
+                <h3>Category: {categoryNames[prop.categoryId-1]}</h3>
+                <h4>${prop.amount} for {prop.duration} minutes</h4>
             </Popup>
         </Circle>
     );
