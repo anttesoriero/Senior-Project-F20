@@ -11,6 +11,7 @@ import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
 {/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */ }
 
+{/* Not sure if this stuff is right */ }
 type taskState = {
     categoryId: number,
     title: string,
@@ -26,6 +27,7 @@ type taskState = {
 {/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */ }
 
 const taskFields = {
+    // TODO: associate categories with their respective category ID's
     // Default initial values for the task fields
     categoryId: 1,
     title: "",
@@ -47,25 +49,10 @@ const ListingPage = ({ history }: RouteComponentProps) => {
     const createTask = async (data) => {
         console.log(data)
 
-        var latitude:number = 0;
-        var longitude:number= 0;
+        // var latitude:number = 0;
+        // var longitude:number= 0;
 
-        onclick = function geocode(){
-            var location = data.address + data.address2 + data.city + data.state + data.zip;
-            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                params: {
-                    address: location,
-                    key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
-                }
-            })
-            .then(function(response){
-                console.log(response.data.results[0].geometry.location)
-                const json = response.data.results[0].geometry.location
-                latitude = json.lat
-                longitude = json.lng
-            })
-            
-        } 
+        const {lat, lng} = geocode(data)
         
         await axios.post(url + 'task/createTask', {
             categoryId: data.categoryId - 1,
@@ -73,8 +60,8 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             description: data.description,
             recommendedPrice: data.recommendedPrice,
             estimatedDurationMinutes: data.estimatedDurationMinutes,
-            locationALatitude: latitude,  // ERROR: returning 0
-            locationALongitude: longitude  // ERROR: returning 0
+            locationALatitude: lat,  // ERROR: returning 0
+            locationALongitude: lng  // ERROR: returning 0
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
@@ -88,6 +75,33 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                 setSerror(true);
             });
     }
+
+    const geocode = (data) => {
+        var location = data.address + data.address2 + data.city + data.state + data.zip;
+        console.log('location: ', location)
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+            params: {
+                address: location,
+                key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
+            }
+        })
+        .then(function(response){
+            // const json = response.data.results[0].geometry.location
+			console.log(response)
+			
+			const results = response.data.results
+			if (results !== undefined && results.length != 0) {
+				const data = results[0].geometry.location
+                console.log('Data: ', data)
+                
+                // Returns something like {lat: 20, lng: -45}
+				return data
+			}
+			else {
+				throw "That address doesn't exist!"
+			}
+        })
+    } 
 
     const inputStyles = {
         maxWidth: 320,
@@ -163,7 +177,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="date"><h4>Date *</h4></Label>
-                                        <Field type="date" name="date" id="date" placeholder="DD-MM-YYYY" as={Input} required />
+                                        <Field type="date" name="date" id="date" placeholder="MM-DD-YYYY" as={Input} required />
                                     </FormGroup>
                                 </Col>
                                 <Col>
@@ -229,7 +243,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 {serror ? <p className='error'>There was an error submitting the task!</p> : <div></div>}
                             </div>
                             <div className="centered">
-                                <Button color="primary" size="lg" type="submit" onclick="geocode()">List Task</Button>
+                                <Button color="primary" size="lg" type="submit">List Task</Button>
                             </div>
 
                         </Form>
