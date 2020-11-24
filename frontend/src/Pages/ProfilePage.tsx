@@ -66,7 +66,8 @@ const ProfilePage = () => {
             email: data.email,
             firstName: data.name.split(' ')[0],
             preferredName: data.preferredName,
-            phoneNumber: data.phoneNumber
+            phoneNumber: data.phoneNumber,
+            bio: data.bio
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
@@ -211,7 +212,11 @@ const ProfilePage = () => {
                                             {/* Left - About Info */}
                                             <Col xs="6">
                                                 <h4>Bio</h4>
-                                                <p>General bio for profile owner</p>
+                                                {user ?
+                                                    <Col xs="10"><p>{user.bio}</p></Col>
+                                                    :
+                                                    <Col xs="10"><p>User bio</p></Col>
+                                                }
 
                                                 <h4>Liked Jobs</h4>
                                                 <p>Selected liked job categories from survey</p>
@@ -220,7 +225,11 @@ const ProfilePage = () => {
                                                 {/* Phone */}
                                                 <Row>
                                                     <Col xs="2"><p>Phone:</p></Col>
-                                                    <Col xs="10"><p>(555) 555-5555</p></Col>
+                                                    {user ?
+                                                        <Col xs="10"><p>{user.phoneNumber}</p></Col>
+                                                        :
+                                                        <Col xs="10"><p>5555555555</p></Col>
+                                                    }  
                                                 </Row>
                                                 {/* Email */}
                                                 <Row>
@@ -307,6 +316,15 @@ const ProfilePage = () => {
                                                     <FormGroup>
                                                         <Label for="phoneNumber"><h4>Phone Number</h4></Label>
                                                         <Field name='phoneNumber' type='text' placeholder={user.phoneNumber} as={Input} />
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+
+                                            <Row>
+                                                <Col className="centered">
+                                                    <FormGroup>
+                                                        <Label for="bio"><h4>Bio</h4></Label>
+                                                        <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
