@@ -24,7 +24,7 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
         axios.get(url + 'me/getProfile',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
             })
             .catch(error => {
                 if (!redirect) {

@@ -3,9 +3,11 @@ import {
     Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader,
     ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label
 } from 'reactstrap';
+import { RiMoneyDollarBoxFill, RiUserFill, RiTimerFill } from 'react-icons/ri'
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
+import jwt_decode from "jwt-decode";
 
 type CardProps = {
     id: number,
@@ -16,6 +18,16 @@ type CardProps = {
     duration: number
 }
 
+type Poster = {
+    email: string
+    gender: string
+    id: number
+    name: string
+    phoneNumber: string
+    preferredName: string
+    profilePicture: ""
+}
+
 const TaskCard = ({ title, offerer, price, description, duration, id }: CardProps) => {
     const url = useContext(APIContext);
     const token = localStorage.getItem('access_token');
@@ -23,7 +35,10 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
     const [open, setOpen] = useState(false)
     const [submitting, setSubmitting] = useState(false);
     const [serror, setSerror] = useState(false);
-    const [poster, setPoster] = useState('');
+    const [oerror, setOerror] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [poster, setPoster] = useState<Poster>();
+    const [user, setUser] = useState(0);
 
     useEffect(() => {
         getPoster()
@@ -36,7 +51,11 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
             },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response)
+                console.log(response.data)
+                setPoster(response.data)
+                let curUser;
+                token ? curUser = jwt_decode(token) : curUser = -1;
+                setUser(curUser.identity)
             })
             .catch(error => {
                 console.log(error)
@@ -49,37 +68,43 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
 
     const createOffer = async (data) => {
         setSubmitting(true)
-        console.log(data)
-        console.log(title, offerer, price, description, duration, id)
-        await axios.post(url + 'offer/createOffer',
-            {
-                taskId: id,
-                payment: data.payment,
-                startDate: data.startDate,
-                jobDurationMinutes: data.jobDurationMinutes,
-                note: data.note
-            },
-            { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                console.log(response)
-                setSubmitting(false)
-            })
-            .catch(error => {
-                console.log(error)
-                setSubmitting(false)
-                setSerror(true)
-            })
+        //console.log(data)
+        if(poster?.id === user){
+            setOerror(true)
+            setSubmitting(false)
+        }
+        else {
+            await axios.post(url + 'offer/createOffer',
+                {
+                    taskId: id,
+                    payment: data.payment,
+                    startDate: data.startDate + ' ' + data.time,
+                    jobDurationMinutes: data.jobDurationMinutes,
+                    note: data.note
+                },
+                { headers: { Authorization: `Bearer ${token}` } })
+                .then(response => {
+                    console.log(response)
+                    setSubmitting(false)
+                    setSuccess(true)
+                })
+                .catch(error => {
+                    console.log(error)
+                    setSubmitting(false)
+                    setSerror(true)
+                })
+        }
     }
 
     return (
         <div>
             <Card>
                 <CardBody>
-                    <h4>{title}</h4>
-                    <CardSubtitle>{offerer}</CardSubtitle>
-                    <CardSubtitle>${price}</CardSubtitle>
-                    <CardSubtitle>{duration / 60} hour(s), {duration} minutes</CardSubtitle>
-                    <CardText>{description}</CardText>
+                    <h4 style={{fontWeight: 'bolder'}}>{title}</h4>
+                    <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder'}}><RiUserFill/> {poster?.name}</CardSubtitle>
+                    <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${price}</CardSubtitle>
+                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> {duration / 60} hour(s), {duration} minutes</CardSubtitle>
+                    <CardText style={{fontWeight: 'bolder'}}>{description}</CardText>
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
                     </div>
@@ -93,17 +118,27 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                     </Button>
                 </ModalHeader>
                 <ModalBody>
-                    <Formik initialValues={{ payment: price, startDate: '', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
+                    <Formik initialValues={{ payment: price, startDate: '', time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
                         {() => (
                             <Form >
                                 <FormGroup>
                                     <Label for="payment">Payment*</Label>
                                     <Field name='payment' type='text' required as={Input}>{price}</Field>
                                 </FormGroup>
-                                <FormGroup>
-                                    <Label for="startDate">Start Date*</Label>
-                                    <Field name='startDate' type='date' required as={Input} />
-                                </FormGroup>
+                                <Row>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="startDate">Start Date*</Label>
+                                            <Field name='startDate' type='date' required as={Input} />
+                                        </FormGroup>
+                                    </Col>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="time">Start Time*</Label>
+                                            <Field name='time' type='time' required as={Input} />
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
                                 <FormGroup>
                                     <Label for='jobDurationMinutes'>Job Duration in Minutes*</Label>
                                     <Field name='jobDurationMinutes' type='text' required as={Input} />
@@ -115,6 +150,8 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                                 <p>* are required fields</p>
                                 <div className='centered'>
                                     {serror ? <p className='error'>There was an error making offer!</p> : <div></div>}
+                                    {oerror ? <p className='error'>Can't make an offer on your own task!</p> : <div></div>}
+                                    {success ? <p className='success'>Offer succesffuly made!</p> : <div></div>}
                                 </div>
                                 <FormGroup className='centered'>
                                     <Row >

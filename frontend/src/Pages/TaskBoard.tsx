@@ -26,7 +26,6 @@ type task = {
 
 const TaskBoard = () => {
     const url = useContext(APIContext);
-
     const token = localStorage.getItem('access_token');
 
     let a: task[] = [];
@@ -76,7 +75,7 @@ const TaskBoard = () => {
                 {/* Left - TaskCards */}
                 <Col xs="4" className="col-scroll">
                     <Container>
-                        <h3 id="top" className="centered">Tasks</h3>
+                        <h3 id="top" className="centered" style={{fontWeight: 'bolder'}}>Tasks</h3>
                         {tasks.map(task => (
                             <TaskCard
                                 key={task.taskId}
@@ -89,7 +88,8 @@ const TaskBoard = () => {
                             />
                         ))}
 
-                        <h4 className="centered">No More Tasks in this Area</h4>
+                        <hr/> 
+                        <h4 className="centered" style={{fontWeight: 'bolder'}}>No More Tasks in this Area</h4>&nbsp;
                         <Button className={'task centered'} href="#top">Back to Top</Button>
 
                         <br />
