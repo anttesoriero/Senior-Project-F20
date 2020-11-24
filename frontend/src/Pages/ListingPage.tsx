@@ -52,7 +52,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
         var latitude:number = 0;
         var longitude:number= 0;
 
-        function geocode(){
+        onclick = function geocode(){
             var location = data.address + data.address2 + data.city + data.state + data.zip;
             axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                 params: {
@@ -165,7 +165,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="date"><h4>Date *</h4></Label>
-                                        <Field type="date" name="date" id="date" placeholder="MM-DD-YYYY" as={Input} required />
+                                        <Field type="date" name="date" id="date" placeholder="DD-MM-YYYY" as={Input} required />
                                     </FormGroup>
                                 </Col>
                                 <Col>
@@ -231,7 +231,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 {serror ? <p className='error'>There was an error submitting the task!</p> : <div></div>}
                             </div>
                             <div className="centered">
-                                <Button color="primary" size="lg" type="submit">List Task</Button>
+                                <Button color="primary" size="lg" type="submit" onclick="geocode()">List Task</Button>
                             </div>
 
                         </Form>
