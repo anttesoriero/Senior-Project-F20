@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import Navigation from '../Components/Navigation';
 import { Container, Row, Col, Button, FormGroup, Input, Label, InputGroup, InputGroupAddon } from 'reactstrap';
 import Footer from "../Components/Footer";
@@ -19,49 +19,53 @@ type taskState = {
     recommendedPrice: number,
     estimatedDurationMinutes: number,
     locationALongitude: number,
-    locationALatitude: number,
-    locationBLongitude: number,
-    locationBLatitude: number
+    locationALatitude: number
+    // locationBLongitude: number,
+    // locationBLatitude: number
 }
 
 {/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */ }
 
 const taskFields = {
-    // TODO: associate categories with their respective category ID's
     // Default initial values for the task fields
     categoryId: 1,
     title: "",
     description: "",
-    recommendedPrice: undefined,
-    estimatedDurationMinutes: undefined,
-    locationALongitude: 15,
-    locationALatitude: 15,
-    locationBLongitude: 15,
-    locationBLatitude: 15
+    recommendedPrice: 0,
+    estimatedDurationMinutes: 0,
+    locationALongitude: 0,
+    locationALatitude: 0
+    // locationBLongitude: 15,
+    // locationBLatitude: 15
 }
 
 const ListingPage = ({ history }: RouteComponentProps) => {
     const token = localStorage.getItem('access_token');
     const url = useContext(APIContext);
+    const [taskInfo, setTaskInfo] = useState<taskState>(taskFields);
+    const [serror, setSerror] = useState<boolean>(false);
+    const isInitialMount = useRef(true)
 
-    const [serror, setSerror] = useState(false);
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false
+        }
+        else {
+            createTask()
+        }
+    })
 
-    const createTask = async (data) => {
-        console.log(data)
+    const createTask = async () => {
+        console.log('Info: ', taskInfo)
 
-        // var latitude:number = 0;
-        // var longitude:number= 0;
-
-        const {lat, lng} = geocode(data)
-        
         await axios.post(url + 'task/createTask', {
-            categoryId: data.categoryId - 1,
-            title: data.title,
-            description: data.description,
-            recommendedPrice: data.recommendedPrice,
-            estimatedDurationMinutes: data.estimatedDurationMinutes,
-            locationALatitude: lat,  // ERROR: returning 0
-            locationALongitude: lng  // ERROR: returning 0
+            categoryId: taskInfo?.categoryId - 1,
+            title: taskInfo?.title,
+            description: taskInfo?.description,
+            recommendedPrice: taskInfo?.recommendedPrice,
+            estimatedDurationMinutes: taskInfo?.estimatedDurationMinutes,
+            locationALatitude: taskInfo?.locationALatitude,
+            locationALongitude: taskInfo?.locationALongitude
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
@@ -76,27 +80,32 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             });
     }
 
-    const geocode = (data) => {
+    const geocode = async (data) => {
         var location = data.address + data.address2 + data.city + data.state + data.zip;
-        console.log('location: ', location)
-        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+
+        await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
             params: {
                 address: location,
                 key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
             }
         })
         .then(function(response){
-            // const json = response.data.results[0].geometry.location
 			console.log(response)
 			
 			const results = response.data.results
 			if (results !== undefined && results.length != 0) {
-				const data = results[0].geometry.location
-                console.log('Data: ', data)
-                
-                // Returns something like {lat: 20, lng: -45}
-				return data
-			}
+				const { lat, lng } = results[0].geometry.location
+             
+				setTaskInfo({
+                    categoryId: data.categoryId,
+                    title: data.title,
+                    description: data.description,
+                    recommendedPrice: data.recommendedPrice,
+                    estimatedDurationMinutes: data.estimatedDurationMinutes,
+                    locationALongitude: lng,
+                    locationALatitude: lat
+                })
+            }
 			else {
 				throw "That address doesn't exist!"
 			}
@@ -107,14 +116,6 @@ const ListingPage = ({ history }: RouteComponentProps) => {
         maxWidth: 320,
     }
 
-    // Update: Steven J.
-    // I leaned away from useEffect() since it runs when the component renders
-    // and doesn't allow the page to create tasks for some reason
-
-    // useEffect(()=> {
-    //     createTask();
-    // }, []);
-
     return (
         <div>
             <Navigation />
@@ -123,7 +124,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                 <br />
 
                 <div className="centered">
-                    <Formik initialValues={{ categoryId: 1, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => createTask(data)} >
+                    <Formik initialValues={{ categoryId: 1, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => geocode(data)} >
                         <Form>
                             {/* Row 1 - Name & Category */}
                             <Row>
