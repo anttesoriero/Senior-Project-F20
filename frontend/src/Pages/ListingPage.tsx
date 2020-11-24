@@ -11,7 +11,6 @@ import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
 {/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */ }
 
-{/* Not sure if this stuff is right */ }
 type taskState = {
     categoryId: number,
     title: string,
@@ -27,7 +26,6 @@ type taskState = {
 {/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */ }
 
 const taskFields = {
-    // TODO: associate categories with their respective category ID's
     // Default initial values for the task fields
     categoryId: 1,
     title: "",
