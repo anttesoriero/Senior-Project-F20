@@ -6,7 +6,7 @@ const RefineSearch = (props) => {
     
     return (
         <div className="centered" style={{background: "#d6d6d6", height: "45px"}}>
-            {/* <Formik initialValues={{ categoryId: 1, search: '', minPayRate: 0, maxPayRate: 0 }} onSubmit={data => }> */}
+            {/* <Formik initialValues={{ categoryId: 1, search: '', duration: 0 }} onSubmit={data => }> */}
             {/* Change "Input"'s to "Field"'s when Formik used */}
                 <Form inline>
                     {/* Title Search Bar */}
