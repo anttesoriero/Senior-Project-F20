@@ -1,10 +1,11 @@
+import { Field } from 'formik';
 import React from 'react';
 import { Input } from 'reactstrap';
 
 const StateSelector = () => {
 
     return (
-        <Input type="select" name="state" id="state" as={Input} required>
+        <Field type="select" name="state" id="state" as={Input} required>
             <option selected disabled>Select State</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -57,7 +58,7 @@ const StateSelector = () => {
             <option value="WV">West Virginia</option>
             <option value="WI">Wisconsin</option>
             <option value="WY">Wyoming</option>
-        </Input>
+        </Field>
     );
 }
 
