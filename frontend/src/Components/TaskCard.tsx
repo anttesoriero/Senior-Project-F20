@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {
     Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader,
-    ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label
+    ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label, InputGroup, InputGroupAddon
 } from 'reactstrap';
 import { RiMoneyDollarBoxFill, RiUserFill, RiTimerFill } from 'react-icons/ri'
 import { Formik, Form, Field } from 'formik';
@@ -121,27 +121,34 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                     <Formik initialValues={{ payment: price, startDate: '', time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
                         {() => (
                             <Form >
+                                {/*  Changing format to match listing page
                                 <FormGroup>
                                     <Label for="payment">Payment*</Label>
                                     <Field name='payment' type='text' required as={Input}>{price}</Field>
-                                </FormGroup>
+                                </FormGroup> */}
+                                <Label for="payment">Payment *</Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                        <Field type="number" name="payment" min="15" as={Input} required >{price}</Field>
+                                        <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                    </InputGroup>
                                 <Row>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="startDate">Start Date*</Label>
-                                            <Field name='startDate' type='date' required as={Input} />
+                                            <Label for="startDate">Start Date *</Label>
+                                            <Field name='startDate' type='date' placeholder="MM-DD-YYYY" required as={Input} />
                                         </FormGroup>
                                     </Col>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="time">Start Time*</Label>
+                                            <Label for="time">Start Time *</Label>
                                             <Field name='time' type='time' required as={Input} />
                                         </FormGroup>
                                     </Col>
                                 </Row>
                                 <FormGroup>
-                                    <Label for='jobDurationMinutes'>Job Duration in Minutes*</Label>
-                                    <Field name='jobDurationMinutes' type='text' required as={Input} />
+                                    <Label for='jobDurationMinutes'>Job Duration in Minutes *</Label>
+                                    <Field name='jobDurationMinutes' type='number' min='15' required as={Input} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for='note'>Notes</Label>
