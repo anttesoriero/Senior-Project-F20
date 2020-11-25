@@ -21,7 +21,8 @@ type userState = {
     zipCode: string,
     phoneNumber: string,
     website: string,
-    bio: string
+    bio: string,
+    profilePicture: string
 }
 
 const userInfo = {
@@ -35,7 +36,8 @@ const userInfo = {
     zipCode: "",
     phoneNumber: "",
     website: "",
-    bio: ""
+    bio: "",
+    profilePicture: ""
 }
 
 const ProfilePage = () => {
@@ -62,12 +64,14 @@ const ProfilePage = () => {
 
     // Have to refactor this if using Formik for edit profile
     const editProfile = async (data) => {
+        console.log('picture: ', userInfo.profilePicture)
         await axios.put(url + 'me/editInformation', {
             email: data.email,
             firstName: data.name.split(' ')[0],
             preferredName: data.preferredName,
             phoneNumber: data.phoneNumber,
-            bio: data.bio
+            bio: data.bio,
+            profilePicture: userInfo.profilePicture
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
@@ -121,6 +125,20 @@ const ProfilePage = () => {
         setPageState("change password")
     }
 
+    // User uploading a profile picture
+    const handlePictureSelected = (event) => {
+        var picture = event.target.files[0];
+        var src     = URL.createObjectURL(picture);
+      
+        console.log('picture: ', picture)
+        console.log('src: ', src)
+        
+        setUser({
+            ...user,
+            profilePicture: src
+        })
+    }
+
     useEffect(() => {
         getUser();
     }, []);
@@ -143,14 +161,20 @@ const ProfilePage = () => {
                                     <Col xs="10">
                                         <Media>
                                             <Media left href="#">
-                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
+                                                {user.profilePicture === "" ?                                                
+                                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
+                                                :
+                                                    // <img src={user.profilePicture}/>
+                                                    <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
+                                                }        
                                             </Media>
                                             <Media body style={{ padding: 10 }}>
                                                 {user ?
-                                                    <div>
-                                                        <h5>Goes by:
+                                                    <div style={{ marginTop: '-3%' }}>
+                                                        <h4>{user.name}</h4>
+                                                        <h5>Goes by: 
                                                     {/* {user.preferredName} */}
-                                                            {user.preferredName !== "" ? user.preferredName : user.name.split(' ')[0]}
+                                                            {user.preferredName !== "" ? " " + user.preferredName : user.name.split(' ')[0]}
                                                         </h5>
                                                         <p>Rating: </p>
                                                         <p>Account Balance: ${String(user.accountBalance)}</p>
@@ -285,7 +309,7 @@ const ProfilePage = () => {
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
                                 <br />
                                 <div className="centered">
-                                    <Formik initialValues={{ email: user.email, name: user.name, preferredName: user.preferredName, phoneNumber: user.phoneNumber }} onSubmit={data => editProfile(data)}>
+                                    <Formik initialValues={{ email: user.email, name: user.name, preferredName: user.preferredName, phoneNumber: user.phoneNumber, profilePicture: user.profilePicture }} onSubmit={data => editProfile(data)}>
                                         <Form>
                                             {/* Row 1 - Change Name */}
                                             <Row>
@@ -319,15 +343,40 @@ const ProfilePage = () => {
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
+                                            <hr />
 
                                             <Row>
                                                 <Col className="centered">
                                                     <FormGroup>
                                                         <Label for="bio"><h4>Bio</h4></Label>
                                                         <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
+                                                    </FormGroup>                                                                                                       
+                                                </Col>
+                                            </Row>
+                                            <hr />
+
+                                            <Row>
+                                                <Col className="centered">
+                                                    <FormGroup>
+                                                        <Label for="profilePicture"><h4>Profile Picture</h4></Label>
+                                                        <br />
+                                                        {user.profilePicture === '' ? 
+                                                        <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
+                                                        : 
+                                                        <img src={user.profilePicture} style={{width: '12%', height: '12%'}} />
+                                                        }
+                                                        <br />
+                                                        <Field name='profilePicture' type='file' onChange={handlePictureSelected} as={Input} />
+
+                                                        {/* <input
+                                                            type="file"
+                                                            onChange={handlePictureSelected}
+                                                        /> */}
+                                                    
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
+
 
                                             {/*Manage funds buttons*/}
                                             <Row>
