@@ -105,7 +105,7 @@ const TaskBoard = () => {
                     <MapContainer className="leaflet-container" center={centerLocation} zoom={15} scrollWheelZoom={true} >
                         {/* Need to change "center" to users location - center{[userLat, userLong]} */}
 
-                        <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        <TileLayer attribution='<a href="/">OddJobs</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                         {/* Map Circle Markers - MapsCircle */}
