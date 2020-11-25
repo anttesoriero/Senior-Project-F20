@@ -37,7 +37,7 @@ function App() {
         <Route exact={true} path="/adminDash" render={(props) => <AdminDashboard />} />
         <Route exact={true} path="/adminUsers" render={(props) => <AdminUsers />} />
         <Route exact={true} path="/adminTasks" render={(props) => <AdminTasks />} />
-        {/* <Route exact={true} path="/testing" render={(props) => <TestingPage />} /> */}
+        <Route exact={true} path="/testing" render={(props) => <TestingPage />} />
         <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />
         <Route exact={true} path="/about" render={(props) => <AboutPage />} />
         <Route exact={true} path="/contact" render={(props) => <ContactPage />} />
