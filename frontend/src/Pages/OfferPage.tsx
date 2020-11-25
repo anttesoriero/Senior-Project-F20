@@ -83,8 +83,9 @@ const OfferPage = () => {
     return (
         <div>
             <Navigation />
-            <h2>Offer Page</h2>
             <Container>
+            <h1 className="centered">Offer Page</h1>
+            <br />
             {tasks.map(task => (
                 <div>
                     <h5>{task.title}</h5>
