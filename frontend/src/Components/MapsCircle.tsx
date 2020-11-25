@@ -13,11 +13,12 @@ const MapsCircle = (prop: {
 
     const categoryNames = ["Yard Work", "Transportation", "Cleaning", "Moving", "Care-Taking", "Cooking"]
     const categoryColor = ["green", "gray", "blue", "red", "purple", "orange"]
+    const chosenColor = categoryColor[prop.categoryId-1]
 
     return (
         <Circle
             center={[prop.latitude, prop.longitute]}
-            pathOptions={{ color: categoryColor[prop.categoryId-1], fillColor: categoryColor[prop.categoryId-1] }}
+            pathOptions={{ color: chosenColor, fillColor: chosenColor }}
             radius={150}>
             <Popup>
                 <h2>{prop.title}</h2>
