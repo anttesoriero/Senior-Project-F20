@@ -18,7 +18,7 @@ import AboutPage from './Pages/AboutPage';
 import ContactPage from './Pages/ContactPage';
 import TermsPage from './Pages/TermsPage';
 import GetStarted from './Pages/GetStarted';
-import OfferPage from './Pages/OfferPage';
+import MyTasksPage from './Pages/MyTasksPage';
 import UserProfile from './Pages/UserProfile';
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
         <Route exact={true} path="/" render={(props) => <LandingPage />} />
         <Route exact={true} path="/survey" render={(props) => <SurveyPage />} />
         <Route exact={true} path="/tasks" render={(props) => <TaskBoard />} />
-        <Route exact={true} path="/offers" render={(props) => <OfferPage />} />
+        <Route exact={true} path="/myTasks" render={(props) => <MyTasksPage />} />
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
         <Route exact={true} path="/user" render={(props) => <UserProfile />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />

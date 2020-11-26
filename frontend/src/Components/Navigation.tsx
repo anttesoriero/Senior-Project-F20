@@ -80,11 +80,11 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
                                 Profile Home
                             </DropdownItem>
                             <DropdownItem divider />
-                            <DropdownItem href="/upcomingtasks">
+                            {/* <DropdownItem href="/upcomingtasks">
                                 Upcoming Tasks
-                            </DropdownItem>
-                            <DropdownItem href="/offers">
-                                Offers
+                            </DropdownItem> */}
+                            <DropdownItem href="/myTasks">
+                                My Tasks
                             </DropdownItem>
                             <DropdownItem onClick={signOut}>
                                 Sign Out
