@@ -153,6 +153,13 @@ const MyTasksPage = () => {
                         return (<div>
                             <h2><u>Upcoming tasks</u></h2>
                             <br />
+                            {/* Comment to be removed */}
+                            <h4><b>Note from Anthony</b></h4>
+                            <h4>Upcoming Tasks page should have a map with precise location markers. 2 Options:</h4>
+                            <ol>
+                                <li>We could have one big map like the Task Board with multiple markers, and a popup for each marker on click</li>
+                                <li>We could have one small map per task, and each task gets its own row. Task info on the left, map on the right</li>
+                            </ol>
                         </div>)
 
                     default:
