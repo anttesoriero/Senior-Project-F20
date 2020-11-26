@@ -82,7 +82,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
 
     const geocode = async (data) => {
         var location = data.address + data.address2 + data.city + data.state + data.zip;
-
+        console.log('data: ', data)
         await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
             params: {
                 address: location,
@@ -194,7 +194,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="estimatedDurationMinutes"><h4>Duration in Minutes *</h4></Label>
-                                        <Input type="number" name="estimatedDurationMinutes" id="estimatedDurationMinutes" placeholder="Minutes" min="15" as={Input} required />
+                                        <Field type="number" name="estimatedDurationMinutes" id="estimatedDurationMinutes" placeholder="Minutes" min="15" as={Input} required />
                                     </FormGroup>
                                 </Col>
                             </Row>
