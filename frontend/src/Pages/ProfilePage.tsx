@@ -265,14 +265,14 @@ const ProfilePage = () => {
                                                     }
                                                 </Row>
                                                 {/* Website */}
-                                                <Row>
+                                                {/* <Row>
                                                     <Col xs="2"><p>Site:</p></Col>
                                                     {user.website ?
                                                         <Col xs="10"><p>{user.website}</p></Col>
                                                         :
                                                         <Col xs="10"><p>website.com</p></Col>
                                                     }
-                                                </Row>
+                                                </Row> */}
                                             </Col>
                                             {/* Right - Location */}
                                             <Col xs="6">
