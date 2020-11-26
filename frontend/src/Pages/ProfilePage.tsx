@@ -9,6 +9,7 @@ import { Formik, Form, Field } from 'formik';
 import { TileLayer, MapContainer, Circle, Popup, Marker, Tooltip } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import APIContext from '../Contexts/APIContext';
+import StateSelector from '../Components/StateSelector';
 
 type userState = {
     email: string,
@@ -182,7 +183,6 @@ const ProfilePage = () => {
                                                     :
                                                     <div>
                                                         Account Balance: $[__]
-                                                    {/*{' '}<Button outline color="info" size="sm">Cash Out</Button>{' '}*/}
                                                     </div>}
                                             </Media>
                                         </Media>
@@ -218,13 +218,6 @@ const ProfilePage = () => {
                                                     <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
                                                 </Col>
                                             </Row>
-                                            {/*
-                                    <Media>
-                                        <Media left object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
-                                        <Media center object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
-                                        <Media right object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
-                                    </Media>
-                                    */}
                                         </div>
                                     </Col>
 
@@ -264,15 +257,6 @@ const ProfilePage = () => {
                                                         <Col xs="10"><p>user@email.com</p></Col>
                                                     }
                                                 </Row>
-                                                {/* Website */}
-                                                {/* <Row>
-                                                    <Col xs="2"><p>Site:</p></Col>
-                                                    {user.website ?
-                                                        <Col xs="10"><p>{user.website}</p></Col>
-                                                        :
-                                                        <Col xs="10"><p>website.com</p></Col>
-                                                    }
-                                                </Row> */}
                                             </Col>
                                             {/* Right - Location */}
                                             <Col xs="6">
@@ -315,7 +299,7 @@ const ProfilePage = () => {
                                             <Row>
                                                 <Col>
                                                     <FormGroup>
-                                                        <Label for="name"><h4>First Name</h4></Label>
+                                                        <Label for="name"><h4>Full Name</h4></Label>
                                                         <Field name='name' type='text' placeholder={user.name} as={Input} />
                                                     </FormGroup>
                                                 </Col>
@@ -348,16 +332,6 @@ const ProfilePage = () => {
                                             <Row>
                                                 <Col className="centered">
                                                     <FormGroup>
-                                                        <Label for="bio"><h4>Bio</h4></Label>
-                                                        <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
-                                                    </FormGroup>                                                                                                       
-                                                </Col>
-                                            </Row>
-                                            <hr />
-
-                                            <Row>
-                                                <Col className="centered">
-                                                    <FormGroup>
                                                         <Label for="profilePicture"><h4>Profile Picture</h4></Label>
                                                         <br />
                                                         {user.profilePicture === '' ? 
@@ -375,26 +349,71 @@ const ProfilePage = () => {
                                                     
                                                     </FormGroup>
                                                 </Col>
+                                                <Col className="centered">
+                                                    <FormGroup>
+                                                        <Label for="bio"><h4>Bio</h4></Label>
+                                                        <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
+                                                    </FormGroup>                                                                                                       
+                                                </Col>
                                             </Row>
+                                            <hr />
 
-
-                                            {/*Manage funds buttons*/}
+                                            {/* Row 4 - Address 1 & Address 2 */}
                                             <Row>
-                                                <Col xs="8">
-                                                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Manage Funds</h3>
-                                                    <hr />
-                                                    <Button id="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
-                                                    <br />
-                                                    <Button id="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
+                                                <Col>
+                                                    <FormGroup>
+                                                        <Label for="address"><h4>Address</h4></Label>
+                                                        <Field type="text" name="address" id="address" placeholder={user.address} as={Input} />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col>
+                                                    <FormGroup>
+                                                        <Label for="address2"><h4>Address 2</h4></Label>
+                                                        <Field type="text" name="address2" id="address2" placeholder="Apartment, studio, floor, etc." as={Input} />
+                                                    </FormGroup>
                                                 </Col>
                                             </Row>
 
-                                            {/*Account deletion*/}
+                                            {/* Row 5 - City - State - Zip */}
                                             <Row>
-                                                <Col xs="8">
-                                                    <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
+                                                <Col md="6">
+                                                    <FormGroup>
+                                                        <Label for="city"><h4>City</h4></Label>
+                                                        <Field type="text" name="city" id="city" placeholder={user.city} as={Input} />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md="4">
+                                                    <FormGroup>
+                                                        <Label for="state"><h4>State - BROKEN</h4></Label>
+                                                        {/* <StateSelector /> */}
+                                                        <Field type="select" name="state" id="state" as={Input}>
+                                                            <option selected disabled>Select State</option>
+                                                        </Field>
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md="2">
+                                                    <FormGroup>
+                                                        <Label for="zip"><h4>Zip</h4></Label>
+                                                        <Field type="text" name="zip" id="zip" placeholder={user.zipCode} as={Input} />
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+
+                                            <Row>
+                                                {/*Manage funds buttons*/}
+                                                <Col>
+                                                    <h3 style={{ fontWeight: 'bold' }}>Manage Funds</h3>
                                                     <hr />
-                                                    <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
+                                                    <Button className="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
+                                                    <br />
+                                                    <Button className="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
+                                                </Col>
+                                                
+                                                {/*Account deletion*/}
+                                                <Col>
+                                                    <h3 style={{ fontWeight: 'bold' }}>Delete Account</h3>
+                                                    <hr />
+                                                    <Button className="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
                                                 </Col>
                                             </Row>
 
