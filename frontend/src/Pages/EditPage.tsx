@@ -65,6 +65,17 @@ const EditPage = () => {
             });
     }
 
+    const deleteAccount = async () => {
+        await axios.get(url + 'me/deleteAccount',
+        { headers: { Authorization: `Bearer ${token}`} })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     useEffect(() => {
         getUser();
     }, []);
@@ -278,7 +289,7 @@ const EditPage = () => {
                             <Col xs="8">
                                 <h3 id="centered" style={{ fontWeight: 'bold' }}>Delete Account</h3>
                                 <hr />
-                                <Button id="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
+                                <Button id="centered" color="secondary" size="sm">Delete Account</Button>{deleteAccount}
                             </Col>
                         </Row>
 
