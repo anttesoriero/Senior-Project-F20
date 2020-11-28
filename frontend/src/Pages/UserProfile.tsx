@@ -18,7 +18,8 @@ type userState = {
     state: string,
     phoneNumber: string,
     website: string,
-    bio: string
+    bio: string,
+    rating: string
 }
 
 const userInfo = {
@@ -29,7 +30,8 @@ const userInfo = {
     state: "",
     phoneNumber: "",
     website: "",
-    bio: ""
+    bio: "",
+    rating: ""
 }
 
 const UserProfile = () => {
@@ -101,13 +103,6 @@ const UserProfile = () => {
                                 <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
                             </Col>
                         </Row>
-                        {/*
-                <Media>
-                    <Media left object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
-                    <Media center object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
-                    <Media right object id="smallMedia" data-src="holder.js/80x80" alt="Generic placeholder image" />
-                </Media>
-                */}
                     </div>
                 </Col>
 
@@ -128,6 +123,18 @@ const UserProfile = () => {
                             <h4>Liked Jobs</h4>
                             <p>Selected liked job categories from survey</p>
 
+                            {/* Rating */}
+                            <h4> Rating: </h4>
+                            <Row>
+                                {user ?
+                                    <Col xs="10"><p>{user.rating}</p></Col>
+                                    :
+                                    <Col xs="10"><p>10</p></Col>
+                                }
+                                <hr/>
+                                <Button id="centered" color="primary" size="sm">Rate User</Button>{/*rateUser*/}
+                            </Row>
+
                             <h4>Contact Info</h4>
                             {/* Phone */}
                             <Row>
@@ -135,7 +142,7 @@ const UserProfile = () => {
                                 {user ?
                                     <Col xs="10"><p>{user.phoneNumber}</p></Col>
                                     :
-                                <Col xs="10"><p>(555) 555-5555</p></Col>
+                                    <Col xs="10"><p>(555) 555-5555</p></Col>
                                 }
                             </Row>
                             {/* Email */}
