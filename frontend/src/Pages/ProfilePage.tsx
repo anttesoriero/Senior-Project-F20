@@ -87,6 +87,18 @@ const ProfilePage = () => {
             });
     }
 
+
+    const deleteAccount = async () => {
+        await axios.get(url + 'me/deleteAccount',
+        { headers: { Authorization: `Bearer ${token}`} })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     const changePassword = async (data) => {
         if (data.oldPassword === "" || data.password === "" || data.confirmPassword === "") {
             setPasswordError("All fields are required!")
@@ -413,7 +425,7 @@ const ProfilePage = () => {
                                                 <Col>
                                                     <h3 style={{ fontWeight: 'bold' }}>Delete Account</h3>
                                                     <hr />
-                                                    <Button className="centered" color="secondary" size="sm">Delete Account</Button>{/*deleteAcc*/}
+                                                    <Button className="centered" color="secondary" size="sm">Delete Account</Button>{deleteAccount}
                                                 </Col>
                                             </Row>
 
