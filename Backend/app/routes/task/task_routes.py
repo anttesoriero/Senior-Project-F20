@@ -306,7 +306,7 @@ def editTask():
     '''
     # Validate input
     requiredParameters = ["taskId"]
-    optionalParameters = ["title", "categroyId", "description", "recommendedPrice", "estimatedDurationMinutes",
+    optionalParameters = ["title", "categoryId", "description", "recommendedPrice", "estimatedDurationMinutes",
                           "locationALongitude", "locationALatitude", "locationBLongitude",
                           "locationBLatitude", "startDate"]
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
