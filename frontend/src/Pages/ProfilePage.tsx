@@ -69,6 +69,7 @@ const ProfilePage = () => {
         await axios.put(url + 'me/editInformation', {
             email: data.email,
             firstName: data.name.split(' ')[0],
+            lastName: data.name.split(' ')[1],
             preferredName: data.preferredName,
             phoneNumber: data.phoneNumber,
             bio: data.bio,
