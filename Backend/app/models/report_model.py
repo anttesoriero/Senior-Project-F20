@@ -32,6 +32,19 @@ class Report(db.Model):
     reportType = db.Column(db.String(120), nullable=False, default="")
     description = db.Column(db.Text(), nullable=True, default="")
 
+    def getInfo(self):
+        '''
+        Get information about Report
+
+        :return: see below
+        '''
+        return {
+            "reportId": self.reportId,
+            "userId_1": self.userId_1,
+            "userId_2": self.userId_2,
+            "reportType": self.reportType,
+            "description": self.description
+        }
     
     @classmethod
     def createReport(cls, userId_1, userId_2, reportType="", description=""):
@@ -55,3 +68,12 @@ class Report(db.Model):
         db.session.commit()
 
         return report
+
+    @classmethod
+    def getAll(cls):
+        '''
+        Gets the report ids from the User table
+
+        :return list of report ids
+        '''
+        return [report.getInfo() for report in Report.query.all()]
