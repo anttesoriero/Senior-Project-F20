@@ -3,7 +3,7 @@ import {
     Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader,
     ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label, InputGroup, InputGroupAddon
 } from 'reactstrap';
-import { RiMoneyDollarBoxFill, RiUserFill, RiTimerFill } from 'react-icons/ri'
+import { RiMoneyDollarBoxFill, RiUserFill, RiTimerFill, RiCalendarFill } from 'react-icons/ri'
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
@@ -110,6 +110,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                             ? ' ' + duration / 60 + ' hour(s)' 
                             : ' ' + duration / 60 + ' hours ' + duration % 60 + ' minutes'}
                     </CardSubtitle>
+                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> NEED Date/Time Range</CardSubtitle>
                     <CardText style={{fontWeight: 'bolder'}}>{description}</CardText>
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
