@@ -19,7 +19,7 @@ const MapsCircle = (prop: {
         <Circle
             center={[prop.latitude, prop.longitute]}
             pathOptions={{ color: chosenColor, fillColor: chosenColor }}
-            radius={150}>
+            radius={2000}>
             <Popup>
                 <h2>{prop.title}</h2>
                 <h3>Category: {categoryNames[prop.categoryId-1]}</h3>

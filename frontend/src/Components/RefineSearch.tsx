@@ -3,21 +3,20 @@ import { Button, Col, Container, Form, FormGroup, Input, Label, Modal, ModalBody
 import { Field, Formik } from 'formik';
 
 const RefineSearch = (props) => {    
-    
     return (
-        <div className="centered" style={{background: "#d6d6d6", height: "45px"}}>
+        <div className="centered" style={{background: "#d6d6d6", height: "auto"}}>
             {/* <Formik initialValues={{ categoryId: 1, search: '', duration: 0 }} onSubmit={data => }> */}
             {/* Change "Input"'s to "Field"'s when Formik used */}
-                <Form inline>
+                <Form inline style={{margin: '1rem'}}>
                     {/* Title Search Bar */}
                     <FormGroup>
-                        <Label for="search"><h5><b>Search</b></h5></Label>{' '}
+                        <Label for="search"><h5><b>Search&nbsp;</b></h5></Label>{' '}
                         <Input type="text" name="search" id="search" placeholder="Task Title" />
                     </FormGroup>
 
                     {/* Select Task Category */}
                     <FormGroup>
-                        <Label for="categoryId"><h5> | <b>Task Category</b></h5></Label>
+                        <Label for="categoryId"><h5>&nbsp;&nbsp;&nbsp;<b>Task Category&nbsp;</b></h5></Label>
                         <Input type="select" name="categoryId" as={Input}>
                             <option value="1" selected>Select Category</option>
                             <option value="2">Yard Work</option>
@@ -31,7 +30,7 @@ const RefineSearch = (props) => {
 
                     {/* Select Duration */}
                     <FormGroup>
-                        <Label for="duration"><h5> | <b>Duration </b> </h5></Label>
+                        <Label for="duration"><h5>&nbsp;&nbsp;&nbsp;<b>Duration&nbsp;</b> </h5></Label>
                         <Input type="select" name="duration" id="duration">
                             <option selected>Select Duration</option>
                             <option value="30">{"< 30 Minutes"}</option>
@@ -43,6 +42,7 @@ const RefineSearch = (props) => {
                     </FormGroup>
 
                     {/* Submit Button */}
+                    &nbsp;&nbsp;&nbsp;
                     <Button color="danger">Refine Search</Button>
                 </Form>
             {/* </Formik> */}

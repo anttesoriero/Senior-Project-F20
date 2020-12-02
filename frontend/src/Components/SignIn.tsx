@@ -18,7 +18,8 @@ const SignIn = ({ history }: RouteComponentProps) => {
     }, [])
 
     const checkDaily = () => {
-        var timestamp = localStorage.getItem('daily_survey')?.substring(0, 15)
+        const storage = localStorage.getItem('daily_survey')
+        var timestamp = storage?.substring(0, 15)
         console.log(timestamp)
         let hoy = new Date();
         localStorage.setItem('today', hoy as unknown as string)
@@ -29,6 +30,11 @@ const SignIn = ({ history }: RouteComponentProps) => {
         else return;
     }
 
+    function openInNewTab(path) {
+        var win = window.open(path, '_blank');
+        win?.focus();
+      }
+
     const oauth = () => {
         axios.get(url + 'auth/oauth')
             .then(function (response) {
@@ -36,6 +42,7 @@ const SignIn = ({ history }: RouteComponentProps) => {
                 //localStorage.setItem('access_token', response.data.access_token);
                 //history.push('/profile')
                 console.log(response);
+                openInNewTab(response.data)
             })
             .catch(function (error) {
                 setSubmitting(false);

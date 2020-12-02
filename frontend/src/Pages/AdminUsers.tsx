@@ -117,7 +117,7 @@ const AdminUsers = () => {
                 <Col className='sidenav' xs='2'>
                     <Sidenav />
                 </Col>
-                <Col>
+                <Col style={{overflow: 'scroll'}}>
                     <h1>Users</h1><hr />
                     <DataTable title='Users' columns={userCols} data={users} striped={true} highlightOnHover={true} progressPending={loading} pagination />
                 </Col>

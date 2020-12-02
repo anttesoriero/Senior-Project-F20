@@ -38,6 +38,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     const [accept, setAccept] = useState(false);
     const [rejected, setRejected] = useState(false);
     const [serror, setSerror] = useState(false);
+    var date = new Date(startDate);
 
 
     useEffect(() => {
@@ -89,17 +90,24 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     }
     
     return (
-        <Card>
+        <Card style={{width: '350px', height: 'auto'}}>
             <CardBody>
                 <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder'}}><RiUserFill/> {offerer?.name}</CardSubtitle>
                 <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${payment}</CardSubtitle>
-                <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> {jobDurationMinutes / 60} hour(s), {jobDurationMinutes} minutes</CardSubtitle>
-                <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {startDate}</CardSubtitle>
+                <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> 
+                {jobDurationMinutes / 60 < 1 
+                            ? ' ' + jobDurationMinutes + ' minutes' 
+                            : jobDurationMinutes % 60 == 0 
+                            ? ' ' + jobDurationMinutes / 60 + ' hour(s)' 
+                            : ' ' + jobDurationMinutes / 60 + ' hours ' + jobDurationMinutes % 60 + ' minutes'}
+                </CardSubtitle>
+                <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
                 <CardText style={{fontWeight: 'bolder'}}>{note}</CardText>
                 <div className='centered'>
                     {serror ? <p className='error'>There was an error accepting/rejecting offer!</p> : <div></div>}
                     {rejected ? <p className='success'>Offer rejected!</p> : <div></div>}
                     {accept ? <p className='success'>Offer accepted!</p> : <div></div>}
+                    {accepted ? <p className='success'>Chosen Offer</p> : <div></div>}
                 </div>
                 <div className='centered'>
                     <Button color="success" size='sm' outline onClick={acceptOffer}>Accept Offer</Button>

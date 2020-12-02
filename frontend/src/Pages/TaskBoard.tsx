@@ -24,21 +24,30 @@ type task = {
     description: string
 }
 
+type location = {
+    local: LatLngTuple
+}
+
 const TaskBoard = () => {
     const url = useContext(APIContext);
     const token = localStorage.getItem('access_token');
 
     let a: task[] = [];
+
     const [tasks, setTasks] = useState(a);
+    const [centerLocation, setCenterLocation] = useState<LatLngTuple>();
     /* const [task, getTaskList] = useState<taskIDState>(taskIDs); ERRORS */
+    const center: LatLngTuple = [0, 0]
 
 
     const getTaskList = async () => {
         await axios.get(url + 'task/recommendTasks',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data.tasks);
+                console.log(response.data);
                 setTasks(response.data.tasks);
+                setCenterLocation([(response.data.query.location.within[1] + response.data.query.location.within[0]) / 2
+                                    , (response.data.query.location.within[2] + response.data.query.location.within[3]) / 2])
             })
             .catch(error => {
                 console.log(error);
@@ -61,8 +70,8 @@ const TaskBoard = () => {
         //getIds();
     }, []);
 
-    const centerLocation: LatLngTuple = [39.7089, -75.1183]
-    const sample: LatLngTuple = [39.7051596, -75.11357028778912]
+    
+    
 
     return (
         <div>
@@ -73,9 +82,10 @@ const TaskBoard = () => {
 
             <Row>
                 {/* Left - TaskCards */}
-                <Col xs="4" className="col-scroll">
+                <Col xs="3" className="col-scroll">
                     <Container>
                         <h3 id="top" className="centered" style={{fontWeight: 'bolder'}}>Tasks</h3>
+                        <hr/>
                         {tasks.map(task => (
                             <TaskCard
                                 key={task.taskId}
@@ -101,12 +111,14 @@ const TaskBoard = () => {
 
                 </Col>
 
-                <Col xs="8">
-                    <MapContainer className="leaflet-container" center={centerLocation} zoom={15} scrollWheelZoom={true} >
+                <Col xs="9">
+                    <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} zoom={5} scrollWheelZoom={true} >
                         {/* Need to change "center" to users location - center{[userLat, userLong]} */}
 
-                        <TileLayer attribution='<a href="/">OddJobs</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <TileLayer
+                            url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                            attribution='Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>'
+                        />
 
                         {/* Map Circle Markers - MapsCircle */}
                         {tasks.map(task => (
@@ -124,7 +136,6 @@ const TaskBoard = () => {
                 </Col>
             </Row>
             <Footer />
-
         </div>
     );
 }

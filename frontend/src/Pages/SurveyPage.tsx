@@ -5,6 +5,7 @@ import { Container, Row, Button, FormGroup, Input, Spinner, Label } from 'reacts
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 type surveyState = {
   active: boolean;
@@ -18,10 +19,15 @@ type surveyState = {
   surveyId: number
 }
 
-const SurveyPage = () => {
+type user = {
+  id: number
+}
+
+const SurveyPage = ({ history }: RouteComponentProps) => {
   const url = useContext(APIContext);
   const token = localStorage.getItem('access_token');
 
+  const [user, setUser] = useState<user>();
   const [survey, setSurvey] = useState<surveyState>();
   const [serror, setSerror] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -39,6 +45,20 @@ const SurveyPage = () => {
       });
   }
 
+  const getUser = async () => {
+    {/* Example of sending authorized request. Get can take multiple parameters, in this case 2.
+        First one is the endpoint and second is the authorization headers */}
+    await axios.get(url + 'me/getProfile',
+        { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => {
+            console.log(response.data);
+            setUser(response.data)
+        })
+        .catch(error => {
+            console.log(error);
+        });
+  }
+
   const postSurvey = async (response) => {
     console.log(response.response)
     setSubmitting(true);
@@ -54,7 +74,8 @@ const SurveyPage = () => {
         console.log(response.data);
         setSuccess(true);
         var today = new Date();
-        localStorage.setItem('daily_survey', today as unknown as string);
+        localStorage.setItem('daily_survey', today as unknown as string + user?.id as unknown as string);
+        history.push('/profile')
       })
       .catch(error => {
         console.log(error);
@@ -65,6 +86,7 @@ const SurveyPage = () => {
 
   useEffect(() => {
     getSurvey();
+    getUser();
   }, []);
 
   return (
@@ -142,4 +164,4 @@ const SurveyPage = () => {
   );
 }
 
-export default SurveyPage;
+export default withRouter(SurveyPage);

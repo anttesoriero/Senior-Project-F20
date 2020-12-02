@@ -63,7 +63,7 @@ const MyTasksPage = () => {
     const getOffers = async (id) => {
         await axios.post(url + 'offer/getOffers', {
             taskId: id as number,
-            includeArchived: true
+            includeArchived: false
         },
         { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
@@ -107,9 +107,9 @@ const MyTasksPage = () => {
                             {/* NOTE: Commented Styling - Could collapse each task section if wanted */}
                             {/* <h5>Click Task to Show Offers</h5> */}
                             <br />
-                            {tasks.map(task => (
+                            {offers ? tasks.map(task => (
                                 <div>
-                                    
+
                                     {/* Task Title & Toggle */}
                                     <Row>
                                         <Col xs="auto"><h5 id={"toggler" + task.taskId}>{task.title} {/* &#9655; */}</h5></Col>
@@ -146,7 +146,7 @@ const MyTasksPage = () => {
                                     {/* </UncontrolledCollapse> */}
                                 </div>
                                 
-                            ))}
+                            )): <div>No Offers</div>}
                         </div>)
 
                     case 'upcoming':

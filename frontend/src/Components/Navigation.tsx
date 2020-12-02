@@ -14,9 +14,14 @@ interface NavProps {
     redirect: boolean
 }
 
+type user = {
+    name: string
+}
+
 const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) => {
     const url = useContext(APIContext);
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState<user>();
 
     const token = localStorage.getItem('access_token');
     useEffect(() => {
@@ -25,6 +30,7 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 //console.log(response.data);
+                setUser(response.data)
             })
             .catch(error => {
                 if (!redirect) {
@@ -34,7 +40,10 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
             });
     }, [history])
 
-    const toggleNav = () => setIsOpen(!isOpen);
+    const toggleNav = () => {
+        setIsOpen(!isOpen);
+        console.log(isOpen)
+    };
 
     const signOut = () => {
         localStorage.removeItem('access_token');
@@ -48,7 +57,7 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
         <Navbar color="dark" dark expand="md">
             <NavbarBrand href="/" className={'mx-auto brand'}>OddJobs</NavbarBrand>
             <NavbarToggler onClick={toggleNav} />
-            <Collapse isOpen={isOpen} navbar>
+            <Collapse isOpen={isOpen} navbar={true}>
                 {/* Checks if you're logged in and renders the rest of navbar if true */}
                 {token ?
                     <Nav navbar className="mr-auto">
@@ -70,7 +79,7 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
                 <UncontrolledDropdown navbar inNavbar>
                     <DropdownToggle nav caret style={{ color: 'white', fontWeight: 'bolder' }}>
                         <IconContext.Provider value={{ size: '1.5em' }}>
-                            <MdPerson />Profile
+                            <MdPerson />{user?.name}
                         </IconContext.Provider>
                     </DropdownToggle>
                     {/* Checks if signed in, then conditionally renders different menu */}

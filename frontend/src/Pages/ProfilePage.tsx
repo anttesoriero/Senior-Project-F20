@@ -188,7 +188,7 @@ const ProfilePage = () => {
                                                         <h4>{user.name}</h4>
                                                         <h5>Goes by: 
                                                     {/* {user.preferredName} */}
-                                                            {user.preferredName !== "" ? " " + user.preferredName : user.name.split(' ')[0]}
+                                                            {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                                         </h5>
                                                         <p>Rating: </p>
                                                         <p>Account Balance: ${String(user.accountBalance)}</p>
@@ -283,8 +283,10 @@ const ProfilePage = () => {
                                                         }
 
                                                         <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15.5} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                                            <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                                        <TileLayer
+                                                            url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                                                            attribution='Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>'
+                                                        />
 
                                                             {/* Map Circle Markers - MapsCircle */}
                                                             <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>

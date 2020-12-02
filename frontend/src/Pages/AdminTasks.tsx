@@ -44,19 +44,19 @@ const AdminTasks = () => {
         getTasks();
     }, [setTasks])
 
-    let formatPhoneNumber = (str) => {
-        //Filter only numbers from the input
-        let cleaned = ('' + str).replace(/\D/g, '');
-
-        //Check if the input is of correct length
-        let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-
-        if (match) {
-            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-        };
-
-        return null
-    };
+    const deleteTask = async () => {
+        await axios.post(url + 'admin/getAllTasks', {
+            adminPassword: sessionStorage.getItem('admin_pass')
+        })
+            .then(function (response) {
+                console.log(response.data);
+                setTasks(response.data.tasks);
+                setLoading(false);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     return (
         <div>
@@ -64,9 +64,9 @@ const AdminTasks = () => {
                 <Col className='sidenav' xs='2'>
                     <Sidenav />
                 </Col>
-                <Col>
-                    <h1>Tasks</h1><hr />
-                    <DataTable title='Tasks'
+                <Col style={{overflow: 'scroll'}}>
+                    <DataTable 
+                        title='Tasks'
                         data={tasks}
                         columns={[
                             {
@@ -78,48 +78,56 @@ const AdminTasks = () => {
                             {
                                 name: 'Title',
                                 selector: 'title',
-                                sortable: true
+                                sortable: true,
+                                grow: 1
                             },
                             {
                                 name: 'Accepted',
                                 selector: t => t.accepted.toString(),
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Description',
                                 selector: 'description',
                                 sortable: true,
-                                grow: 2
+                                grow: 1.5
                             },
                             {
                                 name: 'Category ID',
                                 selector: 'categoryId',
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Duration',
                                 selector: 'estimatedDurationMinutes',
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Offerer ID',
                                 selector: 'posterTaskId',
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Price',
                                 selector: 'recommendedPrice',
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Latitude',
                                 selector: 'locationALatitude',
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Longitude',
                                 selector: 'locationALongitude',
-                                sortable: true
+                                sortable: true,
+                                grow: .5
                             },
                             {
                                 name: 'Edit',
@@ -135,7 +143,7 @@ const AdminTasks = () => {
                                 allowOverflow: true,
                                 button: true,
                             },
-                        ]} striped={true} highlightOnHover={true} progressPending={loading} pagination />
+                        ]} striped={true} highlightOnHover={true} progressPending={loading} pagination/>
                 </Col>
             </Row>
         </div>
