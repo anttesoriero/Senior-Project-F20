@@ -139,6 +139,20 @@ const ProfilePage = () => {
         setPageState("change password")
     }
 
+    let formatPhoneNumber = (str) => {
+        //Filter only numbers from the input
+        let cleaned = ('' + str).replace(/\D/g, '');
+
+        //Check if the input is of correct length
+        let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+
+        if (match) {
+            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+        };
+
+        return null
+    };
+
     // User uploading a profile picture
     const handlePictureSelected = (event) => {
         var picture = event.target.files[0];
@@ -256,7 +270,7 @@ const ProfilePage = () => {
                                                 <Row>
                                                     <Col xs="2"><p>Phone:</p></Col>
                                                     {user ?
-                                                        <Col xs="10"><p>{user.phoneNumber}</p></Col>
+                                                        <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                                         :
                                                         <Col xs="10"><p>5555555555</p></Col>
                                                     }  
