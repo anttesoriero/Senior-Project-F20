@@ -8,27 +8,9 @@ import APIContext from '../Contexts/APIContext';
 
 const SignIn = ({ history }: RouteComponentProps) => {
     const url = useContext(APIContext);
-    const [didDailySurvey, setDidDailySurvey] = useState(false);
 
     const [submitting, setSubmitting] = useState(false);
     const [serror, seetSerror] = useState(false);
-
-    useEffect(() => {
-        checkDaily()
-    }, [])
-
-    const checkDaily = () => {
-        const storage = localStorage.getItem('daily_survey')
-        var timestamp = storage?.substring(0, 15)
-        console.log(timestamp)
-        let hoy = new Date();
-        localStorage.setItem('today', hoy as unknown as string)
-        var today = localStorage.getItem('today')?.substring(0, 15)
-        console.log(today)
-        if (timestamp === today)
-            setDidDailySurvey(true)
-        else return;
-    }
 
     function openInNewTab(path) {
         var win = window.open(path, '_blank');
@@ -51,17 +33,24 @@ const SignIn = ({ history }: RouteComponentProps) => {
             });
     }
 
-    const signIn = data => {
+    const signIn = async (data) => {
         setSubmitting(true);
         axios.post(url + 'auth/login', {
             email: data.email,
             password: data.password
         })
-            .then(function (response) {
+            .then(async function(response){
                 setSubmitting(false);
                 localStorage.setItem('access_token', response.data.access_token);
-                didDailySurvey ? history.push('/profile') : history.push('/survey')
-                console.log(response);
+                const storage = localStorage.getItem('daily_survey')
+                const token = localStorage.getItem('access_token')
+                const  user =  await axios.get(url + 'me/getProfile', { headers: { Authorization: `Bearer ${token}` }})
+                var timestamp = storage?.substring(0, 15) + '' + storage?.substring(storage.length - 1)
+                console.log(timestamp)
+                let hoy = new Date();
+                localStorage.setItem('today', hoy as unknown as string)
+                var today = localStorage.getItem('today')?.substring(0, 15) + '' + user.data.id as unknown as string
+                timestamp === today ? history.push('/profile') : history.push('/survey')
             })
             .catch(function (error) {
                 setSubmitting(false);
