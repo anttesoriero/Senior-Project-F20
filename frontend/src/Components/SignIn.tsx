@@ -21,10 +21,11 @@ const SignIn = ({ history }: RouteComponentProps) => {
         axios.get(url + 'auth/oauth')
             .then(function (response) {
                 setSubmitting(false);
-                //localStorage.setItem('access_token', response.data.access_token);
-                //history.push('/profile')
+                
                 console.log(response);
                 openInNewTab(response.data)
+                localStorage.setItem('access_token', response.data.access_token);
+                history.push('/profile')
             })
             .catch(function (error) {
                 setSubmitting(false);
