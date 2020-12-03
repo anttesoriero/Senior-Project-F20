@@ -89,7 +89,7 @@ const SignIn = ({ history }: RouteComponentProps) => {
                             onSuccess={responseGoogle}
                             onFailure={responseGoogle}
                             cookiePolicy={'single_host_origin'}
-                            isSignedIn={true}
+                            // isSignedIn={true}
                         />
                     </FormGroup>
                 </Form>
