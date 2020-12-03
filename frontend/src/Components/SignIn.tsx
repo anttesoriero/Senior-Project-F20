@@ -11,32 +11,38 @@ const SignIn = ({ history }: RouteComponentProps) => {
     const url = useContext(APIContext);
 
     const [submitting, setSubmitting] = useState(false);
-    const [serror, seetSerror] = useState(false);
+    const [serror, setSerror] = useState(false);
+    const [oauthError, setOAuthError] = useState(false);
 
     function openInNewTab(path) {
         var win = window.open(path, '_blank');
         win?.focus();
-      }
+    }
 
-    const oauth = () => {
-        axios.get(url + 'auth/oauth')
+    const oauth = (response) => {
+        const { email, familyName, givenName, googleId, imageUrl } = response.profileObj
+        setSubmitting(true);
+        axios.post(url + 'auth/oauth', {
+            email: email,
+            password: googleId,
+            firstName: givenName,
+            lastName: familyName,
+            profilePicture: imageUrl
+        })
             .then(function (response) {
                 setSubmitting(false);
-                
-                console.log(response);
-                openInNewTab(response.data)
-                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('access_token', response.data.access_token)
                 history.push('/profile')
             })
             .catch(function (error) {
                 setSubmitting(false);
-                seetSerror(true);
+                setOAuthError(true);
                 console.log(error);
             });
     }
 
-    const responseGoogle = (response) => {
-        console.log(response);
+    const oauthErrorResponse = () => {
+        setOAuthError(true)
     }
 
     const signIn = async (data) => {
@@ -60,7 +66,7 @@ const SignIn = ({ history }: RouteComponentProps) => {
             })
             .catch(function (error) {
                 setSubmitting(false);
-                seetSerror(true);
+                setSerror(true);
                 console.log(error);
             });
     }
@@ -80,14 +86,17 @@ const SignIn = ({ history }: RouteComponentProps) => {
                     <div className='centered'>
                         {serror ? <p className='error'>Incorrect Credentials!</p> : <div></div>}
                     </div>
+                    <div className='centered'>
+                        {oauthError ? <p className='error'>Error with that Google Account!</p> : <div></div>}
+                    </div>
                     <FormGroup className='centered'>
                         {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Signing in...</Button> : <Button type='submit' color="primary">Sign In</Button>}&nbsp;
                         {/* <Button type='button' onClick={oauth} style={{ color: '#333', backgroundColor: '#fff', border: 'none' }}><FcGoogle /> Sign In</Button> */}
                         <GoogleLogin
                             clientId="984254031044-31ou2h0ce0hve56ccggp303b1g1rtnfg.apps.googleusercontent.com"
                             buttonText="Login"
-                            onSuccess={responseGoogle}
-                            onFailure={responseGoogle}
+                            onSuccess={oauth}
+                            onFailure={oauthErrorResponse}
                             cookiePolicy={'single_host_origin'}
                             // isSignedIn={true}
                         />

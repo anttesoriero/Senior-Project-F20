@@ -21,9 +21,9 @@ type userState = {
     state: string,
     zipCode: string,
     phoneNumber: string,
-    website: string,
     bio: string,
-    profilePicture: string
+    profilePicture: string,
+    initials: string
 }
 
 const userInfo = {
@@ -36,9 +36,9 @@ const userInfo = {
     state: "",
     zipCode: "",
     phoneNumber: "",
-    website: "",
     bio: "",
-    profilePicture: ""
+    profilePicture: "",
+    initials: ""
 }
 
 const ProfilePage = () => {
@@ -46,6 +46,7 @@ const ProfilePage = () => {
     const token = localStorage.getItem('access_token');
 
     const [user, setUser] = useState<userState>(userInfo);
+    const [initials, setInitials] = useState<String>("")
     const [passwordError, setPasswordError] = useState<String>("");
     const [pageState, setPageState] = useState<String>("main profile")
 
@@ -56,7 +57,11 @@ const ProfilePage = () => {
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data);
+                const firstName = response.data.name.split(' ')[0]
+                const lastName = response.data.name.split(' ')[1]
+                const initials = firstName.charAt(0) + lastName.charAt(0)
                 setUser(response.data)
+                setInitials(initials)
             })
             .catch(error => {
                 console.log(error);
@@ -190,7 +195,10 @@ const ProfilePage = () => {
                                         <Media>
                                             <Media left href="#">
                                                 {user.profilePicture === "" ?                                                
-                                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
+                                                    // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
+                                                    <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
+                                                        {initials}
+                                                    </Button>
                                                 :
                                                     // <img src={user.profilePicture}/>
                                                     <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
@@ -198,7 +206,7 @@ const ProfilePage = () => {
                                             </Media>
                                             <Media body style={{ padding: 10 }}>
                                                 {user ?
-                                                    <div style={{ marginTop: '-3%' }}>
+                                                    <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
                                                         <h4>{user.name}</h4>
                                                         <h5>Goes by: 
                                                     {/* {user.preferredName} */}
@@ -359,6 +367,7 @@ const ProfilePage = () => {
                                             <hr />
 
                                             <Row>
+                                                {/*
                                                 <Col className="centered">
                                                     <FormGroup>
                                                         <Label for="profilePicture"><h4>Profile Picture</h4></Label>
@@ -374,10 +383,10 @@ const ProfilePage = () => {
                                                         {/* <input
                                                             type="file"
                                                             onChange={handlePictureSelected}
-                                                        /> */}
-                                                    
+                                                        />                                            
                                                     </FormGroup>
-                                                </Col>
+                                                </Col> */}
+                                                
                                                 <Col className="centered">
                                                     <FormGroup>
                                                         <Label for="bio"><h4>Bio</h4></Label>
@@ -413,11 +422,8 @@ const ProfilePage = () => {
                                                 </Col>
                                                 <Col md="4">
                                                     <FormGroup>
-                                                        <Label for="state"><h4>State - BROKEN</h4></Label>
-                                                        {/* <StateSelector /> */}
-                                                        <Field type="select" name="state" id="state" as={Input}>
-                                                            <option selected disabled>Select State</option>
-                                                        </Field>
+                                                        <Label for="state"><h4>State *</h4></Label>
+                                                        <StateSelector />
                                                     </FormGroup>
                                                 </Col>
                                                 <Col md="2">
@@ -442,7 +448,7 @@ const ProfilePage = () => {
                                                 <Col>
                                                     <h3 style={{ fontWeight: 'bold' }}>Delete Account</h3>
                                                     <hr />
-                                                    <Button className="centered" color="secondary" size="sm">Delete Account</Button>{deleteAccount}
+                                                    <Button className="centered" color="danger" size="sm">Delete Account</Button>{deleteAccount}
                                                 </Col>
                                             </Row>
 
