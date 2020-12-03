@@ -5,7 +5,7 @@ Try to use utilities outside of this file to do the heavy lifting
 This file should be focused on annotating routes
 
 @author Matthew Schofield
-@version 11.11.2020
+@version 12.2.2020
 """
 # Library imports
 from flask import jsonify, request, redirect
@@ -18,99 +18,40 @@ import json
 from app.routes.auth import auth_blueprint
 from app.utilities.validation.validation import validateRequestJSON
 from app import blacklist
-from app.utilities.oauth import get_google_provider_cfg
-from app.utilities.oauth import client
-from app.utilities.oauth import GOOGLE_CLIENT_ID
-from app.utilities.oauth import GOOGLE_CLIENT_SECRET
-from app.utilities.oauth import GOOGLE_DISCOVERY_URL
 
 # Database Models
 from app.models.user_model import User
 
-@auth_blueprint.route('/oauth')
-def oauth_login():
-    # Set up a Google provider
-    google_provider_cfg = get_google_provider_cfg()
+@auth_blueprint.route("/oauth", methods=['POST'])
+def oauth():
+    # Validate input
+    success, code, inputJSON = validateRequestJSON(request, ["email", "password"],
+                                                   ["firstName", "lastName", "profilePicture"])
+    if not success:
+        return jsonify({}), code
 
-    # We want to hit the provider's 'authorization' URL
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-
-    # Use library to construct the request for login and provide
-    # scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    # Redirect to the /oauth/callback route
-    # GCP wanted a callback route when the client is ready
-
-    # print(request_uri)
-    return request_uri
-
-@auth_blueprint.route("/oauth/callback")
-def oauth_callback():
-    # Get authorization code that Google sent back to you
-    code = request.args.get("code")
-
-    # Find out what URL to hit to get tokens that allow you to ask for
-    # things on behalf of a user
-    google_provider_cfg = get_google_provider_cfg()
-    token_endpoint = google_provider_cfg["token_endpoint"]
-
-    # Prepare and send request to get tokens
-    token_url, headers, body = client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code,
-    )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
-    )
-
-    # Parse the tokens
-    client.parse_request_body_response(json.dumps(token_response.json()))
-
-    # Now that we have tokens, find and hit URL from Google that gives
-    # user's profile information, including their Google Profile Image and Email
-    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = client.add_token(userinfo_endpoint)
-    userinfo_response = requests.get(uri, headers=headers, data=body)
-
-    # We want to make sure their email is verified.
-    # The user authenticated with Google, authorized our
-    # app, and now we've verified their email through Google
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
-        family_name = userinfo_response.json()["family_name"]
-    else:
-        return "User email not available or not verified by Google.", 400
-
-    # At this point, user is verified
     # Check whether the user has already been created or not
+    users_email = inputJSON["email"]
     user = User.getByEmail(users_email)
+
+    print('Hit 1')
 
     # If user exists, just refresh their JWT token
     if user:
         # Generate JWT token
+        print('Hit 2')
         access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
         return jsonify({"success": True, "access_token": access_token}), 200
     else:
         # Create user
+        print('Hit 3')
         user = User.createUser(
             email=users_email,
-            password=unique_id,
-            firstName=users_name,
-            lastName=family_name,
+            password=inputJSON["password"],
+            firstName=inputJSON["firstName"],
+            lastName=inputJSON["lastName"],
             preferredName="",
-            profilePicture=picture,
+            profilePicture=inputJSON["profilePicture"],
             phoneNumber=""
         )
 
@@ -125,6 +66,7 @@ def oauth_callback():
             return jsonify(response), 200
         else:
             # Send back error
+            print('Hit 4')
             return jsonify({"success": False}), 400
 
 
