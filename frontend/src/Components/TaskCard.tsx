@@ -104,12 +104,14 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                     <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder'}}><RiUserFill/> {poster?.name}</CardSubtitle>
                     <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${price}</CardSubtitle>
                     <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> 
-                        {duration / 60 < 1 
+                    {duration / 60 < 1 
                             ? ' ' + duration + ' minutes' 
                             : duration % 60 == 0 
                             ? ' ' + duration / 60 + ' hour(s)' 
-                            : ' ' + duration / 60 + ' hours ' + duration % 60 + ' minutes'}
+                            : ' ' + Math.floor(duration / 60) + ' hour(s) ' + duration % 60 + ' minutes'}
                     </CardSubtitle>
+                    {/* For when we get the start date */}
+                    {/* {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()} */}
                     <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> NEED Date/Time Range</CardSubtitle>
                     <CardText style={{fontWeight: 'bolder'}}>{description}</CardText>
                     <div className='centered'>

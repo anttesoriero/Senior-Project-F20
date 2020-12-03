@@ -99,7 +99,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                             ? ' ' + jobDurationMinutes + ' minutes' 
                             : jobDurationMinutes % 60 == 0 
                             ? ' ' + jobDurationMinutes / 60 + ' hour(s)' 
-                            : ' ' + jobDurationMinutes / 60 + ' hours ' + jobDurationMinutes % 60 + ' minutes'}
+                            : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
                 </CardSubtitle>
                 <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
                 <CardText style={{fontWeight: 'bolder'}}>{note}</CardText>
