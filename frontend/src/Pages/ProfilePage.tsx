@@ -281,37 +281,37 @@ const ProfilePage = () => {
                                     {/* About */}
                                     <h2 style={{ fontWeight: 'bold' }}>About</h2>
                                     <hr />
-                                    <Row>
                                         {/* Left - About Info */}
-                                        <Col xs="6">
-                                            <h4>Bio</h4>
-                                            {user ?
-                                                <p>{user.bio}</p>
-                                                :
-                                                <p>User bio</p>
-                                            }
+                                        <h4>Bio</h4>
+                                        {user ?
+                                            <Col><p>{user.bio}</p></Col>
+                                            :
+                                            <Col><p>User bio</p></Col>
+                                        }
 
-                                            <h4>Liked Jobs</h4>
-                                            <p>Selected liked job categories from survey</p>
+                                        <h4>Liked Jobs</h4>
+                                        <p>Selected liked job categories from survey</p>
 
-                                            <h4>Contact Info</h4>
-                                            {/* Phone */}
-                                            <p><b>Phone:</b></p>
+                                        <h4>Contact Info</h4>
+                                        {/* Phone */}
+                                        <Row>
+                                            <Col xs="2"><p>Phone:</p></Col>
                                             {user ?
-                                                <p>{formatPhoneNumber(user.phoneNumber)}</p>
+                                                <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                                 :
-                                                <p>5555555555</p>
-                                            }
-                                            {/* Email */}
-                                            <p><b>Email:</b></p>
+                                                <Col xs="10"><p>5555555555</p></Col>
+                                            }  
+                                        </Row>
+                                        {/* Email */}
+                                        <Row>
+                                            <Col xs="2"><p>Email:</p></Col>
                                             {user ?
-                                                <p>{user.email}</p>
+                                                <Col xs="10"><p>{user.email}</p></Col>
                                                 :
-                                                <p>user@email.com</p>
+                                                <Col xs="10"><p>user@email.com</p></Col>
                                             }
-                                        </Col>
+                                        </Row>
                                         {/* Right - Location */}
-                                        <Col xs="6">
                                             {user ?
                                                 <div>
                                                     <h4>Address</h4>
@@ -334,10 +334,8 @@ const ProfilePage = () => {
                                                         <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
                                                     </MapContainer>
                                                 </div> : <div></div>}
-                                        </Col>
-                                    </Row>
                                     
-                                    {/* History
+                                    {/* History -- NOTE: Styled correctly, but commented since we're not using it yet
                                     <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
                                     <hr />
 
@@ -349,9 +347,6 @@ const ProfilePage = () => {
                                                 <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
                                             </Col>
                                             <Col xs="6" sm="4">
-                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                            </Col>
-                                            <Col sm="4">
                                                 <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
                                             </Col>
                                         </Row>
