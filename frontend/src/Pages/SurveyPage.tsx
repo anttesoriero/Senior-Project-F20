@@ -93,19 +93,15 @@ const SurveyPage = ({ history }: RouteComponentProps) => {
     <Fragment>
       <Navigation />
       <Container>
-        <h1 id="centered" style={{ fontWeight: 'bold' }}>Survey Page</h1>
-        <br />
+        <h1 id="centered" style={{ fontWeight: 'bold' }}>Your Daily Survey</h1>
+        <h3 id="centered">To Better Your Experience</h3>
 
-        <h2 id="centered">Here's your daily survey</h2>
-        <p id="centered">These surveys help make your experience better!</p>
         <hr />
-        <Row>
-          {survey ?
-            <h4 id="centered" style={{ fontWeight: 'bold' }} >{survey.question}</h4>
-            :
-            <p id="centered">Some more information if needed</p>
-          }
-        </Row>
+        {survey ?
+          <h4 style={{ fontWeight: 'bold' }} >{survey.question}</h4>
+          :
+          <p id="centered">Survey Question</p>
+        }
 
         <Formik initialValues={{ response: '' }} onSubmit={(data => postSurvey(data))}>
           {() => (
