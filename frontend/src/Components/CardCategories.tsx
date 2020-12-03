@@ -50,7 +50,7 @@ const CardCategories = () => {
                     <Card>
                         <CardImg top style={{ height: '250px', objectFit: 'cover' }} src="https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80" alt="Card image cap" />
                         <CardBody>
-                            <CardTitle>Caer-Taking</CardTitle>
+                            <CardTitle>Care-Taking</CardTitle>
                         </CardBody>
                     </Card>
                 </Col>
