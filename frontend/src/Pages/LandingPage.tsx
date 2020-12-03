@@ -12,37 +12,71 @@ const LandingPage = () => {
 
     const contextType = localStorage.getItem('access_token');
 
+    const isMobile = window.innerWidth < 1000;
+
     return (
         <div>
             <Navigation />
-
-            <Jumbotron fluid>
-                <Container >
-                    {!contextType ?
-                        <Row>
-                            {/* Left - Main info */}
-                            <Col xs="8">
-                                <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
-                                <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
-                            </Col>
-
-                            {/* Right - Login */}
-                            <Col xs="4">
-                                <AuthTabs />
-                            </Col>
-                        </Row>
-                        :
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {isMobile ? 
+                // Mobile
+                <Jumbotron fluid>
+                    <Container >
+                        {!contextType ?
                             <div>
-                                <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
+                                <div>
+                                    <h1 className="display-3" style={{ display: 'flex', justifyContent: 'center', fontWeight: 'bolder' }}>OddJobs</h1>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
+                                    </div>
+                                </div>
+                                <br />
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
+                                    <AuthTabs />
                                 </div>
                             </div>
-                        </div>
-                    }
-                </Container>
-            </Jumbotron>
+                            :
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div>
+                                    <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </Container>
+                </Jumbotron>
+            : 
+                // Normal
+                <Jumbotron fluid>
+                    <Container >
+                        {!contextType ?
+                            <Row>
+                                {/* Left - Main info */}
+                                <Col xs="8">
+                                    <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
+                                    <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
+                                </Col>
+
+                                {/* Right - Login */}
+                                <Col xs="4">
+                                    <AuthTabs />
+                                </Col>
+                            </Row>
+                            :
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div>
+                                    <h1 className="display-3" style={{ fontWeight: 'bolder' }}>OddJobs</h1>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <p className="lead" style={{ fontWeight: 'bolder' }}>No Job is too Odd</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </Container>
+                </Jumbotron>
+                
+            }
 
             <CardCategories />
 
