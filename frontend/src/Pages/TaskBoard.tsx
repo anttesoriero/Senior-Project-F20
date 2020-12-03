@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Button, Col, Container, Row } from 'reactstrap';
+import { Button, Col, Container, Navbar, Row, UncontrolledCollapse } from 'reactstrap';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import TaskCard from '../Components/TaskCard';
@@ -70,21 +70,46 @@ const TaskBoard = () => {
         //getIds();
     }, []);
 
-    
-    
+    const isMobile = window.innerWidth < 1000;
 
     return (
         <div>
             <Navigation />
 
-            {/* Search Bar */}
-            <RefineSearch className="centered" />
+            { isMobile ?
+                <div>
+                    {/* Search Bar */}
+                    <Navbar id="refineToggler" className="centered" color="#bbbbbb" style={{backgroundColor: "#bbbbbb"}} light expand="sm">
+                        <h4 className="centered" style={{fontWeight: "bold"}} id="top">Refine Options</h4>
+                    </Navbar>
+                    <UncontrolledCollapse toggler="#refineToggler">
+                        <RefineSearch className="centered" />
+                    </UncontrolledCollapse>
 
-            <Row>
-                {/* Left - TaskCards */}
-                <Col xs="3" className="col-scroll">
+                    {/* Map */}
+                    <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} >
+                        <TileLayer
+                            url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                            attribution='<a href="/">OddJobs</a> | <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a>'
+                        />
+
+                        {/* Map Circle Markers - MapsCircle */}
+                        {tasks.map(task => (
+                            <MapsCircle
+                                key={task.taskId}
+                                title={task.title}
+                                categoryId={task.categoryId}
+                                amount={Number(task.recommendedPrice)}
+                                duration={task.estimatedDurationMinutes}
+                                latitude={Number(task.locationALatitude)}
+                                longitute={Number(task.locationALongitude)} />
+                        ))}
+
+                    </MapContainer>
+
+                    {/* Tasks */}
                     <Container>
-                        <h3 id="top" className="centered" style={{fontWeight: 'bolder'}}>Tasks</h3>
+                        <h3 className="centered" style={{fontWeight: 'bolder'}}>Tasks</h3>
                         <hr/>
                         {tasks.map(task => (
                             <TaskCard
@@ -108,33 +133,75 @@ const TaskBoard = () => {
                         </div>
 
                     </Container>
+                </div>
 
-                </Col>
+                :
 
-                <Col xs="9">
-                    <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} zoom={5} scrollWheelZoom={true} >
-                        {/* Need to change "center" to users location - center{[userLat, userLong]} */}
+                <div>
+                    {/* Search Bar */}
+                    <RefineSearch className="centered" />
 
-                        <TileLayer
-                            url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                            attribution='<a href="/">OddJobs</a> | <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a>'
-                        />
+                    {/* Page */}
+                    <Row>
+                        {/* Left - TaskCards */}
+                        <Col xs="3" className="col-scroll">
+                            <Container>
+                                <h3 id="top" className="centered" style={{fontWeight: 'bolder'}}>Tasks</h3>
+                                <hr/>
+                                {tasks.map(task => (
+                                    <TaskCard
+                                        key={task.taskId}
+                                        id={task.taskId}
+                                        title={task.title}
+                                        offerer={task.posterTaskId}
+                                        price={Number(task.recommendedPrice)}
+                                        description={task.description}
+                                        duration={task.estimatedDurationMinutes}
+                                    />
+                                ))}
 
-                        {/* Map Circle Markers - MapsCircle */}
-                        {tasks.map(task => (
-                            <MapsCircle
-                                key={task.taskId}
-                                title={task.title}
-                                categoryId={task.categoryId}
-                                amount={Number(task.recommendedPrice)}
-                                duration={task.estimatedDurationMinutes}
-                                latitude={Number(task.locationALatitude)}
-                                longitute={Number(task.locationALongitude)} />
-                        ))}
+                                <hr/> 
+                                <h4 className="centered" style={{fontWeight: 'bolder'}}>No More Tasks in this Area</h4>&nbsp;
+                                <Button className={'task centered'} href="#top">Back to Top</Button>
 
-                    </MapContainer>
-                </Col>
-            </Row>
+                                <br />
+                                <div className='centered'>
+                                    <PaginationRow />
+                                </div>
+
+                            </Container>
+
+                        </Col>
+
+                        <Col xs="9">
+                            <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} zoom={5} scrollWheelZoom={true} >
+                                {/* Need to change "center" to users location - center{[userLat, userLong]} */}
+
+                                <TileLayer
+                                    url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                                    attribution='<a href="/">OddJobs</a> | <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a>'
+                                />
+
+                                {/* Map Circle Markers - MapsCircle */}
+                                {tasks.map(task => (
+                                    <MapsCircle
+                                        key={task.taskId}
+                                        title={task.title}
+                                        categoryId={task.categoryId}
+                                        amount={Number(task.recommendedPrice)}
+                                        duration={task.estimatedDurationMinutes}
+                                        latitude={Number(task.locationALatitude)}
+                                        longitute={Number(task.locationALongitude)} />
+                                ))}
+
+                            </MapContainer>
+                        </Col>
+                    </Row>
+                </div>
+            }
+
+
+
             <Footer />
         </div>
     );
