@@ -21,6 +21,7 @@ from app.models.survey_model import Survey
 from app.models.offer_model import Offer
 from app.models.historical_survey_model import HistoricalSurvey
 from app.models.category_model import Category
+from app.models.report_model import Report
 
 # Static password for admin queries
 adminToken = "SuperSecureLongAdminToken"
@@ -227,3 +228,24 @@ def changeAdminToken():
         "adminToken": adminToken
     }
     return jsonify(response), 200
+
+
+@admin_blueprint.route('/getAllReports', methods=['POST'])
+def getAllReports():
+    '''
+    Returns all Offers
+    '''
+    # Validate input
+    requiredParameters = ["adminPassword"]
+
+    optionalParameters = []
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    # Check Admin token
+    if str(inputJSON["adminPassword"]) != adminToken:
+        return jsonify({}), 403
+
+    return jsonify({"reports": Report.getAll()}), 200

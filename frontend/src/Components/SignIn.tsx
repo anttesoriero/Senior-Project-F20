@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc'
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
+import GoogleLogin from 'react-google-login';
 
 const SignIn = ({ history }: RouteComponentProps) => {
     const url = useContext(APIContext);
@@ -32,6 +33,10 @@ const SignIn = ({ history }: RouteComponentProps) => {
                 seetSerror(true);
                 console.log(error);
             });
+    }
+
+    const responseGoogle = (response) => {
+        console.log(response);
     }
 
     const signIn = async (data) => {
@@ -77,7 +82,15 @@ const SignIn = ({ history }: RouteComponentProps) => {
                     </div>
                     <FormGroup className='centered'>
                         {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Signing in...</Button> : <Button type='submit' color="primary">Sign In</Button>}&nbsp;
-                        <Button type='button' onClick={oauth} style={{ color: '#333', backgroundColor: '#fff', border: 'none' }}><FcGoogle /> Sign In</Button>
+                        {/* <Button type='button' onClick={oauth} style={{ color: '#333', backgroundColor: '#fff', border: 'none' }}><FcGoogle /> Sign In</Button> */}
+                        <GoogleLogin
+                            clientId="984254031044-31ou2h0ce0hve56ccggp303b1g1rtnfg.apps.googleusercontent.com"
+                            buttonText="Login"
+                            onSuccess={responseGoogle}
+                            onFailure={responseGoogle}
+                            cookiePolicy={'single_host_origin'}
+                            // isSignedIn={true}
+                        />
                     </FormGroup>
                 </Form>
             )}
