@@ -176,6 +176,8 @@ const ProfilePage = () => {
         getUser();
     }, []);
 
+    const isMobile = window.innerWidth < 1000;
+
     return (
         <div>
             <Navigation />
@@ -189,9 +191,9 @@ const ProfilePage = () => {
                                 <br />
 
                                 {/* Upper - Main user info and edit button */}
-                                <Row>
-                                    {/* Left - Prof Pic, name, and basic info */}
-                                    <Col xs="10">
+                                {isMobile ?
+                                    <div> {/* MOBILE */}
+                                        {/* User Info */}
                                         <Media>
                                             <Media left href="#">
                                                 {user.profilePicture === "" ?                                                
@@ -209,9 +211,9 @@ const ProfilePage = () => {
                                                     <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
                                                         <h4>{user.name}</h4>
                                                         <h5>Goes by: 
-                                                    {/* {user.preferredName} */}
                                                             {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                                         </h5>
+                                                    
                                                         <p>Rating: </p>
                                                         <p>Account Balance: ${String(user.accountBalance)}</p>
                                                     </div>
@@ -221,19 +223,142 @@ const ProfilePage = () => {
                                                     </div>}
                                             </Media>
                                         </Media>
-                                    </Col>
-
-                                    {/* Right - Edit Profile button */}
-                                    <Col xs="2" id="right">
+                                        
+                                        {/* Buttons */}
                                         <Button onClick={wantToEdit} outline color="primary" size="sm">Edit Profile</Button>{' '}
-                                &nbsp;&nbsp;
-                                <Button onClick={wantToChange} outline color="primary" size="sm">Change Password</Button>{' '}
-                                    </Col>
-                                </Row>
+                                        &nbsp;&nbsp;
+                                        <Button onClick={wantToChange} outline color="primary" size="sm">Change Password</Button>{' '}
+                                    </div>
+                                :
+                                    <Row> {/* NORMAL */}
+                                        {/* Left - Prof Pic, name, and basic info */}
+                                        <Col xs="10">
+                                            <Media>
+                                                <Media left href="#">
+                                                    {user.profilePicture === "" ?                                                
+                                                        // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
+                                                        <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
+                                                            {initials}
+                                                        </Button>
+                                                    :
+                                                        // <img src={user.profilePicture}/>
+                                                        <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
+                                                    }        
+                                                </Media>
+                                                <Media body style={{ padding: 10 }}>
+                                                    {user ?
+                                                        <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
+                                                            <h4>{user.name}</h4>
+                                                            <h5>Goes by: 
+                                                        {/* {user.preferredName} */}
+                                                                {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
+                                                            </h5>
+                                                            <p>Rating: </p>
+                                                            <p>Account Balance: ${String(user.accountBalance)}</p>
+                                                        </div>
+                                                        :
+                                                        <div>
+                                                            Account Balance: $[__]
+                                                        </div>}
+                                                </Media>
+                                            </Media>
+                                        </Col>
+
+                                        {/* Right - Edit Profile button */}
+                                        <Col xs="2" id="right">
+                                            <Button onClick={wantToEdit} outline color="primary" size="sm">Edit Profile</Button>{' '}
+                                            &nbsp;&nbsp;
+                                            <Button onClick={wantToChange} outline color="primary" size="sm">Change Password</Button>{' '}
+                                        </Col>
+                                    </Row>
+                                }  
+
                                 <br />
 
                                 {/* Lower - Job History and About */}
-                                <Row>
+                                {isMobile ? 
+                                <div> {/* MOBILE */}
+                                    {/* About */}
+                                    <h2 style={{ fontWeight: 'bold' }}>About</h2>
+                                    <hr />
+                                    <Row>
+                                        {/* Left - About Info */}
+                                        <Col xs="6">
+                                            <h4>Bio</h4>
+                                            {user ?
+                                                <p>{user.bio}</p>
+                                                :
+                                                <p>User bio</p>
+                                            }
+
+                                            <h4>Liked Jobs</h4>
+                                            <p>Selected liked job categories from survey</p>
+
+                                            <h4>Contact Info</h4>
+                                            {/* Phone */}
+                                            <p><b>Phone:</b></p>
+                                            {user ?
+                                                <p>{formatPhoneNumber(user.phoneNumber)}</p>
+                                                :
+                                                <p>5555555555</p>
+                                            }
+                                            {/* Email */}
+                                            <p><b>Email:</b></p>
+                                            {user ?
+                                                <p>{user.email}</p>
+                                                :
+                                                <p>user@email.com</p>
+                                            }
+                                        </Col>
+                                        {/* Right - Location */}
+                                        <Col xs="6">
+                                            {user ?
+                                                <div>
+                                                    <h4>Address</h4>
+                                                    {user.address ?
+                                                        <p>{user.address}, {user.city}, {user.state} {user.zipCode}</p>
+                                                        :
+                                                        <p>123 Main St, City, ST 12345</p>
+                                                    }
+
+                                                    <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                                    <TileLayer
+                                                        url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                                                        attribution='<a href="/">OddJobs</a>'
+                                                    />
+
+                                                        {/* Map Circle Markers - MapsCircle */}
+                                                        <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
+                                                            <Tooltip sticky>Radius Users See</Tooltip>
+                                                        </Circle>
+                                                        <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
+                                                    </MapContainer>
+                                                </div> : <div></div>}
+                                        </Col>
+                                    </Row>
+                                    
+                                    {/* History
+                                    <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
+                                    <hr />
+
+                                    <div id="history_category">
+                                        <Media heading>Category 1 <Badge color="secondary">New</Badge></Media>
+                                        <br />
+                                        <Row>
+                                            <Col xs="6" sm="4">
+                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
+                                            </Col>
+                                            <Col xs="6" sm="4">
+                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
+                                            </Col>
+                                            <Col sm="4">
+                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
+                                            </Col>
+                                        </Row>
+                                    </div> */}
+                                </div>
+                                :
+                                <Row> {/* NORMAL */}
                                     {/* Left - Job History */}
                                     <Col xs="4">
                                         <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
@@ -320,7 +445,7 @@ const ProfilePage = () => {
                                             </Col>
                                         </Row>
                                     </Col>
-                                </Row>
+                                </Row>}
                             </Container>
                         )
 
