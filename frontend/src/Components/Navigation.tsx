@@ -6,6 +6,7 @@ import {
 } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MdPerson } from 'react-icons/md';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { IconContext } from 'react-icons';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
@@ -52,64 +53,93 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
         window.location.reload(false);
     }
 
+    const isMobile = window.innerWidth < 1000;
 
-    return (
+    if (isMobile) {return (
         <Navbar color="dark" dark expand="md">
-            <NavbarBrand href="/" className={'mx-auto brand'}>OddJobs</NavbarBrand>
-            <NavbarToggler onClick={toggleNav} />
-            <Collapse isOpen={isOpen} navbar={true}>
-                {/* Checks if you're logged in and renders the rest of navbar if true */}
+                <NavbarBrand href="/" className={'mx-auto brand'}>OddJobs</NavbarBrand>
+                {/* <NavbarToggler onClick={toggleNav} /> */}
                 {token ?
-                    <Nav navbar className="mr-auto">
-                        <NavItem>
-                            <NavLink href="/tasks">Task Board</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/listtask">List a Task</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/survey">Surveys</NavLink>
-                        </NavItem>
-                    </Nav>
-                    : <Nav navbar className='mr-auto'></Nav>
-                }
-
-
-                {/* Right side of nav bar */}
                 <UncontrolledDropdown navbar inNavbar>
-                    <DropdownToggle nav caret style={{ color: 'white', fontWeight: 'bolder' }}>
+                    <DropdownToggle nav style={{ color: 'white', fontWeight: 'bolder' }}>
                         <IconContext.Provider value={{ size: '1.5em' }}>
-                            <MdPerson />{user?.name}
+                            <GiHamburgerMenu />
                         </IconContext.Provider>
                     </DropdownToggle>
-                    {/* Checks if signed in, then conditionally renders different menu */}
-                    {token ?
-                        <DropdownMenu right>
-                            <DropdownItem href="/profile">
-                                Profile Home
-                            </DropdownItem>
-                            <DropdownItem divider />
-                            {/* <DropdownItem href="/upcomingtasks">
-                                Upcoming Tasks
-                            </DropdownItem> */}
-                            <DropdownItem href="/myTasks">
-                                My Tasks
-                            </DropdownItem>
-                            <DropdownItem onClick={signOut}>
-                                Sign Out
-                            </DropdownItem>
-                        </DropdownMenu>
-                        :
-                        <DropdownMenu right>
-                            <DropdownItem href="/">
-                                Sign In
-                            </DropdownItem>
-                        </DropdownMenu>
-                    }
+                    
+                    {/* Main */}
+                    <DropdownMenu down>
+                        <DropdownItem href="/tasks" style={{ color: 'white'}}>Task Board</DropdownItem>
+                        <DropdownItem href="/listtask" style={{ color: 'white'}}>List a Task</DropdownItem>
+                        <DropdownItem href="/survey" style={{ color: 'white'}}>Surveys</DropdownItem>
+                        <DropdownItem divider />
+
+                        {/* User */}
+                        <DropdownItem href="/profile" style={{ color: 'white'}}>Profile Home</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem href="/myTasks" style={{ color: 'white'}}>My Tasks</DropdownItem>
+                        <DropdownItem onClick={signOut} style={{ color: 'white'}}>Sign Out</DropdownItem>
+                    </DropdownMenu>
                 </UncontrolledDropdown>
-            </Collapse>
-        </Navbar>
-    );
+                : <div></div>}
+            </Navbar>
+    )} else {return (
+            <Navbar color="dark" dark expand="md">
+                <NavbarBrand href="/" className={'mx-auto brand'}>OddJobs</NavbarBrand>
+                <NavbarToggler onClick={toggleNav} />
+                <Collapse isOpen={isOpen} navbar={true}>
+                    {/* Checks if you're logged in and renders the rest of navbar if true */}
+                    {token ?
+                        <Nav navbar className="mr-auto">
+                            <NavItem>
+                                <NavLink href="/tasks">Task Board</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/listtask">List a Task</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/survey">Surveys</NavLink>
+                            </NavItem>
+                        </Nav>
+                        : <Nav navbar className='mr-auto'></Nav>
+                    }
+
+
+                    {/* Right side of nav bar */}
+                    <UncontrolledDropdown navbar inNavbar>
+                        <DropdownToggle nav caret style={{ color: 'white', fontWeight: 'bolder' }}>
+                            <IconContext.Provider value={{ size: '1.5em' }}>
+                                <MdPerson />{user?.name}
+                            </IconContext.Provider>
+                        </DropdownToggle>
+                        {/* Checks if signed in, then conditionally renders different menu */}
+                        {token ?
+                            <DropdownMenu right>
+                                <DropdownItem href="/profile">
+                                    Profile Home
+                                </DropdownItem>
+                                <DropdownItem divider />
+                                {/* <DropdownItem href="/upcomingtasks">
+                                    Upcoming Tasks
+                                </DropdownItem> */}
+                                <DropdownItem href="/myTasks">
+                                    My Tasks
+                                </DropdownItem>
+                                <DropdownItem onClick={signOut}>
+                                    Sign Out
+                                </DropdownItem>
+                            </DropdownMenu>
+                            :
+                            <DropdownMenu right>
+                                <DropdownItem href="/">
+                                    Sign In
+                                </DropdownItem>
+                            </DropdownMenu>
+                        }
+                    </UncontrolledDropdown>
+                </Collapse>
+            </Navbar>
+        );}
 }
 
 export default withRouter(Navigation);
