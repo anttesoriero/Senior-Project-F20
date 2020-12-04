@@ -385,9 +385,9 @@ const ProfilePage = () => {
                                             <Col xs="6">
                                                 <h4>Bio</h4>
                                                 {user ?
-                                                    <Col xs="10"><p>{user.bio}</p></Col>
+                                                    <p>{user.bio}</p>
                                                     :
-                                                    <Col xs="10"><p>User bio</p></Col>
+                                                    <p>User bio</p>
                                                 }
 
                                                 <h4>Liked Jobs</h4>
@@ -577,7 +577,8 @@ const ProfilePage = () => {
                                             <Row className='centered'>
                                                 <div className="centered"><Button color="primary" size="md" type="submit" onSubmit={editProfile}>Save Changes</Button></div>
                                                 &nbsp;&nbsp;
-                                                <div className="centered"><Button color="secondary" size="md" type="submit" onClick={wantToEdit}>Cancel</Button></div>
+                                                {/* <div className="centered"><Button color="secondary" size="md" type="submit" onClick={wantToEdit}>Cancel</Button></div> */}
+                                                <div className="centered"><Button color="secondary" size="md" type="button" onClick={backToMain}>Cancel</Button></div>
                                             </Row>
                                         </Form>
                                     </Formik>
