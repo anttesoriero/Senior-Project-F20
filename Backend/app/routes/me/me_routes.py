@@ -40,6 +40,8 @@ def getProfile():
     responseInformation = user.getPublicInfo()
     responseInformation["accountBalance"] = float(user.getAccountBalance())
 
+    responseInformation["address"] = user.address
+
     return jsonify(responseInformation), 200
 
 @me_blueprint.route('/getPostedTasks', methods=['GET'])
@@ -82,7 +84,8 @@ def editInformation():
     '''
     # Validate input
     success, code, inputJSON = validateRequestJSON(request, [], 
-                                ["email", "firstName", "lastName", "preferredName", "phoneNumber", "profilePicture"])
+                                ["email", "firstName", "lastName", "preferredName", "phoneNumber", "profilePicture",
+                                 "bio", "address"])
     if not success:
         return jsonify({}), code
 
@@ -104,6 +107,10 @@ def editInformation():
         user.setPhoneNumber(inputJSON["phoneNumber"])
     if inputJSON["profilePicture"] != None:
         user.setProfilePicture(inputJSON["profilePicture"])
+    if inputJSON["bio"] != None:
+        user.setBio(inputJSON["bio"])
+    if inputJSON["address"] != None:
+        user.setProfilePicture(inputJSON["address"])
 
     return jsonify(message="New user information successfully set"), 200
 

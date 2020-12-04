@@ -92,12 +92,13 @@ def getOffers():
     if task is None:
         return jsonify({"success": False, "message": "Task is missing"}), 404
 
-    # Check that the requester is the owner of the Task
-    if not task.posterUserId is get_jwt_identity():
-        return jsonify({"success": False, "message": "Not posting user"}), 401
-
     # Get offers
     offers = Offer.getOffersForTask(taskId, includeArchived)
+    currUser = get_jwt_identity()
+
+    # Check that the requester is the owner of the Task
+    if not task.posterUserId is currUser:
+        return jsonify({"offers": [offer.getInfo() for offer in offers if offer.userIdFrom is currUser]}), 200
 
     return jsonify({"offers": [offer.getInfo() for offer in offers]}), 200
 

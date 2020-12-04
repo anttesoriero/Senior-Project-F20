@@ -342,9 +342,9 @@ def editTask():
         return jsonify({"success": False}), 403
 
 
-@task_blueprint.route('/completed', methods=["POST"])
+@task_blueprint.route('/posterCompleted', methods=["POST"])
 @jwt_required
-def completeTask():
+def completeTaskPoster():
     '''
     Mark a Task as completed
 
@@ -352,7 +352,7 @@ def completeTask():
     '''
     # Validate Inputs
     requiredParameters = ["taskId"]
-    optionalParameters = ["workerRating", "posterRating"]
+    optionalParameters = ["workerRating"]
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
@@ -370,6 +370,34 @@ def completeTask():
         if inputJSON["workerRating"] is not None:
             task.setWorkerRating(inputJSON["workerRating"])
             workerUser.updateWorkerRating()
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False}), 400
+
+@task_blueprint.route('/workerCompleted', methods=["POST"])
+@jwt_required
+def completeTaskWorker():
+    '''
+    Mark a Task as completed
+
+    :return:
+    '''
+    # Validate Inputs
+    requiredParameters = ["taskId"]
+    optionalParameters = ["posterRating"]
+
+    success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
+    if not success:
+        return jsonify({}), code
+
+    # Get current user
+    current_user_id = get_jwt_identity()
+
+    task = Task.getByTaskId(inputJSON["taskId"])
+    if task is None:
+        return jsonify({}), 404
+
+    if success:
         if inputJSON["posterRating"] is not None:
             task.setPosterRating(inputJSON["posterRating"])
             posterUser = User.getByUserId(task.posterUserId)
