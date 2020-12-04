@@ -130,6 +130,13 @@ def createOffer():
     if not success:
         return jsonify({}), code
 
+    # Check input parameters
+    if inputJSON["payment"] < 0:
+        return jsonify({"success": False, "message": "Payment cannot be negative"}), 400
+
+    if inputJSON["jobDurationMinutes"] < 0:
+        return jsonify({"success": False, "message": "Job duration cannot be negative"}), 400
+
     # Check Task
     task = Task.getByTaskId(inputJSON["taskId"])
 
@@ -145,6 +152,8 @@ def createOffer():
 
     if task.posterUserId is current_user_id:
         return jsonify({"success": False, "message": "Cannot post an offer on your own task"}), 400
+
+
 
     # Create Offer
     offer = Offer.createOffer(
@@ -210,12 +219,12 @@ def acceptOffer():
     if task.posterUserId is not currentUserId:
         return jsonify({"success": False, "message": "Not the posting user"}), 401
 
-    # TODO, atomize db commits better, right now there are two seperate commits that COULD cause issues
-    offer.accept(inputJSON["responseMessage"])
-
-    addDeal(task.taskId, offer.userIdFrom, task.posterUserId, offer.payment)
-
-    return jsonify({"success": True}), 200
+    print(offer.payment)
+    if addDeal(task.taskId, offer.userIdFrom, task.posterUserId, float(offer.payment)):
+        offer.accept(inputJSON["responseMessage"])
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "message": "Deal creation failed, insufficient funds"}), 400
 
 @offer_blueprint.route('/rejectOffer', methods=['POST'])
 @jwt_required

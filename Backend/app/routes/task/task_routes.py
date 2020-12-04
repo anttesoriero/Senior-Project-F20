@@ -352,7 +352,7 @@ def completeTask():
     '''
     # Validate Inputs
     requiredParameters = ["taskId"]
-    optionalParameters = []
+    optionalParameters = ["workerRating", "posterRating"]
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
@@ -365,11 +365,15 @@ def completeTask():
     if task is None:
         return jsonify({}), 404
 
-    if task.posterUserId is not current_user_id:
-        # User does not have permission to delete the task
-        return jsonify({"success": False}), 403
-
-    if completeDeal(task.taskId):
+    workerUser, success = completeDeal(task.taskId)
+    if success:
+        if inputJSON["workerRating"] is not None:
+            task.setWorkerRating(inputJSON["workerRating"])
+            workerUser.updateWorkerRating()
+        if inputJSON["posterRating"] is not None:
+            task.setPosterRating(inputJSON["posterRating"])
+            posterUser = User.getByUserId(task.posterUserId)
+            posterUser.updatePosterRating()
         return jsonify({"success": True}), 200
     else:
         return jsonify({"success": False}), 400
