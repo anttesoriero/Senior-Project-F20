@@ -39,7 +39,7 @@ class Task(db.Model):
     categoryId = db.Column(db.Integer(), db.ForeignKey("category.categoryId"))
     description = db.Column(db.String(300), nullable=True)
     title = db.Column(db.String(60), nullable=True)
-    startDate = db.Column(db.DateTime(), nullable=True)
+    startDate = db.Column(db.DateTime())
     recommendedPrice = db.Column(db.Numeric(6,2), nullable=True)
     estimatedDurationMinutes = db.Column(db.Integer(), nullable=True)
     workerRating = db.Column(db.Integer(), nullable=True)
@@ -90,11 +90,16 @@ class Task(db.Model):
         :return:
         '''
         # Strip latitude and longitudes to only 2 decimals
-        locationALongitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
-        locationALatitude = str("%.1f" % self.locationALatitude) if self.locationALatitude else None
-        locationBLongitude = str("%.1f" % self.locationBLongitude) if self.locationBLongitude else None
-        locationBLatitude = str("%.1f" % self.locationBLatitude) if self.locationBLatitude else None
+        locationALongitude = str("%.2f" % self.locationALongitude) if self.locationALongitude else None
+        locationALatitude = str("%.2f" % self.locationALatitude) if self.locationALatitude else None
+        locationBLongitude = str("%.2f" % self.locationBLongitude) if self.locationBLongitude else None
+        locationBLatitude = str("%.2f" % self.locationBLatitude) if self.locationBLatitude else None
+
+
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
+
+
+
 
         output = {
             "taskId": self.taskId,
@@ -280,15 +285,7 @@ class Task(db.Model):
                     filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
 
         tasks = Task.query.filter(*filters).limit(max)
-        return tasks
-
-    @classmethod
-    def getRecommendTasks(cls):
-        tasks = Task.query.filter_by(
-            acceptedOfferId=None
-        )
-        tasks = [task.taskId for task in tasks]
-        return tasks
+        return [task for task in tasks if not task.isAccepted()]
 
     @classmethod
     def getByTaskId(cls, taskId):

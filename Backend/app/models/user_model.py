@@ -38,7 +38,9 @@ class User(db.Model):
     activeAccount = db.Column(db.Boolean(), default=True)
     profilePicture = db.Column(db.String(240), nullable=True)
     workerRating = db.Column(db.Integer(), nullable=True)
-    posterRating = db.Column(db.Integer(), nullable = True)
+    posterRating = db.Column(db.Integer(), nullable=True)
+    bio = db.Column(db.String(500), nullable=True)
+    address = db.Column(db.String(100), nullable=True)
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
@@ -73,6 +75,14 @@ class User(db.Model):
 
     def setPhoneNumber(self, newPhoneNumber):
         self.phoneNumber = newPhoneNumber
+        db.session.commit()
+
+    def setAddress(self, newAddress):
+        self.address = newAddress
+        db.session.commit()
+
+    def setBio(self, newBio):
+        self.bio = newBio
         db.session.commit()
 
     def getTaskIds(self):
@@ -137,6 +147,7 @@ class User(db.Model):
         output = {
             "id": self.userId,
             "name": name,
+            "bio": self.bio,
             "preferredName": self.preferredName,
             "phoneNumber": self.phoneNumber,
             "email": self.email,
