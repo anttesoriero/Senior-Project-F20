@@ -11,6 +11,7 @@ def addDeal(taskId, userIdFrom, userIdTo, amount):
     global arbitrationAccount
     global commission
     global deals
+
     # Check users exist
     userFrom = User.getByUserId(userIdFrom)
     userTo = User.getByUserId(userIdTo)
@@ -18,13 +19,14 @@ def addDeal(taskId, userIdFrom, userIdTo, amount):
         return False
 
     # Check that the payment form the user is possible
-    if userFrom.getAccountBalance() < amount:
+    if userTo.getAccountBalance() < amount:
         return False
 
     # Take money from user and add to deals list
-    userFrom.changeAccountBalance(-amount)
+    userTo.changeAccountBalance(-amount)
     arbitrationAccount += amount
     deals[taskId] = {"From": userIdFrom, "To": userIdTo, "Amount": amount}
+    return True
 
 def completeDeal(taskId):
     global commissionAccount
@@ -32,14 +34,15 @@ def completeDeal(taskId):
     global commission
     global deals
     deal = deals[taskId]
-    amount = deal["Amount"]
-    userTo = User.getByUserId(deal["To"])
+    amount = float(deal["Amount"])
+    userFrom = User.getByUserId(deal["From"])
 
-    if userTo is None:
+    if userFrom is None:
         return False
 
     commissionAmount = amount * commission
     paymentAmount = amount - commissionAmount
     arbitrationAccount -= amount
     commissionAccount += commissionAmount
-    userTo.changeAccountBalance(paymentAmount)
+    userFrom.changeAccountBalance(paymentAmount)
+    return userFrom, True
