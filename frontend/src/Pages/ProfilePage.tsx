@@ -23,7 +23,8 @@ type userState = {
     phoneNumber: string,
     bio: string,
     profilePicture: string,
-    initials: string
+    initials: string,
+    rating: number
 }
 
 const userInfo = {
@@ -38,7 +39,8 @@ const userInfo = {
     phoneNumber: "",
     bio: "",
     profilePicture: "",
-    initials: ""
+    initials: "",
+    rating: 0
 }
 
 const ProfilePage = () => {
@@ -214,7 +216,7 @@ const ProfilePage = () => {
                                                             {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                                         </h5>
                                                     
-                                                        <p>Rating: </p>
+                                                        <p>Rating: {user.rating} / 5</p>
                                                         <p>Account Balance: ${String(user.accountBalance)}</p>
                                                     </div>
                                                     :
