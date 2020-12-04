@@ -9,6 +9,8 @@ These are Tasks that Users post
 # Module imports
 from app import db
 
+
+from app.models.offer_model import Offer
 import datetime
 
 class Task(db.Model):
@@ -40,6 +42,8 @@ class Task(db.Model):
     startDate = db.Column(db.DateTime(), nullable=True)
     recommendedPrice = db.Column(db.Numeric(6,2), nullable=True)
     estimatedDurationMinutes = db.Column(db.Integer(), nullable=True)
+    workerRating = db.Column(db.Integer(), nullable=True)
+    posterRating = db.Column(db.Integer(), nullable = True)
     locationALongitude = db.Column(db.Numeric(8,5), nullable=True)
     locationALatitude = db.Column(db.Numeric(8,5), nullable=True)
     locationBLongitude = db.Column(db.Numeric(8,5), nullable=True)
@@ -55,6 +59,13 @@ class Task(db.Model):
     def isAccepted(self):
         return True in [offer.accepted for offer in self.acceptedOfferId]
 
+    def setWorkerRating(self, newWorkerRating):
+        self.workerRating = newWorkerRating
+        db.session.commit()
+
+    def setPosterRating(self, newPosterRating):
+        self.posterRating = newPosterRating
+        db.session.commit()
 
     def getBriefPublicInfo(self):
         '''
@@ -127,10 +138,10 @@ class Task(db.Model):
         :return: Private information about a Task
         '''
         # Strip latitude and longitudes to only 2 decimals
-        locationALongitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
-        locationALatitude = str("%.1f" % self.locationALatitude) if self.locationALatitude else None
-        locationBLongitude = str("%.1f" % self.locationBLongitude) if self.locationBLongitude else None
-        locationBLatitude = str("%.1f" % self.locationBLatitude) if self.locationBLatitude else None
+        locationALongitude = str("%.4f" % self.locationALongitude) if self.locationALongitude else None
+        locationALatitude = str("%.4f" % self.locationALatitude) if self.locationALatitude else None
+        locationBLongitude = str("%.4f" % self.locationBLongitude) if self.locationBLongitude else None
+        locationBLatitude = str("%.4f" % self.locationBLatitude) if self.locationBLatitude else None
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
 
         output = {
@@ -177,6 +188,31 @@ class Task(db.Model):
         if "startDate" in k:
             self.startDate = paramDict["startDate"]
         db.session.commit()
+
+    @classmethod
+    def buildPosterRatingsForUser(cls, userId):
+        tasks = Task.query.filter(
+            cls.posterUserId == userId,
+            cls.posterRating != None
+        ).all()
+        return [task.posterRating for task in tasks]
+
+    @classmethod
+    def buildWorkerRatingsForUser(cls, userId):
+        tasks = Task.getAll()
+        offerSets = [Offer.getOffersForTask(task["taskId"]) for task in tasks]
+        usersTasks = []
+        for offerSet in offerSets:
+            for offer in offerSet:
+                if int(offer.userIdFrom) == int(userId) and offer.accepted:
+                    usersTasks.append(offer.taskId)
+
+        workerRatings = []
+        for task in [Task.getByTaskId(taskId) for taskId in usersTasks]:
+            if task.workerRating is not None:
+                workerRatings.append(task.workerRating)
+
+        return workerRatings
 
     @classmethod
     def search(cls, queryP, max=100):

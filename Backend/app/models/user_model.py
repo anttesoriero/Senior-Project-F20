@@ -14,7 +14,6 @@ from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
-from app.models.report_model import Report
 
 class User(db.Model):
     '''
@@ -38,6 +37,8 @@ class User(db.Model):
     phoneNumber = db.Column(db.String(12), nullable=True)
     activeAccount = db.Column(db.Boolean(), default=True)
     profilePicture = db.Column(db.String(240), nullable=True)
+    workerRating = db.Column(db.Integer(), nullable=True)
+    posterRating = db.Column(db.Integer(), nullable = True)
 
     # Set-up Database Relationships
     credentials = db.relationship('Credentials', backref="user", uselist=False, cascade="all, delete-orphan")
@@ -45,7 +46,6 @@ class User(db.Model):
     postedTasks = db.relationship('Task', backref="user", uselist=True, cascade="all, delete-orphan")
     extendedModel = db.relationship('ExtendedUser', backref="user", uselist=False, cascade="all, delete-orphan")
     historicalSurvey = db.relationship('HistoricalSurvey', backref="user", uselist=True, cascade="all, delete-orphan")
-    report = db.relationship('Report', backref="user", uselist=True, cascade="all, delete-orphan")
 
 
     '''
@@ -77,6 +77,12 @@ class User(db.Model):
 
     def getTaskIds(self):
         return [task.taskId for task in self.postedTasks]
+
+    def getWorkerRating(self):
+        return self.workerRating
+
+    def getPosterRating(self):
+        return self.posterRating
 
     '''
     Interactions with credentials are routed through Credentials object
@@ -115,7 +121,9 @@ class User(db.Model):
             "preferredName": self.preferredName,
             "phoneNumber": self.phoneNumber,
             "email": self.email,
-            "profilePicture": self.profilePicture
+            "profilePicture": self.profilePicture,
+            "posterRating": self.posterRating,
+            "workerRating": self.workerRating
         }
         return output
 
@@ -133,7 +141,9 @@ class User(db.Model):
             "phoneNumber": self.phoneNumber,
             "email": self.email,
             "gender": self.extendedModel.gender,
-            "profilePicture": self.profilePicture
+            "profilePicture": self.profilePicture,
+            "posterRating": self.posterRating,
+            "workerRating": self.workerRating
         }
         return output
 
@@ -154,6 +164,29 @@ class User(db.Model):
         recommendedSurvey = min(availableSurveyIds.keys(), key=(lambda k: availableSurveyIds[k]))
 
         return recommendedSurvey
+
+    def updateWorkerRating(self):
+        # Get all worker ratings for tasks involved in
+        tasksWorkerRatings = Task.buildWorkerRatingsForUser(self.userId)
+
+        # find mean
+        meanOfWorkerRatings = int(sum(tasksWorkerRatings)/len(tasksWorkerRatings))
+
+        # set value
+        self.workerRating = meanOfWorkerRatings
+        db.session.commit()
+
+
+    def updatePosterRating(self):
+        # Get all poster ratings for tasks involved in
+        tasksPosterRatings = Task.buildPosterRatingsForUser(self.userId)
+
+        # find mean
+        meanOfPosterRatings = int(sum(tasksPosterRatings)/len(tasksPosterRatings))
+
+        # set value
+        self.posterRating = meanOfPosterRatings
+        db.session.commit()
 
     @classmethod
     def getByEmail(cls, email):
