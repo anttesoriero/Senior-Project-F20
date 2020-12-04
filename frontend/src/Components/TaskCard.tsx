@@ -16,7 +16,9 @@ type CardProps = {
     offerer: number,
     price: number,
     description: string,
-    duration: number
+    duration: number,
+    startDate: string,
+    time: string
 }
 
 type Poster = {
@@ -29,7 +31,7 @@ type Poster = {
     profilePicture: ""
 }
 
-const TaskCard = ({ title, offerer, price, description, duration, id }: CardProps) => {
+const TaskCard = ({ title, offerer, price, description, duration, id, startDate, time }: CardProps) => {
     const url = useContext(APIContext);
     const token = localStorage.getItem('access_token');
 
@@ -111,7 +113,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                     <h4 style={{fontWeight: 'bolder'}}>{title}</h4>
                     <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer'}} onClick={viewUser}><RiUserFill/> {poster?.name}</CardSubtitle>
                     <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${price}</CardSubtitle>
-                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> 
+                    <CardSubtitle style={{color: '#c48818', fontWeight: 'bolder'}}><RiTimerFill/> 
                     {duration / 60 < 1 
                             ? ' ' + duration + ' minutes' 
                             : duration % 60 == 0 
@@ -120,7 +122,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                     </CardSubtitle>
                     {/* For when we get the start date */}
                     {/* {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()} */}
-                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> NEED Date/Time Range</CardSubtitle>
+                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {startDate} at {time}</CardSubtitle>
                     <CardText style={{fontWeight: 'bolder'}}>{description}</CardText>
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
@@ -138,17 +140,13 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
                     <Formik initialValues={{ payment: price, startDate: '', time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
                         {() => (
                             <Form >
-                                {/*  Changing format to match listing page
-                                <FormGroup>
-                                    <Label for="payment">Payment*</Label>
-                                    <Field name='payment' type='text' required as={Input}>{price}</Field>
-                                </FormGroup> */}
-                                <Label for="payment">Payment *</Label>
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">$</InputGroupAddon>
-                                        <Field type="number" name="payment" min="15" as={Input} required >{price}</Field>
-                                        <InputGroupAddon addonType="append">.00</InputGroupAddon>
-                                    </InputGroup>
+                                
+                            <Label for="payment">Payment *</Label>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                    <Field type="number" name="payment" min="15" as={Input} required >{price}</Field>
+                                    <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                </InputGroup>
                                 <Row>
                                     <Col>
                                         <FormGroup>
