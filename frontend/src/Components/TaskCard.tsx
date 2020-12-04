@@ -8,6 +8,7 @@ import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
 import jwt_decode from "jwt-decode";
+import { Redirect } from 'react-router-dom';
 
 type CardProps = {
     id: number,
@@ -34,6 +35,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
 
     const [open, setOpen] = useState(false)
     const [submitting, setSubmitting] = useState(false);
+    const [redirect, setRediret] = useState(false);
     const [serror, setSerror] = useState(false);
     const [oerror, setOerror] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -96,12 +98,18 @@ const TaskCard = ({ title, offerer, price, description, duration, id }: CardProp
         }
     }
 
+    const viewUser = () => {
+        setRediret(true)
+    }
+
+    if(redirect)
+        return <Redirect to={'/user/' + poster?.id} />
     return (
         <div>
             <Card>
                 <CardBody>
                     <h4 style={{fontWeight: 'bolder'}}>{title}</h4>
-                    <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder'}}><RiUserFill/> {poster?.name}</CardSubtitle>
+                    <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer'}} onClick={viewUser}><RiUserFill/> {poster?.name}</CardSubtitle>
                     <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${price}</CardSubtitle>
                     <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> 
                     {duration / 60 < 1 

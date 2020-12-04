@@ -30,7 +30,7 @@ function App() {
         <Route exact={true} path="/tasks" render={(props) => <TaskBoard />} />
         <Route exact={true} path="/myTasks" render={(props) => <MyTasksPage />} />
         <Route exact={true} path="/profile" render={(props) => <ProfilePage />} />
-        <Route exact={true} path="/user" render={(props) => <UserProfile />} />
+        <Route exact={true} path="/user/:userId" render={(props) => <UserProfile />} />
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/listtask" render={(props) => <ListingPage />} />
         <Route exact={true} path="/admin" render={(props) => <AdminLogin />} />
