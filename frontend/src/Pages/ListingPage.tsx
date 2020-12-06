@@ -15,14 +15,10 @@ type taskState = {
     recommendedPrice: number,
     estimatedDurationMinutes: number,
     locationALongitude: number,
-<<<<<<< HEAD
-    locationALatitude: number
-=======
     locationALatitude: number,
     startDate: string
     // locationBLongitude: number,
     // locationBLatitude: number
->>>>>>> 8656c5cc61bf0cd8b3b04a7b6511baa4be6f20b0
 }
 
 const taskFields = {
@@ -33,14 +29,10 @@ const taskFields = {
     recommendedPrice: 0,
     estimatedDurationMinutes: 0,
     locationALongitude: 0,
-<<<<<<< HEAD
-    locationALatitude: 0
-=======
     locationALatitude: 0,
     startDate: ""
     // locationBLongitude: 15,
     // locationBLatitude: 15
->>>>>>> 8656c5cc61bf0cd8b3b04a7b6511baa4be6f20b0
 }
 
 const ListingPage = ({ history }: RouteComponentProps) => {

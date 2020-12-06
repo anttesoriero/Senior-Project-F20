@@ -76,25 +76,12 @@ const UserProfile = () => {
     const reportUser = async (values) => {
         const userId_2 = window.location.href.slice(-1)
         console.log('values: ', values)
-<<<<<<< HEAD
-=======
         
->>>>>>> 8656c5cc61bf0cd8b3b04a7b6511baa4be6f20b0
         await axios.put(url + 'me/reportUser', {
             userId_2: userId_2,
             reportType: values.picked,
             description: values.description
         },
-<<<<<<< HEAD
-        { headers: { Authorization: `Bearer ${token}` } })
-        .then(response => {
-            toggle()
-        })
-        .catch(error => {
-            console.log(error);
-        });
-        return
-=======
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log('response: ', response)
@@ -104,7 +91,6 @@ const UserProfile = () => {
             .catch(error => {
                 console.log(error);
             });
->>>>>>> 8656c5cc61bf0cd8b3b04a7b6511baa4be6f20b0
     }
 
     const computeUserRating = () => {
