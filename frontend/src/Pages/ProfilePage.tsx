@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, FormGroup, Input, Label } from 'reactstrap';
+import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label } from 'reactstrap';
 import Footer from "../Components/Footer";
+import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
 import { Formik, Form, Field } from 'formik';
-import { TileLayer, MapContainer, Circle, Marker, Tooltip } from 'react-leaflet';
+import { TileLayer, MapContainer, Circle, Popup, Marker, Tooltip } from 'react-leaflet';
+import { LatLngTuple } from 'leaflet';
 import APIContext from '../Contexts/APIContext';
 import StateSelector from '../Components/StateSelector';
 
@@ -14,15 +16,17 @@ type userState = {
     name: string,
     preferredName: string,
     accountBalance: number,
-    address: string,
-    city: string,
-    state: string,
-    zipCode: string,
     phoneNumber: string,
     bio: string,
     profilePicture: string,
-    initials: string,
-    rating: number
+    address: string,
+    posterRating: number | null,
+    workerRating: number | null
+}
+
+type userLatLong = {
+    latitude: number,
+    longitude: number
 }
 
 const userInfo = {
@@ -30,15 +34,12 @@ const userInfo = {
     name: "",
     preferredName: "",
     accountBalance: 0,
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
     phoneNumber: "",
     bio: "",
     profilePicture: "",
-    initials: "",
-    rating: 0
+    address: "",
+    posterRating: null,
+    workerRating: null
 }
 
 const ProfilePage = () => {
@@ -46,11 +47,14 @@ const ProfilePage = () => {
     const token = localStorage.getItem('access_token');
 
     const [user, setUser] = useState<userState>(userInfo);
-    const [initials, setInitials] = useState<String>("")
+    const [initials, setInitials] = useState<String>("");
+    const [userLatLong, setUserLatLong] = useState<userLatLong>();
     const [passwordError, setPasswordError] = useState<String>("");
-    const [pageState, setPageState] = useState<String>("main profile")
+    const [pageState, setPageState] = useState<String>("main profile");
 
     const getUser = async () => {
+        {/* Example of sending authorized request. Get can take multiple parameters, in this case 2.
+            First one is the endpoint and second is the authorization headers */}
         await axios.get(url + 'me/getProfile',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
@@ -60,6 +64,7 @@ const ProfilePage = () => {
                 const initials = firstName.charAt(0) + lastName.charAt(0)
                 setUser(response.data)
                 setInitials(initials)
+                console.log(userLatLong)
             })
             .catch(error => {
                 console.log(error);
@@ -68,7 +73,9 @@ const ProfilePage = () => {
 
     // Have to refactor this if using Formik for edit profile
     const editProfile = async (data) => {
-        console.log('picture: ', userInfo.profilePicture)
+        const address = data.address + ' ' + data.city + ' ' + data.state + ' ' + data.zip
+        geocode(address)
+        
         await axios.put(url + 'me/editInformation', {
             email: data.email,
             firstName: data.name.split(' ')[0],
@@ -76,13 +83,12 @@ const ProfilePage = () => {
             preferredName: data.preferredName,
             phoneNumber: data.phoneNumber,
             bio: data.bio,
-            profilePicture: userInfo.profilePicture
+            address: address
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
-                console.log(response.data);
                 backToMain()
                 window.location.reload(false);
             })
@@ -90,7 +96,6 @@ const ProfilePage = () => {
                 console.log(error);
             });
     }
-
 
     const deleteAccount = async () => {
         await axios.get(url + 'me/deleteAccount',
@@ -130,6 +135,54 @@ const ProfilePage = () => {
         }
     }
 
+    const geocode = async (data) => {
+        if (data === undefined) {
+            setUserLatLong({
+                latitude: 0,
+                longitude: 0
+            })
+            return
+        }
+        // var location = data.address + data.city + data.state + data.zip;
+        await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+            params: {
+                address: data,
+                key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
+            }
+        })
+        .then(function(response){
+			console.log(response)
+			
+			const results = response.data.results
+			if (results !== undefined && results.length != 0) {
+				const { lat, lng } = results[0].geometry.location
+             
+				setUserLatLong({
+                    latitude: lat,
+                    longitude: lng
+                })
+            }
+			else {
+				throw "That address doesn't exist!"
+			}
+        })
+    } 
+
+    const computeUserRating = () => {
+        const { workerRating, posterRating } = userInfo
+        if (workerRating === null && posterRating === null) {
+            return 'No Ratings Yet'
+        }
+        if (workerRating === null) {
+            return `${posterRating}`
+        }
+        if (posterRating === null) {
+            return `${workerRating}`
+        }
+        const averageRating = (workerRating! + posterRating!) / 2
+        return `${averageRating}`
+    }
+
     const backToMain = () => {
         setPageState("main profile")
     }
@@ -156,23 +209,9 @@ const ProfilePage = () => {
         return null
     };
 
-    // // User uploading a profile picture
-    // const handlePictureSelected = (event) => {
-    //     var picture = event.target.files[0];
-    //     var src     = URL.createObjectURL(picture);
-      
-    //     console.log('picture: ', picture)
-    //     console.log('src: ', src)
-        
-    //     setUser({
-    //         ...user,
-    //         profilePicture: src
-    //     })
-    // }
-    //
     useEffect(() => {
         getUser();
-    });
+    }, []);
 
     const isMobile = window.innerWidth < 1000;
 
@@ -183,6 +222,12 @@ const ProfilePage = () => {
             {(() => {
                 switch (pageState) {
                     case 'main profile':
+                        const userLat = userLatLong !== undefined ? userLatLong.latitude : 0
+                        const userLong = userLatLong !== undefined ? userLatLong.longitude : 0
+                        const userRating = computeUserRating()
+
+                        // console.log(userLat)
+                        // console.log(userLong)
                         return (
                             <Container>
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Profile</h1>
@@ -195,28 +240,25 @@ const ProfilePage = () => {
                                         <Media>
                                             <Media left href="#">
                                                 {user.profilePicture === "" ?                                                
+                                                    // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                                     <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
                                                         {initials}
                                                     </Button>
                                                 :
+                                                    // <img src={user.profilePicture}/>
                                                     <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
                                                 }        
                                             </Media>
                                             <Media body style={{ padding: 10 }}>
-                                                {user ?
-                                                    <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
-                                                        <h4>{user.name}</h4>
-                                                        <h5>Goes by: 
-                                                            {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
-                                                        </h5>
-                                                    
-                                                        <p>Rating: {user.rating} / 5</p>
-                                                        <p>Account Balance: ${String(user.accountBalance)}</p>
-                                                    </div>
-                                                    :
-                                                    <div>
-                                                        Account Balance: $[__]
-                                                    </div>}
+                                                <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
+                                                    <h4>{user.name}</h4>
+                                                    <h5>Goes by: 
+                                                        {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
+                                                    </h5>
+                                                
+                                                    <p>Rating: {userRating}</p>
+                                                    <p>Account Balance: ${String(user.accountBalance)}</p>
+                                                </div>
                                             </Media>
                                         </Media>
                                         
@@ -232,27 +274,25 @@ const ProfilePage = () => {
                                             <Media>
                                                 <Media left href="#">
                                                     {user.profilePicture === "" ?                                                
+                                                        // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                                         <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
                                                             {initials}
                                                         </Button>
                                                     :
+                                                        // <img src={user.profilePicture}/>
                                                         <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
                                                     }        
                                                 </Media>
                                                 <Media body style={{ padding: 10 }}>
-                                                    {user ?
-                                                        <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
-                                                            <h4>{user.name}</h4>
-                                                            <h5>Goes by: 
-                                                                {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
-                                                            </h5>
-                                                            <p>Rating: </p>
-                                                            <p>Account Balance: ${String(user.accountBalance)}</p>
-                                                        </div>
-                                                        :
-                                                        <div>
-                                                            Account Balance: $[__]
-                                                        </div>}
+                                                    <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
+                                                        <h4>{user.name}</h4>
+                                                        <h5>Goes by: 
+                                                    {/* {user.preferredName} */}
+                                                            {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
+                                                        </h5>
+                                                        <p>Rating: {userRating}</p>
+                                                        <p>Account Balance: ${String(user.accountBalance)}</p>
+                                                    </div>
                                                 </Media>
                                             </Media>
                                         </Col>
@@ -292,7 +332,7 @@ const ProfilePage = () => {
                                             {user ?
                                                 <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                                 :
-                                                <Col xs="10"><p>5555555555</p></Col>
+                                                <Col xs="10"><p>###-###-####</p></Col>
                                             }  
                                         </Row>
                                         {/* Email */}
@@ -308,24 +348,31 @@ const ProfilePage = () => {
                                             {user ?
                                                 <div>
                                                     <h4>Address</h4>
-                                                    {user.address ?
-                                                        <p>{user.address}, {user.city}, {user.state} {user.zipCode}</p>
+                                                    {user ?
+                                                        <p>{user.address}</p>
                                                         :
-                                                        <p>123 Main St, City, ST 12345</p>
+                                                        <p>No Address Set</p>
                                                     }
-
-                                                    <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                                    <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
                                                     <TileLayer
                                                         url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
                                                         attribution='<a href="/">OddJobs</a>'
                                                     />
-
-                                                        {/* Map Circle Markers - MapsCircle */}
+                                                        <Circle center={[userLat, userLong]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
+                                                            <Tooltip sticky>Radius Users See</Tooltip>
+                                                        </Circle>
+                                                        <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
+                                                    </MapContainer>
+                                                    {/* <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                                    <TileLayer
+                                                        url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                                                        attribution='<a href="/">OddJobs</a>'
+                                                    />
                                                         <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
                                                             <Tooltip sticky>Radius Users See</Tooltip>
                                                         </Circle>
                                                         <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
-                                                    </MapContainer>
+                                                    </MapContainer> */}
                                                 </div> : <div></div>}
                                     
                                     {/* History -- NOTE: Styled correctly, but commented since we're not using it yet
@@ -378,9 +425,9 @@ const ProfilePage = () => {
                                             <Col xs="6">
                                                 <h4>Bio</h4>
                                                 {user ?
-                                                    <p>{user.bio}</p>
+                                                    <Col xs="10"><p>{user.bio}</p></Col>
                                                     :
-                                                    <p>User bio</p>
+                                                    <Col xs="10"><p>User bio</p></Col>
                                                 }
 
                                                 <h4>Liked Jobs</h4>
@@ -390,19 +437,19 @@ const ProfilePage = () => {
                                                 {/* Phone */}
                                                 <Row>
                                                     <Col xs="2"><p>Phone:</p></Col>
-                                                    {user ?
+                                                    {user.phoneNumber !== '' ?
                                                         <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                                         :
-                                                        <Col xs="10"><p>5555555555</p></Col>
+                                                        <Col xs="10"><p>###-###-####</p></Col>
                                                     }  
                                                 </Row>
                                                 {/* Email */}
                                                 <Row>
                                                     <Col xs="2"><p>Email:</p></Col>
-                                                    {user ?
+                                                    {user.email !== '' ?
                                                         <Col xs="10"><p>{user.email}</p></Col>
                                                         :
-                                                        <Col xs="10"><p>user@email.com</p></Col>
+                                                        <Col xs="10"><p>youremail@email.com</p></Col>
                                                     }
                                                 </Row>
                                             </Col>
@@ -411,23 +458,20 @@ const ProfilePage = () => {
                                                 {user ?
                                                     <div>
                                                         <h4>Address</h4>
-                                                        {user.address ?
-                                                            <p>{user.address}, {user.city}, {user.state} {user.zipCode}</p>
+                                                        {user ?
+                                                            <p>{user.address}</p>
                                                             :
-                                                            <p>123 Main St, City, ST 12345</p>
+                                                            <p>No Address Set</p>
                                                         }
-
-                                                        <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15.5} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                                        <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
                                                         <TileLayer
                                                             url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
                                                             attribution='<a href="/">OddJobs</a>'
                                                         />
-
-                                                            {/* Map Circle Markers - MapsCircle */}
-                                                            <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
+                                                            <Circle center={[userLat, userLong]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
                                                                 <Tooltip sticky>Radius Users See</Tooltip>
                                                             </Circle>
-                                                            <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
+                                                            <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
                                                         </MapContainer>
                                                     </div> : <div></div>}
                                             </Col>
@@ -443,7 +487,7 @@ const ProfilePage = () => {
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
                                 <br />
                                 <div className="centered">
-                                    <Formik initialValues={{ email: user.email, name: user.name, preferredName: user.preferredName, phoneNumber: user.phoneNumber, profilePicture: user.profilePicture }} onSubmit={data => editProfile(data)}>
+                                    <Formik initialValues={{ email: user.email, name: user.name, preferredName: user.preferredName, phoneNumber: user.phoneNumber }} onSubmit={data => editProfile(data)}>
                                         <Form>
                                             {/* Row 1 - Change Name */}
                                             <Row>
@@ -514,15 +558,15 @@ const ProfilePage = () => {
                                                 <Col>
                                                     <FormGroup>
                                                         <Label for="address"><h4>Address</h4></Label>
-                                                        <Field type="text" name="address" id="address" placeholder={user.address} as={Input} />
+                                                        <Field type="text" name="address" id="address" placeholder=" Street Address" as={Input} />
                                                     </FormGroup>
                                                 </Col>
-                                                <Col>
+                                                {/* <Col>
                                                     <FormGroup>
                                                         <Label for="address2"><h4>Address 2</h4></Label>
                                                         <Field type="text" name="address2" id="address2" placeholder="Apartment, studio, floor, etc." as={Input} />
                                                     </FormGroup>
-                                                </Col>
+                                                </Col> */}
                                             </Row>
 
                                             {/* Row 5 - City - State - Zip */}
@@ -530,19 +574,19 @@ const ProfilePage = () => {
                                                 <Col md="6">
                                                     <FormGroup>
                                                         <Label for="city"><h4>City</h4></Label>
-                                                        <Field type="text" name="city" id="city" placeholder={user.city} as={Input} />
+                                                        <Field type="text" name="city" id="city" placeholder="City" as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                                 <Col md="4">
                                                     <FormGroup>
-                                                        <Label for="state"><h4>State *</h4></Label>
+                                                        <Label for="state"><h4>State</h4></Label>
                                                         <StateSelector />
                                                     </FormGroup>
                                                 </Col>
                                                 <Col md="2">
                                                     <FormGroup>
                                                         <Label for="zip"><h4>Zip</h4></Label>
-                                                        <Field type="text" name="zip" id="zip" placeholder={user.zipCode} as={Input} />
+                                                        <Field type="text" name="zip" id="zip" placeholder="Zip" as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
@@ -570,8 +614,7 @@ const ProfilePage = () => {
                                             <Row className='centered'>
                                                 <div className="centered"><Button color="primary" size="md" type="submit" onSubmit={editProfile}>Save Changes</Button></div>
                                                 &nbsp;&nbsp;
-                                                {/* <div className="centered"><Button color="secondary" size="md" type="submit" onClick={wantToEdit}>Cancel</Button></div> */}
-                                                <div className="centered"><Button color="secondary" size="md" type="button" onClick={backToMain}>Cancel</Button></div>
+                                                <div className="centered"><Button color="secondary" size="md" type="submit" onClick={wantToEdit}>Cancel</Button></div>
                                             </Row>
                                         </Form>
                                     </Formik>

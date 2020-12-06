@@ -112,7 +112,7 @@ const UserProfile = () => {
 
     useEffect(() => {
         getUser();
-    });
+    }, []);
 
     return (
         <div>
