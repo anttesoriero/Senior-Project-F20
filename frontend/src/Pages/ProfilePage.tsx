@@ -153,7 +153,7 @@ const ProfilePage = () => {
 			console.log(response)
 			
 			const results = response.data.results
-			if (results !== undefined && results.length != 0) {
+			if (results !== undefined && results.length !== 0) {
 				const { lat, lng } = results[0].geometry.location
              
 				setUserLatLong({
