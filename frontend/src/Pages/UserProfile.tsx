@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label } from 'reactstrap';
+import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Footer from "../Components/Footer";
 import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
@@ -16,13 +16,11 @@ type userState = {
     preferredName: string,
     accountBalance: number,
     address: string,
-    city: string,
-    state: string,
-    zipCode: string,
     phoneNumber: string,
     bio: string,
     profilePicture: string,
-    initials: string
+    posterRating: number | null,
+    workerRating: number | null
 }
 
 const userInfo = {
@@ -31,13 +29,11 @@ const userInfo = {
     preferredName: "",
     accountBalance: 0,
     address: "",
-    city: "",
-    state: "",
-    zipCode: "",
     phoneNumber: "",
     bio: "",
     profilePicture: "",
-    initials: ""
+    posterRating: null,
+    workerRating: null
 }
 
 const UserProfile = () => {
@@ -46,6 +42,8 @@ const UserProfile = () => {
     const isMobile = window.innerWidth < 1000;
 
     const [user, setUser] = useState<userState>(userInfo);
+    const [initials, setInitials] = useState<String>("");
+    const [modal, setModal] = useState(false);
 
     let formatPhoneNumber = (str) => {
         //Filter only numbers from the input
@@ -65,16 +63,55 @@ const UserProfile = () => {
         {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
             First one is the endpoint and second is the authorization headers */}
         console.log(window.location.href.slice(-1))
-        await axios.get(url + '/user/getProfile?otheruser=' + window.location.href.slice(-1),
+        await axios.get(url + 'user/getBriefProfile?otherUser=' + window.location.href.slice(-1),
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data);
+                const firstName = response.data.name.split(' ')[0]
+                const lastName = response.data.name.split(' ')[1]
+                const initials = firstName.charAt(0) + lastName.charAt(0)
                 setUser(response.data)
+                setInitials(initials)
             })
             .catch(error => {
                 console.log(error);
             });
     }
+
+    const reportUser = async (values) => {
+        const userId_2 = window.location.href.slice(-1)
+        console.log('values: ', values)
+        return
+        await axios.put(url + 'me/reportUser', {
+            userId_2: userId_2,
+            reportType: values.picked,
+            description: values.description
+        },
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                toggle()
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    const computeUserRating = () => {
+        const { workerRating, posterRating } = userInfo
+        if (workerRating === null && posterRating === null) {
+            return 'No Ratings Yet'
+        }
+        if (workerRating === null) {
+            return `${posterRating}`
+        }
+        if (posterRating === null) {
+            return `${workerRating}`
+        }
+        const averageRating = (workerRating! + posterRating!) / 2
+        return `${averageRating}`
+    }
+
+    const toggle = () => setModal(!modal);
 
     useEffect(() => {
         getUser();
@@ -95,7 +132,7 @@ const UserProfile = () => {
                                 {user.profilePicture === "" ?                                                
                                     // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                     <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
-                                        {user.initials}
+                                        {initials}
                                     </Button>
                                 :
                                     // <img src={user.profilePicture}/>
@@ -103,20 +140,14 @@ const UserProfile = () => {
                                 }        
                             </Media>
                             <Media body style={{ padding: 10 }}>
-                                {user ?
-                                    <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
-                                        <h4>{user.name}</h4>
-                                        <h5>Goes by: 
-                                            {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
-                                        </h5>
-                                    
-                                        <p>Rating: </p>
-                                        <p>Account Balance: ${String(user.accountBalance)}</p>
-                                    </div>
-                                    :
-                                    <div>
-                                        Account Balance: $[__]
-                                    </div>}
+                                <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
+                                    <h4>{user.name}</h4>
+                                    <h5>Goes by: 
+                                        {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
+                                    </h5>
+                                
+                                    <p>Rating: {computeUserRating()}</p>
+                                </div>
                             </Media>
                         </Media>
                     </div>
@@ -129,7 +160,7 @@ const UserProfile = () => {
                                     {user.profilePicture === "" ?                                                
                                         // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                         <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
-                                            {user.initials}
+                                            {initials}
                                         </Button>
                                     :
                                         // <img src={user.profilePicture}/>
@@ -137,20 +168,14 @@ const UserProfile = () => {
                                     }        
                                 </Media>
                                 <Media body style={{ padding: 10 }}>
-                                    {user ?
-                                        <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
-                                            <h4>{user.name}</h4>
-                                            <h5>Goes by: 
-                                        {/* {user.preferredName} */}
-                                                {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
-                                            </h5>
-                                            <p>Rating: </p>
-                                            <p>Account Balance: ${String(user.accountBalance)}</p>
-                                        </div>
-                                        :
-                                        <div>
-                                            Account Balance: $[__]
-                                        </div>}
+                                    <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
+                                        <h4>{user.name}</h4>
+                                        <h5>Goes by: 
+                                    {/* {user.preferredName} */}
+                                            {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
+                                        </h5>
+                                        <p>Rating: {computeUserRating()}</p>
+                                    </div>
                                 </Media>
                             </Media>
                         </Col>
@@ -179,7 +204,7 @@ const UserProfile = () => {
                             {user ?
                                 <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                 :
-                                <Col xs="10"><p>5555555555</p></Col>
+                                <Col xs="10"><p>###-###-####</p></Col>
                             }  
                         </Row>
                         {/* Email */}
@@ -191,12 +216,59 @@ const UserProfile = () => {
                                 <Col xs="10"><p>user@email.com</p></Col>
                             }
                         </Row>
+                        <Button onClick={toggle} outline color="danger" size="sm" style={{height: '40%'}}>Report User</Button>{' '}
+                        <Modal isOpen={modal} toggle={toggle}>
+                            <ModalHeader toggle={toggle}>Report this User</ModalHeader>
+                            <ModalBody>
+                                Please select the category that this user violated:
+                                <Formik
+                                    initialValues={{
+                                        picked: '',
+                                    }}
+                                    onSubmit={values => reportUser(values)}
+                                >
+                                    {({ values }) => (
+                                        <Form>
+                                        <div role="group" aria-labelledby="my-radio-group">
+                                            <label>
+                                                <Field type="radio" name="picked" value="One" />
+                                                One
+                                            </label>
+                                            <br />
+
+                                            <label>
+                                                <Field type="radio" name="picked" value="Two" />
+                                                Two
+                                            </label>
+                                            <br />
+
+                                            <label>
+                                                <Label for="description">Please provide details as to why you are reporting this user</Label>
+                                                <Field type="textarea" name="description" placeholder="Description" required as={Input} />
+                                            </label>
+                                            <br />
+                                        </div>
+
+                                        <br />
+                                        <Button color="danger" type="submit">Report</Button>{' '}
+
+                                        {/* <button type="submit">Submit</button> */}
+                                        </Form>
+                                    )}
+                                </Formik>
+                            </ModalBody>
+                            {/* <ModalFooter>
+                            <Button color="primary" type="submit" onClick={reportUser}>Report</Button>{' '}
+                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            </ModalFooter> */}
+                        </Modal>
+
                         {/* Right - Location */}
-                            {user ?
+                            {/* {user ?
                                 <div>
                                     <h4>Address</h4>
-                                    {user.address ?
-                                        <p>{user.address}, {user.city}, {user.state} {user.zipCode}</p>
+                                    {user ?
+                                        <p>{user.address}</p>
                                         :
                                         <p>123 Main St, City, ST 12345</p>
                                     }
@@ -205,13 +277,12 @@ const UserProfile = () => {
                                         url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
                                         attribution='<a href="/">OddJobs</a>'
                                     />
-                                        {/* Map Circle Markers - MapsCircle */}
                                         <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
                                             <Tooltip sticky>Radius Users See</Tooltip>
                                         </Circle>
                                         <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
                                     </MapContainer>
-                                </div> : <div></div>}
+                                </div> : <div></div>} */}
                     
                     {/* History -- NOTE: Styled correctly, but commented since we're not using it yet
                     <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
@@ -273,7 +344,7 @@ const UserProfile = () => {
                                     {user ?
                                         <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                         :
-                                        <Col xs="10"><p>5555555555</p></Col>
+                                        <Col xs="10"><p>###-###-####</p></Col>
                                     }  
                                 </Row>
                                 {/* Email */}
@@ -286,13 +357,60 @@ const UserProfile = () => {
                                     }
                                 </Row>
                             </Col>
+                            <Button onClick={toggle} outline color="danger" size="sm" style={{height: '40%'}}>Report User</Button>{' '}
+                            <Modal isOpen={modal} toggle={toggle}>
+                                <ModalHeader toggle={toggle}>Report this User</ModalHeader>
+                                <ModalBody>
+                                    Please select the category that this user violated:
+                                    <Formik
+                                        initialValues={{
+                                            picked: '',
+                                        }}
+                                        onSubmit={values => reportUser(values)}
+                                    >
+                                        {({ values }) => (
+                                            <Form>
+                                            <div role="group" aria-labelledby="my-radio-group">
+                                                <label>
+                                                    <Field type="radio" name="picked" value="One" />
+                                                    One
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Two" />
+                                                    Two
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Label for="description">Please provide details as to why you are reporting this user</Label>
+                                                    <Field type="textarea" name="description" placeholder="Description" required as={Input} />
+                                                </label>
+                                                <br />
+                                            </div>
+
+                                            <br />
+                                            <Button color="danger" type="submit">Report</Button>{' '}
+
+                                            {/* <button type="submit">Submit</button> */}
+                                            </Form>
+                                        )}
+                                    </Formik>
+                                </ModalBody>
+                                {/* <ModalFooter>
+                                <Button color="primary" type="submit" onClick={reportUser}>Report</Button>{' '}
+                                <Button color="secondary" onClick={toggle}>Cancel</Button>
+                                </ModalFooter> */}
+                            </Modal>
+
                             {/* Right - Location */}
-                            <Col xs="6">
+                            {/* <Col xs="6">
                                 {user ?
                                     <div>
                                         <h4>Address</h4>
-                                        {user.address ?
-                                            <p>{user.address}, {user.city}, {user.state} {user.zipCode}</p>
+                                        {user ?
+                                            <p>{user.address}</p>
                                             :
                                             <p>123 Main St, City, ST 12345</p>
                                         }
@@ -301,14 +419,13 @@ const UserProfile = () => {
                                             url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
                                             attribution='<a href="/">OddJobs</a>'
                                         />
-                                            {/* Map Circle Markers - MapsCircle */}
                                             <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
                                                 <Tooltip sticky>Radius Users See</Tooltip>
                                             </Circle>
                                             <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
                                         </MapContainer>
                                     </div> : <div></div>}
-                            </Col>
+                            </Col> */}
                         </Row>
                     </Col>
                 </Row>}
