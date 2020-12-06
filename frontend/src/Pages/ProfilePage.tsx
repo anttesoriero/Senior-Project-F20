@@ -189,7 +189,7 @@ const ProfilePage = () => {
                     case 'main profile':
                         return (
                             <Container>
-                                <h1 id="centered" style={{ fontWeight: 'bold' }}>Profile Page</h1>
+                                <h1 id="centered" style={{ fontWeight: 'bold' }}>Profile</h1>
                                 <br />
 
                                 {/* Upper - Main user info and edit button */}
@@ -357,7 +357,7 @@ const ProfilePage = () => {
                                 :
                                 <Row> {/* NORMAL */}
                                     {/* Left - Job History */}
-                                    <Col xs="4">
+                                    {/* <Col xs="4">
                                         <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
                                         <hr />
 
@@ -376,10 +376,10 @@ const ProfilePage = () => {
                                                 </Col>
                                             </Row>
                                         </div>
-                                    </Col>
+                                    </Col> */}
 
                                     {/* Right - About */}
-                                    <Col xs="8">
+                                    <Col>
                                         <h2 style={{ fontWeight: 'bold' }}>About</h2>
                                         <hr />
                                         <Row>
