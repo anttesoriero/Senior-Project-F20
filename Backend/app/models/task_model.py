@@ -9,6 +9,8 @@ These are Tasks that Users post
 # Module imports
 from app import db
 
+
+from app.models.offer_model import Offer
 import datetime
 
 class Task(db.Model):
@@ -37,9 +39,11 @@ class Task(db.Model):
     categoryId = db.Column(db.Integer(), db.ForeignKey("category.categoryId"))
     description = db.Column(db.String(300), nullable=True)
     title = db.Column(db.String(60), nullable=True)
-    startDate = db.Column(db.DateTime(), nullable=True)
+    startDate = db.Column(db.DateTime())
     recommendedPrice = db.Column(db.Numeric(6,2), nullable=True)
     estimatedDurationMinutes = db.Column(db.Integer(), nullable=True)
+    workerRating = db.Column(db.Integer(), nullable=True)
+    posterRating = db.Column(db.Integer(), nullable = True)
     locationALongitude = db.Column(db.Numeric(8,5), nullable=True)
     locationALatitude = db.Column(db.Numeric(8,5), nullable=True)
     locationBLongitude = db.Column(db.Numeric(8,5), nullable=True)
@@ -55,6 +59,13 @@ class Task(db.Model):
     def isAccepted(self):
         return True in [offer.accepted for offer in self.acceptedOfferId]
 
+    def setWorkerRating(self, newWorkerRating):
+        self.workerRating = newWorkerRating
+        db.session.commit()
+
+    def setPosterRating(self, newPosterRating):
+        self.posterRating = newPosterRating
+        db.session.commit()
 
     def getBriefPublicInfo(self):
         '''
@@ -79,11 +90,16 @@ class Task(db.Model):
         :return:
         '''
         # Strip latitude and longitudes to only 2 decimals
-        locationALongitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
-        locationALatitude = str("%.1f" % self.locationALatitude) if self.locationALatitude else None
-        locationBLongitude = str("%.1f" % self.locationBLongitude) if self.locationBLongitude else None
-        locationBLatitude = str("%.1f" % self.locationBLatitude) if self.locationBLatitude else None
+        locationALongitude = str("%.2f" % self.locationALongitude) if self.locationALongitude else None
+        locationALatitude = str("%.2f" % self.locationALatitude) if self.locationALatitude else None
+        locationBLongitude = str("%.2f" % self.locationBLongitude) if self.locationBLongitude else None
+        locationBLatitude = str("%.2f" % self.locationBLatitude) if self.locationBLatitude else None
+
+
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
+
+
+
 
         output = {
             "taskId": self.taskId,
@@ -127,10 +143,10 @@ class Task(db.Model):
         :return: Private information about a Task
         '''
         # Strip latitude and longitudes to only 2 decimals
-        locationALongitude = str("%.1f" % self.locationALongitude) if self.locationALongitude else None
-        locationALatitude = str("%.1f" % self.locationALatitude) if self.locationALatitude else None
-        locationBLongitude = str("%.1f" % self.locationBLongitude) if self.locationBLongitude else None
-        locationBLatitude = str("%.1f" % self.locationBLatitude) if self.locationBLatitude else None
+        locationALongitude = str("%.4f" % self.locationALongitude) if self.locationALongitude else None
+        locationALatitude = str("%.4f" % self.locationALatitude) if self.locationALatitude else None
+        locationBLongitude = str("%.4f" % self.locationBLongitude) if self.locationBLongitude else None
+        locationBLatitude = str("%.4f" % self.locationBLatitude) if self.locationBLatitude else None
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
 
         output = {
@@ -179,7 +195,32 @@ class Task(db.Model):
         db.session.commit()
 
     @classmethod
-    def search(cls, queryP, max=100):
+    def buildPosterRatingsForUser(cls, userId):
+        tasks = Task.query.filter(
+            cls.posterUserId == userId,
+            cls.posterRating != None
+        ).all()
+        return [task.posterRating for task in tasks]
+
+    @classmethod
+    def buildWorkerRatingsForUser(cls, userId):
+        tasks = Task.getAll()
+        offerSets = [Offer.getOffersForTask(task["taskId"]) for task in tasks]
+        usersTasks = []
+        for offerSet in offerSets:
+            for offer in offerSet:
+                if int(offer.userIdFrom) == int(userId) and offer.accepted:
+                    usersTasks.append(offer.taskId)
+
+        workerRatings = []
+        for task in [Task.getByTaskId(taskId) for taskId in usersTasks]:
+            if task.workerRating is not None:
+                workerRatings.append(task.workerRating)
+
+        return workerRatings
+
+    @classmethod
+    def search(cls, queryP, max=100, userId=None):
         '''
         Search
 
@@ -214,7 +255,7 @@ class Task(db.Model):
         :return:
         '''
         filters = []
-
+        filters.append(cls.posterUserId == userId)
         if "title" in queryP.keys():
             if "contains" in queryP["title"].keys():
                 filters.append(cls.title.like("%" + queryP["title"]["contains"] + "%"))
@@ -244,15 +285,8 @@ class Task(db.Model):
                     filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
 
         tasks = Task.query.filter(*filters).limit(max)
-        return tasks
+        return [task for task in tasks if not task.isAccepted()]
 
-    @classmethod
-    def getRecommendTasks(cls):
-        tasks = Task.query.filter_by(
-            acceptedOfferId=None
-        )
-        tasks = [task.taskId for task in tasks]
-        return tasks
 
     @classmethod
     def getByTaskId(cls, taskId):

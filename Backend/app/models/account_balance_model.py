@@ -4,7 +4,7 @@ Stores account balance of Users
 OneToOne relationship with the User table
 
 @author Matthew Schofield
-@version 11.11.2020
+@version 11.28.2020
 '''
 # Library imports
 
@@ -27,7 +27,7 @@ class AccountBalance(db.Model):
 
         :return: account balance of the user
         '''
-        return self.accountBalance
+        return float(self.accountBalance)
 
     def changeBalance(self, amountToChange):
         '''
@@ -37,11 +37,11 @@ class AccountBalance(db.Model):
         :return: boolean based on success
         '''
         # Check that the amount to change will not put balance in the negative
-        if (self.accountBalance + amountToChange) < 0:
+        if (float(self.accountBalance) + amountToChange) < 0:
             return False
 
         # Make change
-        self.accountBalance += amountToChange
+        self.accountBalance = float(self.accountBalance) + amountToChange
         db.session.commit()
         return True
 

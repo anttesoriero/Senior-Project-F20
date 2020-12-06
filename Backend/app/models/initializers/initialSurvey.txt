@@ -13,14 +13,14 @@ System;How is the visual design of the website?;AMAZING;Great;Good;Okay;Bad;Terr
 System;How did you discover OddJobs?;Recommended by a friend;Advertisement;Social Media;Search Engine;Other
 System;Would you recommend this service to a friend?;Yes;Maybe;No
 System;How reliable do you feel the system is?;As far as Bugs; Crashing; Latency;"Great; no complaints!;Good; issues do not get in the way too often;Okay; issues sometimes get in the way;Bad; the platform is barely usable;Terrible; platform is unusable
-System;How trustworthy do you feel we are?;Very trustworthy!;Usually trustworthy;Not always trustworthy.;Not trustworthy at all;
+System;How trustworthy do you feel we are?;Very trustworthy!;Usually trustworthy;Not always trustworthy;Not trustworthy at all;
 System;How frequent should surveys be?;On login;On every few logins;Optional;Daily;Weekly
 System;Do you feel the surveys are too frequent?;Yes!;Neutral;No
 System;What features should we improve on next?;Job search;Job posting;Profile System;Navigation System;
-Task;What category is most related to Cleaning?;Yard Work;Care-Taking;Transportation;Moving ;Cooking
-Task;What category is most related to Yard Work?;Cleaning;Care-Taking;Transportation;Moving ;Cooking
-Task;What category is most related to Care-Taking?;Cleaning;Yard-Work;Transportation;Moving ;Cooking
-Task;What category is most related to Transportation?;Cleaning;Yard-Work;Care-Taking;Moving ;Cooking
+Task;What category is most related to Cleaning?;Yard Work;Care-Taking;Transportation;Moving;Cooking
+Task;What category is most related to Yard Work?;Cleaning;Care-Taking;Transportation;Moving;Cooking
+Task;What category is most related to Care-Taking?;Cleaning;Yard-Work;Transportation;Moving;Cooking
+Task;What category is most related to Transportation?;Cleaning;Yard-Work;Care-Taking;Moving;Cooking
 Task;What category is most related to Moving?;Cleaning;Yard-Work;Care-Taking;Transportation;Cooking
 Task;What category is most related to Cooking?;Cleaning;Yard-Work;Care-Taking;Transportation;Moving
 Task;What category are you most interested in?;Cleaning;Yard-Work;Care-Taking;Transportation;Moving;Cooking;
