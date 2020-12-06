@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect} from 'react';
-import {
-    Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader,
-    ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label
-} from 'reactstrap';
+import { Card, CardText, CardBody, CardSubtitle, Button } from 'reactstrap';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
 import { RiMoneyDollarBoxFill, RiTimerFill, RiUserFill, RiCalendarFill } from 'react-icons/ri';
@@ -44,11 +41,9 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     const [cerror, SetCError] = useState(false);
     var date = new Date(startDate);
 
-
     useEffect(() => {
         getOfferer()
-    }, [])
-
+    })
 
     const getOfferer = async () => {
         await axios.post(url + 'user/getProfile',
@@ -121,7 +116,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                 <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> 
                 {jobDurationMinutes / 60 < 1 
                             ? ' ' + jobDurationMinutes + ' minutes' 
-                            : jobDurationMinutes % 60 == 0 
+                            : jobDurationMinutes % 60 === 0 
                             ? ' ' + jobDurationMinutes / 60 + ' hour(s)' 
                             : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
                 </CardSubtitle>

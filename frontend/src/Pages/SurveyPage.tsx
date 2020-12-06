@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
 import Footer from '../Components/Footer';
-import { Container, Row, Button, FormGroup, Input, Spinner, Label } from 'reactstrap';
+import { Container, Button, FormGroup, Input, Spinner, Label } from 'reactstrap';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
@@ -46,8 +46,6 @@ const SurveyPage = ({ history }: RouteComponentProps) => {
   }
 
   const getUser = async () => {
-    {/* Example of sending authorized request. Get can take multiple parameters, in this case 2.
-        First one is the endpoint and second is the authorization headers */}
     await axios.get(url + 'me/getProfile',
         { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
@@ -87,7 +85,7 @@ const SurveyPage = ({ history }: RouteComponentProps) => {
   useEffect(() => {
     getSurvey();
     getUser();
-  }, []);
+  });
 
   return (
     <Fragment>

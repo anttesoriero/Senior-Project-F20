@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {
     Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader,
-    ModalBody, ModalFooter, Row, Col, Input, FormGroup, Spinner, Label, InputGroup, InputGroupAddon
+    ModalBody, Row, Col, Input, FormGroup, Spinner, Label, InputGroup, InputGroupAddon
 } from 'reactstrap';
 import { RiMoneyDollarBoxFill, RiUserFill, RiTimerFill, RiCalendarFill } from 'react-icons/ri'
 import { Formik, Form, Field } from 'formik';
@@ -46,7 +46,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
 
     useEffect(() => {
         getPoster()
-    }, [])
+    })
 
     const getPoster = async () => {
         await axios.post(url + 'user/getProfile',
@@ -116,7 +116,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
                     <CardSubtitle style={{color: '#c48818', fontWeight: 'bolder'}}><RiTimerFill/> 
                     {duration / 60 < 1 
                             ? ' ' + duration + ' minutes' 
-                            : duration % 60 == 0 
+                            : duration % 60 === 0 
                             ? ' ' + duration / 60 + ' hour(s)' 
                             : ' ' + Math.floor(duration / 60) + ' hour(s) ' + duration % 60 + ' minutes'}
                     </CardSubtitle>

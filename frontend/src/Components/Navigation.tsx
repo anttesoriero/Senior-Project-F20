@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import AuthContext from '../Contexts/APIContext';
 import {
     Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, UncontrolledDropdown,
-    DropdownToggle, DropdownMenu, DropdownItem, UncontrolledCollapse, Container, Badge, ListGroup, ListGroupItem
+    DropdownToggle, DropdownMenu, DropdownItem, UncontrolledCollapse, ListGroup, ListGroupItem
 } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MdPerson } from 'react-icons/md';
@@ -48,7 +47,6 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
 
     const signOut = () => {
         localStorage.removeItem('access_token');
-        {/* Removes token and refreshes page to refresh AuthContext */ }
         history.push('/');
         window.location.reload(false);
     }

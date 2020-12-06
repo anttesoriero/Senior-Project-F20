@@ -1,10 +1,12 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import Navigation from '../Components/Navigation';
 import {Container, Row, Col, Button, Media} from 'reactstrap';
 import ErrorImage from "../Styles/Images/SurprisedOtterError.png"
 import Footer from '../Components/Footer';
 
 const ErrorPage = () => {
+    let history = useHistory();
     return (
         <div>
             <Navigation />
@@ -23,7 +25,7 @@ const ErrorPage = () => {
 
                 <Row>
                     <Col><hr/></Col>
-                    <Col id="centered"><Button href="javascript:history.go(-1)" color="secondary" size="lg">Go Back</Button></Col>
+                    <Col id="centered"><Button onClick={() => history.goBack()} color="secondary" size="lg">Go Back</Button></Col>
                     <Col id="centered"><Button href="/" color="primary" size="lg">Go Home</Button></Col>
                     <Col><hr/></Col>
                 </Row>

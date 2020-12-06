@@ -1,8 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { FormGroup, Input, Label, Button, Spinner } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc'
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
 import GoogleLogin from 'react-google-login';
@@ -14,11 +13,11 @@ const SignIn = ({ history }: RouteComponentProps) => {
     const [serror, setSerror] = useState(false);
     const [oauthError, setOAuthError] = useState(false);
 
-    function openInNewTab(path) {
-        var win = window.open(path, '_blank');
-        win?.focus();
-    }
-
+    // function openInNewTab(path) {
+    //     var win = window.open(path, '_blank');
+    //     win?.focus();
+    // }
+    //
     const oauth = (response) => {
         const { email, familyName, givenName, googleId, imageUrl } = response.profileObj
         setSubmitting(true);
@@ -91,7 +90,6 @@ const SignIn = ({ history }: RouteComponentProps) => {
                     </div>
                     <FormGroup className='centered'>
                         {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Signing in...</Button> : <Button type='submit' color="primary">Sign In</Button>}&nbsp;
-                        {/* <Button type='button' onClick={oauth} style={{ color: '#333', backgroundColor: '#fff', border: 'none' }}><FcGoogle /> Sign In</Button> */}
                         <GoogleLogin
                             clientId="984254031044-31ou2h0ce0hve56ccggp303b1g1rtnfg.apps.googleusercontent.com"
                             buttonText="Login"

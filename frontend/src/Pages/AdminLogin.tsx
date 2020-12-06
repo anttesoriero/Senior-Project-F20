@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { FormGroup, Button, Spinner, Input } from 'reactstrap';
 import axios from 'axios';
-import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import APIContext from '../Contexts/APIContext';
 

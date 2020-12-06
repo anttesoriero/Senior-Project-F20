@@ -7,11 +7,7 @@ import axios from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import APIContext from '../Contexts/APIContext';
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
-{/* import { GoogleAddressLookup } from 'react-rainbow-components'; REQUIRES GOOGLE MAPS API KEY */ }
-
-{/* Not sure if this stuff is right */ }
 type taskState = {
     categoryId: number,
     title: string,
@@ -20,11 +16,7 @@ type taskState = {
     estimatedDurationMinutes: number,
     locationALongitude: number,
     locationALatitude: number
-    // locationBLongitude: number,
-    // locationBLatitude: number
 }
-
-{/* NOTE: might need leaflet-control-geocoder for geocoding/reverse addresses and coordinates */ }
 
 const taskFields = {
     // Default initial values for the task fields
@@ -35,8 +27,6 @@ const taskFields = {
     estimatedDurationMinutes: 0,
     locationALongitude: 0,
     locationALatitude: 0
-    // locationBLongitude: 15,
-    // locationBLatitude: 15
 }
 
 const ListingPage = ({ history }: RouteComponentProps) => {
@@ -93,7 +83,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
 			console.log(response)
 			
 			const results = response.data.results
-			if (results !== undefined && results.length != 0) {
+			if (results !== undefined && results.length !== 0) {
 				const { lat, lng } = results[0].geometry.location
              
 				setTaskInfo({
@@ -107,14 +97,10 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                 })
             }
 			else {
-				throw "That address doesn't exist!"
+				throw String("That address doesn't exist!")
 			}
         })
     } 
-
-    const inputStyles = {
-        maxWidth: 320,
-    }
 
     return (
         <div>

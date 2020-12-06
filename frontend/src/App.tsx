@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Container } from 'reactstrap';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import LandingPage from './Pages/LandingPage';
 import ProfilePage from './Pages/ProfilePage';
@@ -7,8 +6,6 @@ import ErrorPage from './Pages/ErrorPage';
 import SurveyPage from './Pages/SurveyPage';
 import TaskBoard from './Pages/TaskBoard';
 import ListingPage from './Pages/ListingPage';
-import EditPage from './Pages/EditPage';
-import TestingPage from './Pages/TestingPage';
 import AdminLogin from './Pages/AdminLogin';
 import AdminDashboard from './Pages/AdminDashboard';
 import AdminUsers from './Pages/AdminUsers';
@@ -37,7 +34,6 @@ function App() {
         <Route exact={true} path="/adminDash" render={(props) => <AdminDashboard />} />
         <Route exact={true} path="/adminUsers" render={(props) => <AdminUsers />} />
         <Route exact={true} path="/adminTasks" render={(props) => <AdminTasks />} />
-        <Route exact={true} path="/testing" render={(props) => <TestingPage />} />
         <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />
         <Route exact={true} path="/about" render={(props) => <AboutPage />} />
         <Route exact={true} path="/contact" render={(props) => <ContactPage />} />

@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Container, Row, Col, Button, Media, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Footer from "../Components/Footer";
-import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
 import { Formik, Form, Field } from 'formik';
-import { TileLayer, MapContainer, Circle, Popup, Marker, Tooltip } from 'react-leaflet';
-import { LatLngTuple } from 'leaflet';
 import APIContext from '../Contexts/APIContext';
 
 type userState = {
@@ -60,8 +57,6 @@ const UserProfile = () => {
     };
 
     const getUser = async () => {
-        {/* Example of sending authorized request. Get can take mulyiple parameters, in this case 2.
-            First one is the endpoint and second is the authorization headers */}
         console.log(window.location.href.slice(-1))
         await axios.get(url + 'user/getBriefProfile?otherUser=' + window.location.href.slice(-1),
             { headers: { Authorization: `Bearer ${token}` } })
@@ -81,19 +76,19 @@ const UserProfile = () => {
     const reportUser = async (values) => {
         const userId_2 = window.location.href.slice(-1)
         console.log('values: ', values)
-        return
         await axios.put(url + 'me/reportUser', {
             userId_2: userId_2,
             reportType: values.picked,
             description: values.description
         },
-            { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                toggle()
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => {
+            toggle()
+        })
+        .catch(error => {
+            console.log(error);
+        });
+        return
     }
 
     const computeUserRating = () => {
@@ -115,7 +110,7 @@ const UserProfile = () => {
 
     useEffect(() => {
         getUser();
-    }, []);
+    });
 
     return (
         <div>
@@ -130,12 +125,10 @@ const UserProfile = () => {
                         <Media>
                             <Media left href="#">
                                 {user.profilePicture === "" ?                                                
-                                    // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                     <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
                                         {initials}
                                     </Button>
                                 :
-                                    // <img src={user.profilePicture}/>
                                     <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
                                 }        
                             </Media>
@@ -158,12 +151,10 @@ const UserProfile = () => {
                             <Media>
                                 <Media left href="#">
                                     {user.profilePicture === "" ?                                                
-                                        // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                         <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
                                             {initials}
                                         </Button>
                                     :
-                                        // <img src={user.profilePicture}/>
                                         <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
                                     }        
                                 </Media>
@@ -303,7 +294,7 @@ const UserProfile = () => {
                 :
                 <Row> {/* NORMAL */}
                     {/* Left - Job History */}
-                    <Col xs="4">
+                    {/* <Col xs="4">
                         <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
                         <hr />
                         <div id="history_category">
@@ -321,7 +312,7 @@ const UserProfile = () => {
                                 </Col>
                             </Row>
                         </div>
-                    </Col>
+                    </Col> */}
                     {/* Right - About */}
                     <Col xs="8">
                         <h2 style={{ fontWeight: 'bold' }}>About</h2>

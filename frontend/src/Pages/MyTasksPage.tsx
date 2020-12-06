@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, UncontrolledCollapse, Button, ButtonGroup } from 'reactstrap';
+import { Container, Row, Col, Button, ButtonGroup } from 'reactstrap';
 import APIContext from '../Contexts/APIContext';
 import Footer from '../Components/Footer';
 import Navigation from '../Components/Navigation';
@@ -77,7 +77,7 @@ const MyTasksPage = () => {
 
     useEffect(() => {
         getTaskIds();
-    }, [])
+    })
 
     const [pageState, setPageState] = useState<String>("offers")
 
@@ -104,20 +104,11 @@ const MyTasksPage = () => {
                     case 'offers':
                         return (<div>
                             <h2><u>Offers</u></h2>
-                            {/* NOTE: Commented Styling - Could collapse each task section if wanted */}
-                            {/* <h5>Click Task to Show Offers</h5> */}
                             <br />
                             {offers ? tasks.map(task => (
                                 <div>
-
-                                    {/* Task Title & Toggle */}
-                                    <Row>
-                                        <Col xs="auto"><h5 id={"toggler" + task.taskId}>{task.title} {/* &#9655; */}</h5></Col>
-                                        {/* <Col><Button color="primary" id={"toggler" + task.taskId} size="sm" style={{ marginBottom: '1rem' }}>Toggle</Button></Col> */}
-                                    </Row>
+                                    <h5>{task.title} {/* &#9655; */}</h5>
                                     
-                                    
-                                    {/* <UncontrolledCollapse toggler={"#toggler" + task.taskId}> */}
                                     <ul>
                                         {offers?.map(offer => (
                                             <Row>
@@ -143,7 +134,6 @@ const MyTasksPage = () => {
                                             </Row>
                                         ))}
                                     </ul>
-                                    {/* </UncontrolledCollapse> */}
                                 </div>
                                 
                             )): <div>No Offers</div>}

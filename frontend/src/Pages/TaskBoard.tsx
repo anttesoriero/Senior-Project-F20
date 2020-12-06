@@ -56,21 +56,20 @@ const TaskBoard = () => {
             });
     }
 
-    const getIds = async () => {
-        await axios.get(url + 'task/getPublic',
-            { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
+    // const getIds = async () => {
+    //     await axios.get(url + 'task/getPublic',
+    //         { headers: { Authorization: `Bearer ${token}` } })
+    //         .then(response => {
+    //             console.log(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //         });
+    // }
+    //
     useEffect(() => {
         getTaskList();
-        //getIds();
-    }, []);
+    });
 
     const isMobile = window.innerWidth < 1000;
 

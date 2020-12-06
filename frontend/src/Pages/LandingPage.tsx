@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Jumbotron, Row, Col, Alert } from 'reactstrap';
 import Navigation from '../Components/Navigation';
