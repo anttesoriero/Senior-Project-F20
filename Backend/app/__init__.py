@@ -48,6 +48,7 @@ from app.models.task_model import Task
 from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
+from app.models.report_model import Report
 # Init database with referenced models from routes
 db.create_all()
 '''
