@@ -37,9 +37,14 @@ def getProfile():
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
 
+    if user is None:
+        return jsonify({}), 400
+
     # Construct User information
     responseInformation = user.getPublicInfo()
     responseInformation["accountBalance"] = float(user.getAccountBalance())
+
+    responseInformation["address"] = user.address
 
     return jsonify(responseInformation), 200
 
@@ -83,7 +88,8 @@ def editInformation():
     '''
     # Validate input
     success, code, inputJSON = validateRequestJSON(request, [], 
-                                ["email", "firstName", "lastName", "preferredName", "phoneNumber", "profilePicture"])
+                                ["email", "firstName", "lastName", "preferredName", "phoneNumber", "profilePicture",
+                                 "bio", "address"])
     if not success:
         return jsonify({}), code
 
@@ -105,6 +111,10 @@ def editInformation():
         user.setPhoneNumber(inputJSON["phoneNumber"])
     if inputJSON["profilePicture"] != None:
         user.setProfilePicture(inputJSON["profilePicture"])
+    if inputJSON["bio"] != None:
+        user.setBio(inputJSON["bio"])
+    if inputJSON["address"] != None:
+        user.setAddress(inputJSON["address"])
 
     return jsonify(message="New user information successfully set"), 200
 
@@ -134,9 +144,12 @@ def deleteAccount():
     }
     return jsonify(responseInformation), 200
 
+
 '''
 PUTs
 '''
+
+
 @me_blueprint.route('/reportUser', methods=['PUT'])
 @jwt_required
 def reportUser():
@@ -156,10 +169,12 @@ def reportUser():
     userId_1 = get_jwt_identity()
     # Get user being reported
     userId_2 = User.getByUserId(int(inputJSON["userId_2"]))
-    
+
+    if userId_1 == int(inputJSON["userId_2"]):
+        return jsonify({}), 400
+
     if userId_2 is not None:
         Report.createReport(userId_1, userId_2.userId, inputJSON["reportType"], inputJSON["description"])
         return jsonify({"success": True}), 200
     else:
         return jsonify({}), 404
-

@@ -32,7 +32,7 @@ class TaskRecommender:
                         latA+1
                     ]
 
-        tasks = [task.getPublicInfo() for task in Task.search(filters, 10)]
+        tasks = [task.getPublicInfo() for task in Task.search(filters, 10, user.userId)]
         return {"query": filters, "tasks": tasks}
 
 task_recommender = TaskRecommender()
