@@ -76,11 +76,16 @@ const UserProfile = () => {
     const reportUser = async (values) => {
         const userId_2 = window.location.href.slice(-1)
         console.log('values: ', values)
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 8656c5cc61bf0cd8b3b04a7b6511baa4be6f20b0
         await axios.put(url + 'me/reportUser', {
             userId_2: userId_2,
             reportType: values.picked,
             description: values.description
         },
+<<<<<<< HEAD
         { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
             toggle()
@@ -89,6 +94,17 @@ const UserProfile = () => {
             console.log(error);
         });
         return
+=======
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log('response: ', response)
+                return
+                // toggle()
+            })
+            .catch(error => {
+                console.log(error);
+            });
+>>>>>>> 8656c5cc61bf0cd8b3b04a7b6511baa4be6f20b0
     }
 
     const computeUserRating = () => {
@@ -220,21 +236,53 @@ const UserProfile = () => {
                                 >
                                     {({ values }) => (
                                         <Form>
+                                        <br />
                                         <div role="group" aria-labelledby="my-radio-group">
                                             <label>
-                                                <Field type="radio" name="picked" value="One" />
-                                                One
+                                                <Field type="radio" name="picked" value="Scam" />
+                                                <span>&nbsp;&nbsp;</span>
+                                                Scam
                                             </label>
                                             <br />
 
                                             <label>
-                                                <Field type="radio" name="picked" value="Two" />
-                                                Two
+                                                <Field type="radio" name="picked" value="Harassment" />
+                                                <span>&nbsp;&nbsp;</span>
+                                                Harassment
                                             </label>
                                             <br />
 
                                             <label>
-                                                <Label for="description">Please provide details as to why you are reporting this user</Label>
+                                                <Field type="radio" name="picked" value="Fake Account" />
+                                                <span>&nbsp;&nbsp;</span>
+                                                Fake Account
+                                            </label>
+                                            <br />
+
+                                            <label>
+                                                <Field type="radio" name="picked" value="Inappropriate" />
+                                                <span>&nbsp;&nbsp;</span>
+                                                Inappropriate
+                                            </label>
+                                            <br />
+
+                                            <label>
+                                                <Field type="radio" name="picked" value="Illegal Activity" />
+                                                <span>&nbsp;&nbsp;</span>
+                                                Illegal Activity
+                                            </label>
+                                            <br />
+
+                                            <label>
+                                                <Field type="radio" name="picked" value="Other" />
+                                                <span>&nbsp;&nbsp;</span>
+                                                Other
+                                            </label>
+                                            <br />
+                                            <br />
+
+                                            <label>
+                                                <Label for="description">Please provide details as to why you are reporting this user:</Label>
                                                 <Field type="textarea" name="description" placeholder="Description" required as={Input} />
                                             </label>
                                             <br />
@@ -363,19 +411,49 @@ const UserProfile = () => {
                                             <Form>
                                             <div role="group" aria-labelledby="my-radio-group">
                                                 <label>
-                                                    <Field type="radio" name="picked" value="One" />
-                                                    One
+                                                    <Field type="radio" name="picked" value="Scam" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Scam
                                                 </label>
                                                 <br />
 
                                                 <label>
-                                                    <Field type="radio" name="picked" value="Two" />
-                                                    Two
+                                                    <Field type="radio" name="picked" value="Harassment" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Harassment
                                                 </label>
                                                 <br />
 
                                                 <label>
-                                                    <Label for="description">Please provide details as to why you are reporting this user</Label>
+                                                    <Field type="radio" name="picked" value="Fake Account" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Fake Account
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Inappropriate" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Inappropriate
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Illegal Activity" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Illegal Activity
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Other" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Other
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Label for="description">Please provide details as to why you are reporting this user:</Label>
                                                     <Field type="textarea" name="description" placeholder="Description" required as={Input} />
                                                 </label>
                                                 <br />
