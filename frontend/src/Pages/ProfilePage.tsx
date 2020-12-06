@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, Badge, FormGroup, Input, Label } from 'reactstrap';
+import { Container, Row, Col, Button, Media, FormGroup, Input, Label } from 'reactstrap';
 import Footer from "../Components/Footer";
-import PlaceholderImage from "../Styles/Images/placeholder.jpg"
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
 import { Formik, Form, Field } from 'formik';
-import { TileLayer, MapContainer, Circle, Popup, Marker, Tooltip } from 'react-leaflet';
+import { TileLayer, MapContainer, Circle, Marker, Tooltip } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import APIContext from '../Contexts/APIContext';
 import StateSelector from '../Components/StateSelector';
@@ -317,13 +316,13 @@ const ProfilePage = () => {
                                         {/* Left - About Info */}
                                         <h4>Bio</h4>
                                         {user ?
-                                            <Col><p>{user.bio}</p></Col>
+                                            <p>{user.bio}</p>
                                             :
-                                            <Col><p>User bio</p></Col>
+                                            <p>User bio</p>
                                         }
 
-                                        <h4>Liked Jobs</h4>
-                                        <p>Selected liked job categories from survey</p>
+                                        {/* <h4>Liked Jobs</h4>
+                                        <p>Selected liked job categories from survey</p> */}
 
                                         <h4>Contact Info</h4>
                                         {/* Phone */}
@@ -363,16 +362,6 @@ const ProfilePage = () => {
                                                         </Circle>
                                                         <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
                                                     </MapContainer>
-                                                    {/* <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                                    <TileLayer
-                                                        url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                                                        attribution='<a href="/">OddJobs</a>'
-                                                    />
-                                                        <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
-                                                            <Tooltip sticky>Radius Users See</Tooltip>
-                                                        </Circle>
-                                                        <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
-                                                    </MapContainer> */}
                                                 </div> : <div></div>}
                                     
                                     {/* History -- NOTE: Styled correctly, but commented since we're not using it yet
@@ -425,13 +414,13 @@ const ProfilePage = () => {
                                             <Col xs="6">
                                                 <h4>Bio</h4>
                                                 {user ?
-                                                    <Col xs="10"><p>{user.bio}</p></Col>
+                                                    <p>{user.bio}</p>
                                                     :
-                                                    <Col xs="10"><p>User bio</p></Col>
+                                                    <p>User bio</p>
                                                 }
 
-                                                <h4>Liked Jobs</h4>
-                                                <p>Selected liked job categories from survey</p>
+                                                {/* <h4>Liked Jobs</h4>
+                                                <p>Selected liked job categories from survey</p> */}
 
                                                 <h4>Contact Info</h4>
                                                 {/* Phone */}
