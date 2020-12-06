@@ -22,8 +22,7 @@ type task = {
     title: string,
     posterTaskId: number,
     description: string,
-    startDate: string,
-    time: string
+    startDate: string
 }
 
 type location = {
@@ -122,8 +121,7 @@ const TaskBoard = () => {
                                 price={Number(task.recommendedPrice)}
                                 description={task.description}
                                 duration={task.estimatedDurationMinutes}
-                                startDate={task.startDate + "DATE"}
-                                time={task.time + "TIME"}
+                                startDate={task.startDate}
                             />
                         ))}
 
@@ -161,8 +159,7 @@ const TaskBoard = () => {
                                         price={Number(task.recommendedPrice)}
                                         description={task.description}
                                         duration={task.estimatedDurationMinutes}
-                                        startDate={task.startDate + "DATE"}
-                                        time={task.time + "TIME"}
+                                        startDate={task.startDate}
                                     />
                                 ))}
 

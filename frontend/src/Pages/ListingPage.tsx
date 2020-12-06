@@ -19,7 +19,8 @@ type taskState = {
     recommendedPrice: number,
     estimatedDurationMinutes: number,
     locationALongitude: number,
-    locationALatitude: number
+    locationALatitude: number,
+    startDate: string
     // locationBLongitude: number,
     // locationBLatitude: number
 }
@@ -34,7 +35,8 @@ const taskFields = {
     recommendedPrice: 0,
     estimatedDurationMinutes: 0,
     locationALongitude: 0,
-    locationALatitude: 0
+    locationALatitude: 0,
+    startDate: ""
     // locationBLongitude: 15,
     // locationBLatitude: 15
 }
@@ -65,7 +67,8 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             recommendedPrice: taskInfo?.recommendedPrice,
             estimatedDurationMinutes: taskInfo?.estimatedDurationMinutes,
             locationALatitude: taskInfo?.locationALatitude,
-            locationALongitude: taskInfo?.locationALongitude
+            locationALongitude: taskInfo?.locationALongitude,
+            startDate: taskInfo?.startDate
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
@@ -103,7 +106,8 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                     recommendedPrice: data.recommendedPrice,
                     estimatedDurationMinutes: data.estimatedDurationMinutes,
                     locationALongitude: lng,
-                    locationALatitude: lat
+                    locationALatitude: lat,
+                    startDate: data.date + ' ' + data.time
                 })
             }
 			else {
@@ -205,12 +209,6 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                     <FormGroup>
                                         <Label for="address"><h4>Address *</h4></Label>
                                         <Field type="text" name="address" id="address" placeholder="Address" as={Input} required />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="address2"><h4>Address 2</h4></Label>
-                                        <Field type="text" name="address2" id="address2" placeholder="Apartment, studio, floor, etc." as={Input} />
                                     </FormGroup>
                                 </Col>
                             </Row>

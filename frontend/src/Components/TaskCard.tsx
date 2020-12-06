@@ -17,8 +17,7 @@ type CardProps = {
     price: number,
     description: string,
     duration: number,
-    startDate: string,
-    time: string
+    startDate: string
 }
 
 type Poster = {
@@ -31,7 +30,7 @@ type Poster = {
     profilePicture: ""
 }
 
-const TaskCard = ({ title, offerer, price, description, duration, id, startDate, time }: CardProps) => {
+const TaskCard = ({ title, offerer, price, description, duration, id, startDate }: CardProps) => {
     const url = useContext(APIContext);
     const token = localStorage.getItem('access_token');
 
@@ -122,7 +121,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
                     </CardSubtitle>
                     {/* For when we get the start date */}
                     {/* {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()} */}
-                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {startDate} at {time}</CardSubtitle>
+                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {startDate} </CardSubtitle>
                     <CardText style={{fontWeight: 'bolder'}}>{description}</CardText>
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
