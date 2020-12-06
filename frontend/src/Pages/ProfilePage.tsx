@@ -348,10 +348,10 @@ const ProfilePage = () => {
                                             {user ?
                                                 <div>
                                                     <h4>Address</h4>
-                                                    {user ?
-                                                        <p>{user.address}</p>
-                                                        :
+                                                    {user.address.includes('undefined') ?
                                                         <p>No Address Set</p>
+                                                        :
+                                                        <p>{user.address}</p>
                                                     }
                                                     <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
                                                     <TileLayer
@@ -458,10 +458,10 @@ const ProfilePage = () => {
                                                 {user ?
                                                     <div>
                                                         <h4>Address</h4>
-                                                        {user ?
-                                                            <p>{user.address}</p>
-                                                            :
+                                                        {user.address.includes('undefined') ?
                                                             <p>No Address Set</p>
+                                                            :
+                                                            <p>{user.address}</p>
                                                         }
                                                         <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
                                                         <TileLayer
