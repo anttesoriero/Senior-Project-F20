@@ -94,7 +94,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
 				const { lat, lng } = results[0].geometry.location
              
 				setTaskInfo({
-                    categoryId: data.categoryId - 1,
+                    categoryId: data.categoryId,
                     title: data.title,
                     description: data.description,
                     recommendedPrice: data.recommendedPrice,
@@ -118,7 +118,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                 <br />
 
                 <div className="centered">
-                    <Formik initialValues={{ categoryId: 1, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => geocode(data)} >
+                    <Formik initialValues={{ categoryId: 0, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => geocode(data)} >
                         <Form>
                             {/* Row 1 - Name & Category */}
                             <Row>
@@ -135,14 +135,14 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                             {/* "Select Category" is value=1 because "Yard Work" 
                                                 keeps displaying first even though it's second.
                                                 When calling the endpoint, the categoryId is substracted by one. */}
-                                            <option value="1" disabled>Select Category</option>
-                                            <option value="2">Yard Work</option>
-                                            <option value="3">Transportation</option>
-                                            <option value="4">Cleaning</option>
-                                            <option value="5">Moving</option>
-                                            <option value="6">Care-Taking</option>
-                                            <option value="7">Cooking</option>
-                                            <option value="8">Other</option>
+                                            <option value="0" disabled>Select Category</option>
+                                            <option value="1">Yard Work</option>
+                                            <option value="2">Transportation</option>
+                                            <option value="3">Cleaning</option>
+                                            <option value="4">Moving</option>
+                                            <option value="5">Care-Taking</option>
+                                            <option value="6">Cooking</option>
+                                            <option value="7">Other</option>
                                         </Field>
                                     </FormGroup>
                                 </Col>
