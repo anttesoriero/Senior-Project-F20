@@ -265,7 +265,7 @@ class Task(db.Model):
         :return:
         '''
         filters = []
-        filters.append(cls.posterUserId == userId)
+        filters.append(cls.posterUserId != userId)
         if "title" in queryP.keys():
             if "contains" in queryP["title"].keys():
                 filters.append(cls.title.like("%" + queryP["title"]["contains"] + "%"))
@@ -293,6 +293,7 @@ class Task(db.Model):
                     filters.append(cls.locationALatitude <= queryP["location"]["within"][1])
                     filters.append(cls.locationALongitude >= queryP["location"]["within"][2])
                     filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
+
 
         tasks = Task.query.filter(*filters).limit(max)
         return [task for task in tasks if not task.isAccepted()]
@@ -371,7 +372,10 @@ class Task(db.Model):
         '''
         # Convert startDate to correct format
         if startDate is not None:
-            startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d %H:%M")
+            try:
+               startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d %H:%M")
+            except:
+                startDate = str(startDate)
         # Create Task
         task = Task(
             posterUserId=user.userId,
