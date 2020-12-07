@@ -65,7 +65,7 @@ const MyTasksPage = () => {
             taskId: id as number,
             includeArchived: false
         },
-        { headers: { Authorization: `Bearer ${token}` } })
+            { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data.offers)
                 setOffers(oldArray => [...oldArray, response.data.offers])
@@ -77,7 +77,7 @@ const MyTasksPage = () => {
 
     useEffect(() => {
         getTaskIds();
-    })
+    }, [])
 
     const [pageState, setPageState] = useState<String>("offers")
 
@@ -93,70 +93,70 @@ const MyTasksPage = () => {
         <div>
             <Navigation />
             <Container>
-            <h1 className="centered">My Tasks</h1>
-            <ButtonGroup className="centered">
-                <Button onClick={toOffers}>Offers</Button>
-                <Button onClick={toUpcoming}>Upcoming Tasks</Button>
-            </ButtonGroup>
-            
-            {(() => {
-                switch (pageState) {
-                    case 'offers':
-                        return (<div>
-                            <h2><u>Offers</u></h2>
-                            <br />
-                            {offers ? tasks.map(task => (
-                                <div>
-                                    <h5>{task.title} {/* &#9655; */}</h5>
-                                    
-                                    <ul>
-                                        {offers?.map(offer => (
-                                            <Row>
-                                                {offer.map(single => (
-                                                    single.taskId === task.taskId ? 
-                                                        <Col>
-                                                            <OfferCard 
-                                                                key={single.offerId}
-                                                                accepted={single.accepted}
-                                                                archived={single.archived}
-                                                                jobDurationMinutes={single.jobDurationMinutes}
-                                                                note={single.note}
-                                                                offerId={single.offerId}
-                                                                payment={single.payment}
-                                                                responseMessage={single.responseMessage}
-                                                                startDate={single.startDate}
-                                                                taskId={single.taskId}
-                                                                userIdFrom={single.userIdFrom}
-                                                            />
-                                                        </Col> 
-                                                        : <div></div>
-                                                ))}
-                                            </Row>
-                                        ))}
-                                    </ul>
-                                </div>
-                                
-                            )): <div>No Offers</div>}
-                        </div>)
+                <h1 className="centered">My Tasks</h1>
+                <ButtonGroup className="centered">
+                    <Button onClick={toOffers}>Offers</Button>
+                    <Button onClick={toUpcoming}>Upcoming Tasks</Button>
+                </ButtonGroup>
 
-                    case 'upcoming':
-                        return (<div>
-                            <h2><u>Upcoming tasks</u></h2>
-                            <h4>Upcoming Tasks page should have a map with precise location markers. 2 Options:</h4>
-                            <ol>
-                                <li>We could have one big map like the Task Board with multiple markers, and a popup for each marker on click</li>
-                                <li>We could have one small map per task, and each task gets its own row. Task info on the left, map on the right</li>
-                            </ol>
-                        </div>)
+                {(() => {
+                    switch (pageState) {
+                        case 'offers':
+                            return (<div>
+                                <h2><u>Offers</u></h2>
+                                <br />
+                                {offers ? tasks.map(task => (
+                                    <div>
+                                        <h5>{task.title} {/* &#9655; */}</h5>
 
-                    default:
-                        return null;
-                }
-            })()}
+                                        <ul>
+                                            {offers?.map(offer => (
+                                                <Row>
+                                                    {offer.map(single => (
+                                                        single.taskId === task.taskId ?
+                                                            <Col>
+                                                                <OfferCard
+                                                                    key={single.offerId}
+                                                                    accepted={single.accepted}
+                                                                    archived={single.archived}
+                                                                    jobDurationMinutes={single.jobDurationMinutes}
+                                                                    note={single.note}
+                                                                    offerId={single.offerId}
+                                                                    payment={single.payment}
+                                                                    responseMessage={single.responseMessage}
+                                                                    startDate={single.startDate}
+                                                                    taskId={single.taskId}
+                                                                    userIdFrom={single.userIdFrom}
+                                                                />
+                                                            </Col>
+                                                            : <div></div>
+                                                    ))}
+                                                </Row>
+                                            ))}
+                                        </ul>
+                                    </div>
 
-            
+                                )) : <div>No Offers</div>}
+                            </div>)
 
-                            
+                        case 'upcoming':
+                            return (<div>
+                                <h2><u>Upcoming tasks</u></h2>
+                                <h4>Upcoming Tasks page should have a map with precise location markers. 2 Options:</h4>
+                                <ol>
+                                    <li>We could have one big map like the Task Board with multiple markers, and a popup for each marker on click</li>
+                                    <li>We could have one small map per task, and each task gets its own row. Task info on the left, map on the right</li>
+                                </ol>
+                            </div>)
+
+                        default:
+                            return null;
+                    }
+                })()}
+
+
+
+
             </Container>
             <Footer />
         </div>
