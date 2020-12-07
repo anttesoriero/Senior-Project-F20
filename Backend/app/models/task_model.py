@@ -48,6 +48,8 @@ class Task(db.Model):
     locationALatitude = db.Column(db.Numeric(8,5), nullable=True)
     locationBLongitude = db.Column(db.Numeric(8,5), nullable=True)
     locationBLatitude = db.Column(db.Numeric(8,5), nullable=True)
+    completed = db.Column(db.Boolean(), nullable=False)
+
 
     # Set-up Database Relationships
     acceptedOfferId = db.relationship('Offer', backref="offer", uselist=True)
@@ -61,6 +63,10 @@ class Task(db.Model):
 
     def setWorkerRating(self, newWorkerRating):
         self.workerRating = newWorkerRating
+        db.session.commit()
+
+    def setCompleted(self):
+        self.completed = True
         db.session.commit()
 
     def setPosterRating(self, newPosterRating):
@@ -80,7 +86,8 @@ class Task(db.Model):
             "categoryId": self.categoryId,
             "recommendedPrice": recommendedPrice,
             "accepted": self.isAccepted(),
-            "startDate": self.startDate
+            "startDate": self.startDate,
+            "completed": self.completed
         }
         return output
 
@@ -114,7 +121,8 @@ class Task(db.Model):
             "locationALongitude": locationALongitude,
             "locationALatitude": locationALatitude,
             "locationBLongitude": locationBLongitude,
-            "locationBLatitude": locationBLatitude
+            "locationBLatitude": locationBLatitude,
+            "completed": self.completed
         }
         return output
 
@@ -132,7 +140,8 @@ class Task(db.Model):
 
             "startDate": self.startDate,
             "recommendedPrice": recommendedPrice,
-            "accepted": self.isAccepted()
+            "accepted": self.isAccepted(),
+            "completed": self.completed
         }
         return output
 
@@ -162,7 +171,8 @@ class Task(db.Model):
             "locationALongitude": locationALongitude,
             "locationALatitude": locationALatitude,
             "locationBLongitude": locationBLongitude,
-            "locationBLatitude": locationBLatitude
+            "locationBLatitude": locationBLatitude,
+            "completed": self.completed
         }
         return output
 
@@ -374,7 +384,8 @@ class Task(db.Model):
             locationALongitude=locationALongitude,
             locationALatitude=locationALatitude,
             locationBLongitude=locationBLongitude,
-            locationBLatitude=locationBLatitude
+            locationBLatitude=locationBLatitude,
+            completed=True
         )
 
 
