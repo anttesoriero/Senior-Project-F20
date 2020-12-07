@@ -72,9 +72,11 @@ const ProfilePage = () => {
 
     // Have to refactor this if using Formik for edit profile
     const editProfile = async (data) => {
-        const address = data.address + ' ' + data.city + ' ' + data.state + ' ' + data.zip
-        geocode(address)
-        
+        const geoAddress = data.address + data.city + data.state + data.zip
+        const address = data.address + ', ' + data.city + ', ' + data.state + ', ' + data.zip
+
+        geocode(geoAddress)
+
         await axios.put(url + 'me/editInformation', {
             email: data.email,
             firstName: data.name.split(' ')[0],
@@ -471,12 +473,24 @@ const ProfilePage = () => {
                         )
 
                     case 'edit profile':
+                        var address = user.address.split(', ')
+
                         return (
                             <Container onSubmit={editProfile}>
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Edit Profile</h1>
                                 <br />
                                 <div className="centered">
-                                    <Formik initialValues={{ email: user.email, name: user.name, preferredName: user.preferredName, phoneNumber: user.phoneNumber }} onSubmit={data => editProfile(data)}>
+                                    <Formik initialValues={{ 
+                                            email: user.email, 
+                                            name: user.name, 
+                                            preferredName: user.preferredName, 
+                                            phoneNumber: user.phoneNumber, 
+                                            address: address[0],
+                                            city: address[1],
+                                            state: address[2],
+                                            zip: address[3]
+                                        }} onSubmit={data => editProfile(data)}
+                                    >
                                         <Form>
                                             {/* Row 1 - Change Name */}
                                             <Row>
@@ -547,7 +561,7 @@ const ProfilePage = () => {
                                                 <Col>
                                                     <FormGroup>
                                                         <Label for="address"><h4>Address</h4></Label>
-                                                        <Field type="text" name="address" id="address" placeholder=" Street Address" as={Input} />
+                                                        <Field type="text" name="address" id="address" placeholder={address[0]} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                                 {/* <Col>
@@ -563,7 +577,7 @@ const ProfilePage = () => {
                                                 <Col md="6">
                                                     <FormGroup>
                                                         <Label for="city"><h4>City</h4></Label>
-                                                        <Field type="text" name="city" id="city" placeholder="City" as={Input} />
+                                                        <Field type="text" name="city" id="city" placeholder={address[1]} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                                 <Col md="4">
@@ -575,20 +589,20 @@ const ProfilePage = () => {
                                                 <Col md="2">
                                                     <FormGroup>
                                                         <Label for="zip"><h4>Zip</h4></Label>
-                                                        <Field type="text" name="zip" id="zip" placeholder="Zip" as={Input} />
+                                                        <Field type="text" name="zip" id="zip" placeholder={address[3]} as={Input} />
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
 
                                             <Row>
                                                 {/*Manage funds buttons*/}
-                                                <Col>
+                                                {/* <Col>
                                                     <h3 style={{ fontWeight: 'bold' }}>Manage Funds</h3>
                                                     <hr />
                                                     <Button className="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
                                                     <br />
                                                     <Button className="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
-                                                </Col>
+                                                </Col> */}
                                                 
                                                 {/*Account deletion*/}
                                                 <Col>
