@@ -3,7 +3,7 @@ import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 const PaginationRow = () => {
     return (
-        <Pagination aria-label="Page navigation example">
+        <Pagination style={{marginLeft: '5%'}} aria-label="Page navigation example">
             <PaginationItem>
                 <PaginationLink first href="#" />
             </PaginationItem>
