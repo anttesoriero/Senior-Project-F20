@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Card, CardText, CardBody, CardSubtitle, Button } from 'reactstrap';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
@@ -47,23 +47,24 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
 
     const getOfferer = async () => {
         await axios.post(url + 'user/getProfile',
-        {
-            otherUser: userIdFrom
-        },
-        { headers: { Authorization: `Bearer ${token}` } })
-        .then(response => {
-            console.log(response.data)
-            setOfferer(response.data)
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            {
+                otherUser: userIdFrom
+            },
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log(response.data)
+                setOfferer(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     const acceptOffer = async () => {
         await axios.post(url + 'offer/acceptOffer', {
-            offerId: offerId},
-        { headers: { Authorization: `Bearer ${token}` } })
+            offerId: offerId
+        },
+            { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data)
                 setAccept(true)
@@ -76,8 +77,9 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
 
     const rejectOffer = async () => {
         await axios.post(url + 'offer/rejectOffer', {
-            offerId: offerId},
-        { headers: { Authorization: `Bearer ${token}` } })
+            offerId: offerId
+        },
+            { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data)
                 setRejected(true)
@@ -89,9 +91,25 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     }
 
     const completeOffer = async () => {
-        await axios.post(url + 'task/completed', {
-            taskId: taskId},
-        { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(url + 'task/posterComplete', {
+            taskId: taskId
+        },
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log(response.data)
+                setComplete(true)
+            })
+            .catch(error => {
+                console.log(error)
+                SetCError(true)
+            })
+    }
+
+    const rateUser = async () => {
+        await axios.post(url + 'task/workerComplete', {
+            taskId: taskId
+        },
+            { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log(response.data)
                 setComplete(true)
@@ -106,22 +124,22 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         setRediret(true)
     }
 
-    if(redirect)
+    if (redirect)
         return <Redirect to={'/user/' + userIdFrom} />
     return (
-        <Card style={{width: '350px', height: 'auto'}}>
+        <Card style={{ width: '350px', height: 'auto' }}>
             <CardBody>
-                <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer'}} onClick={viewUser}><RiUserFill/> {offerer?.name}</CardSubtitle>
-                <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${payment}</CardSubtitle>
-                <CardSubtitle style={{fontWeight: 'bolder'}}><RiTimerFill/> 
-                {jobDurationMinutes / 60 < 1 
-                            ? ' ' + jobDurationMinutes + ' minutes' 
-                            : jobDurationMinutes % 60 === 0 
-                            ? ' ' + jobDurationMinutes / 60 + ' hour(s)' 
+                <CardSubtitle style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {offerer?.name}</CardSubtitle>
+                <CardSubtitle style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${payment}</CardSubtitle>
+                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiTimerFill />
+                    {jobDurationMinutes / 60 < 1
+                        ? ' ' + jobDurationMinutes + ' minutes'
+                        : jobDurationMinutes % 60 === 0
+                            ? ' ' + jobDurationMinutes / 60 + ' hour(s)'
                             : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
                 </CardSubtitle>
-                <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
-                <CardText style={{fontWeight: 'bolder'}}>{note}</CardText>
+                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {date.toString().substring(0, 15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
+                <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
                 <div className='centered'>
                     {serror ? <p className='error'>There was an error accepting/rejecting offer!</p> : <div></div>}
                     {cerror ? <p className='error'>Error completing offer!</p> : <div></div>}
@@ -133,7 +151,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                     {accepted ? <p className='success'>Chosen Offer</p> : <div></div>}
                 </div>
                 <div className='centered'>
-                    { accepted 
+                    {accepted
                         ?
                         <div>
                             <Button color="success" size='sm' outline onClick={completeOffer}>Offer Completed</Button>
@@ -147,7 +165,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                             <Button color="danger" size='sm' outline onClick={rejectOffer}>Reject Offer</Button>
                         </div>
                     }
-                    
+
                 </div>
             </CardBody>
         </Card>
