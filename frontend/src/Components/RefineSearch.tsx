@@ -109,6 +109,8 @@ const RefineSearch = (props) => {
                             <option value="5">Moving</option>
                             <option value="6">Care-Taking</option>
                             <option value="7">Cooking</option>
+                            <option value="8">Other</option>
+                            
                         </Field>
                     </FormGroup>
 

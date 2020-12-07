@@ -11,8 +11,8 @@ const MapsCircle = (prop: {
 
 }) => {
 
-    const categoryNames = ["Yard Work", "Transportation", "Cleaning", "Moving", "Care-Taking", "Cooking"]
-    const categoryColor = ["green", "gray", "blue", "red", "purple", "orange"]
+    const categoryNames = ["Yard Work", "Transportation", "Cleaning", "Moving", "Care-Taking", "Cooking", "Other"]
+    const categoryColor = ["green", "gray", "blue", "red", "purple", "orange", "DarkGoldenRod"]
     const chosenColor = categoryColor[prop.categoryId-1]
 
     return (
