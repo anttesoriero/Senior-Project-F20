@@ -220,7 +220,6 @@ def createTask():
     # Get current user
     current_user_id = get_jwt_identity()
     user = User.getByUserId(current_user_id)
-
     # Create task
     task = Task.createTask(
         user=user,
@@ -367,6 +366,7 @@ def completeTaskPoster():
 
     workerUser, success = completeDeal(task.taskId)
     if success:
+        task.setCompleted()
         if inputJSON["workerRating"] is not None:
             task.setWorkerRating(inputJSON["workerRating"])
             workerUser.updateWorkerRating()
