@@ -47,7 +47,7 @@ def addToAccount():
     }
     '''
     # Validate input
-    requiredParameters = ["adminPassword", "amountToChange"]
+    requiredParameters = ["adminPassword", "amountToChange", "userId"]
     optionalParameters = []
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
