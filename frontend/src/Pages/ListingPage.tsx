@@ -55,7 +55,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
         console.log('Info: ', taskInfo)
 
         await axios.post(url + 'task/createTask', {
-            categoryId: taskInfo?.categoryId - 1,
+            categoryId: taskInfo?.categoryId,
             title: taskInfo?.title,
             description: taskInfo?.description,
             recommendedPrice: taskInfo?.recommendedPrice,
@@ -94,7 +94,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
 				const { lat, lng } = results[0].geometry.location
              
 				setTaskInfo({
-                    categoryId: data.categoryId,
+                    categoryId: data.categoryId - 1,
                     title: data.title,
                     description: data.description,
                     recommendedPrice: data.recommendedPrice,
@@ -142,6 +142,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                             <option value="5">Moving</option>
                                             <option value="6">Care-Taking</option>
                                             <option value="7">Cooking</option>
+                                            <option value="8">Other</option>
                                         </Field>
                                     </FormGroup>
                                 </Col>
