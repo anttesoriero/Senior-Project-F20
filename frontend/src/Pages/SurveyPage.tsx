@@ -85,7 +85,7 @@ const SurveyPage = ({ history }: RouteComponentProps) => {
   useEffect(() => {
     getSurvey();
     getUser();
-  });
+  }, []);
 
   return (
     <Fragment>
