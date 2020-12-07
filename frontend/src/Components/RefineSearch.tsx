@@ -47,6 +47,25 @@ const RefineSearch = (props) => {
         //         }
         //     }
         // }
+        query = 
+        {
+            "title": {
+                    "contains": String,
+                    "startsWith": String,
+                    "endsWith": String,
+                    "matches": String
+            },
+            "categoryId": {
+                    "==": Number
+            },
+            "recommendedPrice": {
+                    "<=": Number,
+                    ">=": Number
+                },
+                "location": {
+                // "within": [lowerLat: Number, Upper Lat, Lower Long, Upper Long]
+            }
+        }
 
         await axios.post(url + 'task/searchPostedTask', {
             categoryId: refineSearch?.categoryId - 1,
