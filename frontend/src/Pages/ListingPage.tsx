@@ -78,7 +78,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
     }
 
     const geocode = async (data) => {
-        var location = data.address + data.address2 + data.city + data.state + data.zip;
+        var location = data.address + data.city + data.state + data.zip;
         console.log('data: ', data)
         await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
             params: {
