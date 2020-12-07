@@ -1,7 +1,7 @@
 ﻿User;What is your gender?;Male;Female;Other;Prefer Not to Say;
 User;What is your age range?;17-;18-25;25-30;30-45;45-60;60+;
-User;How many tasks per week would you like to fill?;<1;1;2;3;3+
-User;How many tasks per week would you like to list?;<1;1;2;3;3+
+User;How many tasks per week would you like to fill?;<1;1;2;3;4+
+User;How many tasks per week would you like to list?;<1;1;2;3;4+
 User;How much more would you want to be paid to drive to a task that is 15 minutes further away than a similar task?;I would not expect more;$5;$10;$15;$20;$25+;
 User;How much more would you want to be paid to drive to a task that is 30 minutes further away than a similar task?;I would not expect more;$5;$10;$15;$20;$25+;
 User;How much more would you want to be paid to drive to a task that is an hour further away than a similar task?;I would not expect more;$5;$10;$15;$20;$25+;
