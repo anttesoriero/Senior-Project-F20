@@ -50,7 +50,7 @@ const MyTasksPage = () => {
                 console.log(response.data.tasks)
                 setTasks(response.data.tasks)
                 let i = 0;
-                response.data.tasks.map(task => (
+                response.data.tasks?.map(task => (
                     getOffers(response.data.tasks[i].taskId),
                     i++
                 ))

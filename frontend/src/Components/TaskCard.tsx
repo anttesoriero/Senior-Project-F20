@@ -45,7 +45,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
 
     useEffect(() => {
         getPoster()
-    })
+    }, [])
 
     const getPoster = async () => {
         await axios.post(url + 'user/getProfile',

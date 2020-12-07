@@ -105,7 +105,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             })
     }
 
-    const rateUser = async () => {
+    const ratePoster = async () => {
         await axios.post(url + 'task/workerComplete', {
             taskId: taskId
         },
