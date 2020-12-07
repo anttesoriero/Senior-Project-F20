@@ -69,10 +69,12 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         setOpen(true)
     }
 
+    var date = new Date(startDate);
+
     const createOffer = async (data) => {
         setSubmitting(true)
         //console.log(data)
-        if(poster?.id === user){
+        if (poster?.id === user) {
             setOerror(true)
             setSubmitting(false)
         }
@@ -103,26 +105,26 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         setRediret(true)
     }
 
-    if(redirect)
+    if (redirect)
         return <Redirect to={'/user/' + poster?.id} />
     return (
         <div>
             <Card>
                 <CardBody>
-                    <h4 style={{fontWeight: 'bolder'}}>{title}</h4>
-                    <CardSubtitle style={{color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer'}} onClick={viewUser}><RiUserFill/> {poster?.name}</CardSubtitle>
-                    <CardSubtitle style={{color: '#099c1a', fontWeight: 'bolder'}}><RiMoneyDollarBoxFill/> ${price}</CardSubtitle>
-                    <CardSubtitle style={{color: '#c48818', fontWeight: 'bolder'}}><RiTimerFill/> 
-                    {duration / 60 < 1 
-                            ? ' ' + duration + ' minutes' 
-                            : duration % 60 === 0 
-                            ? ' ' + duration / 60 + ' hour(s)' 
-                            : ' ' + Math.floor(duration / 60) + ' hour(s) ' + duration % 60 + ' minutes'}
+                    <h4 style={{ fontWeight: 'bolder' }}>{title}</h4>
+                    <CardSubtitle style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {poster?.name}</CardSubtitle>
+                    <CardSubtitle style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${price}</CardSubtitle>
+                    <CardSubtitle style={{ color: '#c48818', fontWeight: 'bolder' }}><RiTimerFill />
+                        {duration / 60 < 1
+                            ? ' ' + duration + ' minutes'
+                            : duration % 60 === 0
+                                ? ' ' + duration / 60 + ' hour(s)'
+                                : ' ' + Math.floor(duration / 60) + ' hour(s) ' + duration % 60 + ' minutes'}
                     </CardSubtitle>
                     {/* For when we get the start date */}
                     {/* {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()} */}
-                    <CardSubtitle style={{fontWeight: 'bolder'}}><RiCalendarFill/> {startDate} </CardSubtitle>
-                    <CardText style={{fontWeight: 'bolder'}}>{description}</CardText>
+                    <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {date.toString().substring(0, 15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
+                    <CardText style={{ fontWeight: 'bolder' }}>{description}</CardText>
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
                     </div>
@@ -139,8 +141,8 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     <Formik initialValues={{ payment: price, startDate: '', time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
                         {() => (
                             <Form >
-                                
-                            <Label for="payment">Payment *</Label>
+
+                                <Label for="payment">Payment *</Label>
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend">$</InputGroupAddon>
                                     <Field type="number" name="payment" min="15" as={Input} required >{price}</Field>
