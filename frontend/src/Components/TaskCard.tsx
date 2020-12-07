@@ -148,6 +148,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                                     <Field type="number" name="payment" min="15" as={Input} required >{price}</Field>
                                     <InputGroupAddon addonType="append">.00</InputGroupAddon>
                                 </InputGroup>
+                                <br />
                                 <Row>
                                     <Col>
                                         <FormGroup>
