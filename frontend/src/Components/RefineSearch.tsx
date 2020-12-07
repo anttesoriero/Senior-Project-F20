@@ -4,11 +4,25 @@ import { Field, Formik } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
 
+type refineType = {
+    categoryId: number,
+    title: string,
+    duration: number
+}
+
+const refineFields = {
+    // Default initial values for the task fields
+    categoryId: 1,
+    title: "",
+    duration: 0
+}
+
 const RefineSearch = (props) => {    
     const token = localStorage.getItem('access_token');
     const url = useContext(APIContext);
+    const [refineSearch, refine] = useState<refineType>(refineFields);
 
-    const refine = async (query) => {
+    const searchPostedTask = async (query) => {
         // const queryParams = {
         //     "title":{
         //         "contains": str,
@@ -35,6 +49,10 @@ const RefineSearch = (props) => {
         // }
 
         await axios.post(url + 'task/searchPostedTask', {
+            categoryId: refineSearch?.categoryId - 1,
+            title: refineSearch?.title,
+            duration: refineSearch?.duration,
+
             max: 10,
             query: {
                 
@@ -52,13 +70,13 @@ const RefineSearch = (props) => {
 
     return (
         <div className="centered" style={{background: "#d6d6d6", height: "auto"}}>
-            <Formik initialValues={{ categoryId: 1, search: '', duration: 0 }} onSubmit={data => console.log(data)}>
+            <Formik initialValues={{ categoryId: 1, title: "", duration: 0 }} onSubmit={data => console.log(data)}>
             {/* Change "Input"'s to "Field"'s when Formik used */}
                 <Form inline style={{margin: '1rem'}} >
                     {/* Title Search Bar */}
                     <FormGroup>
                         <Label for="search"><h5><b>Search&nbsp;</b></h5></Label>{' '}
-                        <Field type="text" name="search" id="search" placeholder="Task Title" />
+                        <Field type="text" name="title" id="title" placeholder="Task Title" />
                     </FormGroup>
 
                     {/* Select Task Category */}
@@ -90,7 +108,7 @@ const RefineSearch = (props) => {
 
                     {/* Submit Button */}
                     &nbsp;&nbsp;&nbsp;
-                    <Button color="danger">Refine Search</Button>
+                    <Button color="danger" type="submit">Refine Search</Button>
                 </Form>
             </Formik>
         </div>
