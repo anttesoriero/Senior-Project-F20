@@ -77,7 +77,7 @@ const MyTasksPage = () => {
 
     useEffect(() => {
         getTaskIds();
-    })
+    }, [])
 
     const [pageState, setPageState] = useState<String>("offers")
 
