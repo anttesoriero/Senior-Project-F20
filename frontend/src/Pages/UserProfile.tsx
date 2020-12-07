@@ -85,8 +85,7 @@ const UserProfile = () => {
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 console.log('response: ', response)
-                return
-                // toggle()
+                toggle()
             })
             .catch(error => {
                 console.log(error);
