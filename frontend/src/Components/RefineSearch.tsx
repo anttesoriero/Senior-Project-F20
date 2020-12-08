@@ -24,18 +24,19 @@ const RefineSearch = (props) => {
                             <option value="4">Moving</option>
                             <option value="5">Care-Taking</option>
                             <option value="6">Cooking</option>
+                            <option value="7">Other</option>
                         </Field>
                     </FormGroup>
 
                     {/* Select Min/Max Price */}
                     <FormGroup>
                         <Label for="minPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Min Price&nbsp;</b> </h5></Label>
-                        <Field type="text" name="minPrice" id="minPrice" placeholder="$" as={Input} />
+                        <Field type="text" name="minPrice" id="minPrice" placeholder="$" as={Input} style={{width: 75}} />
                     </FormGroup>
 
                     <FormGroup>
                         <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label>
-                        <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" as={Input} />
+                        <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" as={Input} style={{width: 75}} />
                     </FormGroup>
 
                     {/* Submit Button */}
