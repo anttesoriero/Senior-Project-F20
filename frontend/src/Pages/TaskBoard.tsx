@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Button, Col, Container, Navbar, Row, UncontrolledCollapse } from 'reactstrap';
+import { Button, Col, Container, Navbar, Row, UncontrolledCollapse, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Field, Formik } from 'formik';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import TaskCard from '../Components/TaskCard';
-import RefineSearch from '../Components/RefineSearch';
 import PaginationRow from '../Components/PaginationRow';
 import { TileLayer, MapContainer, useMap, useMapEvents } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
@@ -26,7 +26,10 @@ type task = {
 }
 
 type location = {
-    local: LatLngTuple
+    lowerLat: number,
+    lowerLong: number,
+    upperLat: number,
+    upperLong: number
 }
 
 const TaskBoard = () => {
@@ -36,8 +39,12 @@ const TaskBoard = () => {
     let a: task[] = [];
 
     const [tasks, setTasks] = useState(a);
+    var [lowerLat, setLowerLat] = useState<number>(39.702550);
+    var [lowerLong, setLowerLong] = useState<number>(-75.112005);
+    var [upperLat, setUpperLat] = useState<number>(39.702550);
+    var [upperLong, setUpperLong] = useState<number>(-75.112005);
     const [centerLocation, setCenterLocation] = useState<LatLngTuple>();
-    /* const [task, getTaskList] = useState<taskIDState>(taskIDs); ERRORS */
+
     const center: LatLngTuple = [0, 0]
     const tempCenter: LatLngTuple = [39.702550, -75.112005]
 
@@ -65,16 +72,6 @@ const TaskBoard = () => {
     }
 
     const searchPostedTask = async (pageURL) => {
-        // const queryParams = {
-        //     "location":
-        //     {
-        //         "within':
-        //         {
-        //             [Lower Lat, Upper Lat, Lower Long, Upper Long]
-        //         }
-        //     }
-        // }
-
         // Takes http://localhost:3000/tasks?title=rake&categoryId=2&duration=30 and turns into
         // title=rake&categoryId=2&duration=30
         const queryParams = pageURL.substring(pageURL.indexOf('?') + 1, pageURL.length)
@@ -86,6 +83,11 @@ const TaskBoard = () => {
         const categoryID = arrayOfParams[1].substring(arrayOfParams[1].indexOf('=') + 1, arrayOfParams[1].length)
         const minPrice = arrayOfParams[2].substring(arrayOfParams[2].indexOf('=') + 1, arrayOfParams[2].length)
         const maxPrice = arrayOfParams[3].substring(arrayOfParams[3].indexOf('=') + 1, arrayOfParams[3].length)
+        const lowerLat = arrayOfParams[4].substring(arrayOfParams[4].indexOf('=') + 1, arrayOfParams[4].length)
+        const lowerLong = arrayOfParams[5].substring(arrayOfParams[5].indexOf('=') + 1, arrayOfParams[5].length)
+        const upperLat = arrayOfParams[6].substring(arrayOfParams[6].indexOf('=') + 1, arrayOfParams[6].length)
+        const upperLong = arrayOfParams[7].substring(arrayOfParams[7].indexOf('=') + 1, arrayOfParams[7].length)
+
 
         const queryString = {}
         if (title !== '') {
@@ -95,6 +97,10 @@ const TaskBoard = () => {
             queryString["categoryId"] = {"==": categoryID}
         }
         queryString["recommendedPrice"] = {">=": Number(minPrice), "<=": Number(maxPrice)}
+
+        queryString["location"] = {"within": 
+            [lowerLat, upperLat, lowerLong, upperLong]
+        }
 
         await axios.post(url + 'task/searchPostedTasks', {
             max: 10,
@@ -123,26 +129,26 @@ const TaskBoard = () => {
             });
     }
 
-    const MyComponent = () => {
-        const map = useMapEvents({
-            click: () => {
-              map.locate()
-            },
+    function ChangeView() {
+        const map = useMap()
+
+        const mapEvent = useMapEvents({
             move: () => {
-                console.log('center: ', map.getCenter())
-            },
-            locationfound: (location) => {
-              console.log('location found:', location)
-            },
-          })
-          return null
+                const bound = map.getBounds()
+                setLowerLat(bound.getSouthWest().lat)
+                setLowerLong(bound.getSouthWest().lng)
+                setUpperLat(bound.getNorthEast().lat)
+                setUpperLong(bound.getNorthEast().lng)
+            }
+        })
+        return null
     }
       
 
     useEffect(() => {
         getTaskList();
-        //getIds();
     }, []);
+
 
     const isMobile = window.innerWidth < 1000;
 
@@ -157,14 +163,60 @@ const TaskBoard = () => {
                         <h4 className="centered" style={{ fontWeight: "bold" }} id="top">Refine Options</h4>
                     </Navbar>
                     <UncontrolledCollapse toggler="#refineToggler">
-                        <RefineSearch className="centered" />
+                        <div className="centered" style={{background: "#d6d6d6", height: "auto"}}>
+                            <Formik initialValues={{ categoryId: 0, title: "", duration: 0, minPrice: 0, maxPrice: 999, lowerLat: 42, lowerLong: 50, upperLat: 20, upperLong: 80 }} onSubmit={(data) => console.log(data)}>
+                                <Form inline style={{margin: '1rem'}} >
+                                    {/* Title Search Bar */}
+                                    <FormGroup>
+                                        <Label for="search"><h5><b>Search&nbsp;</b></h5></Label>{' '}
+                                        <Field type="text" name="title" id="title" placeholder="Task Title" />
+                                    </FormGroup>
+
+                                    {/* Select Task Category */}
+                                    <FormGroup>
+                                        <Label for="categoryId"><h5>&nbsp;&nbsp;&nbsp;<b>Task Category&nbsp;</b></h5></Label>
+                                        <Field type="select" name="categoryId" as={Input}>
+                                            <option value="0" selected>Select Category</option>
+                                            <option value="1">Yard Work</option>
+                                            <option value="2">Transportation</option>
+                                            <option value="3">Cleaning</option>
+                                            <option value="4">Moving</option>
+                                            <option value="5">Care-Taking</option>
+                                            <option value="6">Cooking</option>
+                                        </Field>
+                                    </FormGroup>
+
+                                    {/* Select Min/Max Price */}
+                                    <FormGroup>
+                                        <Label for="minPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Min Price&nbsp;</b> </h5></Label>
+                                        <Field type="text" name="minPrice" id="minPrice" placeholder="$" as={Input} />
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label>
+                                        <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" as={Input} />
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        {/* <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label> */}
+                                        <Field type="hidden" name="lowerLat" id="lowerLat" value={lowerLat} as={Input} />
+                                        <Field type="hidden" name="lowerLong" id="lowerLong" value={lowerLong} as={Input} />
+                                        <Field type="hidden" name="upperLat" id="upperLat" value={upperLat} as={Input} />
+                                        <Field type="hidden" name="upperLong" id="upperLong" value={upperLong} as={Input} />
+                                    </FormGroup>
+
+                                    {/* Submit Button */}
+                                    &nbsp;&nbsp;&nbsp;
+                                    <Button color="danger" type="submit">Refine Search</Button>
+                                </Form>
+                            </Formik>
+                        </div>
                     </UncontrolledCollapse>
 
                     {/* Map */}
                     {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
                     <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={5} scrollWheelZoom={true} >
-                        {/* <MyComponent />
-                        {console.log('temp center: ', tempCenter)} */}
+                        {/* <ChangeView center={tempCenter}/> */}
                         <TileLayer
                             url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A"
                             attribution='<a href="/">OddJobs</a> | <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a>'
@@ -217,7 +269,54 @@ const TaskBoard = () => {
 
                 <div>
                     {/* Search Bar */}
-                    <RefineSearch className="centered" />
+                    <div className="centered" style={{background: "#d6d6d6", height: "auto"}}>
+                        <Formik initialValues={{ categoryId: 0, title: "", duration: 0, minPrice: 0, maxPrice: 999, lowerLat: 42, lowerLong: 50, upperLat: 20, upperLong: 80 }} onSubmit={(data) => console.log(data)}>
+                            <Form inline style={{margin: '1rem'}} >
+                                {/* Title Search Bar */}
+                                <FormGroup>
+                                    <Label for="search"><h5><b>Search&nbsp;</b></h5></Label>{' '}
+                                    <Field type="text" name="title" id="title" placeholder="Task Title" />
+                                </FormGroup>
+
+                                {/* Select Task Category */}
+                                <FormGroup>
+                                    <Label for="categoryId"><h5>&nbsp;&nbsp;&nbsp;<b>Task Category&nbsp;</b></h5></Label>
+                                    <Field type="select" name="categoryId" as={Input}>
+                                        <option value="0" selected>Select Category</option>
+                                        <option value="1">Yard Work</option>
+                                        <option value="2">Transportation</option>
+                                        <option value="3">Cleaning</option>
+                                        <option value="4">Moving</option>
+                                        <option value="5">Care-Taking</option>
+                                        <option value="6">Cooking</option>
+                                    </Field>
+                                </FormGroup>
+
+                                {/* Select Min/Max Price */}
+                                <FormGroup>
+                                    <Label for="minPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Min Price&nbsp;</b> </h5></Label>
+                                    <Field type="text" name="minPrice" id="minPrice" placeholder="$" as={Input} />
+                                </FormGroup>
+
+                                <FormGroup>
+                                    <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label>
+                                    <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" as={Input} />
+                                </FormGroup>
+
+                                <FormGroup>
+                                    {/* <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label> */}
+                                    <Field type="hidden" name="lowerLat" id="lowerLat" value={lowerLat} as={Input} />
+                                    <Field type="hidden" name="lowerLong" id="lowerLong" value={lowerLong} as={Input} />
+                                    <Field type="hidden" name="upperLat" id="upperLat" value={upperLat} as={Input} />
+                                    <Field type="hidden" name="upperLong" id="upperLong" value={upperLong} as={Input} />
+                                </FormGroup>
+
+                                {/* Submit Button */}
+                                &nbsp;&nbsp;&nbsp;
+                                <Button color="danger" type="submit">Refine Search</Button>
+                            </Form>
+                        </Formik>
+                    </div>
 
                     {/* Page */}
                     <Row>
@@ -256,7 +355,7 @@ const TaskBoard = () => {
                             {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
                             <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={12} scrollWheelZoom={true} >
                                 {/* Need to change "center" to users location - center{[userLat, userLong]} */}
-
+                                <ChangeView />
                                 <TileLayer
                                     url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A"
                                     attribution='<a href="/">OddJobs</a> | <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a>'
