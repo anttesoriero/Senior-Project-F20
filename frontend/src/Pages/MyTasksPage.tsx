@@ -35,6 +35,14 @@ type offer = {
     userIdFrom: number
 }
 
+// type deleteInfo = {
+//     taskId: string | number
+// }
+
+// const deleteState = {
+//     taskId : ""
+// }
+
 const MyTasksPage = () => {
     const token = localStorage.getItem('access_token');
     const url = useContext(APIContext);
@@ -79,6 +87,21 @@ const MyTasksPage = () => {
             .catch(error => {
                 console.log(error)
             })
+    }
+
+    const deleteTask = async (id) => {
+        await axios.put(url + 'task/deleteTask', {
+            taskId: id
+        },
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     const getUpcomingTasks = async () => {
@@ -135,15 +158,15 @@ const MyTasksPage = () => {
                                     <div>
                                         <Row>
                                             <Col xs="auto"><h5>{task.title}</h5></Col>
-                                            {/* <Col><Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete Task</Button></Col> */}
+                                            <Col><Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete Task</Button></Col>
                                         </Row>
 
-                                        {/* <UncontrolledPopover placement="bottom" target="confirmDelete">
+                                        <UncontrolledPopover placement="bottom" target="confirmDelete">
                                             <h3>Are you sure?</h3>
                                             <PopoverBody>This cannot be undone</PopoverBody>
-                                            <Button color="danger" size="sm" type="button">Confirm</Button>
+                                            <Button color="danger" size="sm" type="submit" onclick={deleteTask(task.taskId)}>Confirm</Button>
                                             <br />
-                                        </UncontrolledPopover> */}
+                                        </UncontrolledPopover>
 
                                         <ul>
                                             
