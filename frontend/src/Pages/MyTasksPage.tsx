@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, ButtonGroup } from 'reactstrap';
+import { Container, Row, Col, Button, ButtonGroup, PopoverBody, UncontrolledPopover } from 'reactstrap';
 import APIContext from '../Contexts/APIContext';
 import Footer from '../Components/Footer';
 import Navigation from '../Components/Navigation';
@@ -107,7 +107,17 @@ const MyTasksPage = () => {
                                 <br />
                                 {offers ? tasks.map(task => (
                                     <div>
-                                        <h5>{task.title} {/* &#9655; */}</h5>
+                                        <Row>
+                                            <Col xs="auto"><h5>{task.title}</h5></Col>
+                                            {/* <Col><Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete Task</Button></Col> */}
+                                        </Row>
+
+                                        {/* <UncontrolledPopover placement="bottom" target="confirmDelete">
+                                            <h3>Are you sure?</h3>
+                                            <PopoverBody>This cannot be undone</PopoverBody>
+                                            <Button color="danger" size="sm" type="button">Confirm</Button>
+                                            <br />
+                                        </UncontrolledPopover> */}
 
                                         <ul>
                                             {offers?.map(offer => (
