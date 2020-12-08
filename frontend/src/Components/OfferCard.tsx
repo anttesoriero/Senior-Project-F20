@@ -43,7 +43,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
 
     useEffect(() => {
         getOfferer()
-    })
+    }, [])
 
     const getOfferer = async () => {
         await axios.post(url + 'user/getProfile',
@@ -91,7 +91,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     }
 
     const completeOffer = async () => {
-        await axios.post(url + 'task/posterComplete', {
+        await axios.post(url + 'task/posterCompleted', {
             taskId: taskId
         },
             { headers: { Authorization: `Bearer ${token}` } })
@@ -106,7 +106,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     }
 
     const ratePoster = async () => {
-        await axios.post(url + 'task/workerComplete', {
+        await axios.post(url + 'task/workerCompleted', {
             taskId: taskId
         },
             { headers: { Authorization: `Bearer ${token}` } })
