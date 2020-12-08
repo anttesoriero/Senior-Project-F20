@@ -90,14 +90,12 @@ const MyTasksPage = () => {
     }
 
     const deleteTask = async (id) => {
-        await axios.put(url + 'task/deleteTask', {
-            taskId: id
-        },
-            {
-                headers: { Authorization: `Bearer ${token}` }
-            })
+        await axios.delete(url + 'task/deleteTask?taskId=' + id, {
+            headers: { Authorization: `Bearer ${token}` 
+        }})
             .then(response => {
                 console.log(response.data);
+                window.location.reload(false);
             })
             .catch(error => {
                 console.log(error);
@@ -164,7 +162,7 @@ const MyTasksPage = () => {
                                         <UncontrolledPopover placement="bottom" target="confirmDelete">
                                             <h3>Are you sure?</h3>
                                             <PopoverBody>This cannot be undone</PopoverBody>
-                                            <Button color="danger" size="sm" type="submit" onclick={deleteTask(task.taskId)}>Confirm</Button>
+                                            <Button color="danger" size="sm" type="submit" onClick={() => deleteTask(task.taskId)}>Confirm</Button>
                                             <br />
                                         </UncontrolledPopover>
 
