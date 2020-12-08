@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Card, CardText, CardBody, CardSubtitle, Button } from 'reactstrap';
+import { Card, CardText, CardBody, CardSubtitle, Button, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
 import { RiMoneyDollarBoxFill, RiTimerFill, RiUserFill, RiCalendarFill } from 'react-icons/ri';
@@ -39,6 +40,8 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
     const [rejected, setRejected] = useState(false);
     const [serror, setSerror] = useState(false);
     const [cerror, SetCError] = useState(false);
+    const [modal, setModal] = useState(false);
+
     var date = new Date(startDate);
 
     useEffect(() => {
@@ -68,6 +71,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             .then(response => {
                 console.log(response.data)
                 setAccept(true)
+                window.location.reload(false);
             })
             .catch(error => {
                 console.log(error)
@@ -98,6 +102,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             .then(response => {
                 console.log(response.data)
                 setComplete(true)
+                window.location.reload(false);
             })
             .catch(error => {
                 console.log(error)
@@ -120,9 +125,27 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             })
     }
 
+    const reportUser = async (values) => {
+        await axios.put(url + 'me/reportUser', {
+            userId_2: userIdFrom,
+            reportType: values.picked,
+            description: values.description
+        },
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log('response: ', response)
+                toggle()
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
     const viewUser = () => {
         setRediret(true)
     }
+
+    const toggle = () => setModal(!modal);
 
     if (redirect)
         return <Redirect to={'/user/' + userIdFrom} />
@@ -156,7 +179,82 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                         <div>
                             <Button color="success" size='sm' outline onClick={completeOffer}>Offer Completed</Button>
                             &nbsp;&nbsp;
-                            <Button color="danger" size='sm' outline onClick={rejectOffer}>Report User</Button>
+                            <Button color="danger" size='sm' outline onClick={toggle}>Report User</Button>
+                            <Modal isOpen={modal} toggle={toggle}>
+                                <ModalHeader toggle={toggle}>Report this User</ModalHeader>
+                                <ModalBody>
+                                    Please select the category that this user violated:
+                                    <Formik
+                                        initialValues={{
+                                            picked: '',
+                                        }}
+                                        onSubmit={values => reportUser(values)}
+                                    >
+                                        {({ values }) => (
+                                            <Form>
+                                            <div role="group" aria-labelledby="my-radio-group">
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Scam" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Scam
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Harassment" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Harassment
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Fake Account" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Fake Account
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Inappropriate" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Inappropriate
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Illegal Activity" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Illegal Activity
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Field type="radio" name="picked" value="Other" />
+                                                    <span>&nbsp;&nbsp;</span>
+                                                    Other
+                                                </label>
+                                                <br />
+
+                                                <label>
+                                                    <Label for="description">Please provide details as to why you are reporting this user:</Label>
+                                                    <Field type="textarea" name="description" placeholder="Description" required as={Input} />
+                                                </label>
+                                                <br />
+                                            </div>
+
+                                            <br />
+                                            <Button color="danger" type="submit">Report</Button>{' '}
+
+                                            {/* <button type="submit">Submit</button> */}
+                                            </Form>
+                                        )}
+                                    </Formik>
+                                </ModalBody>
+                                {/* <ModalFooter>
+                                <Button color="primary" type="submit" onClick={reportUser}>Report</Button>{' '}
+                                <Button color="secondary" onClick={toggle}>Cancel</Button>
+                                </ModalFooter> */}
+                            </Modal>
                         </div>
                         :
                         <div>

@@ -138,7 +138,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     </Button>
                 </ModalHeader>
                 <ModalBody>
-                    <Formik initialValues={{ payment: price, startDate: '', time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
+                    <Formik initialValues={{ payment: price, startDate: startDate, time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
                         {() => (
                             <Form >
 
@@ -175,7 +175,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                                 <div className='centered'>
                                     {serror ? <p className='error'>There was an error making offer!</p> : <div></div>}
                                     {oerror ? <p className='error'>Can't make an offer on your own task!</p> : <div></div>}
-                                    {success ? <p className='success'>Offer succesffuly made!</p> : <div></div>}
+                                    {success ? <p className='success'>Offer successfully made!</p> : <div></div>}
                                 </div>
                                 <FormGroup className='centered'>
                                     <Row >

@@ -8,6 +8,7 @@ import OfferCard from '../Components/OfferCard';
 
 type task = {
     accepted: boolean,
+    completed: boolean,
     categoryId: number,
     description: string,
     estimatedDurationMinutes: number,
@@ -40,18 +41,23 @@ const MyTasksPage = () => {
 
     let a: task[] = [];
     let b: offer[][] = [];
+    let c: task[] = [];
+
     const [tasks, setTasks] = useState(a);
     const [offers, setOffers] = useState(b);
+    const [upcomingTasks, setUpcomingTasks] = useState(c);
 
     const getTaskIds = async () => {
         await axios.get(url + 'me/getPostedTasks',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data.tasks)
-                setTasks(response.data.tasks)
+                const responseData = response.data.tasks
+                console.log(responseData)
+                setTasks(responseData)
+
                 let i = 0;
-                response.data.tasks?.map(task => (
-                    getOffers(response.data.tasks[i].taskId),
+                responseData?.map(task => (
+                    getOffers(responseData[i].taskId),
                     i++
                 ))
             })
@@ -69,6 +75,24 @@ const MyTasksPage = () => {
             .then(response => {
                 console.log(response.data.offers)
                 setOffers(oldArray => [...oldArray, response.data.offers])
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const getUpcomingTasks = async () => {
+        await axios.get(url + 'me/',
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                const responseData = response.data.tasks
+                setTasks(responseData)
+
+                let i = 0;
+                responseData?.map(task => (
+                    getOffers(responseData[i].taskId),
+                    i++
+                ))
             })
             .catch(error => {
                 console.log(error)
@@ -95,7 +119,7 @@ const MyTasksPage = () => {
             <Container>
                 <h1 className="centered">My Tasks</h1>
                 <ButtonGroup className="centered">
-                    <Button onClick={toOffers}>Offers</Button>
+                    <Button onClick={toOffers}>Posted Tasks</Button>
                     <Button onClick={toUpcoming}>Upcoming Tasks</Button>
                 </ButtonGroup>
 
@@ -103,8 +127,10 @@ const MyTasksPage = () => {
                     switch (pageState) {
                         case 'offers':
                             return (<div>
-                                <h2><u>Offers</u></h2>
+                                {/* <h2><u>Offers</u></h2> */}
                                 <br />
+                                {tasks.length === 0 ? <div><h2>No Tasks Posted Yet</h2></div> : <div></div>}
+
                                 {offers ? tasks.map(task => (
                                     <div>
                                         <Row>
@@ -120,8 +146,10 @@ const MyTasksPage = () => {
                                         </UncontrolledPopover> */}
 
                                         <ul>
+                                            
                                             {offers?.map(offer => (
                                                 <Row>
+                                                    {offer.length === 0 ? <div>No Offers Yet</div> : <div></div>}
                                                     {offer.map(single => (
                                                         single.taskId === task.taskId ?
                                                             <Col>
@@ -145,19 +173,21 @@ const MyTasksPage = () => {
                                             ))}
                                         </ul>
                                     </div>
-
-                                )) : <div>No Offers</div>}
+                                    
+                                )) : <div></div>}
                             </div>)
 
                         case 'upcoming':
-                            return (<div>
-                                <h2><u>Upcoming tasks</u></h2>
-                                <h4>Upcoming Tasks page should have a map with precise location markers. 2 Options:</h4>
-                                <ol>
-                                    <li>We could have one big map like the Task Board with multiple markers, and a popup for each marker on click</li>
-                                    <li>We could have one small map per task, and each task gets its own row. Task info on the left, map on the right</li>
-                                </ol>
-                            </div>)
+                            return (
+                                <div>
+                                    <h2><u>Upcoming tasks</u></h2>
+                                    <h4>Upcoming Tasks page should have a map with precise location markers. 2 Options:</h4>
+                                    <ol>
+                                        <li>We could have one big map like the Task Board with multiple markers, and a popup for each marker on click</li>
+                                        <li>We could have one small map per task, and each task gets its own row. Task info on the left, map on the right</li>
+                                    </ol>
+                                </div>
+                            )
 
                         default:
                             return null;
