@@ -222,7 +222,7 @@ const TaskBoard = () => {
                     {/* Page */}
                     <Row>
                         {/* Left - TaskCards */}
-                        <Col xs="3" className="col-scroll">
+                        <Col xs="3" style={{ maxHeight: window.innerWidth / 2, overflowY: "scroll" }}>
                             <Container>
                                 <h3 id="top" className="centered" style={{ fontWeight: 'bolder' }}>Tasks</h3>
                                 <hr />
