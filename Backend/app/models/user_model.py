@@ -288,7 +288,8 @@ class User(db.Model):
         :return list of task ids for a user
         '''
         tasks = Task.query.filter_by(posterUserId = userId).all()
-        return [task.getPublicInfo() for task in tasks]
+        tasks = [task for task in tasks if not task.completed]
+        return [task.getPrivateInfo() for task in tasks]
 
     @classmethod
     def getAll(cls):

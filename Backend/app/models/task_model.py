@@ -11,6 +11,7 @@ from app import db
 
 
 from app.models.offer_model import Offer
+
 import datetime
 
 class Task(db.Model):
@@ -158,6 +159,8 @@ class Task(db.Model):
         locationBLatitude = str("%.4f" % self.locationBLatitude) if self.locationBLatitude else None
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
 
+        worker = self.getWorker()
+
         output = {
             "taskId": self.taskId,
             "posterTaskId": self.posterUserId,
@@ -172,7 +175,8 @@ class Task(db.Model):
             "locationALatitude": locationALatitude,
             "locationBLongitude": locationBLongitude,
             "locationBLatitude": locationBLatitude,
-            "completed": self.completed
+            "completed": self.completed,
+            "worker": worker
         }
         return output
 
@@ -203,6 +207,15 @@ class Task(db.Model):
         if "startDate" in k:
             self.startDate = paramDict["startDate"]
         db.session.commit()
+
+    def getWorker(self):
+        offers = Offer.getOffersForTask(self.taskId)
+        worker = None
+        for offer in offers:
+            if offer.accepted:
+                worker = offer.userIdFrom
+        return worker
+
 
     @classmethod
     def buildPosterRatingsForUser(cls, userId):
@@ -266,6 +279,7 @@ class Task(db.Model):
         '''
         filters = []
         filters.append(cls.posterUserId != userId)
+        filters.append(cls.completed == False)
         if "title" in queryP.keys():
             if "contains" in queryP["title"].keys():
                 filters.append(cls.title.like("%" + queryP["title"]["contains"] + "%"))
@@ -289,10 +303,10 @@ class Task(db.Model):
         if "location" in queryP.keys():
             if "within" in queryP["location"].keys():
                 if len(queryP["location"]["within"]) == 4:
-                    filters.append(cls.locationALatitude >= queryP["location"]["within"][0])
-                    filters.append(cls.locationALatitude <= queryP["location"]["within"][1])
-                    filters.append(cls.locationALongitude >= queryP["location"]["within"][2])
-                    filters.append(cls.locationALongitude <= queryP["location"]["within"][3])
+                    filters.append(cls.locationALatitude >= float(queryP["location"]["within"][0]))
+                    filters.append(cls.locationALatitude <= float(queryP["location"]["within"][1]))
+                    filters.append(cls.locationALongitude >= float(queryP["location"]["within"][2]))
+                    filters.append(cls.locationALongitude <= float(queryP["location"]["within"][3]))
 
 
         tasks = Task.query.filter(*filters).limit(max)
@@ -389,7 +403,7 @@ class Task(db.Model):
             locationALatitude=locationALatitude,
             locationBLongitude=locationBLongitude,
             locationBLatitude=locationBLatitude,
-            completed=True
+            completed=False
         )
 
 

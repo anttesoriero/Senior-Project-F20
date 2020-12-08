@@ -64,13 +64,19 @@ def getPostedTasks():
     
     # Get user's task ids
     tasks = User.getPostedTasks(current_user_id)
-
     # Format output
     responseInformation = {
         "tasks": tasks
     }
 
     return jsonify(responseInformation), 200
+
+@me_blueprint.route('/getMyOffers', methods=['GET'])
+@jwt_required
+def getMyOffers():
+    # Get current user
+    current_user_id = get_jwt_identity()
+
 
 '''
 PUTs
