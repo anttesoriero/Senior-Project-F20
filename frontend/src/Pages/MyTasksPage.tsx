@@ -87,7 +87,6 @@ const MyTasksPage = () => {
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 const responseData = response.data.tasks
-                //console.log(responseData)
                 setTasks(responseData)
 
                 let i = 0;
@@ -108,7 +107,6 @@ const MyTasksPage = () => {
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data.offers)
                 setOffers(oldArray => [...oldArray, response.data.offers])
             })
             .catch(error => {
@@ -121,7 +119,6 @@ const MyTasksPage = () => {
             headers: { Authorization: `Bearer ${token}` 
         }})
             .then(response => {
-                //console.log(response.data);
                 window.location.reload(false);
             })
             .catch(error => {
@@ -129,24 +126,25 @@ const MyTasksPage = () => {
             });
     }
 
-    const editTask = async () => {
-        await axios.patch(url + 'task/updateTask', {
+    const editTask = async (taskData) => {
+        await axios.patch(url + 'task/editTask', {
             taskId: editTaskId,
-            categoryId: taskInfo?.categoryId,
-            title: taskInfo?.title,
-            description: taskInfo?.description,
-            recommendedPrice: taskInfo?.recommendedPrice,
-            estimatedDurationMinutes: taskInfo?.estimatedDurationMinutes,
-            locationALatitude: taskInfo?.locationALatitude,
-            locationALongitude: taskInfo?.locationALongitude,
-            startDate: taskInfo?.startDate
+            categoryId: taskData.categoryId,
+            title: taskData.title,
+            description: taskData.description,
+            recommendedPrice: taskData.recommendedPrice,
+            estimatedDurationMinutes: taskData.estimatedDurationMinutes,
+            locationALatitude: taskData.locationALatitude,
+            locationALongitude: taskData.locationALongitude,
+            startDate: taskData.startDate
         },
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
-                //console.log(response.data);
+                console.log(response.data);
                 toOffers()
+                getTaskIds()
             })
             .catch(error => {
                 console.log(error);
@@ -155,22 +153,20 @@ const MyTasksPage = () => {
     }
 
     const geocode = async (data) => {
-        var location = data.address + data.city + data.state + data.zip;
         console.log('data: ', data)
+        var location = data.address + data.city + data.state + data.zip;
         await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
             params: {
                 address: location,
                 key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
             }
         })
-        .then(function(response){
-			console.log(response)
-			
+        .then(function(response) {
 			const results = response.data.results
 			if (results !== undefined && results.length !== 0) {
-				const { lat, lng } = results[0].geometry.location
-             
-				setTaskInfo({
+                const { lat, lng } = results[0].geometry.location
+                
+                const taskData: taskState = {
                     categoryId: data.categoryId,
                     title: data.title,
                     description: data.description,
@@ -179,8 +175,9 @@ const MyTasksPage = () => {
                     locationALongitude: lng,
                     locationALatitude: lat,
                     startDate: data.date + ' ' + data.time
-                })
-                editTask()
+                }
+
+                editTask(taskData)
             }
 			else {
 				throw String("That address doesn't exist!")
@@ -249,29 +246,29 @@ const MyTasksPage = () => {
                     switch (pageState) {
                         case 'offers':
                             return (<div>
-                                {/* <h2><u>Offers</u></h2> */}
-                                <br />
                                 {tasks.length === 0 ? <div><h2>No Tasks Posted Yet</h2></div> : <div></div>}
 
                                 {offers ? tasks.map(task => (
                                     <div>
                                         <Row>
                                             <Col xs="auto"><h5>{task.title}</h5></Col>
-                                            <Col xs="auto">
-                                                <Button color="info" size="sm" id="editTask" type="button" onClick={() => toEditTask(task.taskId)} outline>Edit</Button>&nbsp;&nbsp;
-                                                <Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete</Button>
-                                            </Col>
+                                            {!task.accepted ? 
+                                                <Col xs="auto">
+                                                    <Button color="info" size="sm" id="editTask" type="button" onClick={() => toEditTask(task.taskId)} outline>Edit</Button>&nbsp;&nbsp;
+                                                    <Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete</Button>
+                                                    <UncontrolledPopover style={{padding: 10}} placement="bottom" target="confirmDelete">
+                                                        <h3>Are you sure?</h3>
+                                                        <PopoverBody>This cannot be undone</PopoverBody>
+                                                        <Button color="danger" size="sm" type="submit" onClick={() => deleteTask(task.taskId)}>Confirm</Button>
+                                                        <br />
+                                                    </UncontrolledPopover>
+                                                </Col>                                                
+                                                :
+                                                <div></div>
+                                            }
                                         </Row>
 
-                                        <UncontrolledPopover style={{padding: 10}} placement="bottom" target="confirmDelete">
-                                            <h3>Are you sure?</h3>
-                                            <PopoverBody>This cannot be undone</PopoverBody>
-                                            <Button color="danger" size="sm" type="submit" onClick={() => deleteTask(task.taskId)}>Confirm</Button>
-                                            <br />
-                                        </UncontrolledPopover>
-
                                         <ul>
-                                            
                                             {offers?.map(offer => (
                                                 <Row>
                                                     {offer.length === 0 ? <div>No Offers Yet</div> : <div></div>}
@@ -450,10 +447,6 @@ const MyTasksPage = () => {
                                 return null;
                     }
                 })()}
-
-
-
-
             </Container>
             <Footer />
         </div>
