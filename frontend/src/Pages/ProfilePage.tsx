@@ -252,7 +252,7 @@ const ProfilePage = () => {
                                         {/* User Info */}
                                         <Media>
                                             <Media left href="#">
-                                                {user.profilePicture === "" ?                                                
+                                                {user.profilePicture ?                                                
                                                     // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                                     <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                                         {initials}

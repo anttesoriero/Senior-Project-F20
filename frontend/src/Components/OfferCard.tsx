@@ -55,7 +55,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setOfferer(response.data)
             })
             .catch(error => {
@@ -69,7 +69,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setAccept(true)
                 window.location.reload(false);
             })
@@ -85,7 +85,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setRejected(true)
             })
             .catch(error => {
@@ -100,7 +100,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setComplete(true)
                 window.location.reload(false);
             })
@@ -116,7 +116,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setComplete(true)
             })
             .catch(error => {
@@ -133,13 +133,30 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log('response: ', response)
+                //console.log('response: ', response)
                 toggle()
             })
             .catch(error => {
                 console.log(error);
             });
     }
+
+    const dateTime = (dateTime) => {
+        const date = new Date(dateTime)
+        const displayDate = date.toString().substring(0, 15)
+        const ampm = Number(date.toISOString().substring(11, 13)) > 11 ? ' PM' : ' AM'
+        const displayTime = Number(date.toISOString().substring(11, 13)) > 12 
+                            ? String((Number(date.toISOString().substring(11, 13)) % 12)) + `:${date.toISOString().substring(14, 16)}` + ampm 
+                            : date.toISOString().substring(11, 16) + ampm
+        return {
+            defaultDate: date.toISOString().substring(0, 10), 
+            defaultTime: date.toISOString().substring(11, 16),
+            displayDate: displayDate,
+            displayTime: displayTime
+        }
+    }
+
+    const { defaultDate, defaultTime, displayDate, displayTime } = dateTime(startDate)
 
     const viewUser = () => {
         setRediret(true)
@@ -161,8 +178,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                             ? ' ' + jobDurationMinutes / 60 + ' hour(s)'
                             : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
                 </CardSubtitle>
-                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {date.toString().substring(0, 15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
-                <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
+                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>                <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
                 <div className='centered'>
                     {serror ? <p className='error'>There was an error accepting/rejecting offer!</p> : <div></div>}
                     {cerror ? <p className='error'>Error completing offer!</p> : <div></div>}
