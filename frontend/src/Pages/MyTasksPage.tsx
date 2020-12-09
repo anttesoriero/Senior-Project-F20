@@ -52,7 +52,7 @@ type taskState = {
 
 const taskFields = {
     // Default initial values for the task fields
-    categoryId: 1,
+    categoryId: 0,
     title: "",
     description: "",
     recommendedPrice: 0,
@@ -63,14 +63,6 @@ const taskFields = {
     // locationBLongitude: 15,
     // locationBLatitude: 15
 }
-
-// type deleteInfo = {
-//     taskId: string | number
-// }
-
-// const deleteState = {
-//     taskId : ""
-// }
 
 const MyTasksPage = () => {
     const token = localStorage.getItem('access_token');
@@ -83,7 +75,10 @@ const MyTasksPage = () => {
     const [tasks, setTasks] = useState(a);
     const [offers, setOffers] = useState(b);
     const [upcomingTasks, setUpcomingTasks] = useState(c);
+    // Task state when user edits task
     const [taskInfo, setTaskInfo] = useState<taskState>(taskFields);
+    // The id of the task that is currently being edited
+    const [editTaskId, setEditTaskId] = useState<number>();
     const [serror, setSerror] = useState<boolean>(false);
 
     const getTaskIds = async () => {
@@ -133,11 +128,9 @@ const MyTasksPage = () => {
             });
     }
 
-    const editTask = async (id) => {
-        toEditTask()
-        console.log('Info: ', taskInfo)
-
+    const editTask = async () => {
         await axios.patch(url + 'task/updateTask', {
+            taskId: editTaskId,
             categoryId: taskInfo?.categoryId,
             title: taskInfo?.title,
             description: taskInfo?.description,
@@ -152,6 +145,7 @@ const MyTasksPage = () => {
             })
             .then(response => {
                 console.log(response.data);
+                toOffers()
             })
             .catch(error => {
                 console.log(error);
@@ -185,6 +179,7 @@ const MyTasksPage = () => {
                     locationALatitude: lat,
                     startDate: data.date + ' ' + data.time
                 })
+                editTask()
             }
 			else {
 				throw String("That address doesn't exist!")
@@ -224,12 +219,23 @@ const MyTasksPage = () => {
         setPageState("upcoming")
     }
 
-    const toEditTask = () => {
+    const toEditTask = async (id) => {
+        setEditTaskId(id)
+        await axios.get(url + 'task/getPublic?taskId=' + id,
+            { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => {
+                console.log(response.data)
+                setTaskInfo(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
         setPageState("editTask")
     }
 
     const dateTime = (dateTime) => {
-        return [dateTime.toString().substring(0, 15), dateTime.toLocaleTimeString()]
+        const date = new Date(dateTime).toISOString()
+        return [date.substring(0, 10), date.substring(11, 16)]
     }
 
     return (
@@ -249,7 +255,6 @@ const MyTasksPage = () => {
                     <h1 className="centered">Edit Task</h1>
                 </div>
                 }
-                
 
                 {(() => {
                     switch (pageState) {
@@ -264,7 +269,7 @@ const MyTasksPage = () => {
                                         <Row>
                                             <Col xs="auto"><h5>{task.title}</h5></Col>
                                             <Col xs="auto">
-                                                <Button color="info" size="sm" id="editTask" type="button" onClick={() => editTask(task.taskId)} outline>Edit</Button>&nbsp;&nbsp;
+                                                <Button color="info" size="sm" id="editTask" type="button" onClick={() => toEditTask(task.taskId)} outline>Edit</Button>&nbsp;&nbsp;
                                                 <Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete</Button>
                                             </Col>
                                         </Row>
@@ -321,10 +326,23 @@ const MyTasksPage = () => {
                             )
 
                         case 'editTask':
+                            const date = dateTime(taskInfo.startDate)[0]
+                            const time = dateTime(taskInfo.startDate)[1]
+
                             return (
                                 <Container>
                                     <div className="centered">
-                                        <Formik initialValues={{ categoryId: 0, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => geocode(data)} >
+                                        <Formik initialValues={{ 
+                                                categoryId: taskInfo.categoryId, 
+                                                title: taskInfo.title, 
+                                                description: taskInfo.description, 
+                                                recommendedPrice: taskInfo.recommendedPrice, 
+                                                estimatedDurationMinutes: taskInfo.estimatedDurationMinutes,
+                                                date: date,
+                                                time: time
+                                            }} 
+                                            onSubmit={data => geocode(data)} 
+                                        >
                                             <Form>
                                                 {/* Row 1 - Name & Category */}
                                                 <Row>
@@ -338,9 +356,6 @@ const MyTasksPage = () => {
                                                         <FormGroup>
                                                             <Label for="categoryId"><h4>Task Category *</h4></Label>
                                                             <Field type="select" name="categoryId" as={Input} selected={taskInfo.categoryId} required>
-                                                                {/* "Select Category" is value=1 because "Yard Work" 
-                                                                    keeps displaying first even though it's second.
-                                                                    When calling the endpoint, the categoryId is substracted by one. */}
                                                                 <option value="0" disabled>Select Category</option>
                                                                 <option value="1">Yard Work</option>
                                                                 <option value="2">Transportation</option>
@@ -380,14 +395,14 @@ const MyTasksPage = () => {
                                                         <FormGroup>
                                                             <Label for="date"><h4>Date *</h4></Label>
                                                             {/* <Field type="date" name="date" id="date" placeholder={dateTime(taskInfo.startDate)[0]} as={Input} required /> */}
-                                                            <Field type="date" name="date" id="date" placeholder="Date" as={Input} required />
+                                                            <Field type="date" name="date" id="date" placeholder={date} as={Input} required />
                                                         </FormGroup>
                                                     </Col>
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="time"><h4>Time *</h4></Label>
                                                             {/* <Field type="time" name="time" id="time" placeholder={dateTime(taskInfo.startDate)[1]} as={Input} required /> */}
-                                                            <Field type="time" name="time" id="time" placeholder="Time" as={Input} required />
+                                                            <Field type="time" name="time" id="time" placeholder={time} as={Input} required />
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
