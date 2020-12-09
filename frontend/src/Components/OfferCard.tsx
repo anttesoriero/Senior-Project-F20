@@ -178,7 +178,8 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                             ? ' ' + jobDurationMinutes / 60 + ' hour(s)'
                             : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
                 </CardSubtitle>
-                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>                <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
+                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>                
+                <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
                 <div className='centered'>
                     {serror ? <p className='error'>There was an error accepting/rejecting offer!</p> : <div></div>}
                     {cerror ? <p className='error'>Error completing offer!</p> : <div></div>}
