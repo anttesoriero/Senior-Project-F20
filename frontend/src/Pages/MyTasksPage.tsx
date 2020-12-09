@@ -246,6 +246,7 @@ const MyTasksPage = () => {
                     switch (pageState) {
                         case 'offers':
                             return (<div>
+                                <br />
                                 {tasks.length === 0 ? <div><h2>No Tasks Posted Yet</h2></div> : <div></div>}
 
                                 {offers ? tasks.map(task => (
