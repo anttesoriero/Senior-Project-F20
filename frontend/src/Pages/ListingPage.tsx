@@ -160,7 +160,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                     <Label className="centered" for="recommendedPrice"><h4>Pay Rate *</h4></Label>
                                     <InputGroup>
                                         <InputGroupAddon addonType="prepend">$</InputGroupAddon>
-                                        <Field type="number" name="recommendedPrice" placeholder="60" min="15" as={Input} required />
+                                        <Field type="number" name="recommendedPrice" placeholder="60" min="15" max="1000" as={Input} required />
                                         <InputGroupAddon addonType="append">.00</InputGroupAddon>
                                     </InputGroup>
                                 </Col>
