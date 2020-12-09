@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button, ButtonGroup, PopoverBody, UncontrolledPopover, FormGroup, Input, Label, InputGroup, InputGroupAddon } from 'reactstrap';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';import OfferCard from './OfferCard';
+import UpcommingTaskCard from './UpcomingTaskCard';
+import { RiUserFill } from 'react-icons/ri';
 ;
 
 type offer = {
@@ -65,35 +67,45 @@ const UpcomingTask = () => {
 
     return(
         <div>
-            {tasks?.map(task => (
-                <ul>
-                                            
-                {offers?.map(offer => (
+            <br />
+            {tasks.length === 0 ? <div className={'centered'}><h2>No Offers Made Yet</h2></div> : <div></div>}
+            {offers ? tasks.map(task => (
+                <div>
                     <Row>
-                        {offer.length === 0 ? <div>No Offers Yet</div> : <div></div>}
-                        {offer.map(single => (
-                            single.taskId === task.taskId ?
-                                <Col>
-                                    <OfferCard
-                                        key={single.offerId}
-                                        accepted={single.accepted}
-                                        archived={single.archived}
-                                        jobDurationMinutes={single.jobDurationMinutes}
-                                        note={single.note}
-                                        offerId={single.offerId}
-                                        payment={single.payment}
-                                        responseMessage={single.responseMessage}
-                                        startDate={single.startDate}
-                                        taskId={single.taskId}
-                                        userIdFrom={single.userIdFrom}
-                                    />
-                                </Col>
-                                : <div></div>
-                        ))}
+                        <Col xs="auto">
+                            <h5>{task.title}</h5>
+                        </Col>
                     </Row>
-                ))}
-            </ul>
-            ))}
+
+                    <ul>
+                        {offers?.map(offer => (
+                            <Row>
+                                {offer.length === 0 ? <div>No Offers Yet</div> : <div></div>}
+                                {offer.map(single => (
+                                    single.taskId === task.taskId ?
+                                        <Col>
+                                            <UpcommingTaskCard
+                                                key={single.offerId}
+                                                accepted={single.accepted}
+                                                archived={single.archived}
+                                                jobDurationMinutes={single.jobDurationMinutes}
+                                                note={single.note}
+                                                offerId={single.offerId}
+                                                payment={single.payment}
+                                                responseMessage={single.responseMessage}
+                                                startDate={single.startDate}
+                                                taskId={single.taskId}
+                                                userIdFrom={task.posterTaskId}
+                                            />
+                                        </Col>
+                                        : <div></div>
+                                ))}
+                            </Row>
+                        ))}
+                    </ul>
+                </div>
+                
+            )) : <div></div>}
         </div>
     )
 }

@@ -225,6 +225,7 @@ const MyTasksPage = () => {
                 {pageState !== "editTask" ?
                 <div>
                     <h1 className="centered">My Tasks</h1>
+                    <br/>
                     {pageState === "offers" ?
                     <ButtonGroup className="centered">
                         <Button onClick={toOffers} active>Posted Tasks</Button>
@@ -247,10 +248,10 @@ const MyTasksPage = () => {
                         case 'offers':
                             return (<div>
                                 <br />
-                                {tasks.length === 0 ? <div><h2>No Tasks Posted Yet</h2></div> : <div></div>}
+                                {tasks.length === 0 ? <div className={'centered'}><h2>No Tasks Posted Yet</h2></div> : <div></div>}
 
                                 {offers ? tasks.map(task => (
-                                    <div>
+                                    <div key={task.taskId}>
                                         <Row>
                                             <Col xs="auto"><h5>{task.title}</h5></Col>
                                             {!task.accepted ? 

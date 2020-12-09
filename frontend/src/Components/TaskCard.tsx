@@ -116,6 +116,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     console.log(response)
                     setSubmitting(false)
                     setSuccess(true)
+                    setOpen(false)
                     return <Redirect to={'/task'}/>
                 })
                 .catch(error => {

@@ -69,7 +69,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             })
             .then(response => {
                 console.log(response.data);
-                history.push('/')
+                history.push('/myTasks')
             })
             .catch(error => {
                 console.log(error);

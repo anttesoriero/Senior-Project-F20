@@ -169,7 +169,7 @@ const TaskBoard = () => {
                                     {/* Title Search Bar */}
                                     <FormGroup>
                                         <Label for="search"><h5><b>Search&nbsp;</b></h5></Label>{' '}
-                                        <Field type="text" name="title" id="title" placeholder="Task Title" />
+                                        <Field type="text" name="search" id="search" placeholder="Task Title" as={Input}/>
                                     </FormGroup>
 
                                     {/* Select Task Category */}
@@ -241,7 +241,7 @@ const TaskBoard = () => {
                     </MapContainer>
 
                     {/* Tasks */}
-                    <Container>
+                    <Container >
                         <h3 className="centered" style={{ fontWeight: 'bolder' }}>Tasks</h3>
                         <hr />
                         {tasks.map(task => (
@@ -262,9 +262,6 @@ const TaskBoard = () => {
                         <Button className={'task centered'} href="#top">Back to Top</Button>
 
                         <br />
-                        <div className='centered'>
-                            <PaginationRow />
-                        </div>
 
                     </Container>
                 </div>
@@ -323,10 +320,10 @@ const TaskBoard = () => {
                     </div>
 
                     {/* Page */}
-                    <Row>
+                    <Row >
                         {/* Left - TaskCards */}
-                        <Col xs="3" style={{ maxHeight: window.innerWidth / 2, overflowY: "scroll" }}>
-                            <Container>
+                        <Col xs="3" style={{ maxHeight: window.innerWidth / 2, overflow: "scroll" }}>
+                            <Container >
                                 <h3 id="top" className="centered" style={{ fontWeight: 'bolder' }}>Tasks</h3>
                                 <hr />
                                 {tasks.map(task => (
@@ -347,10 +344,6 @@ const TaskBoard = () => {
                                 <Button className={'task centered'} href="#top">Back to Top</Button>
 
                                 <br />
-                                <div className='centered'>
-                                    <PaginationRow />
-                                </div>
-
                             </Container>
 
                         </Col>
