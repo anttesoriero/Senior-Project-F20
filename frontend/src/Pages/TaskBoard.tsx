@@ -227,11 +227,15 @@ const TaskBoard = () => {
                             <MapsCircle
                                 key={task.taskId}
                                 title={task.title}
+                                id={task.taskId}
                                 categoryId={task.categoryId}
-                                amount={Number(task.recommendedPrice)}
+                                offerer={task.posterTaskId}
+                                price={Number(task.recommendedPrice)}
                                 duration={task.estimatedDurationMinutes}
                                 latitude={Number(task.locationALatitude)}
-                                longitute={Number(task.locationALongitude)} />
+                                longitute={Number(task.locationALongitude)}
+                                startDate={task.startDate}
+                                description={task.description} />
                         ))}
 
                     </MapContainer>
@@ -364,13 +368,17 @@ const TaskBoard = () => {
                                 {/* Map Circle Markers - MapsCircle */}
                                 {tasks.map(task => (
                                     <MapsCircle
-                                        key={task.taskId}
-                                        title={task.title}
-                                        categoryId={task.categoryId}
-                                        amount={Number(task.recommendedPrice)}
-                                        duration={task.estimatedDurationMinutes}
-                                        latitude={Number(task.locationALatitude)}
-                                        longitute={Number(task.locationALongitude)} />
+                                    key={task.taskId}
+                                    title={task.title}
+                                    id={task.taskId}
+                                    categoryId={task.categoryId}
+                                    offerer={task.posterTaskId}
+                                    price={Number(task.recommendedPrice)}
+                                    duration={task.estimatedDurationMinutes}
+                                    latitude={Number(task.locationALatitude)}
+                                    longitute={Number(task.locationALongitude)}
+                                    startDate={task.startDate}
+                                    description={task.description} />
                                 ))}
 
                             </MapContainer>
