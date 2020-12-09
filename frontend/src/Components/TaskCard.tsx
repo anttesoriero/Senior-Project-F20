@@ -35,6 +35,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
     const token = localStorage.getItem('access_token');
 
     const [open, setOpen] = useState(false)
+    const [made, setMade] = useState(false)
     const [submitting, setSubmitting] = useState(false);
     const [redirect, setRediret] = useState(false);
     const [serror, setSerror] = useState(false);
@@ -92,6 +93,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     console.log(response)
                     setSubmitting(false)
                     setSuccess(true)
+                    return <Redirect to={'/task'}/>
                 })
                 .catch(error => {
                     console.log(error)
@@ -109,8 +111,9 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         const date = new Date(dateTime)
         const displayDate = date.toString().substring(0, 15)
         const ampm = Number(date.toISOString().substring(11, 13)) > 11 ? ' PM' : ' AM'
-        const displayTime = date.toISOString().substring(11, 16) + ampm
-        
+        const displayTime = Number(date.toISOString().substring(11, 13)) > 12 
+                            ? String((Number(date.toISOString().substring(11, 13)) % 12)) + `:${date.toISOString().substring(14, 16)}` + ampm 
+                            : date.toISOString().substring(11, 16) + ampm
         return {
             defaultDate: date.toISOString().substring(0, 10), 
             defaultTime: date.toISOString().substring(11, 16),

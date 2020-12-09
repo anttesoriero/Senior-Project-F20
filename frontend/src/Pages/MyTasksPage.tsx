@@ -7,6 +7,7 @@ import axios from 'axios';
 import OfferCard from '../Components/OfferCard';
 import { Formik, Form, Field } from 'formik';
 import StateSelector from '../Components/StateSelector';
+import UpcomingTask from '../Components/UpcomingTasks';
 
 type task = {
     accepted: boolean,
@@ -86,7 +87,7 @@ const MyTasksPage = () => {
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 const responseData = response.data.tasks
-                console.log(responseData)
+                //console.log(responseData)
                 setTasks(responseData)
 
                 let i = 0;
@@ -107,7 +108,7 @@ const MyTasksPage = () => {
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data.offers)
+                //console.log(response.data.offers)
                 setOffers(oldArray => [...oldArray, response.data.offers])
             })
             .catch(error => {
@@ -120,7 +121,7 @@ const MyTasksPage = () => {
             headers: { Authorization: `Bearer ${token}` 
         }})
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 window.location.reload(false);
             })
             .catch(error => {
@@ -144,7 +145,7 @@ const MyTasksPage = () => {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 toOffers()
             })
             .catch(error => {
@@ -187,26 +188,8 @@ const MyTasksPage = () => {
         })
     } 
 
-    const getUpcomingTasks = async () => {
-        await axios.get(url + 'me/',
-            { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                const responseData = response.data.tasks
-                setTasks(responseData)
-
-                let i = 0;
-                responseData?.map(task => (
-                    getOffers(responseData[i].taskId),
-                    i++
-                ))
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
-
     useEffect(() => {
-        getTaskIds();
+        getTaskIds()
     }, [])
 
     const [pageState, setPageState] = useState<String>("offers")
@@ -315,14 +298,7 @@ const MyTasksPage = () => {
 
                         case 'upcoming':
                             return (
-                                <div>
-                                    <h2><u>Upcoming tasks</u></h2>
-                                    <h4>Upcoming Tasks page should have a map with precise location markers. 2 Options:</h4>
-                                    <ol>
-                                        <li>We could have one big map like the Task Board with multiple markers, and a popup for each marker on click</li>
-                                        <li>We could have one small map per task, and each task gets its own row. Task info on the left, map on the right</li>
-                                    </ol>
-                                </div>
+                                <UpcomingTask/>
                             )
 
                         case 'editTask':
