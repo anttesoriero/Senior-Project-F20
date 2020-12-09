@@ -74,8 +74,19 @@ def getPostedTasks():
 @me_blueprint.route('/getMyOffers', methods=['GET'])
 @jwt_required
 def getMyOffers():
+    '''
+    Get my offers
+
+    :return:
+    '''
+
     # Get current user
     current_user_id = get_jwt_identity()
+
+    responseInformation = User.getOffers(current_user_id)
+    # Format output
+
+    return jsonify(responseInformation), 200
 
 
 '''
@@ -154,8 +165,6 @@ def deleteAccount():
 '''
 PUTs
 '''
-
-
 @me_blueprint.route('/reportUser', methods=['PUT'])
 @jwt_required
 def reportUser():

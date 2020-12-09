@@ -210,8 +210,7 @@ def createTask():
     requiredParameters = ["categoryId", "title"]
 
     optionalParameters = ["description", "recommendedPrice", "estimatedDurationMinutes",
-                          "locationALongitude", "locationALatitude", "locationBLongitude",
-                          "locationBLatitude", "startDate"]
+                          "locationALongitude", "locationALatitude", "startDate"]
 
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
@@ -230,9 +229,7 @@ def createTask():
         recommendedPrice=inputJSON["recommendedPrice"],
         estimatedDurationMinutes=inputJSON["estimatedDurationMinutes"],
         locationALongitude=inputJSON["locationALongitude"],
-        locationALatitude=inputJSON["locationALatitude"],
-        locationBLongitude=inputJSON["locationBLongitude"],
-        locationBLatitude=inputJSON["locationBLatitude"]
+        locationALatitude=inputJSON["locationALatitude"]
     )
 
     # Build output

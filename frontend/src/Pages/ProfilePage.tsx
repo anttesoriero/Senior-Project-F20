@@ -20,7 +20,9 @@ type userState = {
     profilePicture: string,
     address: string,
     posterRating: number | null,
-    workerRating: number | null
+    workerRating: number | null,
+    interested: string,
+    disinterested: string
 }
 
 type userLatLong = {
@@ -38,7 +40,9 @@ const userInfo = {
     profilePicture: "",
     address: "",
     posterRating: null,
-    workerRating: null
+    workerRating: null,
+    interested: "",
+    disinterested: ""
 }
 
 const ProfilePage = () => {
@@ -86,7 +90,7 @@ const ProfilePage = () => {
             bio: data.bio,
         }
 
-        if (data.address !== undefined) {
+        if (data.address !== '') {
             userInfo['address'] = address
         }
 
@@ -327,98 +331,83 @@ const ProfilePage = () => {
                                     {/* About */}
                                     <h2 style={{ fontWeight: 'bold' }}>About</h2>
                                     <hr />
-                                        {/* Left - About Info */}
-                                        <h4>Bio</h4>
-                                        {user.bio ?
-                                            <p>{user.bio}</p>
+                                    {/* Left - About Info */}
+                                    <h4>Bio</h4>
+                                    {user.bio ?
+                                        <p>{user.bio}</p>
+                                        :
+                                        <p>User bio</p>
+                                    }
+
+                                    {/* <h4>Liked Jobs</h4>
+                                    <p>Selected liked job categories from survey</p> */}
+
+                                    <h4>Contact Info</h4>
+                                    {/* Phone */}
+                                    <Row>
+                                        <Col xs="2"><p>Phone:</p></Col>
+                                        {user ?
+                                            <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                             :
-                                            <p>User bio</p>
+                                            <Col xs="10"><p>###-###-####</p></Col>
+                                        }  
+                                    </Row>
+                                    {/* Email */}
+                                    <Row>
+                                        <Col xs="2"><p>Email:</p></Col>
+                                        {user ?
+                                            <Col xs="10"><p>{user.email}</p></Col>
+                                            :
+                                            <Col xs="10"><p>user@email.com</p></Col>
                                         }
-
-                                        {/* <h4>Liked Jobs</h4>
-                                        <p>Selected liked job categories from survey</p> */}
-
-                                        <h4>Contact Info</h4>
-                                        {/* Phone */}
-                                        <Row>
-                                            <Col xs="2"><p>Phone:</p></Col>
-                                            {user ?
-                                                <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
+                                    </Row>
+                                    {/* Right - Location */}
+                                    {user ?
+                                        <div>
+                                            <h4>Address</h4>
+                                            {user.address === '' ?
+                                                <p>No Address Set</p>
                                                 :
-                                                <Col xs="10"><p>###-###-####</p></Col>
-                                            }  
-                                        </Row>
-                                        {/* Email */}
-                                        <Row>
-                                            <Col xs="2"><p>Email:</p></Col>
-                                            {user ?
-                                                <Col xs="10"><p>{user.email}</p></Col>
-                                                :
-                                                <Col xs="10"><p>user@email.com</p></Col>
+                                                <p>{user.address}</p>
                                             }
-                                        </Row>
-                                        {/* Right - Location */}
-                                            {user ?
-                                                <div>
-                                                    <h4>Address</h4>
-                                                    {user.address === '' ?
-                                                        <p>No Address Set</p>
-                                                        :
-                                                        <p>{user.address}</p>
-                                                    }
-                                                    <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                                    <TileLayer
-                                                        url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                                                        attribution='<a href="/">OddJobs</a>'
-                                                    />
-                                                        <Circle center={[userLat, userLong]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
-                                                            <Tooltip sticky>Radius Users See</Tooltip>
-                                                        </Circle>
-                                                        <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
-                                                    </MapContainer>
-                                                </div> : <div></div>}
-                                    
-                                    {/* History -- NOTE: Styled correctly, but commented since we're not using it yet
-                                    <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
-                                    <hr />
+                                            {/* <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                            <TileLayer
+                                                url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
+                                                attribution='<a href="/">OddJobs</a>'
+                                            />
+                                                <Circle center={[userLat, userLong]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
+                                                    <Tooltip sticky>Radius Users See</Tooltip>
+                                                </Circle>
+                                                <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
+                                            </MapContainer> */}
+                                        </div> : <div></div>
+                                    }
 
-                                    <div id="history_category">
-                                        <Media heading>Category 1 <Badge color="secondary">New</Badge></Media>
-                                        <br />
-                                        <Row>
-                                            <Col xs="6" sm="4">
-                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                            </Col>
-                                            <Col xs="6" sm="4">
-                                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                            </Col>
-                                        </Row>
-                                    </div> */}
+                                    {/* Job Categories */}
+                                    <h4>Job Categories</h4>
+
+                                    {/* Liked Categories */}
+                                    <Row>
+                                        <Col xs="2"><p>Interested:</p></Col>
+                                        {user.email !== '' ?
+                                            <Col xs="10"><p>{user.interested}</p></Col>
+                                            :
+                                            <Col xs="10"><p>Interested</p></Col>
+                                        }
+                                    </Row>
+
+                                    {/* Disliked Categories */}
+                                    <Row>
+                                        <Col xs="2"><p>Disinterested:</p></Col>
+                                        {user.email !== '' ?
+                                            <Col xs="10"><p>{user.disinterested}</p></Col>
+                                            :
+                                            <Col xs="10"><p>Disinterested Categories</p></Col>
+                                        }
+                                    </Row>
                                 </div>
                                 :
                                 <Row> {/* NORMAL */}
-                                    {/* Left - Job History */}
-                                    {/* <Col xs="4">
-                                        <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
-                                        <hr />
-
-                                        <div id="history_category">
-                                            <Media heading>Category 1 <Badge color="secondary">New</Badge></Media>
-                                            <br />
-                                            <Row>
-                                                <Col xs="6" sm="4">
-                                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                                </Col>
-                                                <Col xs="6" sm="4">
-                                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                                </Col>
-                                                <Col sm="4">
-                                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </Col> */}
-
                                     {/* Right - About */}
                                     <Col>
                                         <h2 style={{ fontWeight: 'bold' }}>About</h2>
@@ -432,9 +421,6 @@ const ProfilePage = () => {
                                                     :
                                                     <p>User bio</p>
                                                 }
-
-                                                {/* <h4>Liked Jobs</h4>
-                                                <p>Selected liked job categories from survey</p> */}
 
                                                 <h4>Contact Info</h4>
                                                 {/* Phone */}
@@ -466,7 +452,7 @@ const ProfilePage = () => {
                                                             :
                                                             <p>{user.address}</p>
                                                         }
-                                                        <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                                        {/* <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
                                                         <TileLayer
                                                             url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
                                                             attribution='<a href="/">OddJobs</a>'
@@ -475,8 +461,32 @@ const ProfilePage = () => {
                                                                 <Tooltip sticky>Radius Users See</Tooltip>
                                                             </Circle>
                                                             <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
-                                                        </MapContainer>
-                                                    </div> : <div></div>}
+                                                        </MapContainer> */}
+                                                    </div> : <div></div>
+                                                }
+
+                                                {/* Job Categories */}
+                                                <h4>Job Categories</h4>
+
+                                                {/* Liked Categories */}
+                                                <Row>
+                                                    <Col xs="2"><p>Interested:</p></Col>
+                                                    {user.email !== '' ?
+                                                        <Col xs="10"><p>{user.interested}</p></Col>
+                                                        :
+                                                        <Col xs="10"><p>Interested</p></Col>
+                                                    }
+                                                </Row>
+
+                                                {/* Disliked Categories */}
+                                                <Row>
+                                                    <Col xs="2"><p>Disinterested:</p></Col>
+                                                    {user.email !== '' ?
+                                                        <Col xs="10"><p>{user.disinterested}</p></Col>
+                                                        :
+                                                        <Col xs="10"><p>Disinterested Categories</p></Col>
+                                                    }
+                                                </Row>
                                             </Col>
                                         </Row>
                                     </Col>

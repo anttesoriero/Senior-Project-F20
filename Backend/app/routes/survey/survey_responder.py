@@ -11,8 +11,11 @@ class SurveyResponseHandler:
             10: self.overall_sat,
             11: self.simplicity_sat,
             12: self.visual_sat,
+            13: self.discovery_set,
             15: self.reliability_sat,
-            16: self.trust_sat
+            16: self.trust_sat,
+            26: self.most_interested,
+            27: self.least_interested
         }
         self.survey_mapper = {}
         self.build_survey_map()
@@ -32,6 +35,16 @@ class SurveyResponseHandler:
             "answerB": -1,
             "answerC": 0
         }
+        categoryMap = {
+            "Yard Work": 1,
+            "Transportation": 2,
+            "Cleaning": 3,
+            "Moving": 4,
+            "Care-Taking": 5,
+            "Cooking": 6
+        }
+        self.survey_mapper[26] = categoryMap
+        self.survey_mapper[27] = categoryMap
 
     '''
     Maps input character to a Rating
@@ -54,6 +67,8 @@ class SurveyResponseHandler:
     '''
     def age_set(self, current_user, response):
         current_user.extendedModel.setAge(self.survey_mapper[2].get("answer"+response, None))
+
+
 
     '''
     9 - Change Poster Pref 
@@ -83,6 +98,13 @@ class SurveyResponseHandler:
         current_user.extendedModel.setVisualSatisfaction(rating)
 
     '''
+    13 - Discovery
+    '''
+    def discovery_set(self, current_user, response):
+        resp = self.survey_mapper[13].get("answer" + response, None)
+        current_user.extendedModel.setDiscoveryMethod(resp)
+
+    '''
     15 - Reliability Satisfaction
     '''
     def reliability_sat(self, current_user, response):
@@ -96,5 +118,18 @@ class SurveyResponseHandler:
         rating = self.charToRating(response)
         current_user.extendedModel.setTrustSatisfaction(rating)
 
+    '''
+    26 - Most Interested
+    '''
+    def most_interested(self, current_user, response):
+        resp = self.survey_mapper[26].get("answer" + response, None)
+        current_user.extendedModel.setMostInterestedCategory(resp)
+
+    '''
+    27 - Least Interested
+    '''
+    def least_interested(self, current_user, response):
+        resp = self.survey_mapper[27].get("answer" + response, None)
+        current_user.extendedModel.setLeastInterestedCategory(resp)
 
 survey_response_handler = SurveyResponseHandler()

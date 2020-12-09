@@ -11,6 +11,7 @@ from app import db
 from app.models.credentials_model import Credentials
 from app.models.account_balance_model import AccountBalance
 from app.models.task_model import Task
+from app.models.offer_model import Offer
 from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
@@ -177,6 +178,9 @@ class User(db.Model):
         return recommendedSurvey
 
     def updateWorkerRating(self):
+        '''
+        Update a User's worker rating
+        '''
         # Get all worker ratings for tasks involved in
         tasksWorkerRatings = Task.buildWorkerRatingsForUser(self.userId)
 
@@ -187,8 +191,10 @@ class User(db.Model):
         self.workerRating = meanOfWorkerRatings
         db.session.commit()
 
-
     def updatePosterRating(self):
+        '''
+        Update a User's poster rating
+        '''
         # Get all poster ratings for tasks involved in
         tasksPosterRatings = Task.buildPosterRatingsForUser(self.userId)
 
@@ -290,6 +296,27 @@ class User(db.Model):
         tasks = Task.query.filter_by(posterUserId = userId).all()
         tasks = [task for task in tasks if not task.completed]
         return [task.getPrivateInfo() for task in tasks]
+
+
+    @classmethod
+    def getOffers(cls, userId):
+        '''
+        Gets the Offers for a particular user
+
+        :param userId user_id to get user
+        :return list of task ids for a user
+        '''
+        offers = Offer.query.filter_by(userIdFrom=userId).all()
+
+        output = {}
+        for offer in offers:
+            task = Task.getByTaskId(offer.taskId)
+            if not task.completed:
+                if not offer.taskId in output.keys():
+                    output[offer.taskId] = {"task": task.getPublicInfo(), "myOffers": []}
+                output[offer.taskId]["myOffers"].append(offer.getInfo())
+
+        return output
 
     @classmethod
     def getAll(cls):

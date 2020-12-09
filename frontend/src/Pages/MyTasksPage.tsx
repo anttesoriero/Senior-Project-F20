@@ -228,10 +228,16 @@ const MyTasksPage = () => {
                 {pageState !== "editTask" ?
                 <div>
                     <h1 className="centered">My Tasks</h1>
+                    {pageState === "offers" ?
                     <ButtonGroup className="centered">
-                        <Button onClick={toOffers}>Posted Tasks</Button>
+                        <Button onClick={toOffers} active>Posted Tasks</Button>
                         <Button onClick={toUpcoming}>Upcoming Tasks</Button>
                     </ButtonGroup>
+                    :
+                    <ButtonGroup className="centered">
+                        <Button onClick={toOffers}>Posted Tasks</Button>
+                        <Button onClick={toUpcoming} active>Upcoming Tasks</Button>
+                    </ButtonGroup>}
                 </div>
                 :
                 <div>
@@ -358,7 +364,6 @@ const MyTasksPage = () => {
                                                         <InputGroup>
                                                             <InputGroupAddon addonType="prepend">$</InputGroupAddon>
                                                             <Field type="number" name="recommendedPrice" placeholder={taskInfo.recommendedPrice} min="15" as={Input} required />
-                                                            <InputGroupAddon addonType="append">.00</InputGroupAddon>
                                                         </InputGroup>
                                                     </Col>
                                                 </Row>
@@ -370,14 +375,12 @@ const MyTasksPage = () => {
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="date"><h4>Date *</h4></Label>
-                                                            {/* <Field type="date" name="date" id="date" placeholder={dateTime(taskInfo.startDate)[0]} as={Input} required /> */}
                                                             <Field type="date" name="date" id="date" placeholder={date} as={Input} required />
                                                         </FormGroup>
                                                     </Col>
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="time"><h4>Time *</h4></Label>
-                                                            {/* <Field type="time" name="time" id="time" placeholder={dateTime(taskInfo.startDate)[1]} as={Input} required /> */}
                                                             <Field type="time" name="time" id="time" placeholder={time} as={Input} required />
                                                         </FormGroup>
                                                     </Col>

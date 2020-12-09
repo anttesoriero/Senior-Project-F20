@@ -64,7 +64,7 @@ class Dashboard extends React.Component {
                                     <hr />
                                     <div className="stats">
                                         <i className="fas fa-sync-alt" /> Update Now
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
                                     <hr />
                                     <div className="stats">
                                         <i className="far fa-calendar" /> Last day
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
                                     <hr />
                                     <div className="stats">
                                         <i className="far fa-clock" /> In the last hour
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
@@ -142,7 +142,7 @@ class Dashboard extends React.Component {
                                     <hr />
                                     <div className="stats">
                                         <i className="fas fa-sync-alt" /> Update now
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
@@ -166,7 +166,7 @@ class Dashboard extends React.Component {
                                     <hr />
                                     <div className="stats">
                                         <i className="fa fa-history" /> Updated 3 minutes ago
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
@@ -190,11 +190,11 @@ class Dashboard extends React.Component {
                                         <i className="fa fa-circle text-warning" /> Read{" "}
                                         <i className="fa fa-circle text-danger" /> Deleted{" "}
                                         <i className="fa fa-circle text-gray" /> Unopened
-                  </div>
+                                    </div>
                                     <hr />
                                     <div className="stats">
                                         <i className="fa fa-calendar" /> Number of emails sent
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
@@ -216,11 +216,11 @@ class Dashboard extends React.Component {
                                     <div className="chart-legend">
                                         <i className="fa fa-circle text-info" /> Tesla Model S{" "}
                                         <i className="fa fa-circle text-warning" /> BMW 5 Series
-                  </div>
+                                    </div>
                                     <hr />
                                     <div className="card-stats">
                                         <i className="fa fa-check" /> Data information certified
-                  </div>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         </Col>
