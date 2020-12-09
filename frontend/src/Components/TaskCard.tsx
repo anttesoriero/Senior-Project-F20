@@ -69,7 +69,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         setOpen(true)
     }
 
-    var date = new Date(startDate);
+    // var date = new Date(startDate);
 
     const createOffer = async (data) => {
         setSubmitting(true)
@@ -105,8 +105,25 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         setRediret(true)
     }
 
+    const dateTime = (dateTime) => {
+        const date = new Date(dateTime)
+        const displayDate = date.toString().substring(0, 15)
+        const ampm = Number(date.toISOString().substring(11, 13)) > 11 ? ' PM' : ' AM'
+        const displayTime = date.toISOString().substring(11, 16) + ampm
+        
+        return {
+            defaultDate: date.toISOString().substring(0, 10), 
+            defaultTime: date.toISOString().substring(11, 16),
+            displayDate: displayDate,
+            displayTime: displayTime
+        }
+    }
+
+    const { defaultDate, defaultTime, displayDate, displayTime } = dateTime(startDate)
+
     if (redirect)
         return <Redirect to={'/user/' + poster?.id} />
+    
     return (
         <div>
             <Card>
@@ -123,7 +140,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     </CardSubtitle>
                     {/* For when we get the start date */}
                     {/* {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()} */}
-                    <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {date.toString().substring(0, 15) + ' @ ' + date.toLocaleTimeString()}</CardSubtitle>
+                    <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>
                     <CardText style={{ fontWeight: 'bolder' }}>{description}</CardText>
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
@@ -138,10 +155,17 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     </Button>
                 </ModalHeader>
                 <ModalBody>
-                    <Formik initialValues={{ payment: price, startDate: startDate, time: '06:00', jobDurationMinutes: duration, note: '' }} onSubmit={(data => createOffer(data))}>
+                    <Formik initialValues={{ 
+                            payment: price, 
+                            startDate: defaultDate, 
+                            time: defaultTime, 
+                            jobDurationMinutes: duration, 
+                            note: '' 
+                        }} 
+                        onSubmit={(data => createOffer(data))}
+                    >
                         {() => (
                             <Form >
-
                                 <Label for="payment">Payment *</Label>
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend">$</InputGroupAddon>
