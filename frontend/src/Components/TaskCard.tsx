@@ -40,6 +40,8 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
     const [redirect, setRediret] = useState(false);
     const [serror, setSerror] = useState(false);
     const [oerror, setOerror] = useState(false);
+    const [deerror, setDEerror] = useState(false);
+    const [dlerror, setDLerror] = useState(false);
     const [success, setSuccess] = useState(false);
     const [poster, setPoster] = useState<Poster>();
     const [user, setUser] = useState(0);
@@ -70,16 +72,37 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         setOpen(true)
     }
 
-    // var date = new Date(startDate);
-
+    
     const createOffer = async (data) => {
+        const today = new Date();
+        const startingDate = new Date(startDate)
+        // const date3 = startingDate.setDate(startingDate.getDate() + 7)
+        // const date4 = startingDate.setDate(startingDate.getDate())
+        
+        let submitDE = false;
+        let submitDL = false;
+        let submitO = false;
+        
         setSubmitting(true)
-        //console.log(data)
+        
+        // Don't allow submission if offer date before listing date OR before today
+        if(Date.parse(data.startDate) < Date.parse(startDate) || Date.parse(data.startDate) < Date.parse(String(today))){
+            setDEerror(true)
+            setSubmitting(false)
+        } else {submitDE = true}
+
+        // // Don't allow submission if offer date >7 days after listing date
+        // if(startingDate.setDate(startingDate.getDate()) > startingDate.setDate(startingDate.getDate() + 7)){
+        //     setDLerror(true)
+        //     setSubmitting(false)
+        // } else {submitDL = true}
+
         if (poster?.id === user) {
             setOerror(true)
             setSubmitting(false)
-        }
-        else {
+        } else {submitO = true}
+
+        if(submitDE && submitO) {
             await axios.post(url + 'offer/createOffer',
                 {
                     taskId: id,
@@ -168,7 +191,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                         onSubmit={(data => createOffer(data))}
                     >
                         {() => (
-                            <Form >
+                            <Form>
                                 <Label for="payment">Payment *</Label>
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend">$</InputGroupAddon>
@@ -202,6 +225,8 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                                 <div className='centered'>
                                     {serror ? <p className='error'>There was an error making offer!</p> : <div></div>}
                                     {oerror ? <p className='error'>Can't make an offer on your own task!</p> : <div></div>}
+                                    {deerror ? <p className='error'>Offer date too early before listing date!</p> : <div></div>}
+                                    {dlerror ? <p className='error'>Offer date at least 7 days within listing date!</p> : <div></div>}
                                     {success ? <p className='success'>Offer successfully made!</p> : <div></div>}
                                 </div>
                                 <FormGroup className='centered'>
@@ -219,7 +244,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                                                         </div> 
                                                         : 
                                                         <div>
-                                                            <Button color="info" size='sm' type="button" onClick={() => setOpen(false)} outline>Close</Button>
+                                                            <Button color="info" size='sm' type="button" onClick={() => window.location.reload(false)} outline>Close</Button>
                                                         </div>
                                                     }
                                                     {/* <Button style={{ whiteSpace: 'nowrap' }} color="success" size='sm' data-dismiss="modal" type="submit" outline>Make Offer</Button>
