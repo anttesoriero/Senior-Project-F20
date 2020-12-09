@@ -71,7 +71,6 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
     const launchModal = () => {
         setOpen(true)
     }
-
     
     const createOffer = async (data) => {
         const today = new Date();
@@ -115,8 +114,12 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                 .then(response => {
                     console.log(response)
                     setSubmitting(false)
+                    setDEerror(false)
+                    setDLerror(false)
+                    setSerror(false)
+                    setOerror(false)
                     setSuccess(true)
-                    setOpen(false)
+                    // setOpen(false)
                     return <Redirect to={'/task'}/>
                 })
                 .catch(error => {

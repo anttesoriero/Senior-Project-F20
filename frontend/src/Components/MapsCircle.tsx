@@ -105,7 +105,12 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
                 .then(response => {
                     console.log(response)
                     setSubmitting(false)
+                    setDEerror(false)
+                    setDLerror(false)
+                    setSerror(false)
+                    setOerror(false)
                     setSuccess(true)
+                    // setOpen(false)
                 })
                 .catch(error => {
                     console.log(error)
