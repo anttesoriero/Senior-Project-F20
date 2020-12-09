@@ -276,7 +276,7 @@ const TaskBoard = () => {
                                 {/* Title Search Bar */}
                                 <FormGroup>
                                     <Label for="search"><h5><b>Search&nbsp;</b></h5></Label>{' '}
-                                    <Field type="text" name="title" id="title" placeholder="Task Title" />
+                                    <Field type="text" name="search" id="search" placeholder="Task Title" as={Input}/>
                                 </FormGroup>
 
                                 {/* Select Task Category */}
