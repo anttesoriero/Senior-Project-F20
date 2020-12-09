@@ -171,7 +171,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             <CardBody>
                 <CardSubtitle style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {offerer?.name}</CardSubtitle>
                 <CardSubtitle style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${payment}</CardSubtitle>
-                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiTimerFill />
+                <CardSubtitle style={{ color: '#c48818', fontWeight: 'bolder' }}><RiTimerFill />
                     {jobDurationMinutes / 60 < 1
                         ? ' ' + jobDurationMinutes + ' minutes'
                         : jobDurationMinutes % 60 === 0
