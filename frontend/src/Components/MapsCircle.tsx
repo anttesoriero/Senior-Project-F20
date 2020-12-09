@@ -82,7 +82,7 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
         let submitD = false;
         let submitO = false;
 
-        if(Date.parse(data.startDate) < Date.parse(startDate) || Date.parse(data.startDate) < Date.parse(String(today))){
+        if( ( Date.parse(data.startDate) < Date.parse(startDate) ) || ( Date.parse(data.startDate) < Date.parse(String(today)) ) ) {
             setDEerror(true)
             setSubmitting(false)
         } else {submitD = true}
