@@ -1,6 +1,4 @@
-from app.models.extended_user_model import ExtendedUser
-from app.models.survey_model import Survey
-from app.models.historical_survey_model import HistoricalSurvey
+
 from app.models.task_model import Task
 
 class TaskRecommender:
@@ -32,7 +30,25 @@ class TaskRecommender:
                         latA+1
                     ]
 
-        tasks = [task.getPublicInfo() for task in Task.search(filters, 10, user.userId)]
-        return {"query": filters, "tasks": tasks}
+        if eum.leastInterestedCategory is not None:
+            filters["categoryId"] = {}
+            filters["categoryId"]["!="] = eum.leastInterestedCategory
+
+        tasks = [task.getPublicInfo() for task in Task.search(filters, 100, user.userId)]
+        if len(tasks) == 0:
+            return {"query": {}, "tasks": [task.getPublicInfo() for task in Task.search({}, 10, user.userId)]}
+        elif len(tasks) > 10:
+            most = eum.mostInterestedCategory
+            mostAndRelated = [most]
+            if most is not None:
+                newTasks = []
+                for task in tasks:
+                    if task["categoryId"] in mostAndRelated:
+                        newTasks.append(task)
+                if len(newTasks) > 0:
+                    tasks = newTasks
+            return {"query": filters, "tasks": tasks}
+        else:
+            return {"query": filters, "tasks": tasks}
 
 task_recommender = TaskRecommender()

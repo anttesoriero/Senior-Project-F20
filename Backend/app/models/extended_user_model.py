@@ -3,7 +3,7 @@ Stores specific information for informing the service more
 deeply about the User
 
 @author Matthew Schofield, Jasdip Dhillon
-@version 11.11.2020
+@version 12.9.2020
 '''
 # Module imports
 from app import db
@@ -25,8 +25,6 @@ class ExtendedUser(db.Model):
     trustSatisfaction               | Integer | Nullable
     locationInterestedInALongitude  | Numeric | Nullable
     locationInterestedInALatitude   | Numeric | Nullable
-    locationInterestedInBLongitude  | Numeric | Nullable
-    locationInterestedInBLatitude   | Numeric | Nullable
     tasksPosted                     | Integer
     tasksAccepted                   | Integer
     offersSent                      | Integer
@@ -44,12 +42,14 @@ class ExtendedUser(db.Model):
     trustSatisfaction = db.Column(db.Integer(), nullable=True)
     locationInterestedInALongitude = db.Column(db.Numeric(9, 6), nullable=True)
     locationInterestedInALatitude = db.Column(db.Numeric(9, 6), nullable=True)
-    locationInterestedInBLongitude = db.Column(db.Numeric(9, 6), nullable=True)
-    locationInterestedInBLatitude = db.Column(db.Numeric(9, 6), nullable=True)
     tasksPosted = db.Column(db.Integer())
     tasksAccepted = db.Column(db.Integer())
     offersSent = db.Column(db.Integer())
     pricePerDrivingMinute = db.Column(db.Numeric(10, 2), nullable=True)
+    discoveryMethod = db.Column(db.String(40), nullable=True)
+    mostInterestedCategory = db.Column(db.Integer(), nullable=True)
+    leastInterestedCategory = db.Column(db.Integer(), nullable=True)
+
     # User's reported preference
     posterPreference = db.Column(db.Integer(), nullable=True)
 
@@ -89,12 +89,8 @@ class ExtendedUser(db.Model):
         self.locationInterestedInALatitude = newLatitudeA
         db.session.commit()
 
-    def setLocationInterestedInBLongitude(self, newLongitudeB):
-        self.locationInterestedInBLongitude = newLongitudeB
-        db.session.commit()
-
-    def setLocationInterestedInBLatitude(self, newLatitudeB):
-        self.locationInterestedInBLatitude = newLatitudeB
+    def setDiscovered(self, newDiscoveryMethod):
+        self.discoveryMethod = newDiscoveryMethod
         db.session.commit()
 
     def incTasksPosted(self):
@@ -115,6 +111,14 @@ class ExtendedUser(db.Model):
 
     def setPosterPreference(self, newPosterPreference):
         self.posterPreference = newPosterPreference
+        db.session.commit()
+
+    def setMostInterestedCategory(self, newMostInterestedCategory):
+        self.mostInterestedCategory = newMostInterestedCategory
+        db.session.commit()
+
+    def setLeastInterestedCategory(self, newLeastInterestedCategory):
+        self.leastInterestedCategory = newLeastInterestedCategory
         db.session.commit()
 
     @classmethod

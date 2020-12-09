@@ -31,8 +31,6 @@ class Task(db.Model):
     estimatedDuration  Integer nullable
     locationALongitude
     locationALatitude
-    locationBLongitude
-    locationBLatitude
     '''
     # Column definitions
     taskId = db.Column(db.Integer(), primary_key=True)
@@ -47,8 +45,6 @@ class Task(db.Model):
     posterRating = db.Column(db.Integer(), nullable = True)
     locationALongitude = db.Column(db.Numeric(8,5), nullable=True)
     locationALatitude = db.Column(db.Numeric(8,5), nullable=True)
-    locationBLongitude = db.Column(db.Numeric(8,5), nullable=True)
-    locationBLatitude = db.Column(db.Numeric(8,5), nullable=True)
     completed = db.Column(db.Boolean(), nullable=False)
 
 
@@ -100,8 +96,6 @@ class Task(db.Model):
         # Strip latitude and longitudes to only 2 decimals
         locationALongitude = str("%.2f" % self.locationALongitude) if self.locationALongitude else None
         locationALatitude = str("%.2f" % self.locationALatitude) if self.locationALatitude else None
-        locationBLongitude = str("%.2f" % self.locationBLongitude) if self.locationBLongitude else None
-        locationBLatitude = str("%.2f" % self.locationBLatitude) if self.locationBLatitude else None
 
 
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
@@ -121,8 +115,6 @@ class Task(db.Model):
             "estimatedDurationMinutes": self.estimatedDurationMinutes,
             "locationALongitude": locationALongitude,
             "locationALatitude": locationALatitude,
-            "locationBLongitude": locationBLongitude,
-            "locationBLatitude": locationBLatitude,
             "completed": self.completed
         }
         return output
@@ -155,8 +147,6 @@ class Task(db.Model):
         # Strip latitude and longitudes to only 2 decimals
         locationALongitude = str("%.4f" % self.locationALongitude) if self.locationALongitude else None
         locationALatitude = str("%.4f" % self.locationALatitude) if self.locationALatitude else None
-        locationBLongitude = str("%.4f" % self.locationBLongitude) if self.locationBLongitude else None
-        locationBLatitude = str("%.4f" % self.locationBLatitude) if self.locationBLatitude else None
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
 
         worker = self.getWorker()
@@ -173,8 +163,6 @@ class Task(db.Model):
             "estimatedDurationMinutes": self.estimatedDurationMinutes,
             "locationALongitude": locationALongitude,
             "locationALatitude": locationALatitude,
-            "locationBLongitude": locationBLongitude,
-            "locationBLatitude": locationBLatitude,
             "completed": self.completed,
             "worker": worker
         }
@@ -200,10 +188,6 @@ class Task(db.Model):
             self.locationALongitude = paramDict["locationALongitude"]
         if "locationALatitude" in k:
             self.locationALatitude = paramDict["locationALatitude"]
-        if "locationBLongitude" in k:
-            self.locationBLongitude = paramDict["locationBLongitude"]
-        if "locationBLatitude" in k:
-            self.locationBLatitude = paramDict["locationBLatitude"]
         if "startDate" in k:
             self.startDate = paramDict["startDate"]
         db.session.commit()
@@ -257,7 +241,8 @@ class Task(db.Model):
             },
             "categoryId":
             {
-                "==": int
+                "==": int,
+                "!=": int
             },
             "recommendedPrice":
             {
@@ -266,10 +251,8 @@ class Task(db.Model):
             }
             "location":
             {
-                "within':
-                {
-                    [Lower Lat, Upper Lat, Lower Long, Upper Long]
-                }
+                "within': [Lower Lat, Upper Lat, Lower Long, Upper Long]
+
             }
         }
 
@@ -293,6 +276,8 @@ class Task(db.Model):
         if "categoryId" in queryP.keys():
             if "==" in queryP["categoryId"].keys():
                 filters.append(cls.categoryId == queryP["categoryId"]["=="])
+            if "!=" in queryP["categoryId"].keys():
+                filters.append(cls.categoryId != queryP["categoryId"]["!="])
 
         if "recommendedPrice" in queryP.keys():
             if ">=" in queryP["recommendedPrice"].keys():
@@ -331,12 +316,8 @@ class Task(db.Model):
                 task.recommendedPrice = float(task.recommendedPrice)
             if task.locationALatitude is not None:
                 task.locationALatitude = float(task.locationALatitude)
-            if task.locationBLatitude is not None:
-                task.locationBLatitude = float(task.locationBLatitude)
             if task.locationALongitude is not None:
                 task.locationALongitude = float(task.locationALongitude)
-            if task.locationBLongitude is not None:
-                task.locationBLongitude = float(task.locationBLongitude)
 
         return task
 
@@ -367,8 +348,7 @@ class Task(db.Model):
     @classmethod
     def createTask(cls, user, categoryId, title,
                    description=None, recommendedPrice=None, estimatedDurationMinutes=None,
-                   locationALongitude=None, locationALatitude=None, locationBLongitude=None,
-                    locationBLatitude=None, startDate=None):
+                   locationALongitude=None, locationALatitude=None, startDate=None):
         '''
         Creates a Task
 
@@ -380,8 +360,6 @@ class Task(db.Model):
         :param estimatedDurationMinutes:
         :param locationALongitude:
         :param locationALatitude:
-        :param locationBLongitude:
-        :param locationBLatitude:
         :return: Task created
         '''
         # Convert startDate to correct format
@@ -401,8 +379,6 @@ class Task(db.Model):
             estimatedDurationMinutes=estimatedDurationMinutes,
             locationALongitude=locationALongitude,
             locationALatitude=locationALatitude,
-            locationBLongitude=locationBLongitude,
-            locationBLatitude=locationBLatitude,
             completed=False
         )
 

@@ -10,8 +10,9 @@ from app import db
 class Category(db.Model):
     '''
     Column definitions
-    categoryId   Integer
-    categoryName String
+    categoryId        Integer
+    categoryName      String
+    recommendedHourly Integer
 
     Relational Connections
     task
@@ -19,12 +20,50 @@ class Category(db.Model):
     # Columns
     categoryId = db.Column(db.Integer(),  primary_key=True)
     categoryName = db.Column(db.String(128))
+    recommendedHourly = db.Column(db.Integer())
+    mostRelatedCategoryIdA = db.Column(db.Integer(), nullable=True)
+    mostRelatedCategoryIdB = db.Column(db.Integer(), nullable=True)
+    mostRelatedCategoryIdC = db.Column(db.Integer(), nullable=True)
 
     # Set-up Relational connections
     task = db.relationship('Task', backref="category", uselist=False)
 
     def getName(self):
+        '''
+        Get name of category
+
+        :return: Name of category
+        '''
         return self.categoryName
+
+    def getInfo(self):
+        '''
+        Get information about a category
+
+        :return: Serializable output summary of category object
+        '''
+        # Get most related categories
+        mostRelatedA = None
+        mostRelatedB = None
+        mostRelatedC = None
+        if self.mostRelatedCategoryIdA is not None:
+            mostRelatedA = Category.getByCategoryId(self.mostRelatedCategoryIdA).getName()
+
+        if self.mostRelatedCategoryIdB is not None:
+            mostRelatedB = Category.getByCategoryId(self.mostRelatedCategoryIdB).getName()
+
+        if self.mostRelatedCategoryIdC is not None:
+            mostRelatedC = Category.getByCategoryId(self.mostRelatedCategoryIdC).getName()
+
+        # Return information about category
+        return {
+            "categoryId": self.categoryId,
+            "categoryName": self.categoryName,
+            "recommendedHourly": self.recommendedHourly,
+            "mostRelatedA": mostRelatedA,
+            "mostRelatedB": mostRelatedB,
+            "mostRelatedC": mostRelatedC
+        }
 
     @classmethod
     def empty(cls):

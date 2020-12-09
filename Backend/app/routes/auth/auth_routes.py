@@ -34,17 +34,13 @@ def oauth():
     users_email = inputJSON["email"]
     user = User.getByEmail(users_email)
 
-    print('Hit 1')
-
     # If user exists, just refresh their JWT token
     if user:
         # Generate JWT token
-        print('Hit 2')
         access_token = create_access_token(identity=user.userId, expires_delta=datetime.timedelta(days=1))
         return jsonify({"success": True, "access_token": access_token}), 200
     else:
         # Create user
-        print('Hit 3')
         user = User.createUser(
             email=users_email,
             password=inputJSON["password"],
@@ -66,7 +62,6 @@ def oauth():
             return jsonify(response), 200
         else:
             # Send back error
-            print('Hit 4')
             return jsonify({"success": False}), 400
 
 
