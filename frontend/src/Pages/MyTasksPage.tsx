@@ -245,10 +245,16 @@ const MyTasksPage = () => {
                 {pageState !== "editTask" ?
                 <div>
                     <h1 className="centered">My Tasks</h1>
+                    {pageState === "offers" ?
                     <ButtonGroup className="centered">
-                        <Button onClick={toOffers}>Posted Tasks</Button>
+                        <Button onClick={toOffers} active>Posted Tasks</Button>
                         <Button onClick={toUpcoming}>Upcoming Tasks</Button>
                     </ButtonGroup>
+                    :
+                    <ButtonGroup className="centered">
+                        <Button onClick={toOffers}>Posted Tasks</Button>
+                        <Button onClick={toUpcoming} active>Upcoming Tasks</Button>
+                    </ButtonGroup>}
                 </div>
                 :
                 <div>
