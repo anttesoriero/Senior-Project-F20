@@ -92,20 +92,20 @@ const UserProfile = () => {
             });
     }
 
-    const computeUserRating = () => {
-        const { workerRating, posterRating } = userInfo
-        if (workerRating === null && posterRating === null) {
-            return 'No Ratings Yet'
-        }
-        if (workerRating === null) {
-            return `${posterRating}`
-        }
-        if (posterRating === null) {
-            return `${workerRating}`
-        }
-        const averageRating = (workerRating! + posterRating!) / 2
-        return `${averageRating}`
-    }
+    // const computeUserRating = () => {
+    //     const { workerRating, posterRating } = userInfo
+    //     if (workerRating === null && posterRating === null) {
+    //         return 'No Ratings Yet'
+    //     }
+    //     if (workerRating === null) {
+    //         return `${posterRating}`
+    //     }
+    //     if (posterRating === null) {
+    //         return `${workerRating}`
+    //     }
+    //     const averageRating = (workerRating! + posterRating!) / 2
+    //     return `${averageRating}`
+    // }
 
     const toggle = () => setModal(!modal);
 
@@ -126,7 +126,7 @@ const UserProfile = () => {
                         <Media>
                             <Media left href="#">
                                 {user.profilePicture === "" ?                                                
-                                    <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
+                                    <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                         {initials}
                                     </Button>
                                 :
@@ -140,7 +140,8 @@ const UserProfile = () => {
                                         {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                     </h5>
                                 
-                                    <p>Rating: {computeUserRating()}</p>
+                                    <p>Poster Rating: {user.posterRating === null ? 'No Ratings Yet' : user.posterRating}</p>
+                                    <p>Worker Rating: {user.workerRating === null ? 'No Ratings Yet' : user.workerRating}</p>
                                 </div>
                             </Media>
                         </Media>
@@ -152,7 +153,7 @@ const UserProfile = () => {
                             <Media>
                                 <Media left href="#">
                                     {user.profilePicture === "" ?                                                
-                                        <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
+                                        <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                             {initials}
                                         </Button>
                                     :
@@ -163,10 +164,11 @@ const UserProfile = () => {
                                     <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
                                         <h4>{user.name}</h4>
                                         <h5>Goes by: 
-                                    {/* {user.preferredName} */}
                                             {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                         </h5>
-                                        <p>Rating: {computeUserRating()}</p>
+
+                                        <p>Poster Rating: {user.posterRating === null ? 'No Ratings Yet' : user.posterRating}</p>
+                                        <p>Worker Rating: {user.workerRating === null ? 'No Ratings Yet' : user.workerRating}</p>
                                     </div>
                                 </Media>
                             </Media>

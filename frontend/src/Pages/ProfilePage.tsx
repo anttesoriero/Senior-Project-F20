@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Navigation from '../Components/Navigation';
-import { Container, Row, Col, Button, Media, FormGroup, Input, Label } from 'reactstrap';
+import { Container, Row, Col, Button, Media, FormGroup, Input, Label, PopoverBody, UncontrolledPopover } from 'reactstrap';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
@@ -76,16 +76,21 @@ const ProfilePage = () => {
         const address = data.address + ', ' + data.city + ', ' + data.state + ', ' + data.zip
 
         geocode(geoAddress)
-
-        await axios.put(url + 'me/editInformation', {
+        
+        const userInfo = {
             email: data.email,
             firstName: data.name.split(' ')[0],
             lastName: data.name.split(' ')[1],
             preferredName: data.preferredName,
             phoneNumber: data.phoneNumber,
             bio: data.bio,
-            address: address
-        },
+        }
+
+        if (data.address !== undefined) {
+            userInfo['address'] = address
+        }
+
+        await axios.put(url + 'me/editInformation', userInfo,
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
@@ -99,10 +104,11 @@ const ProfilePage = () => {
     }
 
     const deleteAccount = async () => {
-        await axios.get(url + 'me/deleteAccount',
+        await axios.delete(url + 'me/deleteAccount',
         { headers: { Authorization: `Bearer ${token}`} })
         .then(response => {
             console.log(response.data);
+            window.location.reload(false);
         })
         .catch(error => {
             console.log(error);
@@ -151,9 +157,7 @@ const ProfilePage = () => {
                 key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
             }
         })
-        .then(function(response){
-			console.log(response)
-			
+        .then(function(response){		
 			const results = response.data.results
 			if (results !== undefined && results.length !== 0) {
 				const { lat, lng } = results[0].geometry.location
@@ -169,20 +173,20 @@ const ProfilePage = () => {
         })
     } 
 
-    const computeUserRating = () => {
-        const { workerRating, posterRating } = userInfo
-        if (workerRating === null && posterRating === null) {
-            return 'No Ratings Yet'
-        }
-        if (workerRating === null) {
-            return `${posterRating}`
-        }
-        if (posterRating === null) {
-            return `${workerRating}`
-        }
-        const averageRating = (workerRating! + posterRating!) / 2
-        return `${averageRating}`
-    }
+    // const computeUserRating = () => {
+    //     const { workerRating, posterRating } = userInfo
+    //     if (workerRating === null && posterRating === null) {
+    //         return 'No Ratings Yet'
+    //     }
+    //     if (workerRating === null) {
+    //         return `${posterRating}`
+    //     }
+    //     if (posterRating === null) {
+    //         return `${workerRating}`
+    //     }
+    //     const averageRating = (workerRating! + posterRating!) / 2
+    //     return `${averageRating}`
+    // }
 
     const backToMain = () => {
         setPageState("main profile")
@@ -214,6 +218,10 @@ const ProfilePage = () => {
         getUser();
     }, []);
 
+    // useEffect(() => {
+    //     geocode(user.address);
+    // }, [])
+
     const isMobile = window.innerWidth < 1000;
 
     return (
@@ -225,10 +233,10 @@ const ProfilePage = () => {
                     case 'main profile':
                         const userLat = userLatLong !== undefined ? userLatLong.latitude : 0
                         const userLong = userLatLong !== undefined ? userLatLong.longitude : 0
-                        const userRating = computeUserRating()
+                        // const userRating = computeUserRating()
 
-                        // console.log(userLat)
-                        // console.log(userLong)
+                        console.log(userLat)
+                        console.log(userLong)
                         return (
                             <Container>
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Profile</h1>
@@ -242,7 +250,7 @@ const ProfilePage = () => {
                                             <Media left href="#">
                                                 {user.profilePicture === "" ?                                                
                                                     // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
-                                                    <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
+                                                    <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                                         {initials}
                                                     </Button>
                                                 :
@@ -256,8 +264,9 @@ const ProfilePage = () => {
                                                     <h5>Goes by: 
                                                         {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                                     </h5>
-                                                
-                                                    <p>Rating: {userRating}</p>
+
+                                                    <p>Poster Rating: {user.posterRating === null ? 'No Ratings Yet' : user.posterRating}</p>
+                                                    <p>Worker Rating: {user.workerRating === null ? 'No Ratings Yet' : user.workerRating}</p>
                                                     <p>Account Balance: ${String(user.accountBalance)}</p>
                                                 </div>
                                             </Media>
@@ -276,7 +285,9 @@ const ProfilePage = () => {
                                                 <Media left href="#">
                                                     {user.profilePicture === "" ?                                                
                                                         // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
-                                                        <Button disabled style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30}}>
+                                                        <Button 
+                                                            disabled 
+                                                            style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                                             {initials}
                                                         </Button>
                                                     :
@@ -288,10 +299,11 @@ const ProfilePage = () => {
                                                     <div style={{ marginTop: '-3%', marginLeft: '3%' }}>
                                                         <h4>{user.name}</h4>
                                                         <h5>Goes by: 
-                                                    {/* {user.preferredName} */}
                                                             {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                                         </h5>
-                                                        <p>Rating: {userRating}</p>
+
+                                                        <p>Poster Rating: {user.posterRating === null ? 'No Ratings Yet' : user.posterRating}</p>
+                                                        <p>Worker Rating: {user.workerRating === null ? 'No Ratings Yet' : user.workerRating}</p>
                                                         <p>Account Balance: ${String(user.accountBalance)}</p>
                                                     </div>
                                                 </Media>
@@ -317,7 +329,7 @@ const ProfilePage = () => {
                                     <hr />
                                         {/* Left - About Info */}
                                         <h4>Bio</h4>
-                                        {user ?
+                                        {user.bio ?
                                             <p>{user.bio}</p>
                                             :
                                             <p>User bio</p>
@@ -349,7 +361,7 @@ const ProfilePage = () => {
                                             {user ?
                                                 <div>
                                                     <h4>Address</h4>
-                                                    {user.address.includes('undefined') ?
+                                                    {user.address === '' ?
                                                         <p>No Address Set</p>
                                                         :
                                                         <p>{user.address}</p>
@@ -415,7 +427,7 @@ const ProfilePage = () => {
                                             {/* Left - About Info */}
                                             <Col xs="6">
                                                 <h4>Bio</h4>
-                                                {user ?
+                                                {user.bio ?
                                                     <p>{user.bio}</p>
                                                     :
                                                     <p>User bio</p>
@@ -449,7 +461,7 @@ const ProfilePage = () => {
                                                 {user ?
                                                     <div>
                                                         <h4>Address</h4>
-                                                        {user.address.includes('undefined') ?
+                                                        {user.address === '' ?
                                                             <p>No Address Set</p>
                                                             :
                                                             <p>{user.address}</p>
@@ -608,8 +620,15 @@ const ProfilePage = () => {
                                                 <Col>
                                                     <h3 style={{ fontWeight: 'bold' }}>Delete Account</h3>
                                                     <hr />
-                                                    <Button className="centered" color="danger" size="sm">Delete Account</Button>{deleteAccount}
+                                                    {/* <Button className="centered" color="danger" size="sm" >Delete Account</Button> */}
+                                                    <Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete Account</Button>
                                                 </Col>
+                                                <UncontrolledPopover placement="bottom" target="confirmDelete" style={{padding: 10}}>
+                                                    <h3>Are you sure?</h3>
+                                                    <PopoverBody>This cannot be undone</PopoverBody>
+                                                    <Button color="danger" size="sm" type="submit" onClick={deleteAccount}>Confirm</Button>
+                                                    <br />
+                                                </UncontrolledPopover>
                                             </Row>
 
                                             <br />
