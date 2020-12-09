@@ -215,7 +215,7 @@ const TaskBoard = () => {
 
                     {/* Map */}
                     {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
-                    <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={5} scrollWheelZoom={true} >
+                    <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={10} scrollWheelZoom={true} >
                         {/* <ChangeView center={tempCenter}/> */}
                         <TileLayer
                             url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A"
@@ -357,7 +357,7 @@ const TaskBoard = () => {
 
                         <Col xs="9">
                             {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
-                            <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={12} scrollWheelZoom={true} >
+                            <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={10} scrollWheelZoom={true} >
                                 {/* Need to change "center" to users location - center{[userLat, userLong]} */}
                                 <ChangeView />
                                 <TileLayer
