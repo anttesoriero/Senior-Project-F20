@@ -207,15 +207,26 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                                 <FormGroup className='centered'>
                                     <Row >
                                         <Col>
-                                            {submitting ? <Button color="success" size='sm' outline><Spinner size='sm' />&nbsp;Creating offer...</Button> :
-                                                <Button style={{ whiteSpace: 'nowrap' }} color="success" size='sm' data-dismiss="modal" type="submit" outline>
-                                                    Make Offer
-                                            </Button>}&nbsp;
-                                        </Col>
-                                        <Col>
-                                            <Button color="danger" size='sm' type="button" onClick={() => setOpen(false)} outline>
-                                                Cancel
-                                            </Button>
+                                            {submitting ? 
+                                                <Button color="success" size='sm' outline><Spinner size='sm' />&nbsp;Creating offer...</Button> 
+                                                :
+                                                <div>
+                                                    {!success ? 
+                                                        <div>
+                                                            <Button style={{ whiteSpace: 'nowrap' }} color="success" size='sm' data-dismiss="modal" type="submit" outline>Make Offer</Button>
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <Button color="danger" size='sm' type="button" onClick={() => setOpen(false)} outline>Cancel</Button>
+                                                        </div> 
+                                                        : 
+                                                        <div>
+                                                            <Button color="info" size='sm' type="button" onClick={() => setOpen(false)} outline>Close</Button>
+                                                        </div>
+                                                    }
+                                                    {/* <Button style={{ whiteSpace: 'nowrap' }} color="success" size='sm' data-dismiss="modal" type="submit" outline>Make Offer</Button>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <Button color="danger" size='sm' type="button" onClick={() => setOpen(false)} outline>Cancel</Button> */}
+                                                </div>
+                                            }
                                         </Col>
                                     </Row>
                                 </FormGroup>
