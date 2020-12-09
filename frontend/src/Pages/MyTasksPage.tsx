@@ -269,7 +269,7 @@ const MyTasksPage = () => {
                                             </Col>
                                         </Row>
 
-                                        <UncontrolledPopover placement="bottom" target="confirmDelete">
+                                        <UncontrolledPopover style={{padding: 10}} placement="bottom" target="confirmDelete">
                                             <h3>Are you sure?</h3>
                                             <PopoverBody>This cannot be undone</PopoverBody>
                                             <Button color="danger" size="sm" type="submit" onClick={() => deleteTask(task.taskId)}>Confirm</Button>
