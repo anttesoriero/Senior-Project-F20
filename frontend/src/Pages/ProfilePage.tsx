@@ -370,7 +370,7 @@ const ProfilePage = () => {
                                                 :
                                                 <p>{user.address}</p>
                                             }
-                                            <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
+                                            {/* <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
                                             <TileLayer
                                                 url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
                                                 attribution='<a href="/">OddJobs</a>'
@@ -379,9 +379,32 @@ const ProfilePage = () => {
                                                     <Tooltip sticky>Radius Users See</Tooltip>
                                                 </Circle>
                                                 <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
-                                            </MapContainer>
+                                            </MapContainer> */}
                                         </div> : <div></div>
                                     }
+
+                                    {/* Job Categories */}
+                                    <h4>Job Categories</h4>
+
+                                    {/* Liked Categories */}
+                                    <Row>
+                                        <Col xs="2"><p>Interested:</p></Col>
+                                        {user.email !== '' ?
+                                            <Col xs="10"><p>{user.interested}</p></Col>
+                                            :
+                                            <Col xs="10"><p>Interested</p></Col>
+                                        }
+                                    </Row>
+
+                                    {/* Disliked Categories */}
+                                    <Row>
+                                        <Col xs="2"><p>Disinterested:</p></Col>
+                                        {user.email !== '' ?
+                                            <Col xs="10"><p>{user.disinterested}</p></Col>
+                                            :
+                                            <Col xs="10"><p>Disinterested Categories</p></Col>
+                                        }
+                                    </Row>
                                 </div>
                                 :
                                 <Row> {/* NORMAL */}
