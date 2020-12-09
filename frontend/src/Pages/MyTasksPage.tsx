@@ -393,14 +393,12 @@ const MyTasksPage = () => {
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="date"><h4>Date *</h4></Label>
-                                                            {/* <Field type="date" name="date" id="date" placeholder={dateTime(taskInfo.startDate)[0]} as={Input} required /> */}
                                                             <Field type="date" name="date" id="date" placeholder={date} as={Input} required />
                                                         </FormGroup>
                                                     </Col>
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="time"><h4>Time *</h4></Label>
-                                                            {/* <Field type="time" name="time" id="time" placeholder={dateTime(taskInfo.startDate)[1]} as={Input} required /> */}
                                                             <Field type="time" name="time" id="time" placeholder={time} as={Input} required />
                                                         </FormGroup>
                                                     </Col>
