@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, ButtonGroup, PopoverBody, UncontrolledPopover } from 'reactstrap';
+import { Container, Row, Col, Button, ButtonGroup, PopoverBody, UncontrolledPopover, FormGroup, Input, Label, InputGroup, InputGroupAddon } from 'reactstrap';
 import APIContext from '../Contexts/APIContext';
 import Footer from '../Components/Footer';
 import Navigation from '../Components/Navigation';
 import axios from 'axios';
 import OfferCard from '../Components/OfferCard';
+import { Formik, Form, Field } from 'formik';
+import StateSelector from '../Components/StateSelector';
 
 type task = {
     accepted: boolean,
@@ -35,6 +37,33 @@ type offer = {
     userIdFrom: number
 }
 
+type taskState = {
+    categoryId: number,
+    title: string,
+    description: string,
+    recommendedPrice: number,
+    estimatedDurationMinutes: number,
+    locationALongitude: number,
+    locationALatitude: number,
+    startDate: string
+    // locationBLongitude: number,
+    // locationBLatitude: number
+}
+
+const taskFields = {
+    // Default initial values for the task fields
+    categoryId: 1,
+    title: "",
+    description: "",
+    recommendedPrice: 0,
+    estimatedDurationMinutes: 0,
+    locationALongitude: 0,
+    locationALatitude: 0,
+    startDate: ""
+    // locationBLongitude: 15,
+    // locationBLatitude: 15
+}
+
 // type deleteInfo = {
 //     taskId: string | number
 // }
@@ -54,6 +83,8 @@ const MyTasksPage = () => {
     const [tasks, setTasks] = useState(a);
     const [offers, setOffers] = useState(b);
     const [upcomingTasks, setUpcomingTasks] = useState(c);
+    const [taskInfo, setTaskInfo] = useState<taskState>(taskFields);
+    const [serror, setSerror] = useState<boolean>(false);
 
     const getTaskIds = async () => {
         await axios.get(url + 'me/getPostedTasks',
@@ -102,6 +133,65 @@ const MyTasksPage = () => {
             });
     }
 
+    const editTask = async (id) => {
+        toEditTask()
+        console.log('Info: ', taskInfo)
+
+        await axios.patch(url + 'task/updateTask', {
+            categoryId: taskInfo?.categoryId,
+            title: taskInfo?.title,
+            description: taskInfo?.description,
+            recommendedPrice: taskInfo?.recommendedPrice,
+            estimatedDurationMinutes: taskInfo?.estimatedDurationMinutes,
+            locationALatitude: taskInfo?.locationALatitude,
+            locationALongitude: taskInfo?.locationALongitude,
+            startDate: taskInfo?.startDate
+        },
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+                setSerror(true);
+            });
+    }
+
+    const geocode = async (data) => {
+        var location = data.address + data.city + data.state + data.zip;
+        console.log('data: ', data)
+        await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+            params: {
+                address: location,
+                key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
+            }
+        })
+        .then(function(response){
+			console.log(response)
+			
+			const results = response.data.results
+			if (results !== undefined && results.length !== 0) {
+				const { lat, lng } = results[0].geometry.location
+             
+				setTaskInfo({
+                    categoryId: data.categoryId,
+                    title: data.title,
+                    description: data.description,
+                    recommendedPrice: data.recommendedPrice,
+                    estimatedDurationMinutes: data.estimatedDurationMinutes,
+                    locationALongitude: lng,
+                    locationALatitude: lat,
+                    startDate: data.date + ' ' + data.time
+                })
+            }
+			else {
+				throw String("That address doesn't exist!")
+			}
+        })
+    } 
+
     const getUpcomingTasks = async () => {
         await axios.get(url + 'me/',
             { headers: { Authorization: `Bearer ${token}` } })
@@ -134,15 +224,32 @@ const MyTasksPage = () => {
         setPageState("upcoming")
     }
 
+    const toEditTask = () => {
+        setPageState("editTask")
+    }
+
+    const dateTime = (dateTime) => {
+        return [dateTime.toString().substring(0, 15), dateTime.toLocaleTimeString()]
+    }
+
     return (
         <div>
             <Navigation />
             <Container>
-                <h1 className="centered">My Tasks</h1>
-                <ButtonGroup className="centered">
-                    <Button onClick={toOffers}>Posted Tasks</Button>
-                    <Button onClick={toUpcoming}>Upcoming Tasks</Button>
-                </ButtonGroup>
+                {pageState !== "editTask" ?
+                <div>
+                    <h1 className="centered">My Tasks</h1>
+                    <ButtonGroup className="centered">
+                        <Button onClick={toOffers}>Posted Tasks</Button>
+                        <Button onClick={toUpcoming}>Upcoming Tasks</Button>
+                    </ButtonGroup>
+                </div>
+                :
+                <div>
+                    <h1 className="centered">Edit Task</h1>
+                </div>
+                }
+                
 
                 {(() => {
                     switch (pageState) {
@@ -156,7 +263,10 @@ const MyTasksPage = () => {
                                     <div>
                                         <Row>
                                             <Col xs="auto"><h5>{task.title}</h5></Col>
-                                            <Col><Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete Task</Button></Col>
+                                            <Col xs="auto">
+                                                <Button color="info" size="sm" id="editTask" type="button" onClick={() => editTask(task.taskId)} outline>Edit</Button>&nbsp;&nbsp;
+                                                <Button color="danger" size="sm" id="confirmDelete" type="button" outline>Delete</Button>
+                                            </Col>
                                         </Row>
 
                                         <UncontrolledPopover placement="bottom" target="confirmDelete">
@@ -210,8 +320,140 @@ const MyTasksPage = () => {
                                 </div>
                             )
 
-                        default:
-                            return null;
+                        case 'editTask':
+                            return (
+                                <Container>
+                                    <div className="centered">
+                                        <Formik initialValues={{ categoryId: 0, title: '', description: '', recommendedPrice: 0, estimatedDurationMinutes: 60 }} onSubmit={data => geocode(data)} >
+                                            <Form>
+                                                {/* Row 1 - Name & Category */}
+                                                <Row>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="title"><h4>Task Title *</h4></Label>
+                                                            <Field type="text" name="title" placeholder={taskInfo.title} as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="categoryId"><h4>Task Category *</h4></Label>
+                                                            <Field type="select" name="categoryId" as={Input} selected={taskInfo.categoryId} required>
+                                                                {/* "Select Category" is value=1 because "Yard Work" 
+                                                                    keeps displaying first even though it's second.
+                                                                    When calling the endpoint, the categoryId is substracted by one. */}
+                                                                <option value="0" disabled>Select Category</option>
+                                                                <option value="1">Yard Work</option>
+                                                                <option value="2">Transportation</option>
+                                                                <option value="3">Cleaning</option>
+                                                                <option value="4">Moving</option>
+                                                                <option value="5">Care-Taking</option>
+                                                                <option value="6">Cooking</option>
+                                                                <option value="7">Other</option>
+                                                            </Field>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                {/* Row 2 - Description & Pay Rate */}
+                                                <Row>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="taskDesc"><h4>Task Description</h4></Label>
+                                                            <Field type="textarea" name="description" placeholder={taskInfo.description} as={Input} />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col>
+                                                        <Label className="centered" for="recommendedPrice"><h4>Pay Rate *</h4></Label>
+                                                        <InputGroup>
+                                                            <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                                            <Field type="number" name="recommendedPrice" placeholder={taskInfo.recommendedPrice} min="15" as={Input} required />
+                                                            <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                                        </InputGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                <hr />
+
+                                                {/* Row 3 - Date & Time */}
+                                                <Row>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="date"><h4>Date *</h4></Label>
+                                                            {/* <Field type="date" name="date" id="date" placeholder={dateTime(taskInfo.startDate)[0]} as={Input} required /> */}
+                                                            <Field type="date" name="date" id="date" placeholder="Date" as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="time"><h4>Time *</h4></Label>
+                                                            {/* <Field type="time" name="time" id="time" placeholder={dateTime(taskInfo.startDate)[1]} as={Input} required /> */}
+                                                            <Field type="time" name="time" id="time" placeholder="Time" as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                {/* Row 3.5 - DateTimePicker & Extra */}
+                                                <Row>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="estimatedDurationMinutes"><h4>Duration in Minutes *</h4></Label>
+                                                            <Field type="number" name="estimatedDurationMinutes" id="estimatedDurationMinutes" placeholder={taskInfo.estimatedDurationMinutes} min="15" as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                {/* Row 4 - Address 1 & Address 2 */}
+                                                <Row>
+                                                    <Col>
+                                                        <FormGroup>
+                                                            <Label for="address"><h4>Address *</h4></Label>
+                                                            <Field type="text" name="address" id="address" placeholder="Address" as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                {/* Row 5 - City - State - Zip */}
+                                                <Row>
+                                                    <Col md="6">
+                                                        <FormGroup>
+                                                            <Label for="city"><h4>City *</h4></Label>
+                                                            <Field type="text" name="city" id="city" placeholder="City" as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md="4">
+                                                        <FormGroup>
+                                                            <Label for="state"><h4>State *</h4></Label>
+                                                            <StateSelector />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md="2">
+                                                        <FormGroup>
+                                                            <Label for="zip"><h4>Zip *</h4></Label>
+                                                            <Field type="text" name="zip" id="zip" placeholder="Zipcode" as={Input} required />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+                                                <div className='centered'>
+                                                    <p>* are required fields</p> <br />
+                                                </div>
+                                                <div className='centered'>
+                                                    {serror ? <p className='error'>There was an error submitting the task!</p> : <div></div>}
+                                                </div>
+
+                                                {/* Bottom Buttons */}
+                                                <Row className='centered'>
+                                                    <div className="centered"><Button color="primary" size="md" type="submit" >Save Changes</Button></div>
+                                                    &nbsp;&nbsp;
+                                                    <div className="centered"><Button color="secondary" size="md" type="button" onClick={toOffers}>Cancel</Button></div>
+                                                </Row>
+                                            </Form>
+                                        </Formik>
+                                    </div>
+                                </Container>
+                            )
+                        
+                            default:
+                                return null;
                     }
                 })()}
 
