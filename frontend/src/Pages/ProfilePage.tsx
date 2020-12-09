@@ -9,6 +9,8 @@ import { TileLayer, MapContainer, Circle, Marker, Tooltip } from 'react-leaflet'
 import { LatLngTuple } from 'leaflet';
 import APIContext from '../Contexts/APIContext';
 import StateSelector from '../Components/StateSelector';
+import PostTasksCarousel from './../Components/PostedTasksCarousel';
+import TasksCompletedCarousel from './../Components/TasksCompletedCarousel';
 
 type userState = {
     email: string,
@@ -21,13 +23,8 @@ type userState = {
     address: string,
     posterRating: number | null,
     workerRating: number | null,
-    interested: string,
-    disinterested: string
-}
-
-type userLatLong = {
-    latitude: number,
-    longitude: number
+    mostInterestedCategory: string,
+    leastInterestedCategory: string
 }
 
 const userInfo = {
@@ -41,8 +38,8 @@ const userInfo = {
     address: "",
     posterRating: null,
     workerRating: null,
-    interested: "",
-    disinterested: ""
+    mostInterestedCategory: "",
+    leastInterestedCategory: ""
 }
 
 const ProfilePage = () => {
@@ -50,8 +47,9 @@ const ProfilePage = () => {
     const token = localStorage.getItem('access_token');
 
     const [user, setUser] = useState<userState>(userInfo);
+    const [pastTasks, setPastTasks] = useState();
     const [initials, setInitials] = useState<String>("");
-    const [userLatLong, setUserLatLong] = useState<userLatLong>();
+    // const [userLatLong, setUserLatLong] = useState<userLatLong>();
     const [passwordError, setPasswordError] = useState<String>("");
     const [pageState, setPageState] = useState<String>("main profile");
 
@@ -67,7 +65,6 @@ const ProfilePage = () => {
                 const initials = firstName.charAt(0) + lastName.charAt(0)
                 setUser(response.data)
                 setInitials(initials)
-                console.log(userLatLong)
             })
             .catch(error => {
                 console.log(error);
@@ -79,7 +76,7 @@ const ProfilePage = () => {
         const geoAddress = data.address + data.city + data.state + data.zip
         const address = data.address + ', ' + data.city + ', ' + data.state + ', ' + data.zip
 
-        geocode(geoAddress)
+        // geocode(geoAddress)
         
         const userInfo = {
             email: data.email,
@@ -146,36 +143,36 @@ const ProfilePage = () => {
         }
     }
 
-    const geocode = async (data) => {
-        if (data === undefined) {
-            setUserLatLong({
-                latitude: 0,
-                longitude: 0
-            })
-            return
-        }
-        // var location = data.address + data.city + data.state + data.zip;
-        await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-            params: {
-                address: data,
-                key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
-            }
-        })
-        .then(function(response){		
-			const results = response.data.results
-			if (results !== undefined && results.length !== 0) {
-				const { lat, lng } = results[0].geometry.location
+    // const geocode = async (data) => {
+    //     if (data === undefined) {
+    //         setUserLatLong({
+    //             latitude: 0,
+    //             longitude: 0
+    //         })
+    //         return
+    //     }
+    //     // var location = data.address + data.city + data.state + data.zip;
+    //     await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+    //         params: {
+    //             address: data,
+    //             key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
+    //         }
+    //     })
+    //     .then(function(response){		
+	// 		const results = response.data.results
+	// 		if (results !== undefined && results.length !== 0) {
+	// 			const { lat, lng } = results[0].geometry.location
              
-				setUserLatLong({
-                    latitude: lat,
-                    longitude: lng
-                })
-            }
-			else {
-				throw "That address doesn't exist!"
-			}
-        })
-    } 
+	// 			setUserLatLong({
+    //                 latitude: lat,
+    //                 longitude: lng
+    //             })
+    //         }
+	// 		else {
+	// 			throw "That address doesn't exist!"
+	// 		}
+    //     })
+    // } 
 
     // const computeUserRating = () => {
     //     const { workerRating, posterRating } = userInfo
@@ -222,10 +219,6 @@ const ProfilePage = () => {
         getUser();
     }, []);
 
-    // useEffect(() => {
-    //     geocode(user.address);
-    // }, [])
-
     const isMobile = window.innerWidth < 1000;
 
     return (
@@ -235,12 +228,6 @@ const ProfilePage = () => {
             {(() => {
                 switch (pageState) {
                     case 'main profile':
-                        const userLat = userLatLong !== undefined ? userLatLong.latitude : 0
-                        const userLong = userLatLong !== undefined ? userLatLong.longitude : 0
-                        // const userRating = computeUserRating()
-
-                        console.log(userLat)
-                        console.log(userLong)
                         return (
                             <Container>
                                 <h1 id="centered" style={{ fontWeight: 'bold' }}>Profile</h1>
@@ -390,7 +377,7 @@ const ProfilePage = () => {
                                     <Row>
                                         <Col xs="2"><p>Interested:</p></Col>
                                         {user.email !== '' ?
-                                            <Col xs="10"><p>{user.interested}</p></Col>
+                                            <Col xs="10"><p>{user.mostInterestedCategory}</p></Col>
                                             :
                                             <Col xs="10"><p>Interested</p></Col>
                                         }
@@ -400,13 +387,34 @@ const ProfilePage = () => {
                                     <Row>
                                         <Col xs="2"><p>Disinterested:</p></Col>
                                         {user.email !== '' ?
-                                            <Col xs="10"><p>{user.disinterested}</p></Col>
+                                            <Col xs="10"><p>{user.leastInterestedCategory}</p></Col>
                                             :
                                             <Col xs="10"><p>Disinterested Categories</p></Col>
                                         }
                                     </Row>
+
+                                    <Row>
+                                        <Col>
+                                            <h2 style={{ fontWeight: 'bold' }}>Posted Tasks</h2>
+                                            <hr />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <PostTasksCarousel />
+                                    </Row>
+                                                    
+                                    <Row>
+                                        <Col>
+                                            <h2 style={{ fontWeight: 'bold' }}>Tasks Completed</h2>
+                                            <hr />
+                                        </Col>
+                                    </Row>                                
+                                    <Row>
+                                        <TasksCompletedCarousel />
+                                    </Row>
                                 </div>
                                 :
+                                <div>
                                 <Row> {/* NORMAL */}
                                     {/* Right - About */}
                                     <Col>
@@ -472,7 +480,7 @@ const ProfilePage = () => {
                                                 <Row>
                                                     <Col xs="2"><p>Interested:</p></Col>
                                                     {user.email !== '' ?
-                                                        <Col xs="10"><p>{user.interested}</p></Col>
+                                                        <Col xs="10"><p>{user.mostInterestedCategory}</p></Col>
                                                         :
                                                         <Col xs="10"><p>Interested</p></Col>
                                                     }
@@ -482,7 +490,7 @@ const ProfilePage = () => {
                                                 <Row>
                                                     <Col xs="2"><p>Disinterested:</p></Col>
                                                     {user.email !== '' ?
-                                                        <Col xs="10"><p>{user.disinterested}</p></Col>
+                                                        <Col xs="10"><p>{user.leastInterestedCategory}</p></Col>
                                                         :
                                                         <Col xs="10"><p>Disinterested Categories</p></Col>
                                                     }
@@ -490,7 +498,31 @@ const ProfilePage = () => {
                                             </Col>
                                         </Row>
                                     </Col>
-                                </Row>}
+                                    
+                                </Row>
+                                <br />
+                                <Row>
+                                    <Col>
+                                        <h2 style={{ fontWeight: 'bold' }}>Posted Tasks</h2>
+                                        <hr />
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <PostTasksCarousel />
+                                </Row>
+                                                
+                                <Row>
+                                    <Col>
+                                        <h2 style={{ fontWeight: 'bold' }}>Tasks Completed</h2>
+                                        <hr />
+                                    </Col>
+                                </Row>                                
+                                <Row>
+                                    <TasksCompletedCarousel />
+                                </Row>
+                                </div>
+                                
+                                }
                             </Container>
                         )
 
