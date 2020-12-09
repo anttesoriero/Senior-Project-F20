@@ -13,11 +13,6 @@ const SignIn = ({ history }: RouteComponentProps) => {
     const [serror, setSerror] = useState(false);
     const [oauthError, setOAuthError] = useState(false);
 
-    // function openInNewTab(path) {
-    //     var win = window.open(path, '_blank');
-    //     win?.focus();
-    // }
-    //
     const oauth = (response) => {
         const { email, familyName, givenName, googleId, imageUrl } = response.profileObj
         setSubmitting(true);
