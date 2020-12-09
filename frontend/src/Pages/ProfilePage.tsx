@@ -86,7 +86,7 @@ const ProfilePage = () => {
             bio: data.bio,
         }
 
-        if (data.address !== undefined) {
+        if (data.address !== '') {
             userInfo['address'] = address
         }
 
