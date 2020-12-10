@@ -86,11 +86,11 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         
         setSubmitting(true)
         
-        // Don't allow submission if offer date before listing date
-        if(Date.parse(data.startDate) < Date.parse(startDate)){
-            setDEerror(true)
-            setSubmitting(false)
-        } else {submitDE = true}
+        // Don't allow submission if offer date before listing date ----
+        // if(Date.parse(data.startDate) < Date.parse(startDate)){
+        //     setDEerror(true)
+        //     setSubmitting(false)
+        // } else {submitDE = true}
 
         // Don't allow submission if offer date before today
         if(Date.parse(data.startDate) < Date.parse(String(today))){
@@ -109,7 +109,8 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
             setSubmitting(false)
         } else {submitO = true}
 
-        if(submitDE && submitDY && submitO) {
+        // if(submitDE && submitDY && submitO) {
+        if(submitDY && submitO) {
             await axios.post(url + 'offer/createOffer',
                 {
                     taskId: id,
