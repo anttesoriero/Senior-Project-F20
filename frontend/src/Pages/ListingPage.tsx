@@ -166,7 +166,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                     <InputGroup>
                                         <InputGroupAddon addonType="prepend">$</InputGroupAddon>
                                         <Field type="number" name="recommendedPrice" placeholder="60" min="15" max="1000" as={Input} required />
-                                        <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                        {/* <InputGroupAddon addonType="append">.00</InputGroupAddon> */}
                                     </InputGroup>
                                 </Col>
                             </Row>
