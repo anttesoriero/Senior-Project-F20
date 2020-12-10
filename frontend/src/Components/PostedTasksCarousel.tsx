@@ -9,6 +9,7 @@ import {
     Card, CardImg, CardText, CardBody,
     CardTitle, CardSubtitle, Button
 } from 'reactstrap';
+import { RiMoneyDollarBoxFill, RiTimerFill, RiCalendarFill } from 'react-icons/ri'
 import APIContext from '../Contexts/APIContext';
 
 type taskFields = {
@@ -110,15 +111,15 @@ const PostedTasksCarousel = () => {
             >
                 <Card style={{justifyContent: 'center', alignItems: 'center', width: 300, height: 200}} color="primary">
                     <CardBody>
-                    <CardTitle tag="h4">{item.task.title}</CardTitle>
-                    <CardSubtitle tag="h6">{item.task.description}</CardSubtitle>
-                    <CardSubtitle tag="h6">{dateTime(item.offer.startDate).displayDate + ' ' + dateTime(item.offer.startDate).displayTime}</CardSubtitle>
-                    <CardSubtitle tag="h6">${item.offer.payment}</CardSubtitle>
-                    <CardSubtitle tag="h6">{item.offer.jobDurationMinutes / 60 < 1
-                            ? ' ' + item.offer.jobDurationMinutes + ' minutes'
-                            : item.offer.jobDurationMinutes % 60 === 0
+                        <CardTitle tag="h4">{item.task.title}</CardTitle>
+                        <CardSubtitle tag="h6"><RiMoneyDollarBoxFill /> ${item.offer.payment}</CardSubtitle>
+                        <CardSubtitle tag="h6"><RiTimerFill /> {item.offer.jobDurationMinutes / 60 < 1
+                                ? ' ' + item.offer.jobDurationMinutes + ' minutes'
+                                : item.offer.jobDurationMinutes % 60 === 0
                                 ? ' ' + item.offer.jobDurationMinutes / 60 + ' hour(s)'
                                 : ' ' + Math.floor(item.offer.jobDurationMinutes / 60) + ' hour(s) ' + item.offer.jobDurationMinutes % 60 + ' minutes'}</CardSubtitle>
+                        <CardSubtitle tag="h6"><RiCalendarFill /> {dateTime(item.offer.startDate).displayDate + ' ' + dateTime(item.offer.startDate).displayTime}</CardSubtitle>
+                        <CardSubtitle tag="h6">{item.task.description}</CardSubtitle>
                     </CardBody>
                 </Card>
             </CarouselItem>
