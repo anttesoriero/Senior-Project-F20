@@ -189,12 +189,12 @@ const TaskBoard = () => {
                                     {/* Select Min/Max Price */}
                                     <FormGroup>
                                         <Label for="minPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Min Price&nbsp;</b> </h5></Label>
-                                        <Field type="text" name="minPrice" id="minPrice" placeholder="$" as={Input} />
+                                        <Field type="text" name="minPrice" id="minPrice" placeholder="$" min="15" max="999" style={{width: 50}} as={Input} />
                                     </FormGroup>
 
                                     <FormGroup>
                                         <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label>
-                                        <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" as={Input} />
+                                        <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" min="15" max="999" style={{width: 50}} as={Input} />
                                     </FormGroup>
 
                                     <FormGroup>
@@ -296,12 +296,12 @@ const TaskBoard = () => {
                                 {/* Select Min/Max Price */}
                                 <FormGroup>
                                     <Label for="minPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Min Price&nbsp;</b> </h5></Label>
-                                    <Field type="text" name="minPrice" id="minPrice" placeholder="$" as={Input} />
+                                    <Field type="text" name="minPrice" id="minPrice" placeholder="$" min="15" max="999" style={{width: 50}} as={Input} />
                                 </FormGroup>
 
                                 <FormGroup>
                                     <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label>
-                                    <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" as={Input} />
+                                    <Field type="text" name="maxPrice" id="maxPrice" placeholder="$$$" min="15" max="999" style={{width: 50}} as={Input} />
                                 </FormGroup>
 
                                 <FormGroup>
