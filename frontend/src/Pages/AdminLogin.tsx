@@ -28,7 +28,7 @@ const AdminLogin = ({ history }: RouteComponentProps) => {
             .then(function (response) {
                 setSubmitting(false);
                 sessionStorage.setItem('admin_pass', data.password);
-                history.push('/adminDash')
+                history.push('/adminUsers')
                 console.log(response);
             })
             .catch(function (error) {
