@@ -320,9 +320,9 @@ const TaskBoard = () => {
                     </div>
 
                     {/* Page */}
-                    <Row >
+                    <Row style={{height: '85vh'}}>
                         {/* Left - TaskCards */}
-                        <Col xs="3" style={{ maxHeight: window.innerWidth / 2, overflow: "scroll" }}>
+                        <Col xs="3" style={{ height: '85vh', overflowY: "scroll" }}>
                             <Container >
                                 <h3 id="top" className="centered" style={{ fontWeight: 'bolder' }}>Tasks</h3>
                                 <hr />
@@ -350,7 +350,7 @@ const TaskBoard = () => {
 
                         <Col xs="9">
                             {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
-                            <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={10} scrollWheelZoom={true} >
+                            <MapContainer className="leaflet-container" center={tempCenter} style={{ height: '85vh' }} zoom={10} scrollWheelZoom={true} >
                                 {/* Need to change "center" to users location - center{[userLat, userLong]} */}
                                 <ChangeView />
                                 <TileLayer

@@ -77,7 +77,7 @@ const UpcomingTask = () => {
                         </Col>
                     </Row>
 
-                    <ul>
+                    <div>
                         {offers?.map(offer => (
                             <Row>
                                 {offer.length === 0 ? <div>No Offers Yet</div> : <div></div>}
@@ -102,7 +102,7 @@ const UpcomingTask = () => {
                                 ))}
                             </Row>
                         ))}
-                    </ul>
+                    </div>
                 </div>
                 
             )) : <div></div>}

@@ -1,13 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Card, CardText, CardBody, CardSubtitle, Button, Input, Label, Modal, ModalHeader, ModalBody,UncontrolledPopover, PopoverBody, ModalFooter } from 'reactstrap';
-import { Formik, Form, Field } from 'formik';
+import { Card, CardText, CardBody, CardSubtitle, Button, Modal, ModalHeader, ModalBody,UncontrolledPopover, PopoverBody } from 'reactstrap';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
 import { RiMoneyDollarBoxFill, RiTimerFill, RiUserFill, RiCalendarFill } from 'react-icons/ri';
 import { Redirect } from 'react-router-dom';
-import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css'
-import { setSyntheticTrailingComments } from 'typescript';
 import StarRating from './StarRating';
 
 type CardProps = {
@@ -61,7 +58,7 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
             },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setOfferer(response.data)
             })
             .catch(error => {
@@ -90,7 +87,7 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
         console.log(rating)
         await axios.post(url + 'task/workerCompleted', {
             taskId: taskId,
-            posterRating: rating
+            poasterRating: rating
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
@@ -131,67 +128,72 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
     return (
         <div>
         
-        <Card style={{ width: '350px', height: 'auto' }}>
-            <CardBody>
-                <CardSubtitle style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {offerer?.name}</CardSubtitle>
-                <CardSubtitle style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${payment}</CardSubtitle>
-                <CardSubtitle style={{ color: '#c48818', fontWeight: 'bolder' }}><RiTimerFill />
-                    {jobDurationMinutes / 60 < 1
-                        ? ' ' + jobDurationMinutes + ' minutes'
-                        : jobDurationMinutes % 60 === 0
-                        ? ' ' + jobDurationMinutes / 60 + ' hour(s)'
-                        : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
-                </CardSubtitle>
-                <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>                
-                <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
-                <div className='centered'>
-                    {serror ? <p className='error'>There was an error accepting/rejecting offer!</p> : <div></div>}
-                    {cerror ? <p className='error'>Error completing offer!</p> : <div></div>}
-                    {rejected ? <p className='success'>Offer retracted!</p> : <div></div>}
-                    {accept ? <p className='success'>Offer accepted!</p> : <div></div>}
-                    {complete ? <p className='warning'>Offer completed!</p> : <div></div>}
-                </div>
-                <div className='centered'>
-                    {accepted 
-                    ? <p className='success'>Offer Accepted!</p> : <div></div>}
-                </div>
-                <div className='centered'>
-                        <div>
-                            {accepted 
-                                ? 
-                                    <Button color="warning" size='sm' outline onClick={toggle}>Rate User</Button>
-                                : 
-                                <div>
-                                    <UncontrolledPopover style={{padding: 10}} placement="bottom" target="confirmDelete">
-                                        <h3>Are you sure?</h3>
-                                        <PopoverBody>This cannot be undone</PopoverBody>
-                                        <Button color="danger" size="sm" type="submit" onClick={() => retractOffer()}>Confirm</Button>
-                                        <br />
-                                    </UncontrolledPopover>
-                                    <Button color="danger" size='sm' id="confirmDelete" outline>Retract Offer</Button>
-                                </div>
-                                    
-                            }
-                            &nbsp;
-                            <Button color="danger" size='sm' outline onClick={viewUser}>Report User</Button>
-                        </div>
-                </div>
-            </CardBody>
-        </Card>
-        <Modal isOpen={modal} toggle={toggle} >
-            <ModalHeader toggle={toggle}>Rate Poster</ModalHeader>
-            <ModalBody>
-                <div className='centered'>
-                    <StarRating/>
-                </div>
-                <div className='centered'>
+            <Card style={{ width: '325px', height: 'auto' }}>
+                <CardBody>
+                    <CardSubtitle style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {offerer?.name}</CardSubtitle>
+                    <CardSubtitle style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${payment}</CardSubtitle>
+                    <CardSubtitle style={{ color: '#c48818', fontWeight: 'bolder' }}><RiTimerFill />
+                        {jobDurationMinutes / 60 < 1
+                            ? ' ' + jobDurationMinutes + ' minutes'
+                            : jobDurationMinutes % 60 === 0
+                            ? ' ' + jobDurationMinutes / 60 + ' hour(s)'
+                            : ' ' + Math.floor(jobDurationMinutes / 60) + ' hour(s) ' + jobDurationMinutes % 60 + ' minutes'}
+                    </CardSubtitle>
+                    <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>                
+                    <CardText style={{ fontWeight: 'bolder' }}>{note}</CardText>
+                    <div className='centered'>
+                        {serror ? <p className='error'>There was an error accepting/rejecting offer!</p> : <div></div>}
+                        {cerror ? <p className='error'>Error completing offer!</p> : <div></div>}
+                        {rejected ? <p className='success'>Offer retracted!</p> : <div></div>}
+                        {accept ? <p className='success'>Offer accepted!</p> : <div></div>}
+                        {complete ? <p className='warning'>Offer completed!</p> : <div></div>}
+                    </div>
+                    <div className='centered'>
+                        {accepted 
+                        ? <p className='success'>Offer Accepted!</p> : <div></div>}
+                    </div>
+                    <div className='centered'>
+                            <div>
+                                {accepted 
+                                    ? 
+                                        <Button color="warning" size='sm' outline onClick={toggle}>Rate User</Button>
+                                    : 
+                                    <div>
+                                        <UncontrolledPopover style={{padding: 10}} placement="bottom" target="confirmDelete">
+                                            <h3>Are you sure?</h3>
+                                            <PopoverBody>This cannot be undone</PopoverBody>
+                                            <Button color="danger" size="sm" type="submit" onClick={() => retractOffer()}>Confirm</Button>
+                                            <br />
+                                        </UncontrolledPopover>
+                                        <Button color="default" size='sm' id="confirmDelete" outline style={{ whiteSpace: 'nowrap' }}>Retract Offer</Button>
+                                    </div>
+                                        
+                                }
+                                &nbsp;
+                                <Button color="danger" size='sm' outline onClick={viewUser}> Report User</Button>
+                            </div>
+                    </div>
+                </CardBody>
+            </Card>
+            <Modal isOpen={modal} toggle={toggle} >
+                <ModalHeader toggle={toggle}>Rate Poster</ModalHeader>
+                <ModalBody>
+                    <div className='centered'>
+                        <h4>How would you rate the worker?</h4>
+                    </div>
                     <br/>
-                    <Button color="warning" outline onClick={ratePoster}>Rate</Button>
-                    &nbsp;
-                    <Button color="danger" outline onClick={toggle}>Cancel</Button>
-                </div>
-            </ModalBody>
-      </Modal>
+                    <div className='centered'>
+                        <StarRating/>
+                    </div>
+                    <hr/>
+                    <div className='centered'>
+                        <br/>
+                        <Button color="warning" outline onClick={ratePoster}>Rate</Button>
+                        &nbsp;
+                        <Button color="danger" outline onClick={toggle}>Cancel</Button>
+                    </div>
+                </ModalBody>
+            </Modal>
         </div>
     );
 }

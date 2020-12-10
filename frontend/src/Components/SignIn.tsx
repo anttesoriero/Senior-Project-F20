@@ -23,10 +23,18 @@ const SignIn = ({ history }: RouteComponentProps) => {
             lastName: familyName,
             profilePicture: imageUrl
         })
-            .then(function (response) {
+            .then(async function (response) {
                 setSubmitting(false);
-                localStorage.setItem('access_token', response.data.access_token)
-                history.push('/profile')
+                localStorage.setItem('access_token', response.data.access_token);
+                const storage = localStorage.getItem('daily_survey')
+                const token = localStorage.getItem('access_token')
+                const  user =  await axios.get(url + 'me/getProfile', { headers: { Authorization: `Bearer ${token}` }})
+                var timestamp = storage?.substring(0, 15) + '' + storage?.substring(storage.length - 1)
+                console.log(timestamp)
+                let hoy = new Date();
+                localStorage.setItem('today', hoy as unknown as string)
+                var today = localStorage.getItem('today')?.substring(0, 15) + '' + user.data.id as unknown as string
+                timestamp === today ? history.push('/profile') : history.push('/survey')
             })
             .catch(function (error) {
                 setSubmitting(false);

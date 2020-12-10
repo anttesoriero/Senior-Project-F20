@@ -142,7 +142,7 @@ const MyTasksPage = () => {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 toOffers()
                 getTaskIds()
             })
@@ -204,7 +204,7 @@ const MyTasksPage = () => {
         await axios.get(url + 'task/getPublic?taskId=' + id,
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setTaskInfo(response.data)
             })
             .catch(error => {
@@ -253,7 +253,7 @@ const MyTasksPage = () => {
                                 {offers ? tasks.map(task => (
                                     <div key={task.taskId}>
                                         <Row>
-                                            <Col xs="auto"><h5>{task.title}</h5></Col>
+                                            <Col xs="auto"><h5>{task.title}</h5><hr/></Col>
                                             {!task.accepted ? 
                                                 <Col xs="auto">
                                                     <Button color="info" size="sm" id="editTask" type="button" onClick={() => toEditTask(task.taskId)} outline>Edit</Button>&nbsp;&nbsp;
@@ -270,10 +270,11 @@ const MyTasksPage = () => {
                                             }
                                         </Row>
 
-                                        <ul>
+                                        <div>
                                             {offers?.map(offer => (
                                                 <Row>
-                                                    {offer.length === 0 ? <div>No Offers Yet</div> : <div></div>}
+                                                    {console.log(offer)}
+                                                    {offer.length == 0 ? <div>No Offers Yet</div> : <div></div>}
                                                     {offer.map(single => (
                                                         single.taskId === task.taskId ?
                                                             <Col>
@@ -295,7 +296,7 @@ const MyTasksPage = () => {
                                                     ))}
                                                 </Row>
                                             ))}
-                                        </ul>
+                                        </div>
                                     </div>
                                     
                                 )) : <div></div>}

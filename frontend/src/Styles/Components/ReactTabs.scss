@@ -73,3 +73,24 @@
   font-size: medium;
   //text-shadow: rgb(75, 75, 75) 1px 0 10px;
 }
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(136, 136, 136) rgba(196, 196, 196, 0.11);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(196, 196, 196, 0.11);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(136, 136,136);
+  border-radius: 20px;
+  border: 3px solid rgba(196, 196, 196, 0.11);
+}
