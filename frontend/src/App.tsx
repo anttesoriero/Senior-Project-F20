@@ -7,7 +7,7 @@ import SurveyPage from './Pages/SurveyPage';
 import TaskBoard from './Pages/TaskBoard';
 import ListingPage from './Pages/ListingPage';
 import AdminLogin from './Pages/AdminLogin';
-import AdminDashboard from './Pages/AdminDashboard';
+import AdminDashboard from './Pages/AdminReports';
 import AdminUsers from './Pages/AdminUsers';
 import AdminTasks from './Pages/AdminTasks';
 import PrivacyPage from './Pages/PrivacyPage';
@@ -17,6 +17,7 @@ import TermsPage from './Pages/TermsPage';
 import GetStarted from './Pages/GetStarted';
 import MyTasksPage from './Pages/MyTasksPage';
 import UserProfile from './Pages/UserProfile';
+import AdminReports from './Pages/AdminReports';
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
         <Route exact={true} path="/error" render={(props) => <ErrorPage />} />
         <Route exact={true} path="/listtask" render={(props) => <ListingPage />} />
         <Route exact={true} path="/admin" render={(props) => <AdminLogin />} />
-        <Route exact={true} path="/adminDash" render={(props) => <AdminDashboard />} />
+        <Route exact={true} path="/adminReports" render={(props) => <AdminReports />} />
         <Route exact={true} path="/adminUsers" render={(props) => <AdminUsers />} />
         <Route exact={true} path="/adminTasks" render={(props) => <AdminTasks />} />
         <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import { AiFillDashboard } from 'react-icons/ai';
 import { FaUsers, FaTasks } from 'react-icons/fa';
+import { MdReport } from 'react-icons/md';
 
 
 const Sidenav = () => {
@@ -10,10 +11,10 @@ const Sidenav = () => {
             <h3 style={{ fontWeight: 'bolder', color: "#e0e0e0" }}>&nbsp;Admin</h3><hr />
             <Nav vertical className="justify-content-center">
                 <NavItem>
-                    <NavLink href="/adminDash" style={{ fontWeight: 'bolder' }}><AiFillDashboard />&nbsp;Dashboard</NavLink>
+                    <NavLink href="/adminUsers" style={{ fontWeight: 'bolder' }}><FaUsers />&nbsp;Users</NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink href="/adminUsers" style={{ fontWeight: 'bolder' }}><FaUsers />&nbsp;Users</NavLink>
+                    <NavLink href="/adminReports" style={{ fontWeight: 'bolder' }}><MdReport />&nbsp;User Reports</NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink href="/adminTasks" style={{ fontWeight: 'bolder' }}><FaTasks />&nbsp;Tasks</NavLink>

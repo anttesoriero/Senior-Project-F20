@@ -42,7 +42,7 @@ const AdminTasks = () => {
                 });
         }
         getTasks();
-    }, [setTasks])
+    }, [])
 
     const deleteTask = async () => {
         await axios.post(url + 'admin/getAllTasks', {

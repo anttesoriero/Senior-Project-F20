@@ -5,71 +5,40 @@ import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import APIContext from '../Contexts/APIContext';
 
-type user = {
-    id: number,
-    email: string,
-    gender: string,
-    name: string,
-    phoneNumber: string,
-    preferredName: string
+type report = {
+    description: string
+    reportId: number
+    reportType: string
+    userId_1: number
+    userId_2: number
 }
 
 const AdminUsers = () => {
     const url = useContext(APIContext);
-    let a: user[] = []
+    let a: report[] = []
 
-    const [users, setUsers] = useState(a);
+    const [reports, setReports] = useState(a);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function getUsers() {
-            await axios.post(url + 'admin/getAllUsers', {
+        async function getReports() {
+            await axios.post(url + 'admin/getAllReports', {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {
-                    console.log(response.data.users);
-                    setUsers(response.data.users);
+                    console.log(response.data.reports);
+                    setReports(response.data.reports);
                     setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         }
-        getUsers();
+        getReports();
     }, [])
 
-    let formatPhoneNumber = (str) => {
-        //Filter only numbers from the input
-        let cleaned = ('' + str).replace(/\D/g, '');
-
-        //Check if the input is of correct length
-        let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-
-        if (match) {
-            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-        };
-
-        return null
-    };
-
     const deleteUser = async id => {
-        await axios.post(url + 'admin/addToAccount', {
-            adminPassword: sessionStorage.getItem('admin_pass')
-        })
-            .then(function (response) {
-                console.log(response.data.users);
-                setUsers(response.data.users);
-                setLoading(false);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
-    const addFunds = async id => {
-        await axios.post(url + '/admin/addToAccount', {
-
-        })
+        await axios.delete(url + 'me/deleteUser')
             .then(function (response) {
                 console.log(response);
             })
@@ -81,34 +50,30 @@ const AdminUsers = () => {
     const userCols = [
         {
             name: 'Id',
-            selector: 'id',
-            sortable: true
-        },
-        {
-            name: 'Email',
-            selector: 'email',
-            sortable: true,
-            grow: 2
-        },
-        {
-            name: 'Gender',
-            selector: 'gender',
+            selector: 'reportId',
             sortable: true,
             grow: .5
         },
         {
-            name: 'Name',
-            selector: 'name',
+            name: 'Report Type',
+            selector: 'reportType',
+            sortable: true,
+            grow: .5
+        },
+        {
+            name: 'Description',
+            selector: 'description',
+            sortable: true,
+            grow: 2
+        },
+        {
+            name: 'User ID 1',
+            selector: 'userId_1',
             sortable: true
         },
         {
-            name: 'Phone Number',
-            selector: u => formatPhoneNumber(u.phoneNumber),
-            sortable: true
-        },
-        {
-            name: 'Preferred Name',
-            selector: 'preferredName',
+            name: 'User ID 2',
+            selector: 'userId_2',
             sortable: true
         },
         {
@@ -134,8 +99,8 @@ const AdminUsers = () => {
                     <Sidenav />
                 </Col>
                 <Col style={{overflow: 'scroll'}}>
-                    <h1>Users</h1><hr />
-                    <DataTable title='Users' columns={userCols} data={users} striped={true} highlightOnHover={true} progressPending={loading} pagination />
+                    <h1>Reports</h1><hr />
+                    <DataTable title='Reports' columns={userCols} data={reports} striped={true} highlightOnHover={true} progressPending={loading} pagination />
                 </Col>
             </Row>
         </div>
