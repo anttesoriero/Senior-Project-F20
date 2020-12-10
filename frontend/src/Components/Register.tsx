@@ -23,7 +23,7 @@ const Register = ({ history }: RouteComponentProps) => {
             .then(function (response) {
                 setSubmitting(false);
                 localStorage.setItem('access_token', response.data.access_token)
-                history.push('/profile')
+                history.push('/survey')
             })
             .catch(function (error) {
                 setSubmitting(false);
