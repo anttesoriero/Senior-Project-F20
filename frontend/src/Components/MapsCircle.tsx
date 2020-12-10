@@ -92,16 +92,16 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
         setSubmitting(true)
         
         // Don't allow submission if offer date before listing date
-        if(Date.parse(data.startDate) < Date.parse(startDate)){
-            setDEerror(true)
-            setSubmitting(false)
-        } else {submitDE = true}
+        // if(Date.parse(data.startDate) < Date.parse(startDate)){
+        //     setDEerror(true)
+        //     setSubmitting(false)
+        // } else {submitDE = true}
 
         // Don't allow submission if offer date before today
-        if(Date.parse(data.startDate) < Date.parse(String(today))){
-            setDYerror(true)
-            setSubmitting(false)
-        } else {submitDY = true}
+        // if(Date.parse(data.startDate) < Date.parse(String(today))){
+        //     setDYerror(true)
+        //     setSubmitting(false)
+        // } else {submitDY = true}
 
         // // Don't allow submission if offer date >7 days after listing date
         // if(startingDate.setDate(startingDate.getDate()) > startingDate.setDate(startingDate.getDate() + 7)){
@@ -115,6 +115,7 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
         } else {submitO = true}
 
         //if(submitDE && submitDY && submitO) {
+        if(submitO) {
             await axios.post(url + 'offer/createOffer',
                 {
                     taskId: id,
@@ -133,14 +134,13 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
                     setSerror(false)
                     setOerror(false)
                     setSuccess(true)
-                    // setOpen(false)
                 })
                 .catch(error => {
                     console.log(error)
                     setSubmitting(false)
                     setSerror(true)
                 })
-        //}
+        }
     }
 
     const viewUser = () => {
