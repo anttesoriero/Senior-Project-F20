@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Modal, ModalBody, ModalHeader, Input } from 'reactstrap';
 import Sidenav from '../Components/Sidenav';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import APIContext from '../Contexts/APIContext';
+import StarRating from '../Components/StarRating';
 
 type user = {
     id: number,
@@ -11,7 +12,11 @@ type user = {
     gender: string,
     name: string,
     phoneNumber: string,
-    preferredName: string
+    preferredName: string,
+    leastInterestedCategory: string,
+    mostInterestedCategory: string,
+    posterRating: number,
+    workerRating: number
 }
 
 const AdminUsers = () => {
@@ -20,6 +25,12 @@ const AdminUsers = () => {
 
     const [users, setUsers] = useState(a);
     const [loading, setLoading] = useState(true);
+    const [modal, setModal] = useState(false);
+    const [amount, setAmount] = useState(0);
+    const [id, setId] = useState(0);
+    const [derror, setDError] = useState(false);
+
+    const toggle = () => setModal(!modal);
 
     useEffect(() => {
         async function getUsers() {
@@ -27,7 +38,7 @@ const AdminUsers = () => {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {
-                    console.log(response.data.users);
+                    //console.log(response.data.users);
                     setUsers(response.data.users);
                     setLoading(false);
                 })
@@ -52,43 +63,39 @@ const AdminUsers = () => {
         return null
     };
 
-    const deleteUser = async id => {
+    const addFunds = async () => {
         await axios.post(url + 'admin/addToAccount', {
-            adminPassword: sessionStorage.getItem('admin_pass')
+            adminPassword: sessionStorage.getItem('admin_pass'),
+            userId: id,
+            amountToChange: amount
         })
             .then(function (response) {
-                console.log(response.data.users);
-                setUsers(response.data.users);
-                setLoading(false);
+                console.log(response)
+                toggle()
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    const addFunds = async id => {
-        await axios.post(url + '/admin/addToAccount', {
-
-        })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
 
     const userCols = [
         {
             name: 'Id',
             selector: 'id',
-            sortable: true
+            sortable: true,
+            grow: .5
         },
         {
-            name: 'Email',
-            selector: 'email',
+            name: 'Name',
+            selector: 'name',
             sortable: true,
-            grow: 2
+            grow: 1.5
+        },
+        {
+            name: 'Preferred Name',
+            selector: 'preferredName',
+            sortable: true
         },
         {
             name: 'Gender',
@@ -97,9 +104,10 @@ const AdminUsers = () => {
             grow: .5
         },
         {
-            name: 'Name',
-            selector: 'name',
-            sortable: true
+            name: 'Email',
+            selector: 'email',
+            sortable: true,
+            grow: 2
         },
         {
             name: 'Phone Number',
@@ -107,24 +115,36 @@ const AdminUsers = () => {
             sortable: true
         },
         {
-            name: 'Preferred Name',
-            selector: 'preferredName',
-            sortable: true
+            name: 'Least Interested Category',
+            selector: 'leastInterestedCategory',
+            sortable: true,
+            grow: 2
         },
         {
-            name: 'Edit',
-            cell: () => <Button size='sm' color='primary'>Edit</Button>,
+            name: 'Most Interested Category',
+            selector: 'mostInterestedCategory',
+            sortable: true,
+            grow: 2
+        },
+        {
+            name: 'Worker Rating',
+            selector: 'workerRating',
+            sortable: true,
+            grow: .5
+        },
+        {
+            name: 'Poster Rating',
+            selector: 'posterRating',
+            sortable: true,
+            grow: .5
+        },
+        {
+            name: 'Deposit Funds',
+            cell: () => <Button size='sm' color='primary' onClick={toggle}>Deposit</Button>,
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,
-        },
-        {
-            name: 'Delete',
-            cell: () => <Button size='sm' color='danger' onClick={deleteUser}>Delete</Button>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
+        }
     ];
 
     return (
@@ -135,9 +155,40 @@ const AdminUsers = () => {
                 </Col>
                 <Col style={{overflow: 'scroll'}}>
                     <h1>Users</h1><hr />
-                    <DataTable title='Users' columns={userCols} data={users} striped={true} highlightOnHover={true} progressPending={loading} pagination />
+                    <DataTable 
+                        title='Users' 
+                        columns={userCols} 
+                        data={users} 
+                        striped={true} 
+                        highlightOnHover={true} 
+                        progressPending={loading} 
+                        onRowClicked={row => setId(row.id)} 
+                    />
                 </Col>
             </Row>
+            <Modal isOpen={modal} toggle={toggle} >
+                <ModalHeader toggle={toggle}>Deposit Funds</ModalHeader>
+                <ModalBody>
+                    <div className='centered'>
+                        <h4>How much to deposit?</h4>
+                    </div>
+                    <br/>
+                    <div className='centered'>
+                        {console.log(id)}
+                        <Input type='number' pattern="[0-9]" placeholder='Funds' onChange={n => setAmount(Number(n.target.value))}/>
+                    </div>
+                    <hr/>
+                    <div className='centered'>
+                                {derror ? <p className='error'>Error depositing funds!</p> : <div></div>}
+                            </div>
+                    <div className='centered'>
+                        <br/>
+                        <Button color="success" outline onClick={addFunds}>Deposit Funds</Button>
+                        &nbsp;
+                        <Button color="danger" outline onClick={toggle}>Cancel</Button>
+                    </div>
+                </ModalBody>
+            </Modal>
         </div>
     );
 }

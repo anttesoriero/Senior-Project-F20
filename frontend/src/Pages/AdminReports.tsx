@@ -75,21 +75,7 @@ const AdminUsers = () => {
             name: 'User ID 2',
             selector: 'userId_2',
             sortable: true
-        },
-        {
-            name: 'Edit',
-            cell: () => <Button size='sm' color='primary'>Edit</Button>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
-        {
-            name: 'Delete',
-            cell: () => <Button size='sm' color='danger' onClick={deleteUser}>Delete</Button>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
+        }
     ];
 
     return (
@@ -100,7 +86,7 @@ const AdminUsers = () => {
                 </Col>
                 <Col style={{overflow: 'scroll'}}>
                     <h1>Reports</h1><hr />
-                    <DataTable title='Reports' columns={userCols} data={reports} striped={true} highlightOnHover={true} progressPending={loading} pagination />
+                    <DataTable title='Reports' columns={userCols} data={reports} striped={true} highlightOnHover={true} progressPending={loading} />
                 </Col>
             </Row>
         </div>

@@ -18,6 +18,8 @@ import GetStarted from './Pages/GetStarted';
 import MyTasksPage from './Pages/MyTasksPage';
 import UserProfile from './Pages/UserProfile';
 import AdminReports from './Pages/AdminReports';
+import AdminOffers from './Pages/AdminOffers';
+import AdminSurvey from './Pages/AdminSurvey';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
         <Route exact={true} path="/adminReports" render={(props) => <AdminReports />} />
         <Route exact={true} path="/adminUsers" render={(props) => <AdminUsers />} />
         <Route exact={true} path="/adminTasks" render={(props) => <AdminTasks />} />
+        <Route exact={true} path="/adminOffers" render={(props) => <AdminOffers />} />
+        <Route exact={true} path="/adminSurveys" render={(props) => <AdminSurvey />} />
         <Route exact={true} path="/privacy" render={(props) => <PrivacyPage />} />
         <Route exact={true} path="/about" render={(props) => <AboutPage />} />
         <Route exact={true} path="/contact" render={(props) => <ContactPage />} />

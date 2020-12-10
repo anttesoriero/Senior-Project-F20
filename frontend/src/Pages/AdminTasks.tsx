@@ -143,7 +143,7 @@ const AdminTasks = () => {
                                 allowOverflow: true,
                                 button: true,
                             },
-                        ]} striped={true} highlightOnHover={true} progressPending={loading} pagination/>
+                        ]} striped={true} highlightOnHover={true} progressPending={loading}/>
                 </Col>
             </Row>
         </div>
