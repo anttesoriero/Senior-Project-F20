@@ -39,7 +39,7 @@ const AdminLogin = ({ history }: RouteComponentProps) => {
     }
 
     return (
-        <div className='centered' style={{ display: 'flex', background: "linear-gradient(#618ac9, #2f3a99)", height: '100vh' }}>
+        <div className='centered' style={{ display: 'flex', background: "linear-gradient(#2d5186, #1a3255)", height: '100vh' }}>
             <Container style={{ flex: '1 0 auto', alignItems: 'center', backgroundColor: '#3131314d', padding: '200px 0px 200px 0px'}}>
 
                 <br />
@@ -59,7 +59,7 @@ const AdminLogin = ({ history }: RouteComponentProps) => {
                                 {serror ? <p className='error'>Incorrect Password!</p> : <div></div>}
                             </div>
                             <FormGroup className='centered'>
-                                {submitting ? <Button color='primary'><Spinner size='sm' />&nbsp;Signing in...</Button> : <Button type='submit' color="primary">Sign In</Button>}
+                                {submitting ? <Button color='default'><Spinner size='sm' />&nbsp;Signing in...</Button> : <Button type='submit' color="default">Sign In</Button>}
                             </FormGroup>
                         </Form>
                     )}
