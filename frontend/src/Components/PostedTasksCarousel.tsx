@@ -5,9 +5,8 @@ import {
     CarouselItem,
     CarouselControl,
     CarouselIndicators,
-    CarouselCaption,
-    Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button
+    Card, CardBody,
+    CardTitle, CardSubtitle 
 } from 'reactstrap';
 import { RiMoneyDollarBoxFill, RiTimerFill, RiCalendarFill, RiStickyNoteFill } from 'react-icons/ri'
 import APIContext from '../Contexts/APIContext';
@@ -109,9 +108,9 @@ const PostedTasksCarousel = () => {
                 onExited={() => setAnimating(false)}
                 key={item.task.taskId}
             >
-                <Card style={{justifyContent: 'center', alignItems: 'center', width: 300, height: 200}} color="primary">
+                <Card style={{justifyContent: 'center', alignItems: 'center', width: 300, height: 200 }} color="primary">
                     <CardBody>
-                        <CardTitle tag="h4">{item.task.title}</CardTitle>
+                        <CardTitle tag="h4" style={{width: 215}}>{item.task.title}</CardTitle>
                         <CardSubtitle tag="h6"><RiMoneyDollarBoxFill /> ${item.offer.payment}</CardSubtitle>
                         <CardSubtitle tag="h6"><RiTimerFill /> {item.offer.jobDurationMinutes / 60 < 1
                                 ? ' ' + item.offer.jobDurationMinutes + ' minutes'
@@ -120,7 +119,7 @@ const PostedTasksCarousel = () => {
                                 : ' ' + Math.floor(item.offer.jobDurationMinutes / 60) + ' hour(s) ' + item.offer.jobDurationMinutes % 60 + ' minutes'}</CardSubtitle>
                         <CardSubtitle tag="h6"><RiCalendarFill /> {dateTime(item.offer.startDate).displayDate + ' ' + dateTime(item.offer.startDate).displayTime}</CardSubtitle>
                         {item.task.description? 
-                            <CardSubtitle tag="h6"><RiStickyNoteFill /> {item.task.description}</CardSubtitle>
+                            <CardSubtitle tag="h6" style={{width: 215}}><RiStickyNoteFill /> {item.task.description.substring(0,75)}...</CardSubtitle>
                             : 
                             <div></div>
                         }
