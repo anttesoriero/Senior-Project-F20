@@ -40,6 +40,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
     const url = useContext(APIContext);
     const [taskInfo, setTaskInfo] = useState<taskState>(taskFields);
     const [serror, setSerror] = useState<boolean>(false);
+    const [dyerror, setDYerror] = useState(false);
     const isInitialMount = useRef(true)
 
     useEffect(() => {
@@ -53,8 +54,12 @@ const ListingPage = ({ history }: RouteComponentProps) => {
 
     const createTask = async () => {
         console.log('Info: ', taskInfo)
+        const today = new Date();
 
-        await axios.post(url + 'task/createTask', {
+        // Don't allow submission if offer date before today
+        if(Date.parse(taskInfo?.startDate) < Date.parse(String(today))){
+            setDYerror(true)
+        } else { await axios.post(url + 'task/createTask', {
             categoryId: taskInfo?.categoryId,
             title: taskInfo?.title,
             description: taskInfo?.description,
@@ -74,7 +79,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
             .catch(error => {
                 console.log(error);
                 setSerror(true);
-            });
+            });}
     }
 
     const geocode = async (data) => {
@@ -231,6 +236,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                             </div>
                             <div className='centered'>
                                 {serror ? <p className='error'>There was an error submitting the task!</p> : <div></div>}
+                                {dyerror ? <p className='error'>Listing date before today!</p> : <div></div>}
                             </div>
                             <div className="centered">
                                 <Button color="primary" size="lg" type="submit">List Task</Button>
