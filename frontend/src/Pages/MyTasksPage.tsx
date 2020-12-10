@@ -390,7 +390,7 @@ const MyTasksPage = () => {
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="estimatedDurationMinutes"><h4>Duration in Minutes *</h4></Label>
-                                                            <Field type="number" name="estimatedDurationMinutes" id="estimatedDurationMinutes" placeholder={taskInfo.estimatedDurationMinutes} min="15" as={Input} required />
+                                                            <Field type="number" name="estimatedDurationMinutes" id="estimatedDurationMinutes" placeholder={taskInfo.estimatedDurationMinutes} min="15" max="720" as={Input} required />
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
