@@ -119,7 +119,11 @@ const PostedTasksCarousel = () => {
                                 ? ' ' + item.offer.jobDurationMinutes / 60 + ' hour(s)'
                                 : ' ' + Math.floor(item.offer.jobDurationMinutes / 60) + ' hour(s) ' + item.offer.jobDurationMinutes % 60 + ' minutes'}</CardSubtitle>
                         <CardSubtitle tag="h6"><RiCalendarFill /> {dateTime(item.offer.startDate).displayDate + ' ' + dateTime(item.offer.startDate).displayTime}</CardSubtitle>
-                        <CardSubtitle tag="h6"><RiStickyNoteFill />  {item.task.description}</CardSubtitle>
+                        {item.task.description? 
+                            <CardSubtitle tag="h6"><RiStickyNoteFill /> {item.task.description}</CardSubtitle>
+                            : 
+                            <div></div>
+                        }
                     </CardBody>
                 </Card>
             </CarouselItem>

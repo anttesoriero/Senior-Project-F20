@@ -177,10 +177,12 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                                 ? ' ' + duration / 60 + ' hour(s)'
                                 : ' ' + Math.floor(duration / 60) + ' hour(s) ' + duration % 60 + ' minutes'}
                     </CardSubtitle>
-                    {/* For when we get the start date */}
-                    {/* {date.toString().substring(0,15) + ' @ ' + date.toLocaleTimeString()} */}
                     <CardSubtitle style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</CardSubtitle>
-                    <CardText style={{ fontWeight: 'bolder' }}><RiStickyNoteFill /> {description}</CardText>
+                    {description? 
+                        <CardText style={{ fontWeight: 'bolder' }}><RiStickyNoteFill /> {description}</CardText> 
+                        : 
+                        <div></div>
+                    }
                     <div className='centered'>
                         <Button className={'task'} onClick={launchModal}>Create Offer</Button>
                     </div>
