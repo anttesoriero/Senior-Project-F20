@@ -128,21 +128,7 @@ const AdminTasks = () => {
                                 selector: 'locationALongitude',
                                 sortable: true,
                                 grow: .5
-                            },
-                            {
-                                name: 'Edit',
-                                cell: () => <Button size='sm' color='primary'>Edit</Button>,
-                                ignoreRowClick: true,
-                                allowOverflow: true,
-                                button: true,
-                            },
-                            {
-                                name: 'Delete',
-                                cell: () => <Button size='sm' color='danger'>Delete</Button>,
-                                ignoreRowClick: true,
-                                allowOverflow: true,
-                                button: true,
-                            },
+                            }
                         ]} striped={true} highlightOnHover={true} progressPending={loading}/>
                 </Col>
             </Row>
