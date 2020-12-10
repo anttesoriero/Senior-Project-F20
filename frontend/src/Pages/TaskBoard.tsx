@@ -45,7 +45,7 @@ const TaskBoard = () => {
     var [upperLong, setUpperLong] = useState<number>(-75.112005);
     const [centerLocation, setCenterLocation] = useState<LatLngTuple>();
 
-    const center: LatLngTuple = [0, 0]
+    const center: LatLngTuple = [lowerLat, lowerLong]
     const tempCenter: LatLngTuple = [39.702550, -75.112005]
 
     const getTaskList = async () => {
@@ -64,6 +64,11 @@ const TaskBoard = () => {
                 setTasks(response.data.tasks);
                 setCenterLocation([(response.data.query.location.within[1] + response.data.query.location.within[0]) / 2
                     , (response.data.query.location.within[2] + response.data.query.location.within[3]) / 2])
+                var current_url = new URL(pageURL)
+                const lat = current_url.searchParams.get('lowerLat')
+                const long = current_url.searchParams.get('upperLong')
+                localStorage.setItem('lat', lat !== null ? lat: String(39.702550))
+                localStorage.setItem('long', long !== null ? long: String(-75.112005))
             })
             .catch(error => {
                 console.log(error);
@@ -215,7 +220,7 @@ const TaskBoard = () => {
 
                     {/* Map */}
                     {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
-                    <MapContainer className="leaflet-container" center={tempCenter} style={{ height: window.innerWidth / 2 }} zoom={10} scrollWheelZoom={true} >
+                    <MapContainer className="leaflet-container" center={center || tempCenter} style={{ height: window.innerWidth / 2 }} zoom={10} scrollWheelZoom={true} >
                         {/* <ChangeView center={tempCenter}/> */}
                         <TileLayer
                             url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A"
