@@ -87,11 +87,11 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
         console.log(rating)
         await axios.post(url + 'task/workerCompleted', {
             taskId: taskId,
-            poasterRating: rating
+            posterRating: rating
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
+                console.log(response.data)
                 toggle()
             })
             .catch(error => {

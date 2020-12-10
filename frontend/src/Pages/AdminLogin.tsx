@@ -39,16 +39,22 @@ const AdminLogin = ({ history }: RouteComponentProps) => {
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Container style={{ flex: '1 0 auto' }}>
-                <h2>Please input admin password to proceed</h2>
+        <div className='centered' style={{ display: 'flex', background: "linear-gradient(#618ac9, #2f3a99)", height: '100vh' }}>
+            <Container style={{ flex: '1 0 auto', alignItems: 'center', backgroundColor: '#3131314d', padding: '200px 0px 200px 0px'}}>
+
                 <br />
                 <Formik initialValues={{ password: '' }} onSubmit={(data => signIn(data))}>
                     {() => (
-                        <Form >
-                            <FormGroup>
-                                <Field placeholder='Password' name='password' type='password' required as={Input} />
-                            </FormGroup>
+                        <Form >                
+                            <div className='centered'>
+                                <h2 style={{color: '#f3f3f3f3'}}>Please input admin password to proceed</h2>
+                            </div>
+                            <div className='centered'>
+                                <FormGroup style={{width: '30vw'}} >
+                                    <Field placeholder='Password' name='password' type='password' required as={Input} />
+                                </FormGroup>
+
+                            </div>
                             <div className='centered'>
                                 {serror ? <p className='error'>Incorrect Password!</p> : <div></div>}
                             </div>
