@@ -129,6 +129,7 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
                     setSubmitting(false)
                     setDEerror(false)
                     setDLerror(false)
+                    setDYerror(false)
                     setSerror(false)
                     setOerror(false)
                     setSuccess(true)
