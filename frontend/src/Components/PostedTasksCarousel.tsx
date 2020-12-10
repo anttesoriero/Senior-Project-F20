@@ -9,7 +9,7 @@ import {
     Card, CardImg, CardText, CardBody,
     CardTitle, CardSubtitle, Button
 } from 'reactstrap';
-import { RiMoneyDollarBoxFill, RiTimerFill, RiCalendarFill } from 'react-icons/ri'
+import { RiMoneyDollarBoxFill, RiTimerFill, RiCalendarFill, RiStickyNoteFill } from 'react-icons/ri'
 import APIContext from '../Contexts/APIContext';
 
 type taskFields = {
@@ -119,7 +119,7 @@ const PostedTasksCarousel = () => {
                                 ? ' ' + item.offer.jobDurationMinutes / 60 + ' hour(s)'
                                 : ' ' + Math.floor(item.offer.jobDurationMinutes / 60) + ' hour(s) ' + item.offer.jobDurationMinutes % 60 + ' minutes'}</CardSubtitle>
                         <CardSubtitle tag="h6"><RiCalendarFill /> {dateTime(item.offer.startDate).displayDate + ' ' + dateTime(item.offer.startDate).displayTime}</CardSubtitle>
-                        <CardSubtitle tag="h6">{item.task.description}</CardSubtitle>
+                        <CardSubtitle tag="h6"><RiStickyNoteFill />  {item.task.description}</CardSubtitle>
                     </CardBody>
                 </Card>
             </CarouselItem>
