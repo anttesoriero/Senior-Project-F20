@@ -5,8 +5,6 @@ import Footer from "../Components/Footer";
 import axios from 'axios';
 import 'reactjs-popup/dist/index.css';
 import { Formik, Form, Field } from 'formik';
-import { TileLayer, MapContainer, Circle, Marker, Tooltip } from 'react-leaflet';
-import { LatLngTuple } from 'leaflet';
 import APIContext from '../Contexts/APIContext';
 import StateSelector from '../Components/StateSelector';
 import PostTasksCarousel from './../Components/PostedTasksCarousel';
@@ -48,9 +46,7 @@ const ProfilePage = () => {
     const token = localStorage.getItem('access_token');
 
     const [user, setUser] = useState<userState>(userInfo);
-    const [pastTasks, setPastTasks] = useState();
     const [initials, setInitials] = useState<String>("");
-    // const [userLatLong, setUserLatLong] = useState<userLatLong>();
     const [passwordError, setPasswordError] = useState<String>("");
     const [pageState, setPageState] = useState<String>("main profile");
 
@@ -72,12 +68,9 @@ const ProfilePage = () => {
             });
     }
 
-    // Have to refactor this if using Formik for edit profile
     const editProfile = async (data) => {
         const geoAddress = data.address + data.city + data.state + data.zip
         const address = data.address + ', ' + data.city + ', ' + data.state + ', ' + data.zip
-
-        // geocode(geoAddress)
         
         const userInfo = {
             email: data.email,
@@ -143,52 +136,6 @@ const ProfilePage = () => {
                 });
         }
     }
-
-    // const geocode = async (data) => {
-    //     if (data === undefined) {
-    //         setUserLatLong({
-    //             latitude: 0,
-    //             longitude: 0
-    //         })
-    //         return
-    //     }
-    //     // var location = data.address + data.city + data.state + data.zip;
-    //     await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-    //         params: {
-    //             address: data,
-    //             key: 'AIzaSyAqavh6zA4RtzZud6DohqzFjdJscxQ_Hk4'
-    //         }
-    //     })
-    //     .then(function(response){		
-	// 		const results = response.data.results
-	// 		if (results !== undefined && results.length !== 0) {
-	// 			const { lat, lng } = results[0].geometry.location
-             
-	// 			setUserLatLong({
-    //                 latitude: lat,
-    //                 longitude: lng
-    //             })
-    //         }
-	// 		else {
-	// 			throw "That address doesn't exist!"
-	// 		}
-    //     })
-    // } 
-
-    // const computeUserRating = () => {
-    //     const { workerRating, posterRating } = userInfo
-    //     if (workerRating === null && posterRating === null) {
-    //         return 'No Ratings Yet'
-    //     }
-    //     if (workerRating === null) {
-    //         return `${posterRating}`
-    //     }
-    //     if (posterRating === null) {
-    //         return `${workerRating}`
-    //     }
-    //     const averageRating = (workerRating! + posterRating!) / 2
-    //     return `${averageRating}`
-    // }
 
     const backToMain = () => {
         setPageState("main profile")
@@ -335,14 +282,12 @@ const ProfilePage = () => {
                                             <Media>
                                                 <Media left href="#">
                                                     {user.profilePicture === "" ?                                                
-                                                        // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                                         <Button 
                                                             disabled 
                                                             style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                                             {initials}
                                                         </Button>
                                                     :
-                                                        // <img src={user.profilePicture}/>
                                                         <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
                                                     }        
                                                 </Media>
@@ -442,9 +387,6 @@ const ProfilePage = () => {
                                         <p>User bio</p>
                                     }
 
-                                    {/* <h4>Liked Jobs</h4>
-                                    <p>Selected liked job categories from survey</p> */}
-
                                     <h4>Contact Info</h4>
                                     {/* Phone */}
                                     <Row>
@@ -473,16 +415,6 @@ const ProfilePage = () => {
                                                 :
                                                 <p>{user.address}</p>
                                             }
-                                            {/* <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                            <TileLayer
-                                                url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                                                attribution='<a href="/">OddJobs</a>'
-                                            />
-                                                <Circle center={[userLat, userLong]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
-                                                    <Tooltip sticky>Radius Users See</Tooltip>
-                                                </Circle>
-                                                <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
-                                            </MapContainer> */}
                                         </div> : <div></div>
                                     }
 
@@ -572,16 +504,6 @@ const ProfilePage = () => {
                                                             :
                                                             <p>{user.address}</p>
                                                         }
-                                                        {/* <MapContainer className="leaflet-container" center={[userLat, userLong]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                                        <TileLayer
-                                                            url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                                                            attribution='<a href="/">OddJobs</a>'
-                                                        />
-                                                            <Circle center={[userLat, userLong]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
-                                                                <Tooltip sticky>Radius Users See</Tooltip>
-                                                            </Circle>
-                                                            <Marker position={[userLat, userLong]}><Tooltip>Where You Are</Tooltip></Marker>
-                                                        </MapContainer> */}
                                                     </div> : <div></div>
                                                 }
 
@@ -688,26 +610,6 @@ const ProfilePage = () => {
                                             <hr />
 
                                             <Row>
-                                                {/*
-                                                <Col className="centered">
-                                                    <FormGroup>
-                                                        <Label for="profilePicture"><h4>Profile Picture</h4></Label>
-                                                        <br />
-                                                        {user.profilePicture === '' ? 
-                                                        <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
-                                                        : 
-                                                        <img src={user.profilePicture} style={{width: '12%', height: '12%'}} />
-                                                        }
-                                                        <br />
-                                                        <Field name='profilePicture' type='file' onChange={handlePictureSelected} as={Input} />
-
-                                                        {/* <input
-                                                            type="file"
-                                                            onChange={handlePictureSelected}
-                                                        />                                            
-                                                    </FormGroup>
-                                                </Col> */}
-                                                
                                                 <Col className="centered">
                                                     <FormGroup>
                                                         <Label for="bio"><h4>Bio</h4></Label>
@@ -725,12 +627,6 @@ const ProfilePage = () => {
                                                         <Field type="text" name="address" id="address" placeholder={address[0]} as={Input} />
                                                     </FormGroup>
                                                 </Col>
-                                                {/* <Col>
-                                                    <FormGroup>
-                                                        <Label for="address2"><h4>Address 2</h4></Label>
-                                                        <Field type="text" name="address2" id="address2" placeholder="Apartment, studio, floor, etc." as={Input} />
-                                                    </FormGroup>
-                                                </Col> */}
                                             </Row>
 
                                             {/* Row 5 - City - State - Zip */}
