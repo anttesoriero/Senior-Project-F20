@@ -400,20 +400,16 @@ const ProfilePage = () => {
                                         <Col>
                                             <h2 style={{ fontWeight: 'bold' }}>Posted Tasks</h2>
                                             <hr />
+                                            <div style={{width: 300}}><PostTasksCarousel /></div>
                                         </Col>
-                                    </Row>
-                                    <Row>
-                                        <PostTasksCarousel />
                                     </Row>
                                                     
                                     <Row>
                                         <Col>
                                             <h2 style={{ fontWeight: 'bold' }}>Tasks Completed</h2>
                                             <hr />
+                                            <div style={{width: 300}}><TasksCompletedCarousel /></div>
                                         </Col>
-                                    </Row>                                
-                                    <Row>
-                                        <TasksCompletedCarousel />
                                     </Row>
                                 </div>
                                 :
