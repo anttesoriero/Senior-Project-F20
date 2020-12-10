@@ -33,7 +33,7 @@ class TaskRecommender:
         if eum.leastInterestedCategory is not None:
             filters["categoryId"] = {}
             filters["categoryId"]["!="] = eum.leastInterestedCategory
-
+        print(eum.leastInterestedCategory)
         tasks = [task.getPublicInfo() for task in Task.search(filters, 100, user.userId)]
         if len(tasks) == 0:
             return {"query": {}, "tasks": [task.getPublicInfo() for task in Task.search({}, 10, user.userId)]}

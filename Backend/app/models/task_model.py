@@ -189,7 +189,7 @@ class Task(db.Model):
         if "locationALatitude" in k:
             self.locationALatitude = paramDict["locationALatitude"]
         if "startDate" in k:
-            self.startDate = paramDict["startDate"]
+            self.startDate = datetime.datetime.strptime(paramDict["startDate"], "%Y-%m-%d %H:%M")
         db.session.commit()
 
     def getWorker(self):
@@ -265,16 +265,17 @@ class Task(db.Model):
         filters.append(cls.completed == False)
         if "title" in queryP.keys():
             if "contains" in queryP["title"].keys():
-                filters.append(cls.title.like("%" + queryP["title"]["contains"] + "%"))
+                q = queryP["title"]["contains"].replace("+", " ")
+                filters.append(cls.title.like("%" + q + "%"))
             if "startsWith" in queryP["title"].keys():
                 filters.append(cls.title.like(queryP["title"]["startsWith"] + "%"))
             if "endsWith" in queryP["title"].keys():
-                filters.append(cls.title.like("%" + queryP["title"]["startsWith"]))
+                filters.append(cls.title.like("%" + queryP["title"]["endsWith"]))
             if "matches" in queryP["title"].keys():
-                filters.append(cls.title.like(queryP["title"]["startsWith"]))
+                filters.append(cls.title.like(queryP["title"]["matches"]))
 
         if "categoryId" in queryP.keys():
-            if "==" in queryP["categoryId"].keys():
+            if "==" in queryP["categoryId"].keys() and queryP["categoryId"]["=="] != 0:
                 filters.append(cls.categoryId == queryP["categoryId"]["=="])
             if "!=" in queryP["categoryId"].keys():
                 filters.append(cls.categoryId != queryP["categoryId"]["!="])

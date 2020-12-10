@@ -314,7 +314,7 @@ def retractOffer():
         return jsonify({"success": False, "message": "Offer is archived"}), 403
 
     if offer.accepted:
-        return jsonify({"success": False, "message": "Offer is already accepted"})
+        return jsonify({"success": False, "message": "Offer is already accepted"}), 403
 
     # Delete offer
     Offer.deleteOffer(offer)

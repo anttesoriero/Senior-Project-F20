@@ -15,6 +15,7 @@ from app.models.offer_model import Offer
 from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
+from app.models.category_model import Category
 
 class User(db.Model):
     '''
@@ -54,6 +55,20 @@ class User(db.Model):
     '''
     General Setters and Getters
     '''
+    def getMostInterested(self):
+        catId = self.extendedModel.mostInterestedCategory
+        if catId is not None:
+            return Category.getByCategoryId(catId).getName()
+        else:
+            return None
+
+    def getLeastInterested(self):
+        catId = self.extendedModel.leastInterestedCategory
+        if catId is not None:
+            return Category.getByCategoryId(catId).getName()
+        else:
+            return None
+
     def setProfilePicture(self, newProfilePicture):
         self.profilePicture = newProfilePicture
         db.session.commit()
@@ -155,7 +170,9 @@ class User(db.Model):
             "gender": self.extendedModel.gender,
             "profilePicture": self.profilePicture,
             "posterRating": self.posterRating,
-            "workerRating": self.workerRating
+            "workerRating": self.workerRating,
+            "leastInterestedCategory": self.getLeastInterested(),
+            "mostInterestedCategory": self.getMostInterested()
         }
         return output
 
@@ -299,7 +316,7 @@ class User(db.Model):
 
 
     @classmethod
-    def getOffers(cls, userId):
+    def getOffers(cls, userId, historical):
         '''
         Gets the Offers for a particular user
 
@@ -311,11 +328,31 @@ class User(db.Model):
         output = {}
         for offer in offers:
             task = Task.getByTaskId(offer.taskId)
-            if not task.completed:
+            if not task.completed or historical:
                 if not offer.taskId in output.keys():
                     output[offer.taskId] = {"task": task.getPublicInfo(), "myOffers": []}
                 output[offer.taskId]["myOffers"].append(offer.getInfo())
+        newOutput = []
+        for out in output.keys():
+            newOutput.append(output[out])
+        return newOutput
 
+    @classmethod
+    def getPastTasks(cls, userId):
+        tasks = Task.query.filter_by(posterUserId=userId).filter_by(completed=True).all()
+        output = []
+        for task in tasks:
+            offer = Offer.query.filter_by(taskId=task.taskId).filter_by(accepted=True).first()
+            output.append({"task": task.getPrivateInfo(), "offer": offer.getInfo()})
+        return output
+
+    @classmethod
+    def getPastCompletedTasks(cls, userId):
+        offers = Offer.query.filter_by(userIdFrom=userId).filter_by(accepted=True).all()
+        output = []
+        for offer in offers:
+            task = Task.query.filter_by(taskId=offer.taskId).filter_by(completed=True).first()
+            output.append({"task": task.getPrivateInfo(), "offer": offer.getInfo()})
         return output
 
     @classmethod
