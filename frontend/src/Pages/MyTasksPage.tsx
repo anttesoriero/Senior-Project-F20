@@ -274,7 +274,7 @@ const MyTasksPage = () => {
                                             {offers?.map(offer => (
                                                 <Row>
                                                     {console.log(offer)}
-                                                    {offer.length == 0 ? <div>No Offers Yet</div> : <div></div>}
+                                                    {/* {offer.length == 0 ? <div>No Offers Yet</div> : <div></div>} */}
                                                     {offer.map(single => (
                                                         single.taskId === task.taskId ?
                                                             <Col>
