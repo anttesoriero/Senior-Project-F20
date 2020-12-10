@@ -57,9 +57,10 @@ const ListingPage = ({ history }: RouteComponentProps) => {
         const today = new Date();
 
         // Don't allow submission if offer date before today
-        if(Date.parse(taskInfo?.startDate) < Date.parse(String(today))){
-            setDYerror(true)
-        } else { await axios.post(url + 'task/createTask', {
+        // if(Date.parse(taskInfo?.startDate) < Date.parse(String(today))){
+        //     setDYerror(true)
+        // } else
+        { await axios.post(url + 'task/createTask', {
             categoryId: taskInfo?.categoryId,
             title: taskInfo?.title,
             description: taskInfo?.description,
