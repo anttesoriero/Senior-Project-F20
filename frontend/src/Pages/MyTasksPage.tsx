@@ -396,17 +396,17 @@ const MyTasksPage = () => {
                                                 </Row>
 
                                                 {/* Row 4 - Address 1 & Address 2 */}
-                                                <Row>
+                                                {/* <Row>
                                                     <Col>
                                                         <FormGroup>
                                                             <Label for="address"><h4>Address *</h4></Label>
                                                             <Field type="text" name="address" id="address" placeholder="Address" as={Input} required />
                                                         </FormGroup>
                                                     </Col>
-                                                </Row>
+                                                </Row> */}
 
                                                 {/* Row 5 - City - State - Zip */}
-                                                <Row>
+                                                {/* <Row>
                                                     <Col md="6">
                                                         <FormGroup>
                                                             <Label for="city"><h4>City *</h4></Label>
@@ -425,7 +425,8 @@ const MyTasksPage = () => {
                                                             <Field type="text" name="zip" id="zip" placeholder="Zipcode" as={Input} required />
                                                         </FormGroup>
                                                     </Col>
-                                                </Row>
+                                                </Row> */}
+
                                                 <div className='centered'>
                                                     <p>* are required fields</p> <br />
                                                 </div>
