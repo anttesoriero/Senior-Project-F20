@@ -278,7 +278,7 @@ def deleteTask():
 
     # Get target task
     task = Task.getByTaskId(taskId)
-    if task:
+    if task or task.isAccepted():
         # Check if the user is the poster
         if task.posterUserId == current_user_id:
             # Delete task
@@ -323,7 +323,6 @@ def editTask():
     if task.posterUserId is not current_user_id:
         # User does not have permission to delete the task
         return jsonify({"success": False}), 403
-
     # If the task exists and does not have an accepted offer
     if task and not task.isAccepted():
         # Filter out None parameters, accept None as string "None"

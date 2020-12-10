@@ -36,12 +36,12 @@ class SurveyResponseHandler:
             "answerC": 0
         }
         categoryMap = {
-            "Yard Work": 1,
-            "Transportation": 2,
-            "Cleaning": 3,
-            "Moving": 4,
-            "Care-Taking": 5,
-            "Cooking": 6
+            "answerA": 1,
+            "answerB": 2,
+            "answerC": 3,
+            "answerD": 4,
+            "answerE": 5,
+            "answerF": 6
         }
         self.survey_mapper[26] = categoryMap
         self.survey_mapper[27] = categoryMap

@@ -176,8 +176,5 @@ class Offer(db.Model):
         :param offer: Offer to delete
         :return: Boolean whether delete was successful
         '''
-        if offer.archived:
-            db.session.delete(offer)
-            db.session.commit()
-            return True
-        return False
+        db.session.delete(offer)
+        db.session.commit()

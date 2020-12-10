@@ -20,8 +20,12 @@ class SurveyRecommender:
 
         for survey_id in survey_ids:
             availableSurveyIds[survey_id] = completed_survey_ids.count(survey_id)
-
-        recommendedSurvey = min(availableSurveyIds.keys(), key=(lambda k: availableSurveyIds[k]))
+        if 26 in availableSurveyIds.keys():
+            recommendedSurvey = 26
+        elif 27 in availableSurveyIds.keys():
+            recommendedSurvey = 27
+        else:
+            recommendedSurvey = min(availableSurveyIds.keys(), key=(lambda k: availableSurveyIds[k]))
 
         return recommendedSurvey
 

@@ -79,14 +79,43 @@ def getMyOffers():
 
     :return:
     '''
+    # Get current user
+    current_user_id = get_jwt_identity()
+
+    responseInformation = User.getOffers(current_user_id, False)
+
+    # Format output
+    return jsonify(responseInformation), 200
+
+@me_blueprint.route('/getMyPastTasks', methods=['GET'])
+@jwt_required
+def getMyPastTasks():
+    '''
+    Get my old tasks
+
+    :return:
+    '''
+    # Get current user
+    current_user_id = get_jwt_identity()
+
+    responseInformation = User.getPastTasks(current_user_id)
+
+    return jsonify(responseInformation)
+
+@me_blueprint.route('/getMyCompletedTasks', methods=['GET'])
+@jwt_required
+def getMyCompletedTasks():
+    '''
+
+    :return:
+    '''
 
     # Get current user
     current_user_id = get_jwt_identity()
 
-    responseInformation = User.getOffers(current_user_id)
-    # Format output
+    responseInformation = User.getPastCompletedTasks(current_user_id)
 
-    return jsonify(responseInformation), 200
+    return jsonify(responseInformation)
 
 
 '''
