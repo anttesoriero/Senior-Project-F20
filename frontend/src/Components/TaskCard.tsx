@@ -110,7 +110,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
         } else {submitO = true}
 
         // if(submitDE && submitDY && submitO) {
-        if(submitDY && submitO) {
+        //if(submitDY && submitO) {
             await axios.post(url + 'offer/createOffer',
                 {
                     taskId: id,
@@ -137,7 +137,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
                     setSubmitting(false)
                     setSerror(true)
                 })
-        }
+        //}
     }
 
     const viewUser = () => {
