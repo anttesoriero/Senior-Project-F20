@@ -448,20 +448,20 @@ const ProfilePage = () => {
                                     <h4>Contact Info</h4>
                                     {/* Phone */}
                                     <Row>
-                                        <Col xs="2"><p>Phone:</p></Col>
+                                        <Col xs="auto"><p>Phone:</p></Col>
                                         {user ?
-                                            <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
+                                            <Col xs="auto"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                             :
-                                            <Col xs="10"><p>###-###-####</p></Col>
+                                            <Col xs="auto"><p>###-###-####</p></Col>
                                         }  
                                     </Row>
                                     {/* Email */}
                                     <Row>
-                                        <Col xs="2"><p>Email:</p></Col>
+                                        <Col xs="auto"><p>Email:</p></Col>
                                         {user ?
-                                            <Col xs="10"><p>{user.email}</p></Col>
+                                            <Col xs="auto"><p>{user.email}</p></Col>
                                             :
-                                            <Col xs="10"><p>user@email.com</p></Col>
+                                            <Col xs="auto"><p>user@email.com</p></Col>
                                         }
                                     </Row>
                                     {/* Right - Location */}
@@ -491,21 +491,21 @@ const ProfilePage = () => {
 
                                     {/* Liked Categories */}
                                     <Row>
-                                        <Col xs="2"><p>Interested:</p></Col>
+                                        <Col xs="auto"><p>Interested:</p></Col>
                                         {user.email !== '' ?
-                                            <Col xs="10"><p>{user.mostInterestedCategory}</p></Col>
+                                            <Col xs="auto"><p>{user.mostInterestedCategory}</p></Col>
                                             :
-                                            <Col xs="10"><p>Interested</p></Col>
+                                            <Col xs="auto"><p>Interested</p></Col>
                                         }
                                     </Row>
 
                                     {/* Disliked Categories */}
                                     <Row>
-                                        <Col xs="2"><p>Disinterested:</p></Col>
+                                        <Col xs="auto"><p>Disinterested:</p></Col>
                                         {user.email !== '' ?
-                                            <Col xs="10"><p>{user.leastInterestedCategory}</p></Col>
+                                            <Col xs="auto"><p>{user.leastInterestedCategory}</p></Col>
                                             :
-                                            <Col xs="10"><p>Disinterested Categories</p></Col>
+                                            <Col xs="auto"><p>Disinterested Categories</p></Col>
                                         }
                                     </Row>
 
@@ -545,20 +545,20 @@ const ProfilePage = () => {
                                                 <h4>Contact Info</h4>
                                                 {/* Phone */}
                                                 <Row>
-                                                    <Col xs="2"><p>Phone:</p></Col>
+                                                    <Col xs="auto"><p>Phone:</p></Col>
                                                     {user.phoneNumber !== '' ?
-                                                        <Col xs="10"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
+                                                        <Col xs="auto"><p>{formatPhoneNumber(user.phoneNumber)}</p></Col>
                                                         :
-                                                        <Col xs="10"><p>###-###-####</p></Col>
+                                                        <Col xs="auto"><p>###-###-####</p></Col>
                                                     }  
                                                 </Row>
                                                 {/* Email */}
                                                 <Row>
-                                                    <Col xs="2"><p>Email:</p></Col>
+                                                    <Col xs="auto"><p>Email:</p></Col>
                                                     {user.email !== '' ?
-                                                        <Col xs="10"><p>{user.email}</p></Col>
+                                                        <Col xs="auto"><p>{user.email}</p></Col>
                                                         :
-                                                        <Col xs="10"><p>youremail@email.com</p></Col>
+                                                        <Col xs="auto"><p>youremail@email.com</p></Col>
                                                     }
                                                 </Row>
                                             </Col>
@@ -590,21 +590,21 @@ const ProfilePage = () => {
 
                                                 {/* Liked Categories */}
                                                 <Row>
-                                                    <Col xs="2"><p>Interested:</p></Col>
+                                                    <Col xs="auto"><p>Interested:</p></Col>
                                                     {user.email !== '' ?
-                                                        <Col xs="10"><p>{user.mostInterestedCategory}</p></Col>
+                                                        <Col xs="auto"><p>{user.mostInterestedCategory}</p></Col>
                                                         :
-                                                        <Col xs="10"><p>Interested</p></Col>
+                                                        <Col xs="auto"><p>Interested</p></Col>
                                                     }
                                                 </Row>
 
                                                 {/* Disliked Categories */}
                                                 <Row>
-                                                    <Col xs="2"><p>Disinterested:</p></Col>
+                                                    <Col xs="auto"><p>Disinterested:</p></Col>
                                                     {user.email !== '' ?
-                                                        <Col xs="10"><p>{user.leastInterestedCategory}</p></Col>
+                                                        <Col xs="auto"><p>{user.leastInterestedCategory}</p></Col>
                                                         :
-                                                        <Col xs="10"><p>Disinterested Categories</p></Col>
+                                                        <Col xs="auto"><p>Disinterested Categories</p></Col>
                                                     }
                                                 </Row>
                                             </Col>
