@@ -130,7 +130,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="title"><h4>Task Title *</h4></Label>
-                                        <Field type="text" name="title" placeholder="Title" as={Input} required />
+                                        <Field type="text" name="title" placeholder="Title" as={Input} maxLength={24} required />
                                     </FormGroup>
                                 </Col>
                                 <Col>
@@ -158,7 +158,7 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                 <Col>
                                     <FormGroup>
                                         <Label for="taskDesc"><h4>Task Description</h4></Label>
-                                        <Field type="textarea" name="description" placeholder="Description" as={Input} />
+                                        <Field type="textarea" name="description" placeholder="Description" maxLength={100} as={Input} />
                                     </FormGroup>
                                 </Col>
                                 <Col>
