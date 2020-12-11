@@ -69,11 +69,11 @@ const ProfilePage = () => {
     }
 
     const editProfile = async (data) => {
-        const geoAddress = data.address + data.city + data.state + data.zip
+        // const geoAddress = data.address + data.city + data.state + data.zip
         const address = data.address + ', ' + data.city + ', ' + data.state + ', ' + data.zip
         
         const userInfo = {
-            email: data.email,
+            // email: data.email,
             firstName: data.name.split(' ')[0],
             lastName: data.name.split(' ')[1],
             preferredName: data.preferredName,
@@ -564,7 +564,7 @@ const ProfilePage = () => {
                                 <br />
                                 <div className="centered">
                                     <Formik initialValues={{ 
-                                            email: user.email, 
+                                            // email: user.email, 
                                             name: user.name, 
                                             preferredName: user.preferredName, 
                                             phoneNumber: user.phoneNumber, 
@@ -595,10 +595,14 @@ const ProfilePage = () => {
                                             {/*Change email and preferred name */}
                                             <Row>
                                                 <Col>
-                                                    <FormGroup>
+                                                    {/* <FormGroup>
                                                         <Label for="email"><h4>Email Address</h4></Label>
                                                         <Field name='email' type='email' placeholder={user.email} as={Input} />
-                                                    </FormGroup>
+                                                    </FormGroup> */}
+                                                    <FormGroup>
+                                                        <Label for="bio"><h4>Bio</h4></Label>
+                                                        <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
+                                                    </FormGroup>        
                                                 </Col>
                                                 <Col>
                                                     <FormGroup>
@@ -608,7 +612,7 @@ const ProfilePage = () => {
                                                 </Col>
                                             </Row>
                                             <hr />
-
+{/* 
                                             <Row>
                                                 <Col className="centered">
                                                     <FormGroup>
@@ -616,8 +620,8 @@ const ProfilePage = () => {
                                                         <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
                                                     </FormGroup>                                                                                                       
                                                 </Col>
-                                            </Row>
-                                            <hr />
+                                            </Row> */}
+                                            {/* <hr /> */}
 
                                             {/* Row 4 - Address 1 & Address 2 */}
                                             <Row>
