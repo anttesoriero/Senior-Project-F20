@@ -259,6 +259,7 @@ const TaskBoard = () => {
                                 description={task.description}
                                 duration={task.estimatedDurationMinutes}
                                 startDate={task.startDate}
+                                categoryId={task.categoryId}
                             />
                         ))}
 
@@ -341,6 +342,7 @@ const TaskBoard = () => {
                                         description={task.description}
                                         duration={task.estimatedDurationMinutes}
                                         startDate={task.startDate}
+                                        categoryId={task.categoryId}
                                     />
                                 ))}
 

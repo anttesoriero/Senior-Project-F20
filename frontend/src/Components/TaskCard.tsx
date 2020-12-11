@@ -4,6 +4,7 @@ import {
     ModalBody, Row, Col, Input, FormGroup, Spinner, Label, InputGroup, InputGroupAddon
 } from 'reactstrap';
 import { RiMoneyDollarBoxFill, RiUserFill, RiTimerFill, RiCalendarFill, RiStickyNoteFill } from 'react-icons/ri'
+import { FaHashtag, FaListUl } from 'react-icons/fa'
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';
@@ -17,7 +18,8 @@ type CardProps = {
     price: number,
     description: string,
     duration: number,
-    startDate: string
+    startDate: string,
+    categoryId: number
 }
 
 type Poster = {
@@ -30,7 +32,7 @@ type Poster = {
     profilePicture: ""
 }
 
-const TaskCard = ({ title, offerer, price, description, duration, id, startDate }: CardProps) => {
+const TaskCard = ({ title, offerer, price, description, duration, id, startDate, categoryId }: CardProps) => {
     const url = useContext(APIContext);
     const token = localStorage.getItem('access_token');
 
@@ -164,12 +166,19 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
 
     if (redirect)
         return <Redirect to={'/user/' + poster?.id} />
+
+    const categoryNames = ["Yard Work", "Transportation", "Cleaning", "Moving", "Care-Taking", "Cooking", "Other"]
+    const chosenName = categoryNames[categoryId-1]
     
     return (
         <div>
             <Card>
                 <CardBody>
                     <h4 style={{ fontWeight: 'bolder' }}>{title}</h4>
+                    <Row>
+                        <Col xs="auto"><CardSubtitle style={{ fontWeight: 'bolder' }}><FaListUl /> {chosenName}</CardSubtitle></Col>
+                        <Col><CardSubtitle style={{ fontWeight: 'bolder' }}><FaHashtag /> Task: {id}</CardSubtitle></Col>
+                    </Row>
                     <CardSubtitle style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {poster?.name}</CardSubtitle>
                     <CardSubtitle style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${price}</CardSubtitle>
                     <CardSubtitle style={{ color: '#c48818', fontWeight: 'bolder' }}><RiTimerFill />
@@ -192,7 +201,7 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate 
             </Card>
             <Modal isOpen={open} toggle={() => setOpen(false)}>
                 <ModalHeader>
-                    <h3 id="exampleModalLiveLabel">Create offer for {title.toLowerCase()}</h3>
+                    <h3 id="exampleModalLiveLabel">Create offer for task {id}: {title.toLowerCase()}</h3>
                     <Button aria-label="Close" className="close" data-dismiss="modal" type="button" onClick={() => setOpen(false)}>
                         <span aria-hidden={true}>×</span>
                     </Button>
