@@ -93,21 +93,6 @@ const UserProfile = () => {
             });
     }
 
-    // const computeUserRating = () => {
-    //     const { workerRating, posterRating } = userInfo
-    //     if (workerRating === null && posterRating === null) {
-    //         return 'No Ratings Yet'
-    //     }
-    //     if (workerRating === null) {
-    //         return `${posterRating}`
-    //     }
-    //     if (posterRating === null) {
-    //         return `${workerRating}`
-    //     }
-    //     const averageRating = (workerRating! + posterRating!) / 2
-    //     return `${averageRating}`
-    // }
-
     const toggle = () => setModal(!modal);
 
     useEffect(() => {
@@ -202,8 +187,11 @@ const UserProfile = () => {
                                 </div>
                             </Media>
                         </Media>
+                        <br />
+                        <Button onClick={toggle} outline color="danger" size="sm">Report User</Button>{' '}
                     </div>
                 :
+                    <div>
                     <Row> {/* NORMAL */}
                         {/* Left - Prof Pic, name, and basic info */}
                         <Col xs="10">
@@ -287,6 +275,9 @@ const UserProfile = () => {
                             </Media>
                         </Col>
                     </Row>
+                    <br />
+                    <Button onClick={toggle} outline color="danger" size="sm">Report User</Button>{' '}
+                    </div>
                 }  
                 <br />
                 {/* Lower - Job History and About */}
@@ -323,144 +314,9 @@ const UserProfile = () => {
                                 <Col xs="10"><p>user@email.com</p></Col>
                             }
                         </Row>
-                        <Button onClick={toggle} outline color="danger" size="sm" style={{height: '40%'}}>Report User</Button>{' '}
-                        <Modal isOpen={modal} toggle={toggle}>
-                            <ModalHeader toggle={toggle}>Report this User</ModalHeader>
-                            <ModalBody>
-                                Please select the category that this user violated:
-                                <Formik
-                                    initialValues={{
-                                        picked: '',
-                                    }}
-                                    onSubmit={values => reportUser(values)}
-                                >
-                                    {({ values }) => (
-                                        <Form>
-                                        <br />
-                                        <div role="group" aria-labelledby="my-radio-group">
-                                            <label>
-                                                <Field type="radio" name="picked" value="Scam" />
-                                                <span>&nbsp;&nbsp;</span>
-                                                Scam
-                                            </label>
-                                            <br />
-
-                                            <label>
-                                                <Field type="radio" name="picked" value="Harassment" />
-                                                <span>&nbsp;&nbsp;</span>
-                                                Harassment
-                                            </label>
-                                            <br />
-
-                                            <label>
-                                                <Field type="radio" name="picked" value="Fake Account" />
-                                                <span>&nbsp;&nbsp;</span>
-                                                Fake Account
-                                            </label>
-                                            <br />
-
-                                            <label>
-                                                <Field type="radio" name="picked" value="Inappropriate" />
-                                                <span>&nbsp;&nbsp;</span>
-                                                Inappropriate
-                                            </label>
-                                            <br />
-
-                                            <label>
-                                                <Field type="radio" name="picked" value="Illegal Activity" />
-                                                <span>&nbsp;&nbsp;</span>
-                                                Illegal Activity
-                                            </label>
-                                            <br />
-
-                                            <label>
-                                                <Field type="radio" name="picked" value="Other" />
-                                                <span>&nbsp;&nbsp;</span>
-                                                Other
-                                            </label>
-                                            <br />
-                                            <br />
-
-                                            <label>
-                                                <Label for="description">Please provide details as to why you are reporting this user:</Label>
-                                                <Field type="textarea" name="description" placeholder="Description" required as={Input} />
-                                            </label>
-                                            <br />
-                                        </div>
-
-                                        <br />
-                                        <Button color="danger" type="submit">Report</Button>{' '}
-
-                                        {/* <button type="submit">Submit</button> */}
-                                        </Form>
-                                    )}
-                                </Formik>
-                            </ModalBody>
-                            {/* <ModalFooter>
-                            <Button color="primary" type="submit" onClick={reportUser}>Report</Button>{' '}
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
-                            </ModalFooter> */}
-                        </Modal>
-
-                        {/* Right - Location */}
-                            {/* {user ?
-                                <div>
-                                    <h4>Address</h4>
-                                    {user ?
-                                        <p>{user.address}</p>
-                                        :
-                                        <p>123 Main St, City, ST 12345</p>
-                                    }
-                                    <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                    <TileLayer
-                                        url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                                        attribution='<a href="/">OddJobs</a>'
-                                    />
-                                        <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
-                                            <Tooltip sticky>Radius Users See</Tooltip>
-                                        </Circle>
-                                        <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
-                                    </MapContainer>
-                                </div> : <div></div>} */}
-                    
-                    {/* History -- NOTE: Styled correctly, but commented since we're not using it yet
-                    <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
-                    <hr />
-                    <div id="history_category">
-                        <Media heading>Category 1 <Badge color="secondary">New</Badge></Media>
-                        <br />
-                        <Row>
-                            <Col xs="6" sm="4">
-                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                            </Col>
-                            <Col xs="6" sm="4">
-                                <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                            </Col>
-                        </Row>
-                    </div> */}
                 </div>
                 :
                 <Row> {/* NORMAL */}
-                    {/* Left - Job History */}
-                    {/* <Col xs="4">
-                        <h2 style={{ fontWeight: 'bold' }}>Job History</h2>
-                        <hr />
-                        <div id="history_category">
-                            <Media heading>Category 1 <Badge color="secondary">New</Badge></Media>
-                            <br />
-                            <Row>
-                                <Col xs="6" sm="4">
-                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                </Col>
-                                <Col xs="6" sm="4">
-                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                </Col>
-                                <Col sm="4">
-                                    <Media object src={PlaceholderImage} alt="Generic placeholder image" height="80" width="80" />
-                                </Col>
-                            </Row>
-                        </div>
-                    </Col> */}
                     {/* Right - About */}
                     <Col xs="8">
                         <h2 style={{ fontWeight: 'bold' }}>About</h2>
@@ -496,108 +352,81 @@ const UserProfile = () => {
                                     }
                                 </Row>
                             </Col>
-                            <Button onClick={toggle} outline color="danger" size="sm" style={{height: '40%'}}>Report User</Button>{' '}
-                            <Modal isOpen={modal} toggle={toggle}>
-                                <ModalHeader toggle={toggle}>Report this User</ModalHeader>
-                                <ModalBody>
-                                    Please select the category that this user violated:
-                                    <Formik
-                                        initialValues={{
-                                            picked: '',
-                                        }}
-                                        onSubmit={values => reportUser(values)}
-                                    >
-                                        {({ values }) => (
-                                            <Form>
-                                            <div role="group" aria-labelledby="my-radio-group">
-                                                <label>
-                                                    <Field type="radio" name="picked" value="Scam" />
-                                                    <span>&nbsp;&nbsp;</span>
-                                                    Scam
-                                                </label>
-                                                <br />
-
-                                                <label>
-                                                    <Field type="radio" name="picked" value="Harassment" />
-                                                    <span>&nbsp;&nbsp;</span>
-                                                    Harassment
-                                                </label>
-                                                <br />
-
-                                                <label>
-                                                    <Field type="radio" name="picked" value="Fake Account" />
-                                                    <span>&nbsp;&nbsp;</span>
-                                                    Fake Account
-                                                </label>
-                                                <br />
-
-                                                <label>
-                                                    <Field type="radio" name="picked" value="Inappropriate" />
-                                                    <span>&nbsp;&nbsp;</span>
-                                                    Inappropriate
-                                                </label>
-                                                <br />
-
-                                                <label>
-                                                    <Field type="radio" name="picked" value="Illegal Activity" />
-                                                    <span>&nbsp;&nbsp;</span>
-                                                    Illegal Activity
-                                                </label>
-                                                <br />
-
-                                                <label>
-                                                    <Field type="radio" name="picked" value="Other" />
-                                                    <span>&nbsp;&nbsp;</span>
-                                                    Other
-                                                </label>
-                                                <br />
-
-                                                <label>
-                                                    <Label for="description">Please provide details as to why you are reporting this user:</Label>
-                                                    <Field type="textarea" name="description" placeholder="Description" required as={Input} />
-                                                </label>
-                                                <br />
-                                            </div>
-
-                                            <br />
-                                            <Button color="danger" type="submit">Report</Button>{' '}
-
-                                            {/* <button type="submit">Submit</button> */}
-                                            </Form>
-                                        )}
-                                    </Formik>
-                                </ModalBody>
-                                {/* <ModalFooter>
-                                <Button color="primary" type="submit" onClick={reportUser}>Report</Button>{' '}
-                                <Button color="secondary" onClick={toggle}>Cancel</Button>
-                                </ModalFooter> */}
-                            </Modal>
-
-                            {/* Right - Location */}
-                            {/* <Col xs="6">
-                                {user ?
-                                    <div>
-                                        <h4>Address</h4>
-                                        {user ?
-                                            <p>{user.address}</p>
-                                            :
-                                            <p>123 Main St, City, ST 12345</p>
-                                        }
-                                        <MapContainer className="leaflet-container" center={[39.7089, -75.1183]} zoom={15.5} scrollWheelZoom={false} style={{ height: "200px" }} >
-                                        <TileLayer
-                                            url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A" 
-                                            attribution='<a href="/">OddJobs</a>'
-                                        />
-                                            <Circle center={[39.7089, -75.1183]} pathOptions={{ color: 'blue', fillColor: 'blue' }} radius={150}>
-                                                <Tooltip sticky>Radius Users See</Tooltip>
-                                            </Circle>
-                                            <Marker position={[39.7089, -75.1183]}><Tooltip>Where You Are</Tooltip></Marker>
-                                        </MapContainer>
-                                    </div> : <div></div>}
-                            </Col> */}
                         </Row>
                     </Col>
                 </Row>}
+
+                <Modal isOpen={modal} toggle={toggle}>
+                    <ModalHeader toggle={toggle}>Report this User</ModalHeader>
+                    <ModalBody>
+                        Please select the category that this user violated:
+                        <Formik
+                            initialValues={{
+                                picked: '',
+                            }}
+                            onSubmit={values => reportUser(values)}
+                        >
+                            {({ values }) => (
+                            <Form>
+                                <div role="group" aria-labelledby="my-radio-group">
+                                    <label>
+                                        <Field type="radio" name="picked" value="Scam" />
+                                        <span>&nbsp;&nbsp;</span>
+                                        Scam
+                                    </label>
+                                    <br />
+
+                                    <label>
+                                        <Field type="radio" name="picked" value="Harassment" />
+                                        <span>&nbsp;&nbsp;</span>
+                                        Harassment
+                                    </label>
+                                    <br />
+
+                                    <label>
+                                        <Field type="radio" name="picked" value="Fake Account" />
+                                        <span>&nbsp;&nbsp;</span>
+                                        Fake Account
+                                    </label>
+                                    <br />
+
+                                    <label>
+                                        <Field type="radio" name="picked" value="Inappropriate" />
+                                        <span>&nbsp;&nbsp;</span>
+                                        Inappropriate
+                                    </label>
+                                    <br />
+
+                                    <label>
+                                        <Field type="radio" name="picked" value="Illegal Activity" />
+                                        <span>&nbsp;&nbsp;</span>
+                                        Illegal Activity
+                                    </label>
+                                    <br />
+
+                                    <label>
+                                        <Field type="radio" name="picked" value="Other" />
+                                        <span>&nbsp;&nbsp;</span>
+                                        Other
+                                    </label>
+                                    <br />
+
+                                    <label>
+                                        <Label for="description">Please provide details as to why you are reporting this user:</Label>
+                                        <Field type="textarea" name="description" placeholder="Description" required as={Input} />
+                                    </label>
+                                    <br />
+                                </div>
+
+                                <br />
+                                <Button color="danger" type="submit">Report</Button>{' '}
+
+                            </Form>
+                            )}
+                        </Formik>
+                    </ModalBody>
+                </Modal>
+
             </Container>
             <Footer/>
         </div>
