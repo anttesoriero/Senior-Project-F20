@@ -141,8 +141,64 @@ const UserProfile = () => {
                                         {user.preferredName ? " " + user.preferredName : ' ' + user.name.split(' ')[0]}
                                     </h5>
                                 
-                                    <p>Poster Rating: {user.posterRating === null ? 'No Ratings Yet' : user.posterRating}</p>
-                                    <p>Worker Rating: {user.workerRating === null ? 'No Ratings Yet' : user.workerRating}</p>
+                                    <p>{user.posterRating === null  
+                                                            ? 'Poster Rating: No Ratings Yet' 
+                                                            :        
+                                                            <div>
+                                                                Poster Rating: 
+                                                            {[...Array(Math.round(user.posterRating))].map((star, i) => {
+                                                                return(
+                                                                    <label>
+                                                                        <FaStar 
+                                                                            style={{cursor: 'pointer', transition: 'color 200ms'}} 
+                                                                            size={15} 
+                                                                            color={'#ffc107'}
+                                                                        />
+                                                                    </label>
+                                                                )
+                                                            })}
+                                                            {[...Array(5 - Math.round(user.posterRating))].map((star, i) => {
+                                                                return(
+                                                                    <label>
+                                                                        <FaStar 
+                                                                            style={{cursor: 'pointer', transition: 'color 200ms'}} 
+                                                                            size={15} 
+                                                                            color={'#e4e5e6'}
+                                                                        />
+                                                                    </label>
+                                                                )
+                                                            })}
+                                                        </div>}
+                                        </p>
+                                        <p>{user.workerRating === null  
+                                                            ? 'Worker Rating: No Ratings Yet' 
+                                                            :        
+                                                            <div>
+                                                                Worker Rating: 
+                                                            {[...Array(user.workerRating)].map((star, i) => {
+                                                                return(
+                                                                    <label>
+                                                                        <FaStar 
+                                                                            style={{cursor: 'pointer', transition: 'color 200ms'}} 
+                                                                            size={15} 
+                                                                            color={'#ffc107'}
+                                                                        />
+                                                                    </label>
+                                                                )
+                                                            })}
+                                                            {[...Array(5 - user.workerRating)].map((star, i) => {
+                                                                return(
+                                                                    <label>
+                                                                        <FaStar 
+                                                                            style={{cursor: 'pointer', transition: 'color 200ms'}} 
+                                                                            size={15} 
+                                                                            color={'#e4e5e6'}
+                                                                        />
+                                                                    </label>
+                                                                )
+                                                            })}
+                                                        </div>}
+                                        </p>
                                 </div>
                             </Media>
                         </Media>
