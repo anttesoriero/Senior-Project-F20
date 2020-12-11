@@ -6,6 +6,8 @@ import { Popup, Circle } from 'react-leaflet';
 import { Button, Col, FormGroup, Input, InputGroup, InputGroupAddon, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
+import { FaHashtag, FaListUl } from 'react-icons/fa';
+import { RiUserFill, RiMoneyDollarBoxFill, RiTimerFill, RiCalendarFill } from 'react-icons/ri';
 
 type CardProps = {
     id: number,
@@ -32,8 +34,11 @@ type Poster = {
 
 const MapsCircle = ({ title, offerer, price, description, duration, id, categoryId, startDate, latitude, longitute }: CardProps) => {
     const categoryNames = ["Yard Work", "Transportation", "Cleaning", "Moving", "Care-Taking", "Cooking", "Other"]
+    const chosenName = categoryNames[categoryId-1]
+
     const categoryColor = ["green", "gray", "blue", "red", "purple", "orange", "DarkGoldenRod"]
     const chosenColor = categoryColor[categoryId-1]
+
 
     const url = useContext(APIContext);
     const token = localStorage.getItem('access_token');
@@ -81,8 +86,6 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
     const createOffer = async (data) => {
         const today = new Date();
         const startingDate = new Date(startDate)
-        // const date3 = startingDate.setDate(startingDate.getDate() + 7)
-        // const date4 = startingDate.setDate(startingDate.getDate())
         
         let submitDE = false;
         let submitDL = false;
@@ -90,31 +93,12 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
         let submitO = false;
         
         setSubmitting(true)
-        
-        // Don't allow submission if offer date before listing date
-        // if(Date.parse(data.startDate) < Date.parse(startDate)){
-        //     setDEerror(true)
-        //     setSubmitting(false)
-        // } else {submitDE = true}
-
-        // Don't allow submission if offer date before today
-        // if(Date.parse(data.startDate) < Date.parse(String(today))){
-        //     setDYerror(true)
-        //     setSubmitting(false)
-        // } else {submitDY = true}
-
-        // // Don't allow submission if offer date >7 days after listing date
-        // if(startingDate.setDate(startingDate.getDate()) > startingDate.setDate(startingDate.getDate() + 7)){
-        //     setDLerror(true)
-        //     setSubmitting(false)
-        // } else {submitDL = true}
 
         if (poster?.id === user) {
             setOerror(true)
             setSubmitting(false)
         } else {submitO = true}
 
-        //if(submitDE && submitDY && submitO) {
         if(submitO) {
             await axios.post(url + 'offer/createOffer',
                 {
@@ -151,8 +135,9 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
         const date = new Date(dateTime)
         const displayDate = date.toString().substring(0, 15)
         const ampm = Number(date.toISOString().substring(11, 13)) > 11 ? ' PM' : ' AM'
-        const displayTime = date.toISOString().substring(11, 16) + ampm
-        
+        const displayTime = Number(date.toISOString().substring(11, 13)) > 12 
+                            ? String((Number(date.toISOString().substring(11, 13)) % 12)) + `:${date.toISOString().substring(14, 16)}` + ampm 
+                            : date.toISOString().substring(11, 16) + ampm
         return {
             defaultDate: date.toISOString().substring(0, 10), 
             defaultTime: date.toISOString().substring(11, 16),
@@ -160,7 +145,6 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
             displayTime: displayTime
         }
     }
-
     const { defaultDate, defaultTime, displayDate, displayTime } = dateTime(startDate)
 
     if (redirect)
@@ -173,19 +157,37 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
         pathOptions={{ color: chosenColor, fillColor: chosenColor }}
         radius={2000}>
             <Popup>
-                <h2>{title}</h2>
+                {/* <h2>{title}</h2>
                 <h3>Category: {categoryNames[categoryId-1]}</h3>
                 <h4>${price} for {duration} minutes</h4>
-                <br />
+                <br /> */}
+
+                <h2>{title}</h2>
+                <Row>
+                    <Col xs="auto"><h5 style={{ fontWeight: 'bolder' }}><FaListUl /> {chosenName}</h5></Col>
+                    <Col><h5 style={{ fontWeight: 'bold' }}><FaHashtag /> Task: {id}</h5></Col>
+                </Row>
+                <h5 style={{ color: '#377fb3', fontWeight: 'bolder', cursor: 'pointer' }} onClick={viewUser}><RiUserFill /> {poster?.name}</h5>
+                <h5 style={{ color: '#099c1a', fontWeight: 'bolder' }}><RiMoneyDollarBoxFill /> ${price}</h5>
+                <h5 style={{ color: '#c48818', fontWeight: 'bolder' }}><RiTimerFill />
+                    {duration / 60 < 1
+                        ? ' ' + duration + ' minutes'
+                        : duration % 60 === 0
+                            ? ' ' + duration / 60 + ' hour(s)'
+                            : ' ' + Math.floor(duration / 60) + ' hour(s) ' + duration % 60 + ' minutes'}
+                </h5>
+                <h5 style={{ fontWeight: 'bolder' }}><RiCalendarFill /> {displayDate + ' @ ' + displayTime}</h5>
+                
                 <div className='centered'>
                     <Button className={'task'} onClick={launchModal}>Create Offer</Button>
                 </div>
+
             </Popup>
         </Circle>
 
         <Modal isOpen={open} toggle={() => setOpen(false)}>
                 <ModalHeader>
-                    <h3 id="exampleModalLiveLabel">Create offer for {title.toLowerCase()}</h3>
+                    <h3 id="exampleModalLiveLabel">Create offer for task {id}: {title.toLowerCase()}</h3>
                     <Button aria-label="Close" className="close" data-dismiss="modal" type="button" onClick={() => setOpen(false)}>
                         <span aria-hidden={true}>×</span>
                     </Button>
