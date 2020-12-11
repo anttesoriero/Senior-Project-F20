@@ -59,6 +59,10 @@ const AboutPage = () => {
                         <li>Matthew Schofield - <a href="https://github.com/mattscho">GitHub</a> - <a href="https://www.linkedin.com/in/matthew-schofield-253a33189/">LinkedIn</a></li>
                         <li>Jasdip Dhillon - <a href="https://github.com/dhillonj2">GitHub</a> - <a href="https://www.linkedin.com/in/jasdip-dhillon-050a5719a/">LinkedIn</a></li>
                         <li>Nicholas Romeo - <a href="https://github.com/romeon728">GitHub</a> - <a href="https://www.linkedin.com/in/nicholas-romeo-05989b150">LinkedIn</a></li>
+                    </Col>
+                    <Col>
+                        <h4>Wild-Card <span style={{fontSize: 15}}>(Frontend and Backend)</span></h4>
+                        <hr />
                         <li>Steven Jiang - <a href="https://github.com/jiangs11">GitHub</a> - <a href="https://www.linkedin.com/in/steven-jiang-471453192/">LinkedIn</a></li>
                     </Col>
                 </Row>
