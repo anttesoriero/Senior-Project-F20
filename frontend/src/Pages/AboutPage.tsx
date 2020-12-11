@@ -28,18 +28,30 @@ const AboutPage = () => {
                     <Col>
                         <h4>Frontend</h4>
                         <hr />
-                        <li>HTML</li>
-                        <li>SASS</li>
-                        <li>React.JS</li>
-                        <li>Typescript</li>
+                        <Row>
+                            <Col>
+                                <li>HTML</li>
+                                <li>SASS</li>
+                            </Col>
+                            <Col>
+                                <li>React.JS</li>
+                                <li>Typescript</li>
+                            </Col>
+                        </Row>
                     </Col>
                     <Col>
                         <h4>Backend</h4>
                         <hr />
-                        <li>Python3</li>
-                        <li>Flask</li>
-                        <li>MySQL</li>
-                        <li>AWS EC2</li>
+                        <Row>
+                            <Col>
+                                <li>Python3</li>
+                                <li>Flask</li>
+                            </Col>
+                            <Col>
+                                <li>MySQL</li>
+                                <li>AWS EC2</li>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
 
