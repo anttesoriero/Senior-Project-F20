@@ -345,6 +345,7 @@ def completeTaskPoster():
 
     :return:
     '''
+    print("COMPLETE POSTER")
     # Validate Inputs
     requiredParameters = ["taskId"]
     optionalParameters = ["workerRating"]
@@ -378,6 +379,7 @@ def completeTaskWorker():
 
     :return:
     '''
+    print("COMPLETE WORKER")
     # Validate Inputs
     requiredParameters = ["taskId"]
     optionalParameters = ["posterRating"]
@@ -385,7 +387,7 @@ def completeTaskWorker():
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
-
+    print(inputJSON)
     # Get current user
     current_user_id = get_jwt_identity()
 

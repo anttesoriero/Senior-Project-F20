@@ -23,8 +23,8 @@ Task;What category is most related to Cleaning?;Yard Work;Care-Taking;Transporta
 Task;What category is most related to Moving?;Cleaning;Yard-Work;Care-Taking;Transportation;Cooking
 Task;What category is most related to Care-Taking?;Cleaning;Yard-Work;Transportation;Moving;Cooking
 Task;What category is most related to Cooking?;Cleaning;Yard-Work;Care-Taking;Transportation;Moving
-Task;What category are you most interested in?;Cleaning;Yard-Work;Care-Taking;Transportation;Moving;Cooking;
-Task;What category are you least interested in?;Cleaning;Yard-Work;Care-Taking;Transportation;Moving;Cooking;
+Task;What category are you most interested in?;Yard-Work;Transportation;Cleaning;Moving;Care-Taking;Cooking;
+Task;What category are you least interested in?;Yard-Work;Transportation;Cleaning;Moving;Care-Taking;Cooking;
 Task;How much would you like to be paid per hour for a Cleaning task?;$15;$20;$25;$30;$35;$40+;
 Task;How much would you like to pay someone per hour for a Cleaning task?;$15;$20;$25;$30;$35;$40+;
 Task;How much would you like to be paid per hour for a Transportation task?;$15;$20;$25;$30;$35;$40+;

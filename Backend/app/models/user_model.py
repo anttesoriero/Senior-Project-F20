@@ -327,11 +327,12 @@ class User(db.Model):
 
         output = {}
         for offer in offers:
-            task = Task.getByTaskId(offer.taskId)
-            if not task.completed or historical:
-                if not offer.taskId in output.keys():
-                    output[offer.taskId] = {"task": task.getPublicInfo(), "myOffers": []}
-                output[offer.taskId]["myOffers"].append(offer.getInfo())
+            if not offer.archived:
+                task = Task.getByTaskId(offer.taskId)
+                if not task.completed or historical:
+                    if not offer.taskId in output.keys():
+                        output[offer.taskId] = {"task": task.getPublicInfo(), "myOffers": []}
+                    output[offer.taskId]["myOffers"].append(offer.getInfo())
         newOutput = []
         for out in output.keys():
             newOutput.append(output[out])
