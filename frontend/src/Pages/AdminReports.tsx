@@ -67,12 +67,12 @@ const AdminUsers = () => {
             grow: 2
         },
         {
-            name: 'User ID 1',
+            name: 'Reporter ID',
             selector: 'userId_1',
             sortable: true
         },
         {
-            name: 'User ID 2',
+            name: 'Reported ID',
             selector: 'userId_2',
             sortable: true
         }
