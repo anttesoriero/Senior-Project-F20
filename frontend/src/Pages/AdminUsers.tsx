@@ -4,7 +4,6 @@ import Sidenav from '../Components/Sidenav';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import APIContext from '../Contexts/APIContext';
-import StarRating from '../Components/StarRating';
 
 type user = {
     id: number,
@@ -38,7 +37,6 @@ const AdminUsers = () => {
                 adminPassword: sessionStorage.getItem('admin_pass')
             })
                 .then(function (response) {
-                    //console.log(response.data.users);
                     setUsers(response.data.users);
                     setLoading(false);
                 })

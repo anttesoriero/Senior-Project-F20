@@ -42,7 +42,6 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
     const [serror, setSerror] = useState(false);
     const [cerror, SetCError] = useState(false);
     const [modal, setModal] = useState(false);
-    //const [rating, setRating] = useState(0);
     var rating = 0;
 
     var date = new Date(startDate);
@@ -58,7 +57,6 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
             },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
                 setOfferer(response.data)
             })
             .catch(error => {
@@ -72,7 +70,6 @@ const UpcommingTaskCard = ({ accepted, archived, jobDurationMinutes, note, offer
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
                 setRejected(true)
                 window.location.reload(false);
             })

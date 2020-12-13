@@ -1,6 +1,5 @@
 import React from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
-import { AiFillDashboard } from 'react-icons/ai';
 import { FaUsers, FaTasks } from 'react-icons/fa';
 import { MdReport,MdLocalOffer } from 'react-icons/md';
 import { RiSurveyFill } from 'react-icons/ri';

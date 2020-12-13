@@ -1,10 +1,8 @@
-import { SlowBuffer } from 'buffer'
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, ButtonGroup, PopoverBody, UncontrolledPopover, FormGroup, Input, Label, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import axios from 'axios';
 import APIContext from '../Contexts/APIContext';import OfferCard from './OfferCard';
 import UpcommingTaskCard from './UpcomingTaskCard';
-import { RiUserFill } from 'react-icons/ri';
 ;
 
 type offer = {

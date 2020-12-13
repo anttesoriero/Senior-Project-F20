@@ -6,7 +6,6 @@ import Navigation from '../Components/Navigation';
 import axios from 'axios';
 import OfferCard from '../Components/OfferCard';
 import { Formik, Form, Field } from 'formik';
-import StateSelector from '../Components/StateSelector';
 import UpcomingTask from '../Components/UpcomingTasks';
 
 type task = {
@@ -47,8 +46,6 @@ type taskState = {
     locationALongitude: number,
     locationALatitude: number,
     startDate: string
-    // locationBLongitude: number,
-    // locationBLatitude: number
 }
 
 const taskFields = {
@@ -61,8 +58,6 @@ const taskFields = {
     locationALongitude: 0,
     locationALatitude: 0,
     startDate: ""
-    // locationBLongitude: 15,
-    // locationBLatitude: 15
 }
 
 const MyTasksPage = () => {
@@ -142,7 +137,6 @@ const MyTasksPage = () => {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
-                //console.log(response.data);
                 toOffers()
                 getTaskIds()
             })
@@ -204,7 +198,6 @@ const MyTasksPage = () => {
         await axios.get(url + 'task/getPublic?taskId=' + id,
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
                 setTaskInfo(response.data)
             })
             .catch(error => {
@@ -274,7 +267,6 @@ const MyTasksPage = () => {
                                             {offers?.map(offer => (
                                                 <Row>
                                                     {console.log(offer)}
-                                                    {/* {offer.length == 0 ? <div>No Offers Yet</div> : <div></div>} */}
                                                     {offer.map(single => (
                                                         single.taskId === task.taskId ?
                                                             <Col>
@@ -386,7 +378,7 @@ const MyTasksPage = () => {
                                                     </Col>
                                                 </Row>
 
-                                                {/* Row 3.5 - DateTimePicker & Extra */}
+                                                {/* Row 4 - DateTimePicker & Extra */}
                                                 <Row>
                                                     <Col>
                                                         <FormGroup>
@@ -395,38 +387,6 @@ const MyTasksPage = () => {
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
-
-                                                {/* Row 4 - Address 1 & Address 2 */}
-                                                {/* <Row>
-                                                    <Col>
-                                                        <FormGroup>
-                                                            <Label for="address"><h4>Address *</h4></Label>
-                                                            <Field type="text" name="address" id="address" placeholder="Address" as={Input} required />
-                                                        </FormGroup>
-                                                    </Col>
-                                                </Row> */}
-
-                                                {/* Row 5 - City - State - Zip */}
-                                                {/* <Row>
-                                                    <Col md="6">
-                                                        <FormGroup>
-                                                            <Label for="city"><h4>City *</h4></Label>
-                                                            <Field type="text" name="city" id="city" placeholder="City" as={Input} required />
-                                                        </FormGroup>
-                                                    </Col>
-                                                    <Col md="4">
-                                                        <FormGroup>
-                                                            <Label for="state"><h4>State *</h4></Label>
-                                                            <StateSelector />
-                                                        </FormGroup>
-                                                    </Col>
-                                                    <Col md="2">
-                                                        <FormGroup>
-                                                            <Label for="zip"><h4>Zip *</h4></Label>
-                                                            <Field type="text" name="zip" id="zip" placeholder="Zipcode" as={Input} required />
-                                                        </FormGroup>
-                                                    </Col>
-                                                </Row> */}
 
                                                 <div className='centered'>
                                                     <p>* are required fields</p> <br />

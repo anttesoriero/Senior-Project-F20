@@ -5,7 +5,6 @@ import { Field, Formik } from 'formik';
 import Footer from "../Components/Footer";
 import axios from 'axios';
 import TaskCard from '../Components/TaskCard';
-import PaginationRow from '../Components/PaginationRow';
 import { TileLayer, MapContainer, useMap, useMapEvents } from 'react-leaflet';
 import { LatLngTuple } from 'leaflet';
 import MapsCircle from '../Components/MapsCircle';
@@ -67,8 +66,6 @@ const TaskBoard = () => {
             await axios.get(url + 'task/recommendTasks',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data);
-                //console.log('getting task')
                 setTasks(response.data.tasks);
                 var current_url = new URL(pageURL)
             })
@@ -222,7 +219,6 @@ const TaskBoard = () => {
                     </UncontrolledCollapse>
 
                     {/* Map */}
-                    {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
                     <MapContainer className="leaflet-container" center={centerLocation} style={{ height: window.innerWidth / 2 }} zoom={10} scrollWheelZoom={true} >
                         {/* <ChangeView center={tempCenter}/> */}
                         <TileLayer
@@ -314,7 +310,6 @@ const TaskBoard = () => {
                                 </FormGroup>
 
                                 <FormGroup>
-                                    {/* <Label for="maxPrice"><h5>&nbsp;&nbsp;&nbsp;<b>Max Price&nbsp;</b> </h5></Label> */}
                                     <Field type="hidden" name="lowerLat" id="lowerLat" value={lowerLat} as={Input} />
                                     <Field type="hidden" name="lowerLong" id="lowerLong" value={lowerLong} as={Input} />
                                     <Field type="hidden" name="upperLat" id="upperLat" value={upperLat} as={Input} />
@@ -359,9 +354,7 @@ const TaskBoard = () => {
                         </Col>
 
                         <Col xs="9">
-                            {/* <MapContainer className="leaflet-container" center={centerLocation ? centerLocation : center} style={{height: window.innerWidth/2 }} zoom={5} scrollWheelZoom={true} > */}
                             <MapContainer className="leaflet-container" center={centerLocation} style={{ height: '85vh' }} zoom={10} scrollWheelZoom={true} >
-                                {/* Need to change "center" to users location - center{[userLat, userLong]} */}
                                 <ChangeView />
                                 <TileLayer
                                     url="https://api.mapbox.com/styles/v1/sanchezer1757/cki7qwrxp2vlt1arsifbfcccx/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FuY2hlemVyMTc1NyIsImEiOiJja2k3cXUzbzExbDNtMnRxc2NlZnFnenJ2In0.zCSSQC8m87qtzSpfQS7Y8A"

@@ -29,7 +29,6 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
         await axios.get(url + 'me/getProfile',
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data);
                 setUser(response.data)
             })
             .catch(error => {
@@ -119,9 +118,6 @@ const Navigation = ({ history }: RouteComponentProps, { redirect }: NavProps) =>
                                     Profile Home
                             </DropdownItem>
                                 <DropdownItem divider />
-                                {/* <DropdownItem href="/upcomingtasks">
-                                Upcoming Tasks
-                            </DropdownItem> */}
                                 <DropdownItem href="/myTasks">
                                     My Tasks
                             </DropdownItem>

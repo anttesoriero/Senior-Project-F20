@@ -57,7 +57,6 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
             },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
                 setOfferer(response.data)
             })
             .catch(error => {
@@ -71,7 +70,6 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
                 setAccept(true)
                 window.location.reload(false);
             })
@@ -87,7 +85,6 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log(response.data)
                 setRejected(true)
             })
             .catch(error => {
@@ -122,7 +119,6 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
         },
             { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
-                //console.log('response: ', response)
                 toggle()
             })
             .catch(error => {
@@ -199,7 +195,7 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
                                             onSubmit={values => reportUser(values)}
                                         >
                                             {({ values }) => (
-                                                <Form>
+                                            <Form>
                                                 <div role="group" aria-labelledby="my-radio-group">
                                                     <label>
                                                         <Field type="radio" name="picked" value="Scam" />
@@ -252,16 +248,10 @@ const OfferCard = ({ accepted, archived, jobDurationMinutes, note, offerId, paym
 
                                                 <br />
                                                 <Button color="danger" type="submit">Report</Button>{' '}
-
-                                                {/* <button type="submit">Submit</button> */}
-                                                </Form>
+                                            </Form>
                                             )}
                                         </Formik>
                                     </ModalBody>
-                                    {/* <ModalFooter>
-                                    <Button color="primary" type="submit" onClick={reportUser}>Report</Button>{' '}
-                                    <Button color="secondary" onClick={toggle}>Cancel</Button>
-                                    </ModalFooter> */}
                                 </Modal>
                             </div>
                             :

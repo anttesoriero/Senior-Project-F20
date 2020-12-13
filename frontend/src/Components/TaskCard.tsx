@@ -42,8 +42,6 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
     const [redirect, setRediret] = useState(false);
     const [serror, setSerror] = useState(false);
     const [oerror, setOerror] = useState(false);
-    const [deerror, setDEerror] = useState(false);
-    const [dlerror, setDLerror] = useState(false);
     const [dyerror, setDYerror] = useState(false);
     const [success, setSuccess] = useState(false);
     const [poster, setPoster] = useState<Poster>();
@@ -76,43 +74,25 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
     }
     
     const createOffer = async (data) => {
-        const today = new Date();
-        const startingDate = new Date(startDate)
-        // const date3 = startingDate.setDate(startingDate.getDate() + 7)
-        // const date4 = startingDate.setDate(startingDate.getDate())
-        
-        let submitDE = false;
-        let submitDL = false;
+        const today = new Date()
+        const yesterday = today.setDate(today.getDate() - 1)  // Needed even though unused
         let submitDY = false;
         let submitO = false;
         
         setSubmitting(true)
         
-        // Don't allow submission if offer date before listing date ----
-        // if(Date.parse(data.startDate) < Date.parse(startDate)){
-        //     setDEerror(true)
-        //     setSubmitting(false)
-        // } else {submitDE = true}
-
         // Don't allow submission if offer date before today
-        // if(Date.parse(data.startDate) < Date.parse(String(today))){
-        //     setDYerror(true)
-        //     setSubmitting(false)
-        // } else {submitDY = true}
-
-        // // Don't allow submission if offer date >7 days after listing date
-        // if(startingDate.setDate(startingDate.getDate()) > startingDate.setDate(startingDate.getDate() + 7)){
-        //     setDLerror(true)
-        //     setSubmitting(false)
-        // } else {submitDL = true}
+        if(Date.parse(data.startDate) < Date.parse(String(today))){
+            setDYerror(true)
+            setSubmitting(false)
+        } else {submitDY = true}
 
         if (poster?.id === user) {
             setOerror(true)
             setSubmitting(false)
         } else {submitO = true}
 
-        // if(submitDE && submitDY && submitO) {
-        // if(submitDY && submitO) {
+        // if(submitDY && submitO) {  // Should work now
         if(submitO) {
             await axios.post(url + 'offer/createOffer',
                 {
@@ -126,8 +106,6 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
                 .then(response => {
                     console.log(response)
                     setSubmitting(false)
-                    setDEerror(false)
-                    setDLerror(false)
                     setDYerror(false)
                     setSerror(false)
                     setOerror(false)
@@ -251,8 +229,6 @@ const TaskCard = ({ title, offerer, price, description, duration, id, startDate,
                                 <div className='centered'>
                                     {serror ? <p className='error'>There was an error making offer!</p> : <div></div>}
                                     {oerror ? <p className='error'>Can't make an offer on your own task!</p> : <div></div>}
-                                    {deerror ? <p className='error'>Offer date before listing date!</p> : <div></div>}
-                                    {dlerror ? <p className='error'>Offer date at least 7 days within listing date!</p> : <div></div>}
                                     {dyerror ? <p className='error'>Offer date before today!</p> : <div></div>}
                                     {success ? <p className='success'>Offer successfully made!</p> : <div></div>}
                                 </div>

@@ -69,11 +69,9 @@ const ProfilePage = () => {
     }
 
     const editProfile = async (data) => {
-        // const geoAddress = data.address + data.city + data.state + data.zip
         const address = data.address + ', ' + data.city + ', ' + data.state + ', ' + data.zip
         
         const userInfo = {
-            // email: data.email,
             firstName: data.name.split(' ')[0],
             lastName: data.name.split(' ')[1],
             preferredName: data.preferredName,
@@ -188,14 +186,12 @@ const ProfilePage = () => {
                                         <Media>
                                             <Media left href="#">
                                                 {user.profilePicture === "" ?                                                
-                                                    // <Media object src={PlaceholderImage} alt="Generic placeholder image" height="160" width="160" />
                                                     <Button 
                                                         disabled 
                                                         style={{borderRadius: 10, fontSize: 60, marginTop: '10%', paddingLeft: 30, paddingRight: 30, height: 160, width: 160}}>
                                                         {initials}
                                                     </Button>
                                                 :
-                                                    // <img src={user.profilePicture}/>
                                                     <Media object src={user.profilePicture} alt="Generic placeholder image" height="160" width="160" />
                                                 }        
                                             </Media>
@@ -541,8 +537,6 @@ const ProfilePage = () => {
                                         <hr />
                                         <div style={{width: 300}}><PostTasksCarousel/></div>
                                     </Col>
-                                {/* </Row>          
-                                <Row> */}
                                     <Col>
                                         <h2 style={{ fontWeight: 'bold' }}>Tasks Completed</h2>
                                         <hr />
@@ -564,7 +558,6 @@ const ProfilePage = () => {
                                 <br />
                                 <div className="centered">
                                     <Formik initialValues={{ 
-                                            // email: user.email, 
                                             name: user.name, 
                                             preferredName: user.preferredName, 
                                             phoneNumber: user.phoneNumber, 
@@ -595,10 +588,6 @@ const ProfilePage = () => {
                                             {/*Change email and preferred name */}
                                             <Row>
                                                 <Col>
-                                                    {/* <FormGroup>
-                                                        <Label for="email"><h4>Email Address</h4></Label>
-                                                        <Field name='email' type='email' placeholder={user.email} as={Input} />
-                                                    </FormGroup> */}
                                                     <FormGroup>
                                                         <Label for="bio"><h4>Bio</h4></Label>
                                                         <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
@@ -612,18 +601,6 @@ const ProfilePage = () => {
                                                 </Col>
                                             </Row>
                                             <hr />
-{/* 
-                                            <Row>
-                                                <Col className="centered">
-                                                    <FormGroup>
-                                                        <Label for="bio"><h4>Bio</h4></Label>
-                                                        <Field name='bio' type='textarea' placeholder={user.bio} as={Input} />
-                                                    </FormGroup>                                                                                                       
-                                                </Col>
-                                            </Row> */}
-                                            {/* <hr /> */}
-
-                                            {/* Row 4 - Address 1 & Address 2 */}
                                             <Row>
                                                 <Col>
                                                     <FormGroup>
@@ -656,15 +633,6 @@ const ProfilePage = () => {
                                             </Row>
 
                                             <Row>
-                                                {/*Manage funds buttons*/}
-                                                {/* <Col>
-                                                    <h3 style={{ fontWeight: 'bold' }}>Manage Funds</h3>
-                                                    <hr />
-                                                    <Button className="centered" outline color="warning" size="sm">Deposit Funds</Button>{' '}
-                                                    <br />
-                                                    <Button className="centered" outline color="primary" size="sm">Withdraw Funds</Button>{' '}
-                                                </Col> */}
-                                                
                                                 {/*Account deletion*/}
                                                 <Col>
                                                     <h3 style={{ fontWeight: 'bold' }}>Delete Account</h3>

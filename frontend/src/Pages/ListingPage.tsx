@@ -17,8 +17,6 @@ type taskState = {
     locationALongitude: number,
     locationALatitude: number,
     startDate: string
-    // locationBLongitude: number,
-    // locationBLatitude: number
 }
 
 const taskFields = {
@@ -31,8 +29,6 @@ const taskFields = {
     locationALongitude: 0,
     locationALatitude: 0,
     startDate: ""
-    // locationBLongitude: 15,
-    // locationBLatitude: 15
 }
 
 const ListingPage = ({ history }: RouteComponentProps) => {
@@ -56,10 +52,6 @@ const ListingPage = ({ history }: RouteComponentProps) => {
         console.log('Info: ', taskInfo)
         const today = new Date();
 
-        // Don't allow submission if offer date before today
-        // if(Date.parse(taskInfo?.startDate) < Date.parse(String(today))){
-        //     setDYerror(true)
-        // } else
         { await axios.post(url + 'task/createTask', {
             categoryId: taskInfo?.categoryId,
             title: taskInfo?.title,
@@ -167,7 +159,6 @@ const ListingPage = ({ history }: RouteComponentProps) => {
                                     <InputGroup>
                                         <InputGroupAddon addonType="prepend">$</InputGroupAddon>
                                         <Field type="number" name="recommendedPrice" placeholder="60" min="15" max="1000" as={Input} required />
-                                        {/* <InputGroupAddon addonType="append">.00</InputGroupAddon> */}
                                     </InputGroup>
                                 </Col>
                             </Row>

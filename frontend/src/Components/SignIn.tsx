@@ -99,7 +99,6 @@ const SignIn = ({ history }: RouteComponentProps) => {
                             onSuccess={oauth}
                             onFailure={oauthErrorResponse}
                             cookiePolicy={'single_host_origin'}
-                            // isSignedIn={true}
                         />
                     </FormGroup>
                 </Form>
