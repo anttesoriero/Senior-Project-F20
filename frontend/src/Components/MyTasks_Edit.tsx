@@ -188,7 +188,7 @@ const MyTasks_Edit = ({toOffers, getTaskIds, editTaskId, taskInfo}: MyTasksEditP
                             <Row className='centered'>
                                 <div className="centered"><Button color="primary" size="md" type="submit" >Save Changes</Button></div>
                                 &nbsp;&nbsp;
-                                <div className="centered"><Button color="secondary" size="md" type="button">Cancel</Button></div>
+                                <div className="centered"><Button color="secondary" size="md" type="button" onClick={() => toOffers()}>Cancel</Button></div>
                             </Row>
                         </Form>
                     )}

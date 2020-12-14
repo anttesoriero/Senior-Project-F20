@@ -5,7 +5,7 @@ import { Input } from 'reactstrap';
 const StateSelector = () => {
 
     return (
-        <Field type="select" name="state" id="state" as={Input} required>
+        <Field type="select" name="state" id="state" as={Input}>
             <option selected disabled>Select State</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
