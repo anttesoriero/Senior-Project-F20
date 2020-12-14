@@ -68,7 +68,7 @@ const AdminUsers = () => {
             amountToChange: amount
         })
             .then(function (response) {
-                console.log(response)
+                //console.log(response)
                 toggle()
             })
             .catch(function (error) {
