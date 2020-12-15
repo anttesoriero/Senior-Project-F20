@@ -2,8 +2,8 @@
 Stores specific information for informing the service more
 deeply about the User
 
-@author Matthew Schofield, Jasdip Dhillon
-@version 12.9.2020
+:author: Matthew Schofield, Jasdip Dhillon
+:version: 12.9.2020
 '''
 # Module imports
 from app import db
@@ -27,9 +27,11 @@ class ExtendedUser(db.Model):
     locationInterestedInALatitude   | Numeric | Nullable
     tasksPosted                     | Integer
     tasksAccepted                   | Integer
-    offersSent                      | Integer
     posterPreference                | Integer | Nullable
     pricePerDrivingMinute           | Numeric | Nullable
+    discoveryMethod                 | String  | Nullable
+    mostInterestedCategory          | Integer | Nullable
+    leastInterestedCategory         | Integer | Nullable
     '''
     # Column definitions
     userId = db.Column(db.Integer(), db.ForeignKey("user.userId"), primary_key=True)
@@ -44,7 +46,6 @@ class ExtendedUser(db.Model):
     locationInterestedInALatitude = db.Column(db.Numeric(9, 6), nullable=True)
     tasksPosted = db.Column(db.Integer())
     tasksAccepted = db.Column(db.Integer())
-    offersSent = db.Column(db.Integer())
     pricePerDrivingMinute = db.Column(db.Numeric(10, 2), nullable=True)
     discoveryMethod = db.Column(db.String(40), nullable=True)
     mostInterestedCategory = db.Column(db.Integer(), nullable=True)
@@ -101,10 +102,6 @@ class ExtendedUser(db.Model):
         self.tasksAccepted = newTasksAccepted
         db.session.commit()
 
-    def setOffersSent(self, newOffersSent):
-        self.offersSent = newOffersSent
-        db.session.commit()
-
     def setPricePerDrivingMinute(self, newPricePerDrivingMinute):
         self.pricePerDrivingMinute = newPricePerDrivingMinute
         db.session.commit()
@@ -121,6 +118,8 @@ class ExtendedUser(db.Model):
         self.leastInterestedCategory = newLeastInterestedCategory
         db.session.commit()
 
+
+
     @classmethod
     def createExtendedUserModel(cls, user):
         '''
@@ -131,8 +130,7 @@ class ExtendedUser(db.Model):
         # Create Credentials object
         extendedUser = ExtendedUser(user=user,
                                     tasksPosted=0,
-                                    tasksAccepted=0,
-                                    offersSent=0
+                                    tasksAccepted=0
         )
 
         # Save to database

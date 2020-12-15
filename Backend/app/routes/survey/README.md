@@ -1,1 +1,1 @@
-For endpoints related to surveys
+For endpoints, recommendations, and response handles related to surveys

@@ -1,11 +1,8 @@
 """
 Defines error handlers for the broader application
 
-Try to use utilities outside of this file to do the heavy lifting
-This file should be focused on annotating routes
-
-@author Matthew Schofield
-@version 9.12.2020
+:author: Matthew Schofield
+:version: 9.12.2020
 """
 # Library imports
 from flask import jsonify

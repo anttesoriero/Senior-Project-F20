@@ -1,7 +1,7 @@
 """
 Framework for auth module
 
-The auth module will handle authentication related tasks
+The auth module handles authentication related tasks
 
 Example usages:
 Login

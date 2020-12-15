@@ -1,7 +1,7 @@
 """
 Framework for errors module
 
-The error module will handle HTTP errors that arise
+The error module handles HTTP errors that arise
 
 @author Matthew Schofield
 @version 9.11.2020

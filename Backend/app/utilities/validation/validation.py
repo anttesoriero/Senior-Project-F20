@@ -2,8 +2,9 @@ def validateRequestJSON(request, requiredParamaters, variableParameters):
     '''
     Validates an input request as JSON with the given required parameters
 
-    :param request:
-    :param requiredParamaters:
+    :param request: flask request object
+    :param requiredParamaters: list of required parameters
+    :param variableParameters: list of non-required parameters
     '''
     success = True
     errorCode = 400

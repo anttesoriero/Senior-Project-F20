@@ -51,7 +51,6 @@ class Task(db.Model):
     # Set-up Database Relationships
     acceptedOfferId = db.relationship('Offer', backref="offer", uselist=True)
 
-
     '''
     Read
     '''
@@ -90,8 +89,9 @@ class Task(db.Model):
 
     def getPublicInfo(self):
         '''
+        Retrieves the public information about a task
 
-        :return:
+        :return: dictionary of information about a task
         '''
         # Strip latitude and longitudes to only 2 decimals
         locationALongitude = str("%.2f" % self.locationALongitude) if self.locationALongitude else None
@@ -99,9 +99,6 @@ class Task(db.Model):
 
 
         recommendedPrice = str("%.2f" % self.recommendedPrice) if self.recommendedPrice else None
-
-
-
 
         output = {
             "taskId": self.taskId,
@@ -171,12 +168,16 @@ class Task(db.Model):
     '''
     Update
     '''
-
     def edit(self, paramDict):
+        '''
+        Edit information about a task
+
+        :param paramDict: task information to change
+        '''
         k = paramDict.keys()
         if "title" in k:
             self.title = paramDict["title"]
-        if "categroyId" in k:
+        if "categoryId" in k:
             self.categoryId = paramDict["categoryId"]
         if "description" in k:
             self.description = paramDict["description"]
@@ -184,15 +185,16 @@ class Task(db.Model):
             self.recommendedPrice = paramDict["recommendedPrice"]
         if "estimatedDurationMinutes" in k:
             self.estimatedDurationMinutes = paramDict["estimatedDurationMinutes"]
-        if "locationALongitude" in k:
-            self.locationALongitude = paramDict["locationALongitude"]
-        if "locationALatitude" in k:
-            self.locationALatitude = paramDict["locationALatitude"]
         if "startDate" in k:
             self.startDate = datetime.datetime.strptime(paramDict["startDate"], "%Y-%m-%d %H:%M")
         db.session.commit()
 
     def getWorker(self):
+        '''
+        Gets the worker for a task by checking its accepted offer
+
+        :return: User id of the worker or None
+        '''
         offers = Offer.getOffersForTask(self.taskId)
         worker = None
         for offer in offers:
@@ -203,22 +205,43 @@ class Task(db.Model):
 
     @classmethod
     def buildPosterRatingsForUser(cls, userId):
+        '''
+        Get all poster ratings for a user by userId
+
+        :param userId: User id to get poster ratings for
+        :return: list of poster ratings
+        '''
+        # Get all tasks a user posted that have a poster rating
         tasks = Task.query.filter(
             cls.posterUserId == userId,
             cls.posterRating != None
         ).all()
+
+        # Return a list of all poster ratings for the user
         return [task.posterRating for task in tasks]
 
     @classmethod
     def buildWorkerRatingsForUser(cls, userId):
+        '''
+        Get all worker ratings for a User by userId
+
+        :param userId: User's userId
+        :return: list of worker ratings for the given user
+        '''
+        # Get all tasks
         tasks = Task.getAll()
+
+        # Get offers
         offerSets = [Offer.getOffersForTask(task["taskId"]) for task in tasks]
+
+        # Get all task Ids that a user has been a worker for
         usersTasks = []
         for offerSet in offerSets:
             for offer in offerSet:
                 if int(offer.userIdFrom) == int(userId) and offer.accepted:
                     usersTasks.append(offer.taskId)
 
+        # Get all worker ratings for a user
         workerRatings = []
         for task in [Task.getByTaskId(taskId) for taskId in usersTasks]:
             if task.workerRating is not None:
@@ -256,13 +279,14 @@ class Task(db.Model):
             }
         }
 
-        :param queryP:
-        :param max:
-        :return:
+        :return: list of Tasks
         '''
+        # Initialize filters, do not show own tasks or completed tasks
         filters = []
         filters.append(cls.posterUserId != userId)
         filters.append(cls.completed == False)
+
+        # Parse title search term
         if "title" in queryP.keys():
             if "contains" in queryP["title"].keys():
                 q = queryP["title"]["contains"].replace("+", " ")
@@ -274,18 +298,21 @@ class Task(db.Model):
             if "matches" in queryP["title"].keys():
                 filters.append(cls.title.like(queryP["title"]["matches"]))
 
+        # Parse cat Id search term
         if "categoryId" in queryP.keys():
             if "==" in queryP["categoryId"].keys() and queryP["categoryId"]["=="] != 0:
                 filters.append(cls.categoryId == queryP["categoryId"]["=="])
             if "!=" in queryP["categoryId"].keys():
                 filters.append(cls.categoryId != queryP["categoryId"]["!="])
 
+        # Parse recommended price search term
         if "recommendedPrice" in queryP.keys():
             if ">=" in queryP["recommendedPrice"].keys():
                 filters.append(cls.recommendedPrice >= queryP["recommendedPrice"][">="])
             if "<=" in queryP["recommendedPrice"].keys():
                 filters.append(cls.recommendedPrice <= queryP["recommendedPrice"]["<="])
 
+        # Parse location search term
         if "location" in queryP.keys():
             if "within" in queryP["location"].keys():
                 if len(queryP["location"]["within"]) == 4:
@@ -294,7 +321,7 @@ class Task(db.Model):
                     filters.append(cls.locationALongitude >= float(queryP["location"]["within"][2]))
                     filters.append(cls.locationALongitude <= float(queryP["location"]["within"][3]))
 
-
+        # Execute query for Tasks
         tasks = Task.query.filter(*filters).limit(max)
         return [task for task in tasks if not task.isAccepted()]
 
@@ -330,14 +357,19 @@ class Task(db.Model):
         '''
         Deletes a task by ID
 
-        Unsafe
-
-        :param taskId:
-        :return:
+        :param taskId: taskId to delete
+        :return: boolean whether task was found to then be deleted
         '''
+        # Get task
         task = cls.getByTaskId(taskId)
+
+        # If task exists
         if task:
-            db.session.delete(task)
+            # Delete all attached offers
+            Offer.deleteAllByTaskId(taskId)
+            # Delete Task
+            db.session.query(Task).filter_by(taskId=taskId).delete()
+            # Commit
             db.session.commit()
             return True
         else:
@@ -353,15 +385,7 @@ class Task(db.Model):
         '''
         Creates a Task
 
-        :param posterUserId:
-        :param categoryId:
-        :param title:
-        :param description:
-        :param recommendedPrice:
-        :param estimatedDurationMinutes:
-        :param locationALongitude:
-        :param locationALatitude:
-        :return: Task created
+        :return: Task object
         '''
         # Convert startDate to correct format
         if startDate is not None:
@@ -369,6 +393,7 @@ class Task(db.Model):
                startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d %H:%M")
             except:
                 startDate = str(startDate)
+
         # Create Task
         task = Task(
             posterUserId=user.userId,
@@ -383,7 +408,7 @@ class Task(db.Model):
             completed=False
         )
 
-
+        # If a location is set update the user's extended model
         if not locationALongitude is None and not locationALatitude is None:
             user.extendedModel.setLocationInterestedInALongitude(locationALongitude)
             user.extendedModel.setLocationInterestedInALatitude(locationALatitude)

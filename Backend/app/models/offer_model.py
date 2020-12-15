@@ -85,6 +85,15 @@ class Offer(db.Model):
         self.responseMessage = responseMessage
         db.session.commit()
 
+    @classmethod
+    def deleteAllByTaskId(cls, taskId):
+        '''
+        Delete all offers for a particular task Id
+
+        :param taskId: task id to delete offers for
+        '''
+        db.session.query(Offer).filter_by(taskId=taskId).delete()
+
     '''
     Class methods
     '''

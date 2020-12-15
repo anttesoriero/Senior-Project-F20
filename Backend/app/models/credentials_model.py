@@ -3,8 +3,8 @@ Credential's model for database
 Stores the password hashes for Users
 OneToOne relationship with the User table
 
-@author Matthew Schofield
-@version 11.11.2020
+:author: Matthew Schofield
+:version: 11.11.2020
 '''
 # Library imports
 from werkzeug.security import generate_password_hash, check_password_hash
