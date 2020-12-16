@@ -100,8 +100,8 @@ const MapsCircle = ({ title, offerer, price, description, duration, id, category
             setSubmitting(false)
         } else {submitO = true}
 
-        // if(submitDY && submitO) {  // Should work now
-        if(submitO) {
+        // if(submitO) {
+        if(submitDY && submitO) { 
             await axios.post(url + 'offer/createOffer',
                 {
                     taskId: id,
