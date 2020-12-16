@@ -4,9 +4,6 @@ Storage for Historical Surveys
 @author Matthew Schofield
 @version 10.16.2020
 '''
-# Library imports
-from werkzeug.security import generate_password_hash, check_password_hash
-
 # Module imports
 from app import db
 

@@ -1,11 +1,11 @@
 """
-Defines routes for the main (Miscellaneous) endpoints
+Defines routes for task related endpoints
 
 ! Try to use utilities outside of this file to do the heavy lifting !
 This file should be focused on annotating routes
 
-@author Matthew Schofield
-@version 10.14.2020
+:author: Matthew Schofield
+:version: 12.14.2020
 """
 # Library imports
 from flask import jsonify, request
@@ -242,6 +242,12 @@ def createTask():
 @task_blueprint.route('/searchPostedTasks', methods=['POST'])
 @jwt_required
 def searchTask():
+    '''
+    Search posted tasks
+    See search function in task model for spec
+
+    :return: list of tasks as JSON
+    '''
     # Validate input
     requiredParameters = ["query"]
     optionalParameters = ["max"]
@@ -268,9 +274,6 @@ DELETEs
 def deleteTask():
     '''
     Delete a task by a given Id if the current user is the poster
-
-    TODO:
-    Check there are no offers
     '''
     taskId = request.args.get('taskId', type=int)
     # Get current user
@@ -299,12 +302,17 @@ PUTs
 def editTask():
     '''
     Edit a task
+
+    In:
+    Task parameters
+
+    Out:
+    Success boolean
     '''
     # Validate input
     requiredParameters = ["taskId"]
     optionalParameters = ["title", "categoryId", "description", "recommendedPrice", "estimatedDurationMinutes",
-                          "locationALongitude", "locationALatitude", "locationBLongitude",
-                          "locationBLatitude", "startDate"]
+                         "startDate"]
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
@@ -341,11 +349,15 @@ def editTask():
 @jwt_required
 def completeTaskPoster():
     '''
-    Mark a Task as completed
+    Mark a Task as completed for a poster
 
-    :return:
+    In
+    Task id that is complete
+    Worker rating
+
+    Out
+    success boolean
     '''
-    print("COMPLETE POSTER")
     # Validate Inputs
     requiredParameters = ["taskId"]
     optionalParameters = ["workerRating"]
@@ -375,11 +387,15 @@ def completeTaskPoster():
 @jwt_required
 def completeTaskWorker():
     '''
-    Mark a Task as completed
+    Mark a Task as completed by a worker
 
-    :return:
+    In
+    TaskId to mark completed
+    posterRating set poster rating
+
+    Out
+    success boolean
     '''
-    print("COMPLETE WORKER")
     # Validate Inputs
     requiredParameters = ["taskId"]
     optionalParameters = ["posterRating"]
@@ -387,7 +403,7 @@ def completeTaskWorker():
     success, code, inputJSON = validateRequestJSON(request, requiredParameters, optionalParameters)
     if not success:
         return jsonify({}), code
-    print(inputJSON)
+
     # Get current user
     current_user_id = get_jwt_identity()
 

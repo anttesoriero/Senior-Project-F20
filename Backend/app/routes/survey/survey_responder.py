@@ -1,9 +1,18 @@
 from app.models.historical_survey_model import HistoricalSurvey
 from app.models.survey_model import Survey
 
+'''
+Handle responses to surveys
+
+:author: Matthew Schofield, Jasdip Dhillon
+:version: 12.14.2020
+'''
 class SurveyResponseHandler:
 
     def __init__(self):
+        '''
+        Create handles for functions to respond to surveys
+        '''
         self.survey_handles = {
             1: self.gender_set,
             2: self.age_set,
@@ -21,13 +30,26 @@ class SurveyResponseHandler:
         self.build_survey_map()
 
     def respond(self, current_user, survey_id, response):
+        '''
+        Handle a response to a survey
+
+        :param current_user: current User
+        :param survey_id: id of survey responding to
+        :param response: response to survey
+        '''
         HistoricalSurvey.createHistoricalSurvey(current_user.userId, survey_id, response)
         self.survey_handles.get(survey_id, self.catch)(current_user, response)
 
     def catch(self, current_user, response):
+        '''
+        No operation
+        '''
         pass
 
     def build_survey_map(self):
+        '''
+        Set up map for survey answers
+        '''
         for survey in Survey.getAll():
             self.survey_mapper[survey["surveyId"]] = survey
         self.survey_mapper[9] = {

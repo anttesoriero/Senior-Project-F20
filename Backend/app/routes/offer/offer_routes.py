@@ -154,8 +154,6 @@ def createOffer():
     if task.posterUserId is current_user_id:
         return jsonify({"success": False, "message": "Cannot post an offer on your own task"}), 400
 
-
-
     # Create Offer
     offer = Offer.createOffer(
         taskId=inputJSON["taskId"],
@@ -220,7 +218,6 @@ def acceptOffer():
     if task.posterUserId is not currentUserId:
         return jsonify({"success": False, "message": "Not the posting user"}), 401
 
-    print(offer.payment)
     if addDeal(task.taskId, offer.userIdFrom, task.posterUserId, float(offer.payment)):
         offer.accept(inputJSON["responseMessage"])
         return jsonify({"success": True}), 200

@@ -51,7 +51,7 @@ const UpcomingTask = () => {
                 response.data.map(task => {
                     setTasks(oldArray => [...oldArray, task.task])
                     setOffers(old => [...old, task.myOffers])
-
+                    console.log(task)
                 })
             })
             .catch(error => {

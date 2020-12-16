@@ -23,7 +23,6 @@ class Report(db.Model):
     reportType      String      nullable
     description     text        nullable
     '''
-
     reportId = db.Column(db.Integer(), primary_key=True)
     # User sending report
     userId_1 = db.Column(db.Integer(), db.ForeignKey("user.userId"))
@@ -57,10 +56,10 @@ class Report(db.Model):
 
         # Create Report
         report = Report(
-            userId_1 = userId_1,
-            userId_2 = userId_2,
-            reportType = reportType,
-            description = description
+            userId_1=userId_1,
+            userId_2=userId_2,
+            reportType=reportType,
+            description=description
         )
 
         # Save Report to database

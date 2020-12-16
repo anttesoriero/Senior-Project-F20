@@ -3,8 +3,8 @@ Account Balance's model for database
 Stores account balance of Users
 OneToOne relationship with the User table
 
-@author Matthew Schofield
-@version 11.28.2020
+:author: Matthew Schofield
+:version: 11.28.2020
 '''
 # Library imports
 
@@ -13,6 +13,8 @@ from app import db
 
 class AccountBalance(db.Model):
     '''
+    Stores the account balance of users
+
     Column definitions
 
     user_id         Integer PK

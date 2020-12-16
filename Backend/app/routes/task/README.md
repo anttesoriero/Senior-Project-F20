@@ -1,1 +1,2 @@
-Endpoints related to tasks
+Handles task operations
+Task endpoints and recommendation functionality

@@ -1,1 +1,1 @@
-Module to handle user tasks
+Module to handle user endpoints

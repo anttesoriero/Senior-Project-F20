@@ -2,6 +2,12 @@ from app.models.extended_user_model import ExtendedUser
 from app.models.survey_model import Survey
 from app.models.historical_survey_model import HistoricalSurvey
 
+'''
+Recommend surveys
+
+:author: Matthew Schofield
+:version: 12.14.2020
+'''
 class SurveyRecommender:
 
      def __init__(self):
@@ -20,9 +26,11 @@ class SurveyRecommender:
 
         for survey_id in survey_ids:
             availableSurveyIds[survey_id] = completed_survey_ids.count(survey_id)
-        if 26 in availableSurveyIds.keys():
+
+        # Prioritize surveys for most/least interested categories
+        if availableSurveyIds[26] == 0:
             recommendedSurvey = 26
-        elif 27 in availableSurveyIds.keys():
+        elif availableSurveyIds[27] == 0:
             recommendedSurvey = 27
         else:
             recommendedSurvey = min(availableSurveyIds.keys(), key=(lambda k: availableSurveyIds[k]))

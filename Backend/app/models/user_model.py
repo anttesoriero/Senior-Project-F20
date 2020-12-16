@@ -187,9 +187,11 @@ class User(db.Model):
         completed_survey_ids = HistoricalSurvey.getHistoricalSurveyIdsForUserId(self.userId)
         availableSurveyIds = {}
 
+        # Create a map for the count of the number of times a user has answered each survey
         for survey_id in survey_ids:
             availableSurveyIds[survey_id] = completed_survey_ids.count(survey_id)
 
+        # Use the survey they have responded to the least
         recommendedSurvey = min(availableSurveyIds.keys(), key=(lambda k: availableSurveyIds[k]))
 
         return recommendedSurvey
@@ -268,8 +270,8 @@ class User(db.Model):
         '''
         Creates a User
 
-        :param email: User's email
-        :param password: User's plaintext password
+        :param: user Information
+        :return: User object
         '''
         # Check if user exists
         if not User.existsByEmail(email):
@@ -321,18 +323,27 @@ class User(db.Model):
         Gets the Offers for a particular user
 
         :param userId user_id to get user
-        :return list of task ids for a user
+        :return list of offers a user has made and associated tasks
         '''
+        # All offers made by user
         offers = Offer.query.filter_by(userIdFrom=userId).all()
 
+        # Get all tasks associated with the offers a user ahs made
         output = {}
+        # Iterate through offers
         for offer in offers:
+            # The offer is active
             if not offer.archived:
+                # Get the task associated with the offer
                 task = Task.getByTaskId(offer.taskId)
+                # Check the task is not old or that you do want old tasks
                 if not task.completed or historical:
+                    # If the offer is not already in the map insert it and associated task
                     if not offer.taskId in output.keys():
                         output[offer.taskId] = {"task": task.getPublicInfo(), "myOffers": []}
+                    # Attaches offer to related task
                     output[offer.taskId]["myOffers"].append(offer.getInfo())
+        # Convert map to list
         newOutput = []
         for out in output.keys():
             newOutput.append(output[out])
@@ -340,18 +351,38 @@ class User(db.Model):
 
     @classmethod
     def getPastTasks(cls, userId):
+        '''
+        Get past tasks for a user posted
+
+        :param userId: userId of User to get tasks for
+        :return: Task and accepted Offer
+        '''
+        # Get Tasks posted by a user
         tasks = Task.query.filter_by(posterUserId=userId).filter_by(completed=True).all()
+
+        # Prepare output
         output = []
         for task in tasks:
+            # Get accepted offer
             offer = Offer.query.filter_by(taskId=task.taskId).filter_by(accepted=True).first()
             output.append({"task": task.getPrivateInfo(), "offer": offer.getInfo()})
         return output
 
     @classmethod
     def getPastCompletedTasks(cls, userId):
+        '''
+        Get past tasks completed by a user
+
+        :param userId: userId of User to get tasks completed
+        :return: Task and accepted Offer
+        '''
+        # Get Offers accepted from user
         offers = Offer.query.filter_by(userIdFrom=userId).filter_by(accepted=True).all()
+
+        # Prepare output
         output = []
         for offer in offers:
+            # Get Tasks completed
             task = Task.query.filter_by(taskId=offer.taskId).filter_by(completed=True).first()
             output.append({"task": task.getPrivateInfo(), "offer": offer.getInfo()})
         return output

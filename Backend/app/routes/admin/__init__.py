@@ -1,7 +1,7 @@
 """
-Framework for main module
+Framework for admin module
 
-The admin module is intended to high priviledge low level operations
+The admin module is intended to preform high privilege low level operations
 
 @author Matthew Schofield
 @version 10.16.2020

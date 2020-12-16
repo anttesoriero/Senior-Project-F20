@@ -1,8 +1,8 @@
 '''
 Database model for Categories that are used to encapsulate jobs
 
-@author Matthew Schofield
-@version 11.11.2020
+:author: Matthew Schofield
+:version: 11.11.2020
 '''
 # Module imports
 from app import db
@@ -10,9 +10,12 @@ from app import db
 class Category(db.Model):
     '''
     Column definitions
-    categoryId        Integer
-    categoryName      String
-    recommendedHourly Integer
+    categoryId             Integer
+    categoryName           String
+    recommendedHourly      Integer
+    mostRelatedCategoryIdA Integer
+    mostRelatedCategoryIdB Integer
+    mostRelatedCategoryIdC Integer
 
     Relational Connections
     task
@@ -46,6 +49,7 @@ class Category(db.Model):
         mostRelatedA = None
         mostRelatedB = None
         mostRelatedC = None
+
         if self.mostRelatedCategoryIdA is not None:
             mostRelatedA = Category.getByCategoryId(self.mostRelatedCategoryIdA).getName()
 
